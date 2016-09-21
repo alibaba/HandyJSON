@@ -208,9 +208,9 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
 
 ## Compatibility
 
-已经在32位、64位、iOS 8.0+/9.0+ 机器测试通过。
+已经在32位、64位、iOS 8.0+/9.0+/10.0+ 机器测试通过。
 
-已经在Swift 2.2， Swift 3.0 beta上测试通过；
+已经在Swift 2.3， Swift 3.0 beta上测试通过；
 
 ## To Do
 
@@ -218,4 +218,4 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
 
 * 支持对象到JSON的序列化;
 
-* 支持Swift 2.3， Swift 3.0;
+* 支持Swift 3.0;

@@ -19,12 +19,55 @@
 import UIKit
 import HandyJSON
 
-class Animal: HandyJSON {
+enum Gender: String, HandyJSON {
+    case Male = "Male"
+    case Female = "Female"
+
+    init() {
+        self = .Male
+    }
+}
+
+class Teacher: HandyJSON {
     var name: String?
-    var id: String?
-    var num: Int?
+    var age: Int?
+    var height: Int?
+    var gender: Gender?
 
     required init() {}
+
+    func mapping(mapper: Mapper) {
+        mapper.specify(&gender) {
+            return Gender(rawValue: $0)
+        }
+    }
+}
+
+struct Subject: HandyJSON {
+    var name: String?
+    var id: Int64?
+    var credit: Int?
+    var lessonPeriod: Int?
+}
+
+class Student: HandyJSON {
+    var id: String?
+    var name: String?
+    var age: Int?
+    var height: Int?
+    var gender: Gender?
+    var className: String?
+    var teacher: Teacher?
+    var subject: [Subject]?
+    var seat: String?
+
+    required init() {}
+
+    func mapping(mapper: Mapper) {
+        mapper.specify(&gender) {
+            return Gender(rawValue: $0)
+        }
+    }
 }
 
 class ViewController: UIViewController {
@@ -42,10 +85,29 @@ class ViewController: UIViewController {
     }
 
     func demo() {
-        let jsonString = "{\"name\":\"cat\",\"id\":\"12345\",\"num\":180}"
+        let jsonString = "{\"id\":\"77544\",\"name\":\"Tom Li\",\"age\":18,\"height\":180,\"gender\":\"Male\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subject\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
 
-        if let animal = JSONDeserializer<Animal>.deserializeFrom(jsonString) {
-            print(animal.num)
+        if let student = JSONDeserializer<Student>.deserializeFrom(jsonString) {
+            print(student)
+            print(student.id)
+            print(student.name)
+            print(student.age)
+            print(student.height)
+            print(student.gender)
+            print(student.className)
+            print(student.teacher?.name)
+            print(student.teacher?.age)
+            print(student.teacher?.height)
+            print(student.teacher?.gender)
+            print(student.subject?.first?.name)
+            print(student.subject?.first?.id)
+            print(student.subject?.first?.credit)
+            print(student.subject?.first?.lessonPeriod)
+            print(student.subject?.last?.name)
+            print(student.subject?.last?.id)
+            print(student.subject?.last?.credit)
+            print(student.subject?.last?.lessonPeriod)
+            print(student.seat)
         }
     }
 }

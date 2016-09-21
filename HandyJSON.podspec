@@ -14,4 +14,6 @@ Pod::Spec.new do |s|
 
     s.summary = 'A Json Serialization & Deserialization Library for Swift'
     s.description = 'A Handy Json Library for Swift which serials object to json and deserials json to object'
+
+    s.pod_target_xcconfig = { 'SWIFT_VERSION' => '2.3' }
 end
