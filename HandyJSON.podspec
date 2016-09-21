@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
     s.name = "HandyJSON"
 
     s.source_files = 'HandyJSON/**/*.{swift,h,m}'
-    s.source = { :git => 'git@github.com:alibaba/HandyJSON.git', :tag => s.version.to_s }
+    s.source = { :git => 'https://github.com/alibaba/HandyJSON.git', :tag => s.version.to_s }
 
     s.summary = 'A Json Serialization & Deserialization Library for Swift'
     s.description = 'A Handy Json Library for Swift which serials object to json and deserials json to object'

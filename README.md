@@ -1,20 +1,44 @@
 # HandyJSON
 
-HandyJSON是一个Swift编写的`JSON-对象间`序列化、反序列化库，用法简单，类型支持完善。
+HandyJSON is a framework written in Swift to make converting model objects (classes/structs) to and from JSON easy on iOS. / HandyJSON是一个Swift编写的`JSON-对象间`序列化、反序列化库，用法简单，类型支持完善。
 
 ## Feature
 
-* 支持`struct`和`class`;
+* Deserialize JSON to Object (classes and structs) / JSON反序列化至对象
 
-* 支持大部分基本类型、组合类型、嵌套类型、可选类型;
+* Support most all types in Swift / 支持类型完善
 
-* 自动使用对象的字段名称在JSON中取值，而不需要手动指定Mapping方法;
+* Naturally use object property name for mapping, no need to specify a mapping relationship / 自动使用对象属性名做映射，无须手动指定
 
-* 支持自定义映射关系和解析函数;
+* Custom transformations for mapping / 可自定义映射关系和转换过程
 
-* 支持指定从JSON的某个节点开始反序列化;
+* Type-Adaption, such as string json field maps to int property, int json field maps to string property / 类型自适应，如String字段映射到对象的Int属性，Int字段映射到String属性等
 
-* 支持字段类型自适应，如String到Int、Int到String等的转换;
+## Requirements
+
+* iOS 8.0+
+
+* Xcode 8.0+
+
+* Swift 2.3+
+
+## Installation
+
+### Cocoapods
+
+Add the following lines to your podfile:
+
+```
+use_frameworks!
+
+pod 'HandyJSON', '~> 0.1.0'
+```
+
+Then, run the following command:
+
+```
+$ pod install
+```
 
 ## The Basics
 
@@ -192,30 +216,26 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
 
 * `UInt8/UInt16/UInt23/UInt64`
 
-* `Array<T>` // T是已经支持的类型
+* `Optional<T>/ImplicitUnwrappedOptional<T>` // T is one of the above types
 
-* `Dictionary<String, T>` // T是已经支持的类型
+* `Array<T>` // T is one of the above types
 
-* `Optional<T>` // T是已经支持的类型
+* `Dictionary<String, T>` // T is one of the above types
 
-* `ImplicitlyUnwrappedOption<T>` // T是已经支持的类型
-
-* 嵌套对象
-
-* 自定义解析类型
-
-* 有继承关系的类
+* Nested of aboves
 
 ## Compatibility
 
-已经在32位、64位、iOS 8.0+/9.0+/10.0+ 机器测试通过。
+* Pass test on 32-bit/64bit simulator/real device
 
-已经在Swift 2.3， Swift 3.0 beta上测试通过；
+* Pass test on iOS 8.0+/9.0+/10.0+
+
+* Pass test while compiled with Swift 2.2、2.3、3.0 beta
 
 ## To Do
 
-* 支持直接到基本类型、集合类型(即非对象类型)的反序列化；
+* Support non-object (such as basic type, array, dictionany) type deserializing directly / 支持直接到基本类型的反序列化
 
-* 支持对象到JSON的序列化;
+* Objects serials to JSON / 支持对象序列化至JSON
 
-* 支持Swift 3.0;
+* A branch for Swift 3.0 / 开分支支持Swift 3.0
