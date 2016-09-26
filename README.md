@@ -2,6 +2,10 @@
 
 HandyJSON is a framework written in Swift to make converting model objects (classes/structs) to and from JSON easy on iOS. / HandyJSON是一个Swift编写的`JSON-对象间`序列化、反序列化库，用法简单，类型支持完善。
 
+[![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=master)](https://travis-ci.org/alibaba/HandyJSON)
+[![Cocoapods Version](https://img.shields.io/cocoapods/v/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
+[![Cocoapods Platform](https://img.shields.io/cocoapods/p/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
+
 ## Feature
 
 * Deserialize JSON to Object (classes and structs) / JSON反序列化至对象
