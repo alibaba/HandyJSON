@@ -154,7 +154,7 @@ public class JSONSerializer {
 
 extension Property {
     
-    internal static func transform(dict: NSDictionary, withMapper: Mapper, withPointer: UnsafePointer<Byte>, withCurrentOffset: Int, byMirror: Mirror) -> Int {
+    internal static func transform(dict: NSDictionary, withMapper: CustomMapper, withPointer: UnsafePointer<Byte>, withCurrentOffset: Int, byMirror: Mirror) -> Int {
         
         var currentOffset = withCurrentOffset
         if let superMirror = byMirror.superclassMirror() {
@@ -227,7 +227,7 @@ extension Property {
         }
 
         var pointer: UnsafePointer<Byte>!
-        let mapper = Mapper()
+        let mapper = CustomMapper()
         var currentOffset = 0
 
         // do user-specified mapping first

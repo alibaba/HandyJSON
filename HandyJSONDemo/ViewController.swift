@@ -28,15 +28,13 @@ enum Gender: String, HandyJSON {
     }
 }
 
-class Teacher: HandyJSON {
+struct Teacher: HandyJSON {
     var name: String?
     var age: Int?
     var height: Int?
     var gender: Gender?
 
-    required init() {}
-
-    func mapping(mapper: Mapper) {
+    mutating func mapping(mapper: CustomMapper) {
         mapper.specify(&gender) {
             return Gender(rawValue: $0)
         }
@@ -63,7 +61,7 @@ class Student: HandyJSON {
 
     required init() {}
 
-    func mapping(mapper: Mapper) {
+    func mapping(mapper: CustomMapper) {
         mapper.specify(&gender) {
             return Gender(rawValue: $0)
         }
@@ -76,7 +74,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
 
-        self.demo()
+        self.serialization()
+        self.deserialization()
     }
 
     override func didReceiveMemoryWarning() {
@@ -84,7 +83,38 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    func demo() {
+    func serialization() {
+        enum Gender: String {
+            case Male = "male"
+            case Female = "Female"
+        }
+
+        struct Subject {
+            var id: Int64?
+            var name: String?
+
+            init(id: Int64, name: String) {
+                self.id = id
+                self.name = name
+            }
+        }
+
+        class Student {
+            var name: String?
+            var gender: Gender?
+            var subjects: [Subject]?
+        }
+
+        let student = Student()
+        student.name = "Jack"
+        student.gender = .Female
+        student.subjects = [Subject(id: 1, name: "math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
+
+        print(JSONSerializer.serializeToJSON(student)!)
+        print(JSONSerializer.serializeToJSON(student, prettify: true)!)
+    }
+
+    func deserialization() {
         let jsonString = "{\"id\":\"77544\",\"name\":\"Tom Li\",\"age\":18,\"height\":180,\"gender\":\"Male\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subject\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
 
         if let student = JSONDeserializer<Student>.deserializeFrom(jsonString) {
