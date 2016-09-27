@@ -1,6 +1,8 @@
 # HandyJSON
 
-HandyJSON is a framework written in Swift to make converting model objects (classes/structs) to and from JSON easy on iOS. / HandyJSON是一个Swift编写的`JSON-对象间`序列化、反序列化库，用法简单，类型支持完善。
+HandyJSON is a framework written in Swift which to make converting model objects(classes/structs) to and from JSON easy on iOS.
+
+Compared with others, the most significant feature of HandyJSON is that it does not need the objects inherit from NSObject(not using KVC), neither implements a 'mapping' function.
 
 [![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=master)](https://travis-ci.org/alibaba/HandyJSON)
 [![Cocoapods Version](https://img.shields.io/cocoapods/v/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
@@ -8,21 +10,19 @@ HandyJSON is a framework written in Swift to make converting model objects (clas
 
 ## Feature
 
-* Deserialize JSON to Object (classes and structs) / JSON反序列化至对象
+* Deserialize JSON to Object (classes and structs)
 
-* Support most all types in Swift / 支持类型完善
+* Support most all types in Swift
 
-* Naturally use object property name for mapping, no need to specify a mapping relationship / 自动使用对象属性名做映射，无须手动指定
+* Naturally use object property name for mapping, no need to specify a mapping relationship
 
-* Custom transformations for mapping / 可自定义映射关系和转换过程
+* Custom transformations for mapping
 
-* Type-Adaption, such as string json field maps to int property, int json field maps to string property / 类型自适应，如String字段映射到对象的Int属性，Int字段映射到String属性等
+* Type-Adaption, such as string json field maps to int property, int json field maps to string property
 
 ## Requirements
 
 * iOS 8.0+
-
-* Xcode 8.0+
 
 * Swift 2.3+
 
@@ -33,8 +33,6 @@ HandyJSON is a framework written in Swift to make converting model objects (clas
 Add the following lines to your podfile:
 
 ```
-use_frameworks!
-
 pod 'HandyJSON', '~> 0.1.0'
 ```
 
@@ -46,7 +44,9 @@ $ pod install
 
 ## The Basics
 
-Swift类实现`HandyJSON`协议(要求实现一个`init()`方法)后，就能从JSON文本进行反序列化了:
+To support deserialization from JSON, a class/struct need to comform to 'HandyJSON' protocol. It's truely protocol, not some class inherited from NSObject.
+
+To comform to 'HandyJSON', a class need to implement an empty initializer.
 
 ```
 class Animal: HandyJSON {
@@ -64,7 +64,7 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(jsonString) {
 }
 ```
 
-如果是`struct`，则不需要实现`init()`方法：
+For struct, since the compiler privide a default empty initializer, we use if for free.
 
 ```
 struct Animal: HandyJSON {
@@ -80,9 +80,9 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(jsonString) {
 }
 ```
 
-## Optional/ImplicitWrappedOptional/Collection
+## Optional, ImplicitlyUnwrappedOptional, Collectiones and so on
 
-`HandyJSON`支持属性为隐式可选、可选、数组类型、嵌套集合类型、Objective-C基本类型等的类：
+'HandyJSON' support classes/structs composed of `optional`, `implicitlyUnwrappedOptional`, `array`, `dictionary`, `objective-c base type`, `nested type` etc. properties.
 
 ```
 struct Cat: HandyJSON {
@@ -103,7 +103,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
 
 ## Designated Path
 
-可以为`HandyJSON`指定从JSON的某个节点开始反序列化:
+`HandyJSON` supports deserialization from designated path of json.
 
 ```
 struct Cat: HandyJSON {
@@ -120,7 +120,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString, designatedPath: "
 
 ## Composition Object
 
-类中非基本类型的属性，也需要实现`HandyJSON`协议，才能进行反序列化:
+Notice that all the properties of a class/struct need to deserialized should be type comformed to `HandyJSON`.
 
 ```
 struct Component: HandyJSON {
@@ -143,7 +143,7 @@ if let composition = JSONDeserializer<Composition>.deserializeFrom(jsonString) {
 
 ## Inheritance Object
 
-有继承关系的类，需要继承链上的类都实现`HandyJSON`协议:
+A subclass need deserialization, it's superclass need to comform to `HandyJSON`.
 
 ```
 class Animal: HandyJSON {
@@ -167,9 +167,9 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
 }
 ```
 
-## Customize Mapping
+## Custom Mapping
 
-`HandyJSON`允许你自行定义映射到类属性的`Key`，和解析的方法，只需要在实现`HandyJSON`协议时，实现一个可选函数mapping，在其中指定`Key`和解析方法:
+`HandyJSON` let you customize the key mapping to JSON fields, or parsing method of any property. All you need to do is implementing an optional `mapping` function, do things in it.
 
 ```
 class Cat: HandyJSON {
@@ -179,11 +179,11 @@ class Cat: HandyJSON {
 
     required init() {}
 
-    func mapping(mapper: Mapper) {
-        // 指定JSON中"cat_id"的值反序列化到"id"字段
+    func mapping(mapper: CustomMapper) {
+        // specify 'cat_id' field in json map to 'id' property in object
         mapper.specify(&id, name: "cat_id")
 
-        // 指定"parent"对应的JSON字段采用如下方式解析
+        // specify 'parent' field in json parse as following to 'parent' property in object
         mapper.specify(&parent) {
             let parentName = $0.characters.split{$0 == "/"}.map(String.init)
             return (parentName[0], parentName[1])
@@ -238,8 +238,6 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
 
 ## To Do
 
-* Support non-object (such as basic type, array, dictionany) type deserializing directly / 支持直接到基本类型的反序列化
+* Support non-object (such as basic type, array, dictionany) type deserializing directly
 
-* Objects serials to JSON / 支持对象序列化至JSON
-
-* A branch for Swift 3.0 / 开分支支持Swift 3.0
+* A branch for Swift 3.0
