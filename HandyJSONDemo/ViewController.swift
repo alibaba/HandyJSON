@@ -34,7 +34,7 @@ struct Teacher: HandyJSON {
     var height: Int?
     var gender: Gender?
 
-    mutating func mapping(mapper: Mapper) {
+    mutating func mapping(mapper: CustomMapper) {
         mapper.specify(&gender) {
             return Gender(rawValue: $0)
         }
@@ -61,7 +61,7 @@ class Student: HandyJSON {
 
     required init() {}
 
-    func mapping(mapper: Mapper) {
+    func mapping(mapper: CustomMapper) {
         mapper.specify(&gender) {
             return Gender(rawValue: $0)
         }

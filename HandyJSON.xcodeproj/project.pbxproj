@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2144A50E1D9A7A770090F50E /* CustomMappingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */; };
 		21520C481D3341B200F53111 /* HandyJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 21520C471D3341B200F53111 /* HandyJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21520C541D3341FC00F53111 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C501D3341FC00F53111 /* Extension.swift */; };
 		21520C551D3341FC00F53111 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C511D3341FC00F53111 /* Property.swift */; };
@@ -62,6 +63,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMappingTest.swift; sourceTree = "<group>"; };
 		21520C441D3341B200F53111 /* HandyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HandyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21520C471D3341B200F53111 /* HandyJSON.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandyJSON.h; sourceTree = "<group>"; };
 		21520C491D3341B200F53111 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */,
 				21F252AB1D595F3900B214BB /* ClassObjectTest.swift */,
 				21F252A91D58BE9100B214BB /* NestObjectTest.swift */,
+				2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */,
 				2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */,
 				21F252AF1D596A7000B214BB /* MemoryLayoutValidationTest.swift */,
 				21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */,
@@ -348,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21F252B41D599DE200B214BB /* InvalidStateHandlingTest.swift in Sources */,
+				2144A50E1D9A7A770090F50E /* CustomMappingTest.swift in Sources */,
 				39B36C241D8D780200AD2A3F /* SerializeToJSONTests.swift in Sources */,
 				21F252B21D59718100B214BB /* AllBaseTypePropertyObjectTest.swift in Sources */,
 				217B04701D571B9F0035A8E2 /* StructObjectTest.swift in Sources */,

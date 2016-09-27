@@ -30,8 +30,8 @@ public class CustomMapper {
 
     public func specify<T>(inout property: T, converter: String -> T) {
         let key = withUnsafePointer(&property, { return $0 }).hashValue
-        let assign = { (org: String) in
-            UnsafeMutablePointer<T>(bitPattern: key).memory = converter(org)
+        let assign = { (rawValue: String) in
+            UnsafeMutablePointer<T>(bitPattern: key).memory = converter(rawValue)
         }
         self.mapping[key] = (nil, assign)
     }
@@ -39,9 +39,8 @@ public class CustomMapper {
     public func specify<T>(inout property: T, name: String, converter: String -> T) {
         let key = withUnsafePointer(&property, { return $0 }).hashValue
 
-        let assign: (String -> ()) = { (org) in
-            let value = converter(org)
-            property = value
+        let assign = { (rawValue: String) in
+            UnsafeMutablePointer<T>(bitPattern: key).memory = converter(rawValue)
         }
         self.mapping[key] = (name, assign)
     }
