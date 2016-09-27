@@ -101,7 +101,7 @@ $ pod install
 
 ## The Basics
 
-To support deserialization from JSON, a class/struct need to comform to 'HandyJSON' protocol. It's truely protocol, not some class inherited from NSObject.
+To support deserialization from JSON, a class/struct need to comform to 'HandyJSON' protocol. It's truly protocol, not some class inherited from NSObject.
 
 To comform to 'HandyJSON', a class need to implement an empty initializer.
 
@@ -341,3 +341,5 @@ print(JSONSerializer.serializeToJSON(student, prettify: true)!)
 * Support non-object (such as basic type, array, dictionany) type deserializing directly
 
 * A branch for Swift 3.0
+
+* Support macOS
