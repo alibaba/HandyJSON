@@ -5,3 +5,5 @@ env:
     - ACTION=test  PLATFORM=iOS     DESTINATION='platform=iOS Simulator,name=iPhone 6S'
 script:
     - set -o pipefail && xcodebuild -scheme HandyJSONTests -destination "$DESTINATION" $ACTION | xcpretty
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
