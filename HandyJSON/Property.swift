@@ -57,11 +57,11 @@ extension Property {
 
 public protocol HandyJSON: Property {
     init()
-    func mapping(mapper: Mapper)
+    mutating func mapping(mapper: Mapper)
 }
 
 public extension HandyJSON {
-    func mapping(mapper: Mapper) {}
+    public mutating func mapping(mapper: Mapper) {}
 }
 
 protocol BasePropertyProtocol: HandyJSON {
