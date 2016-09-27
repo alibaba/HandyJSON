@@ -88,7 +88,7 @@ print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
 Add the following lines to your podfile:
 
 ```
-pod 'HandyJSON', '~> 0.1.0'
+pod 'HandyJSON', '~> 0.2.0'
 ```
 
 Then, run the following command:
