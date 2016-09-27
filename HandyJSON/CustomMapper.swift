@@ -19,7 +19,7 @@
 
 import Foundation
 
-public class Mapper {
+public class CustomMapper {
 
     private var mapping = Dictionary<Int, (String?, (String -> ())?)>()
 
