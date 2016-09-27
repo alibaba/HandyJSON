@@ -84,19 +84,34 @@ class ViewController: UIViewController {
     }
 
     func serialization() {
-        class Animal {
-            var name: String?
-            var height: Int?
+        enum Gender: String {
+            case Male = "male"
+            case Female = "Female"
+        }
 
-            init(name: String, height: Int) {
+        struct Subject {
+            var id: Int64?
+            var name: String?
+
+            init(id: Int64, name: String) {
+                self.id = id
                 self.name = name
-                self.height = height
             }
         }
 
-        let cat = Animal(name: "cat", height: 30)
-        print(JSONSerializer.serializeToJSON(cat)!)
-        print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
+        class Student {
+            var name: String?
+            var gender: Gender?
+            var subjects: [Subject]?
+        }
+
+        let student = Student()
+        student.name = "Jack"
+        student.gender = .Female
+        student.subjects = [Subject(id: 1, name: "math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
+
+        print(JSONSerializer.serializeToJSON(student)!)
+        print(JSONSerializer.serializeToJSON(student, prettify: true)!)
     }
 
     func deserialization() {

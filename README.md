@@ -2,18 +2,72 @@
 
 HandyJSON is a framework written in Swift which to make converting model objects(classes/structs) to and from JSON easy on iOS.
 
-Compared with others, the most significant feature of HandyJSON is that it does not need the objects inherit from NSObject(not using KVC), neither implements a 'mapping' function.
+Compared with others, the most significant feature of HandyJSON is that it does not need the objects inherit from NSObject(not using KVC but reflection), neither implements a 'mapping' function.
 
 [![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=master)](https://travis-ci.org/alibaba/HandyJSON)
 [![Cocoapods Version](https://img.shields.io/cocoapods/v/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
 [![Cocoapods Platform](https://img.shields.io/cocoapods/p/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
 [![Codecov branch](https://img.shields.io/codecov/c/github/alibaba/HandyJSON/master.svg?style=flat)](https://codecov.io/gh/alibaba/HandyJSON/branch/master)
 
-## Feature
+## Sample Code
 
-* Deserialize JSON to Object (classes and structs)
+### Deserialization
 
-* Support most all types in Swift
+```
+struct Animal: HandyJSON {
+    var name: String?
+    var height: Int?
+}
+
+if let cat = JSONDeserializer<Animal>.deserializeFrom(json) {
+    print(cat)
+}
+```
+
+### Serialization
+
+```
+class Animal {
+    var name: String?
+    var height: Int?
+
+    init(name: String, height: Int) {
+        self.name = name
+        self.height = height
+    }
+}
+
+let cat = Animal(name: "cat", height: 30)
+
+print(JSONSerializer.serializeToJSON(cat)!)
+print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
+```
+
+# Content
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+    - [Cocoapods](#cocoapods)
+- [Deserialization](#deserialization)
+    - [The Basics](#the-basics)
+    - [Optional, ImplicitlyUnwrappedOptional, Collectiones and so on](optional-implicitlyunwrappedoptional-collectiones-and-so-on)
+    - [Designated Path](#designated-path)
+    - [Composition Object](#composition-object)
+    - [Inheritance Object](#inheritance-object)
+    - [Custom Mapping](#custom-mapping)
+    - [Supported Property Type](#supported-property-type)
+- [Serialization](#serialization)
+    - [The Basics](#the-basics)
+    - [Complex Object](#complex-object)
+- [Compatibility](#compatibility)
+- [To Do](#to-do)
+
+# Features
+
+* Serialize/Deserialize Object/JSON to/From JSON/Object (classes and structs)
+
+* Support almost all types in Swift
 
 * Naturally use object property name for mapping, no need to specify a mapping relationship
 
@@ -21,15 +75,15 @@ Compared with others, the most significant feature of HandyJSON is that it does 
 
 * Type-Adaption, such as string json field maps to int property, int json field maps to string property
 
-## Requirements
+# Requirements
 
 * iOS 8.0+
 
 * Swift 2.3+
 
-## Installation
+# Installation
 
-### Cocoapods
+## Cocoapods
 
 Add the following lines to your podfile:
 
@@ -42,6 +96,8 @@ Then, run the following command:
 ```
 $ pod install
 ```
+
+# Deserialization
 
 ## The Basics
 
@@ -81,7 +137,7 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(jsonString) {
 }
 ```
 
-## Optional, ImplicitlyUnwrappedOptional, Collectiones and so on
+## Optional, ImplicitlyUnwrappedOptional, Collections and so on
 
 'HandyJSON' support classes/structs composed of `optional`, `implicitlyUnwrappedOptional`, `array`, `dictionary`, `objective-c base type`, `nested type` etc. properties.
 
@@ -104,7 +160,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
 
 ## Designated Path
 
-`HandyJSON` supports deserialization from designated path of json.
+`HandyJSON` supports deserialization from designated path of JSON.
 
 ```
 struct Cat: HandyJSON {
@@ -201,25 +257,11 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
 
 ## Supported Property Type
 
-* `Int`
-
-* `Bool`
-
-* `Double`
-
-* `Float`
-
-* `String`
-
-* `NSString`
-
-* `NSNumber`
+* `Int`/`Bool`/`Double`/`Float`/`String`/`NSNumber`/`NSString`
 
 * `NSArray/NSDictionary`
 
-* `Int8/Int16/Int32/Int64`
-
-* `UInt8/UInt16/UInt23/UInt64`
+* `Int8/Int16/Int32/Int64`/`UInt8/UInt16/UInt23/UInt64`
 
 * `Optional<T>/ImplicitUnwrappedOptional<T>` // T is one of the above types
 
@@ -229,7 +271,64 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
 
 * Nested of aboves
 
-## Compatibility
+# Serialization
+
+## The Basics
+
+You need to do nothing special to support serialization. Define the class/struct, get the instances, then serialize it.
+
+```
+class Animal {
+    var name: String?
+    var height: Int?
+
+    init(name: String, height: Int) {
+        self.name = name
+        self.height = height
+    }
+}
+
+let cat = Animal(name: "cat", height: 30)
+print(JSONSerializer.serializeToJSON(cat)!)
+print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
+```
+
+## Complex Object
+
+Still need no extra effort.
+
+```
+enum Gender: String {
+    case Male = "male"
+    case Female = "Female"
+}
+
+struct Subject {
+    var id: Int64?
+    var name: String?
+
+    init(id: Int64, name: String) {
+        self.id = id
+        self.name = name
+    }
+}
+
+class Student {
+    var name: String?
+    var gender: Gender?
+    var subjects: [Subject]?
+}
+
+let student = Student()
+student.name = "Jack"
+student.gender = .Female
+student.subjects = [Subject(id: 1, name: "math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
+
+print(JSONSerializer.serializeToJSON(student)!)
+print(JSONSerializer.serializeToJSON(student, prettify: true)!)
+```
+
+# Compatibility
 
 * Pass test on 32-bit/64bit simulator/real device
 
@@ -237,7 +336,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
 
 * Pass test while compiled with Swift 2.2、2.3、3.0 beta
 
-## To Do
+# To Do
 
 * Support non-object (such as basic type, array, dictionany) type deserializing directly
 
