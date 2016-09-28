@@ -101,9 +101,9 @@ $ pod install
 
 ## The Basics
 
-To support deserialization from JSON, a class/struct need to comform to 'HandyJSON' protocol. It's truly protocol, not some class inherited from NSObject.
+To support deserialization from JSON, a class/struct need to conform to 'HandyJSON' protocol. It's truly protocol, not some class inherited from NSObject.
 
-To comform to 'HandyJSON', a class need to implement an empty initializer.
+To conform to 'HandyJSON', a class need to implement an empty initializer.
 
 ```
 class Animal: HandyJSON {
@@ -177,7 +177,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString, designatedPath: "
 
 ## Composition Object
 
-Notice that all the properties of a class/struct need to deserialized should be type comformed to `HandyJSON`.
+Notice that all the properties of a class/struct need to deserialized should be type conformed to `HandyJSON`.
 
 ```
 struct Component: HandyJSON {
@@ -200,7 +200,7 @@ if let composition = JSONDeserializer<Composition>.deserializeFrom(jsonString) {
 
 ## Inheritance Object
 
-A subclass need deserialization, it's superclass need to comform to `HandyJSON`.
+A subclass need deserialization, it's superclass need to conform to `HandyJSON`.
 
 ```
 class Animal: HandyJSON {
