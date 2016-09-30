@@ -11,7 +11,7 @@
 		21520C481D3341B200F53111 /* HandyJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 21520C471D3341B200F53111 /* HandyJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21520C541D3341FC00F53111 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C501D3341FC00F53111 /* Extension.swift */; };
 		21520C551D3341FC00F53111 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C511D3341FC00F53111 /* Property.swift */; };
-		21520C561D3341FC00F53111 /* Transformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C521D3341FC00F53111 /* Transformer.swift */; };
+		21520C561D3341FC00F53111 /* JSONDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C521D3341FC00F53111 /* JSONDeserializer.swift */; };
 		21520C5E1D3344A900F53111 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C5D1D3344A900F53111 /* AppDelegate.swift */; };
 		21520C601D3344A900F53111 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C5F1D3344A900F53111 /* ViewController.swift */; };
 		21520C631D3344A900F53111 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21520C611D3344A900F53111 /* Main.storyboard */; };
@@ -23,6 +23,7 @@
 		217B04681D56D2B50035A8E2 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B04671D56D2B50035A8E2 /* Converter.swift */; };
 		217B04701D571B9F0035A8E2 /* StructObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */; };
 		217B04721D571B9F0035A8E2 /* HandyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21520C441D3341B200F53111 /* HandyJSON.framework */; };
+		21A7A59D1D9EBF450015E3F0 /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */; };
 		21F252AA1D58BE9100B214BB /* NestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestObjectTest.swift */; };
 		21F252AC1D595F3900B214BB /* ClassObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AB1D595F3900B214BB /* ClassObjectTest.swift */; };
 		21F252B01D596A7000B214BB /* MemoryLayoutValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AF1D596A7000B214BB /* MemoryLayoutValidationTest.swift */; };
@@ -69,7 +70,7 @@
 		21520C491D3341B200F53111 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21520C501D3341FC00F53111 /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		21520C511D3341FC00F53111 /* Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
-		21520C521D3341FC00F53111 /* Transformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transformer.swift; sourceTree = "<group>"; };
+		21520C521D3341FC00F53111 /* JSONDeserializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONDeserializer.swift; sourceTree = "<group>"; };
 		21520C5B1D3344A900F53111 /* HandyJSONDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandyJSONDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21520C5D1D3344A900F53111 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21520C5F1D3344A900F53111 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -83,6 +84,7 @@
 		217B046D1D571B9F0035A8E2 /* HandyJSONTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandyJSONTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructObjectTest.swift; sourceTree = "<group>"; };
 		217B04711D571B9F0035A8E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
 		21F252A91D58BE9100B214BB /* NestObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NestObjectTest.swift; sourceTree = "<group>"; };
 		21F252AB1D595F3900B214BB /* ClassObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassObjectTest.swift; sourceTree = "<group>"; };
 		21F252AF1D596A7000B214BB /* MemoryLayoutValidationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryLayoutValidationTest.swift; sourceTree = "<group>"; };
@@ -145,7 +147,8 @@
 				21520C501D3341FC00F53111 /* Extension.swift */,
 				2179B6B21D911DB4007B0320 /* CustomMapper.swift */,
 				21520C511D3341FC00F53111 /* Property.swift */,
-				21520C521D3341FC00F53111 /* Transformer.swift */,
+				21520C521D3341FC00F53111 /* JSONDeserializer.swift */,
+				21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */,
 				21520C491D3341B200F53111 /* Info.plist */,
 			);
 			path = HandyJSON;
@@ -330,7 +333,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				21520C551D3341FC00F53111 /* Property.swift in Sources */,
-				21520C561D3341FC00F53111 /* Transformer.swift in Sources */,
+				21A7A59D1D9EBF450015E3F0 /* JSONSerializer.swift in Sources */,
+				21520C561D3341FC00F53111 /* JSONDeserializer.swift in Sources */,
 				21520C541D3341FC00F53111 /* Extension.swift in Sources */,
 				217B04681D56D2B50035A8E2 /* Converter.swift in Sources */,
 				2179B6B31D911DB4007B0320 /* CustomMapper.swift in Sources */,
