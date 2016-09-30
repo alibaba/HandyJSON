@@ -2,7 +2,7 @@
 
 HandyJSON is a framework written in Swift which to make converting model objects(classes/structs) to and from JSON easy on iOS.
 
-Compared with others, the most significant feature of HandyJSON is that it does not need the objects inherit from NSObject( **not using KVC but reflection** ), neither implements a 'mapping' function( **use pointer to achieve property assignment** ).
+Compared with others, the most significant feature of HandyJSON is that it does not need the objects inherit from NSObject(**not using KVC but reflection**), neither implements a 'mapping' function(**use pointer to achieve property assignment**).
 
 [![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=master)](https://travis-ci.org/alibaba/HandyJSON)
 [![Cocoapods Version](https://img.shields.io/cocoapods/v/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
