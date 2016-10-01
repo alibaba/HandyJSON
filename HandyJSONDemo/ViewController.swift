@@ -19,55 +19,6 @@
 import UIKit
 import HandyJSON
 
-enum Gender: String, HandyJSON {
-    case Male = "Male"
-    case Female = "Female"
-
-    init() {
-        self = .Male
-    }
-}
-
-struct Teacher: HandyJSON {
-    var name: String?
-    var age: Int?
-    var height: Int?
-    var gender: Gender?
-
-    mutating func mapping(mapper: HelpingMapper) {
-        mapper.specify(&gender) {
-            return Gender(rawValue: $0)
-        }
-    }
-}
-
-struct Subject: HandyJSON {
-    var name: String?
-    var id: Int64?
-    var credit: Int?
-    var lessonPeriod: Int?
-}
-
-class Student: HandyJSON {
-    var id: String?
-    var name: String?
-    var age: Int?
-    var height: Int?
-    var gender: Gender?
-    var className: String?
-    var teacher: Teacher?
-    var subject: [Subject]?
-    var seat: String?
-
-    required init() {}
-
-    func mapping(mapper: HelpingMapper) {
-        mapper.specify(&gender) {
-            return Gender(rawValue: $0)
-        }
-    }
-}
-
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -115,6 +66,55 @@ class ViewController: UIViewController {
     }
 
     func deserialization() {
+        enum Gender: String, HandyJSON {
+            case Male = "Male"
+            case Female = "Female"
+
+            init() {
+                self = .Male
+            }
+        }
+
+        struct Teacher: HandyJSON {
+            var name: String?
+            var age: Int?
+            var height: Int?
+            var gender: Gender?
+
+            mutating func mapping(mapper: HelpingMapper) {
+                mapper.specify(&gender) {
+                    return Gender(rawValue: $0)
+                }
+            }
+        }
+
+        struct Subject: HandyJSON {
+            var name: String?
+            var id: Int64?
+            var credit: Int?
+            var lessonPeriod: Int?
+        }
+
+        class Student: HandyJSON {
+            var id: String?
+            var name: String?
+            var age: Int?
+            var height: Int?
+            var gender: Gender?
+            var className: String?
+            var teacher: Teacher?
+            var subject: [Subject]?
+            var seat: String?
+
+            required init() {}
+
+            func mapping(mapper: HelpingMapper) {
+                mapper.specify(&gender) {
+                    return Gender(rawValue: $0)
+                }
+            }
+        }
+
         let jsonString = "{\"id\":\"77544\",\"name\":\"Tom Li\",\"age\":18,\"height\":180,\"gender\":\"Male\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subject\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
 
         if let student = JSONDeserializer<Student>.deserializeFrom(jsonString) {
