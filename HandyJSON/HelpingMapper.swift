@@ -21,31 +21,32 @@ import Foundation
 
 public class HelpingMapper {
 
-    private var mapping = Dictionary<Int, (String?, (String -> ())?)>()
+    private var mapping = Dictionary<Int, (String?, ((String) -> ())?)>()
 
-    public func specify<T>(inout property: T, name: String) {
-        let key = withUnsafePointer(&property, { return $0 }).hashValue
+    public func specify<T>(property: inout T, name: String) {
+        let key = withUnsafePointer(to: &property, { return $0 }).hashValue
         self.mapping[key] = (name, nil)
     }
 
-    public func specify<T>(inout property: T, converter: String -> T) {
-        let key = withUnsafePointer(&property, { return $0 }).hashValue
+    public func specify<T>(property: inout T, converter: @escaping (String) -> T) {
+        let pointer = withUnsafePointer(to: &property, { return $0 })
+        let key = pointer.hashValue
         let assign = { (rawValue: String) in
-            UnsafeMutablePointer<T>(bitPattern: key).memory = converter(rawValue)
+            UnsafeMutablePointer<T>(mutating: pointer).pointee = converter(rawValue)
         }
         self.mapping[key] = (nil, assign)
     }
 
-    public func specify<T>(inout property: T, name: String, converter: String -> T) {
-        let key = withUnsafePointer(&property, { return $0 }).hashValue
-
+    public func specify<T>(property: inout T, name: String, converter: @escaping (String) -> T) {
+        let pointer = withUnsafePointer(to: &property, { return $0 })
+        let key = pointer.hashValue
         let assign = { (rawValue: String) in
-            UnsafeMutablePointer<T>(bitPattern: key).memory = converter(rawValue)
+            UnsafeMutablePointer<T>(mutating: pointer).pointee = converter(rawValue)
         }
         self.mapping[key] = (name, assign)
     }
 
-    internal func getNameAndConverter(key: Int) -> (String?, (String -> ())?)? {
+    internal func getNameAndConverter(key: Int) -> (String?, ((String) -> ())?)? {
         return mapping[key]
     }
 }

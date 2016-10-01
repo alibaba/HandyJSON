@@ -42,7 +42,7 @@ class ClassObjectTest: XCTestCase {
 
     func testSimpleClass() {
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        guard let a = JSONDeserializer<A>.deserializeFrom(jsonString) else {
+        guard let a = JSONDeserializer<A>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -61,7 +61,7 @@ class ClassObjectTest: XCTestCase {
 
     func testClassWithArrayProperty() {
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let b = JSONDeserializer<B>.deserializeFrom(jsonString) else {
+        guard let b = JSONDeserializer<B>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -75,14 +75,14 @@ class ClassObjectTest: XCTestCase {
     class C: NSObject, HandyJSON {
         var id: Int?
         var arr1: Array<Int?>!
-        var arr2: Array<String!>?
+        var arr2: Array<String>?
 
         required override init() {}
     }
 
     func testClassWithImplicitlyUnwrappedOptionalProperty() {
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let c = JSONDeserializer<C>.deserializeFrom(jsonString) else {
+        guard let c = JSONDeserializer<C>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -106,7 +106,7 @@ class ClassObjectTest: XCTestCase {
 
     func testClassWithDummyProperty() {
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let d = JSONDeserializer<D>.deserializeFrom(jsonString) else {
+        guard let d = JSONDeserializer<D>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -120,14 +120,14 @@ class ClassObjectTest: XCTestCase {
     class E: HandyJSON {
         var id: Int?
         var arr1: Array<Int?>!
-        var arr2: Array<String!>?
+        var arr2: Array<String>?
 
         required init() {}
     }
 
     func testClassWithDummyJsonField() {
         let jsonString = "{\"id\":123456,\"dummy1\":23334,\"arr1\":[1,2,3,4,5,6],\"dummy2\":\"string\",\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let e = JSONDeserializer<E>.deserializeFrom(jsonString) else {
+        guard let e = JSONDeserializer<E>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -140,7 +140,7 @@ class ClassObjectTest: XCTestCase {
     
     func testOptionalClass() {
         var jsonString: String? = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        guard let a = JSONDeserializer<A>.deserializeFrom(jsonString) else {
+        guard let a = JSONDeserializer<A>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -150,7 +150,7 @@ class ClassObjectTest: XCTestCase {
         
         jsonString = nil
         
-        if let _ = JSONDeserializer<A>.deserializeFrom(jsonString) {
+        if let _ = JSONDeserializer<A>.deserializeFrom(json: jsonString) {
             XCTAssert(false)
         } else {
             XCTAssert(true)

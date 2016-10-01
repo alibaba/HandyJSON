@@ -45,15 +45,15 @@ class CustomMappingTest: XCTestCase {
 
             mutating func mapping(mapper: HelpingMapper) {
                 // specify json field name
-                mapper.specify(&name, name: "json_name")
+                mapper.specify(property: &name, name: "json_name")
 
                 // specify converting method
-                mapper.specify(&id, converter: { rawValue -> String in
+                mapper.specify(property: &id, converter: { rawValue -> String in
                     return "json_" + rawValue
                 })
 
                 // specify both
-                mapper.specify(&height, name: "json_height", converter: { rawValue -> Int in
+                mapper.specify(property: &height, name: "json_height", converter: { rawValue -> Int in
                     print("classMapping: ", rawValue)
                     return Int(rawValue) ?? 0
                 })
@@ -61,7 +61,7 @@ class CustomMappingTest: XCTestCase {
         }
 
         let jsonString = "{\"json_name\":\"Bob\",\"id\":\"12345\",\"json_height\":180}"
-        guard let a = JSONDeserializer<A>.deserializeFrom(jsonString) else {
+        guard let a = JSONDeserializer<A>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -82,15 +82,15 @@ class CustomMappingTest: XCTestCase {
 
             func mapping(mapper: HelpingMapper) {
                 // specify json field name
-                mapper.specify(&name, name: "json_name")
+                mapper.specify(property: &name, name: "json_name")
 
                 // specify converting method
-                mapper.specify(&id, converter: { rawValue -> String in
+                mapper.specify(property: &id, converter: { rawValue -> String in
                     return "json_" + rawValue
                 })
 
                 // specify both
-                mapper.specify(&height, name: "json_height", converter: { rawValue -> Int? in
+                mapper.specify(property: &height, name: "json_height", converter: { rawValue -> Int? in
                     print("classMapping: ", rawValue)
                     return Int(rawValue)
                 })
@@ -98,7 +98,7 @@ class CustomMappingTest: XCTestCase {
         }
 
         let jsonString = "{\"json_name\":\"Bob\",\"id\":\"12345\",\"json_height\":180}"
-        guard let a = JSONDeserializer<A>.deserializeFrom(jsonString) else {
+        guard let a = JSONDeserializer<A>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }

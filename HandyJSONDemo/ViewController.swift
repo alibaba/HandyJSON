@@ -19,55 +19,6 @@
 import UIKit
 import HandyJSON
 
-enum Gender: String, HandyJSON {
-    case Male = "Male"
-    case Female = "Female"
-
-    init() {
-        self = .Male
-    }
-}
-
-struct Teacher: HandyJSON {
-    var name: String?
-    var age: Int?
-    var height: Int?
-    var gender: Gender?
-
-    mutating func mapping(mapper: HelpingMapper) {
-        mapper.specify(&gender) {
-            return Gender(rawValue: $0)
-        }
-    }
-}
-
-struct Subject: HandyJSON {
-    var name: String?
-    var id: Int64?
-    var credit: Int?
-    var lessonPeriod: Int?
-}
-
-class Student: HandyJSON {
-    var id: String?
-    var name: String?
-    var age: Int?
-    var height: Int?
-    var gender: Gender?
-    var className: String?
-    var teacher: Teacher?
-    var subject: [Subject]?
-    var seat: String?
-
-    required init() {}
-
-    func mapping(mapper: HelpingMapper) {
-        mapper.specify(&gender) {
-            return Gender(rawValue: $0)
-        }
-    }
-}
-
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -76,6 +27,21 @@ class ViewController: UIViewController {
 
         self.serialization()
         self.deserialization()
+        self.simpleDeserialization()
+    }
+
+    func simpleDeserialization() {
+        class Cat: HandyJSON {
+            var id: Int?
+
+            required init() {}
+        }
+
+        if let cat = JSONDeserializer<Cat>.deserializeFrom(json: "{\"id\": 12}") {
+            print(cat.id)
+        } else {
+            print("nothing")
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -110,14 +76,63 @@ class ViewController: UIViewController {
         student.gender = .Female
         student.subjects = [Subject(id: 1, name: "math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
 
-        print(JSONSerializer.serializeToJSON(student)!)
-        print(JSONSerializer.serializeToJSON(student, prettify: true)!)
+        print(JSONSerializer.serializeToJSON(object: student)!)
+        print(JSONSerializer.serializeToJSON(object: student, prettify: true)!)
     }
 
     func deserialization() {
+        enum Gender: String, HandyJSON {
+            case Male = "Male"
+            case Female = "Female"
+
+            init() {
+                self = .Male
+            }
+        }
+
+        struct Teacher: HandyJSON {
+            var name: String?
+            var age: Int?
+            var height: Int?
+            var gender: Gender?
+
+            mutating func mapping(mapper: HelpingMapper) {
+                mapper.specify(property: &gender) {
+                    return Gender(rawValue: $0)
+                }
+            }
+        }
+
+        struct Subject: HandyJSON {
+            var name: String?
+            var id: Int64?
+            var credit: Int?
+            var lessonPeriod: Int?
+        }
+
+        class Student: HandyJSON {
+            var id: String?
+            var name: String?
+            var age: Int?
+            var height: Int?
+            var gender: Gender?
+            var className: String?
+            var teacher: Teacher?
+            var subject: [Subject]?
+            var seat: String?
+
+            required init() {}
+
+            func mapping(mapper: HelpingMapper) {
+                mapper.specify(property: &gender) {
+                    return Gender(rawValue: $0)
+                }
+            }
+        }
+
         let jsonString = "{\"id\":\"77544\",\"name\":\"Tom Li\",\"age\":18,\"height\":180,\"gender\":\"Male\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subject\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
 
-        if let student = JSONDeserializer<Student>.deserializeFrom(jsonString) {
+        if let student = JSONDeserializer<Student>.deserializeFrom(json: jsonString) {
             print(student)
             print(student.id)
             print(student.name)
