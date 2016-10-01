@@ -19,7 +19,9 @@ struct Animal: HandyJSON {
     var height: Int?
 }
 
-if let cat = JSONDeserializer<Animal>.deserializeFrom(json) {
+let json = "{\"name\": \"Tom\", \"height\": 25.0}"
+
+if let cat = JSONDeserializer<Animal>.deserializeFrom(json: json) {
     print(cat)
 }
 ```
@@ -39,8 +41,8 @@ class Animal {
 
 let cat = Animal(name: "cat", height: 30)
 
-print(JSONSerializer.serializeToJSON(cat)!)
-print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
+print(JSONSerializer.serializeToJSON(object: cat)!)
+print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
 ```
 
 # Content
@@ -79,16 +81,22 @@ print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
 
 * iOS 8.0+
 
-* Swift 2.3+
+* Swift 2.3+ / Swift 3.0+
 
 # Installation
+
+**To use with Swift 2.x using == 0.2.0**
+
+**To use with Swift 3.x using >= 1.0.0**
+
+For Legacy Swift support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x)
 
 ## Cocoapods
 
 Add the following lines to your podfile:
 
 ```
-pod 'HandyJSON', '~> 0.2.0'
+pod 'HandyJSON', '~> 1.0.0'
 ```
 
 Then, run the following command:
@@ -116,7 +124,7 @@ class Animal: HandyJSON {
 
 let jsonString = "{\"name\":\"cat\",\"id\":\"12345\",\"num\":180}"
 
-if let animal = JSONDeserializer<Animal>.deserializeFrom(jsonString) {
+if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
     print(animal)
 }
 ```
@@ -132,7 +140,7 @@ struct Animal: HandyJSON {
 
 let jsonString = "{\"name\":\"cat\",\"id\":\"12345\",\"num\":180}"
 
-if let animal = JSONDeserializer<Animal>.deserializeFrom(jsonString) {
+if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
     print(animal)
 }
 ```
@@ -155,7 +163,7 @@ struct Cat: HandyJSON {
 
 let jsonString = "{\"id\":1234567,\"name\":\"Kitty\",\"friend\":[\"Tom\",\"Jack\",\"Lily\",\"Black\"],\"weight\":15.34,\"alive\":false,\"color\":\"white\"}"
 
-if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
+if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
     print(cat)
 }
 ```
@@ -172,7 +180,7 @@ struct Cat: HandyJSON {
 
 let jsonString = "{\"code\":200,\"msg\":\"success\",\"data\":{\"cat\":{\"id\":12345,\"name\":\"Kitty\"}}}"
 
-if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString, designatedPath: "data.cat") {
+if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString, designatedPath: "data.cat") {
     print(cat.name)
 }
 ```
@@ -195,7 +203,7 @@ struct Composition: HandyJSON {
 
 let jsonString = "{\"num\":12345,\"comp1\":{\"aInt\":1,\"aString\":\"aaaaa\"},\"comp2\":{\"aInt\":2,\"aString\":\"bbbbb\"}}"
 
-if let composition = JSONDeserializer<Composition>.deserializeFrom(jsonString) {
+if let composition = JSONDeserializer<Composition>.deserializeFrom(json: jsonString) {
     print(composition)
 }
 ```
@@ -221,7 +229,7 @@ class Cat: Animal {
 
 let jsonString = "{\"id\":12345,\"color\":\"black\",\"name\":\"cat\"}"
 
-if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
+if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
     print(cat)
 }
 ```
@@ -238,12 +246,12 @@ class Cat: HandyJSON {
 
     required init() {}
 
-    func mapping(mapper: CustomMapper) {
+    func mapping(mapper: HelpingMapper) {
         // specify 'cat_id' field in json map to 'id' property in object
-        mapper.specify(&id, name: "cat_id")
+        mapper.specify(property: &id, name: "cat_id")
 
         // specify 'parent' field in json parse as following to 'parent' property in object
-        mapper.specify(&parent) {
+        mapper.specify(property: &parent) {
             let parentName = $0.characters.split{$0 == "/"}.map(String.init)
             return (parentName[0], parentName[1])
         }
@@ -252,7 +260,7 @@ class Cat: HandyJSON {
 
 let jsonString = "{\"cat_id\":12345,\"name\":\"Kitty\",\"parent\":\"Tom/Lily\"}"
 
-if let cat = JSONDeserializer<Cat>.deserializeFrom(jsonString) {
+if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
     print(cat)
 }
 ```
@@ -291,8 +299,8 @@ class Animal {
 }
 
 let cat = Animal(name: "cat", height: 30)
-print(JSONSerializer.serializeToJSON(cat)!)
-print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
+print(JSONSerializer.serializeToJSON(object: cat)!)
+print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
 ```
 
 ## Complex Object
@@ -326,22 +334,22 @@ student.name = "Jack"
 student.gender = .Female
 student.subjects = [Subject(id: 1, name: "math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
 
-print(JSONSerializer.serializeToJSON(student)!)
-print(JSONSerializer.serializeToJSON(student, prettify: true)!)
+print(JSONSerializer.serializeToJSON(object: student)!)
+print(JSONSerializer.serializeToJSON(object: student, prettify: true)!)
 ```
 
 # Compatibility
 
-* Pass test on 32-bit/64bit simulator/real device
+* Pass tests on 32-bit/64bit simulator/real device
 
-* Pass test on iOS 8.0+/9.0+/10.0+
+* Pass tests on iOS 8.0+/9.0+/10.0+
 
-* Pass test while compiled with Swift 2.2、2.3、3.0 beta
+* Pass tests while compiled with Swift 2.3、3.0
 
 # To Do
 
 * Support non-object (such as basic type, array, dictionany) type deserializing directly
 
-* A branch for Swift 3.0
+* Improve error handling
 
 * Support macOS
