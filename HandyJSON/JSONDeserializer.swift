@@ -21,170 +21,78 @@ import Foundation
 
 public class JSONDeserializer<T: HandyJSON> {
     public static func deserializeFrom(dict: NSDictionary) -> T? {
-        return T.transform(dict, toType: T.self) as? T
+        return T._transform(dict: dict, toType: T.self) as? T
     }
 
     public static func deserializeFrom(dict: NSDictionary, designatedPath: String?) -> T? {
         var tmpDict: AnyObject? = dict
-        if let paths = designatedPath?.componentsSeparatedByString(".") where paths.count > 0 {
+        if let paths = designatedPath?.components(separatedBy: "."), paths.count > 0 {
             paths.forEach({ (seg) in
-                tmpDict = (tmpDict as? NSDictionary)?.objectForKey(seg)
+                tmpDict = (tmpDict as? NSDictionary)?.object(forKey: seg) as AnyObject?
             })
         }
         if let innerDict = tmpDict as? NSDictionary {
-            return deserializeFrom(innerDict)
+            return deserializeFrom(dict: innerDict)
         }
         return nil
     }
 
     public static func deserializeFrom(json: String) -> T? {
-        return deserializeFrom(json, designatedPath: nil)
+        return deserializeFrom(json: json, designatedPath: nil)
     }
     
     public static func deserializeFrom(json: String?) -> T? {
         if let _json = json {
-            return self.deserializeFrom(_json)
+            return self.deserializeFrom(json: _json)
         } else {
             return nil
         }
     }
 
     public static func deserializeFrom(json: String, designatedPath: String?) -> T? {
-        if let dict = try? NSJSONSerialization.JSONObjectWithData(json.dataUsingEncoding(NSUTF8StringEncoding)!, options: .AllowFragments) {
+        if let dict = try? JSONSerialization.jsonObject(with: json.data(using: String.Encoding.utf8)!, options: .allowFragments) {
             if let jsonDict = dict as? NSDictionary {
-                return deserializeFrom(jsonDict, designatedPath: designatedPath)
+                return deserializeFrom(dict: jsonDict, designatedPath: designatedPath)
             }
         }
         return nil
     }
 }
 
-
-public class JSONSerializer {
-    
-    public static func serializeToJSON(object: Any?, prettify: Bool = false) -> String? {
-        if let _object = object {
-            var json = _serializeToJSON(_object)
-            
-            if prettify {
-                let jsonData = json.dataUsingEncoding(NSUTF8StringEncoding)!
-                let jsonObject:AnyObject = try! NSJSONSerialization.JSONObjectWithData(jsonData, options: [])
-                let prettyJsonData = try! NSJSONSerialization.dataWithJSONObject(jsonObject, options: .PrettyPrinted)
-                json = NSString(data: prettyJsonData, encoding: NSUTF8StringEncoding)! as String
-            }
-            return json
-        } else {
-            return nil
-        }
-    }
-    
-    static func _serializeToJSON(object: Any) -> String {
-        
-        if (object.dynamicType is String.Type || object.dynamicType is NSString.Type ) {
-            let json = "\"" + String(object)  + "\""
-            return json
-        } else if (object.dynamicType is BasePropertyProtocol.Type) {
-            let json = String(object) ?? "null"
-            return json
-        }
-        
-        var json = String()
-        let mirror = Mirror(reflecting: object)
-        
-        if mirror.displayStyle == .Class || mirror.displayStyle == .Struct {
-            var handledValue = String()
-            var children = [(label: String?, value: Any)]()
-            let mirrorChildrenCollection = AnyRandomAccessCollection(mirror.children)!
-            children += mirrorChildrenCollection
-            
-            var currentMirror = mirror
-            while let superclassChildren = currentMirror.superclassMirror()?.children {
-                let randomCollection = AnyRandomAccessCollection(superclassChildren)!
-                children += randomCollection
-                currentMirror = currentMirror.superclassMirror()!
-            }
-            
-            children.enumerate().forEach({ (index, element) in
-                handledValue = _serializeToJSON(element.value)
-                json += "\"\(element.label ?? "")\":\(handledValue)" + (index < children.count-1 ? "," : "")
-            })
-            
-            return "{" + json + "}"
-        } else if mirror.displayStyle == .Enum {
-            return  "\"" + String(object) + "\""
-        } else if  mirror.displayStyle == .Optional {
-            if mirror.children.count != 0 {
-                let (_, some) = mirror.children.first!
-                return _serializeToJSON(some)
-            } else {
-                return "null"
-            }
-        } else if mirror.displayStyle == .Collection || mirror.displayStyle == .Set {
-            json = "["
-            
-            let count = mirror.children.count
-            mirror.children.enumerate().forEach({ (index, element) in
-                let transformValue = _serializeToJSON(element.value)
-                json += transformValue
-                json += (index < count-1 ? "," : "")
-            })
-            
-            json += "]"
-            return json
-        } else if mirror.displayStyle == .Dictionary {
-            json += "{"
-            mirror.children.enumerate().forEach({ (index, element) in
-                let _mirror = Mirror(reflecting: element.value)
-                _mirror.children.enumerate().forEach({ (_index, _element) in
-                    if _index == 0 {
-                        json += _serializeToJSON(_element.value) + ":"
-                    } else {
-                        json += _serializeToJSON(_element.value)
-                        json += (index < mirror.children.count-1 ? "," : "")
-                    }
-                })
-            })
-            json += "}"
-            return json
-        } else {
-            return String(object) != "nil" ? "\"\(object)\"" : "null"
-        }
-    }
-}
-
 extension Property {
     
-    internal static func transform(dict: NSDictionary, withMapper: Mapper, withPointer: UnsafePointer<Byte>, withCurrentOffset: Int, byMirror: Mirror) -> Int {
+    internal static func _transform(rawData dict: NSDictionary, toPointer pointer: UnsafePointer<Byte>, toOffset currentOffset: Int, byMirror mirror: Mirror, withMapper mapper: HelpingMapper) -> Int {
         
-        var currentOffset = withCurrentOffset
-        if let superMirror = byMirror.superclassMirror() {
-            currentOffset = transform(dict, withMapper: withMapper, withPointer: withPointer, withCurrentOffset: currentOffset, byMirror: superMirror)
+        var currentOffset = currentOffset
+        if let superMirror = mirror.superclassMirror {
+            currentOffset = _transform(rawData: dict, toPointer: pointer, toOffset: currentOffset, byMirror: superMirror, withMapper: mapper)
         }
 
-        var pointer = withPointer.advancedBy(currentOffset)
-        byMirror.children.forEach({ (child) in
+        var mutablePointer = pointer.advanced(by: currentOffset)
+        mirror.children.forEach({ (child) in
 
             var offset = 0, size = 0
 
-            guard let p = child.value.dynamicType as? Property.Type else {
+            guard let propertyType = type(of: child.value) as? Property.Type else {
+                print("label: ", child.label ?? "", "type: ", "\(type(of: child.value))")
                 fatalError("Each property should be handyjson-property type")
             }
 
-            size = p.size()
-            offset = p.offsetToAlignment(currentOffset, align: p.align())
+            size = propertyType.size()
+            offset = propertyType.offsetToAlignment(value: currentOffset, align: propertyType.align())
 
-            pointer = pointer.advancedBy(offset)
+            mutablePointer = mutablePointer.advanced(by: offset)
             currentOffset += offset
 
             guard let label = child.label else {
-                pointer = pointer.advancedBy(size)
+                mutablePointer = mutablePointer.advanced(by: size)
                 currentOffset += size
                 return
             }
 
             var key = label
 
-            if let converter = withMapper.getConverter(pointer.hashValue) {
+            if let converter = mapper.getNameAndConverter(key: mutablePointer.hashValue) {
                 // if specific key is set, replace the label
                 if let specifyKey = converter.0 {
                     key = specifyKey
@@ -196,83 +104,83 @@ extension Property {
                         specifyConverter(ocValue)
                     }
 
-                    pointer = pointer.advancedBy(size)
+                    mutablePointer = mutablePointer.advanced(by: size)
                     currentOffset += size
                     return
                 }
             }
 
             guard let value = dict[key] as? NSObject else {
-                pointer = pointer.advancedBy(size)
+                mutablePointer = mutablePointer.advanced(by: size)
                 currentOffset += size
                 return
             }
 
-            if let sv = p.valueFrom(value) {
-                p.codeIntoMemory(pointer, value: sv)
+            if let sv = propertyType.valueFrom(object: value) {
+                propertyType.codeIntoMemory(pointer: mutablePointer, value: sv)
             }
 
-            pointer = pointer.advancedBy(size)
+            mutablePointer = mutablePointer.advanced(by: size)
             currentOffset += size
         })
         return currentOffset
     }
 
-    public static func transform(dict: NSDictionary, toType: HandyJSON.Type) -> HandyJSON {
-        var any = toType.init()
-        let mirror = Mirror(reflecting: any)
+    public static func _transform(dict: NSDictionary, toType type: HandyJSON.Type) -> HandyJSON {
+        var instance = type.init()
+        let mirror = Mirror(reflecting: instance)
 
         guard let dStyle = mirror.displayStyle else {
             fatalError("Target type must has a display type")
         }
 
         var pointer: UnsafePointer<Byte>!
-        let mapper = Mapper()
+        let mapper = HelpingMapper()
         var currentOffset = 0
 
         // do user-specified mapping first
-        any.mapping(mapper)
+        instance.mapping(mapper: mapper)
 
-        if dStyle == .Class {
-            pointer = any.headPointerOfClass()
+        if dStyle == .class {
+            pointer = instance.headPointerOfClass()
             // for 64bit architecture, it's 16
             // for 32bit architecture, it's 12
-            currentOffset = 8 + sizeof(Int)
-        } else if dStyle == .Struct {
-            pointer = any.headPointerOfStruct()
+            currentOffset = 8 + MemoryLayout<Int>.size
+        } else if dStyle == .struct {
+            pointer = instance.headPointerOfStruct()
         } else {
             fatalError("Target object must be class or struct")
         }
 
-        transform(dict, withMapper: mapper, withPointer: pointer, withCurrentOffset: currentOffset, byMirror: mirror)
+        _ = _transform(rawData: dict, toPointer: pointer, toOffset: currentOffset, byMirror: mirror, withMapper: mapper)
 
-        return any
+        return instance
     }
 
     static func valueFrom(object: NSObject) -> Self? {
         if self is BasePropertyProtocol.Type {
 
             // base type can be transformed directly
-            return baseValueFrom(object)
+            return baseValueFrom(object: object)
         } else if self is OptionalTypeProtocol.Type {
 
             // optional type, we parse the wrapped generic type to construct the value, then wrap it to optional
-            return optionalValueFrom(object)
+            return optionalValueFrom(object: object)
         } else if self is ImplicitlyUnwrappedTypeProtocol.Type {
 
             // similar to optional
-            return implicitUnwrappedValueFrom(object)
+            return implicitUnwrappedValueFrom(object: object)
         } else if self is ArrayTypeProtocol.Type {
-            if let va = arrayValueFrom(object) {
+            if let va = arrayValueFrom(object: object) {
 
                 // we can't retrieve the generic type wrapped by array here, so we go into array extension to do the casting
-                return (self as! ArrayTypeProtocol.Type).castArrayType(va) as? Self
+                return (self as! ArrayTypeProtocol.Type).castArrayType(arr: va) as? Self
             }
         } else if self is DictionaryTypeProtocol.Type {
-            if let dict = dictValueFrom(object) {
+            if let dict = dictValueFrom(object: object) {
 
                 // similar to array
-                return (self as! DictionaryTypeProtocol.Type).castDictionaryType(dict) as? Self
+                return (self as! DictionaryTypeProtocol.Type).castDictionaryType(dict: dict) as? Self
             }
         } else if self is NSArray.Type {
 
@@ -288,7 +196,7 @@ extension Property {
 
             if let dict = object as? NSDictionary {
                 // nested object, transform recursively
-                return transform(dict, toType: self as! HandyJSON.Type) as? Self
+                return _transform(dict: dict, toType: self as! HandyJSON.Type) as? Self
             }
         }
         return nil
@@ -338,10 +246,10 @@ extension Property {
     static func optionalValueFrom(object: NSObject) -> Self? {
         if let wrappedType = (self as! OptionalTypeProtocol.Type).getWrappedType() as? Property.Type {
             // only can infer v is property.type
-            if let v = wrappedType.valueFrom(object) {
+            if let v = wrappedType.valueFrom(object: object) {
 
                 // so the argument must be property.type of function "wrapByOptional"
-                return wrappedType.wrapByOptional(v) as? Self
+                return wrappedType.wrapByOptional(value: v) as? Self
             }
         }
         return nil
@@ -351,8 +259,8 @@ extension Property {
         if let wrappedType = (self as! ImplicitlyUnwrappedTypeProtocol.Type).getWrappedType() as? Property.Type {
 
             // similar to optional value processing
-            if let v = wrappedType.valueFrom(object) {
-                return wrappedType.wrapByImplicitUnwrapped(v) as? Self
+            if let v = wrappedType.valueFrom(object: object) {
+                return wrappedType.wrapByImplicitUnwrapped(value: v) as? Self
             }
         }
         return nil
@@ -369,7 +277,7 @@ extension Property {
     static func arrayValueFrom(object: NSObject) -> [Any]? {
         if let wrappedType = (self as! ArrayTypeProtocol.Type).getWrappedType() as? Property.Type {
             if let arr = object as? NSArray {
-                return wrappedType.composeToArray(arr)
+                return wrappedType.composeToArray(nsArray: arr)
             }
         }
         return nil
@@ -379,7 +287,7 @@ extension Property {
         var arr = [Any]()
         nsArray.forEach { (anyObject) in
             if let nsObject = anyObject as? NSObject {
-                let v = valueFrom(nsObject)
+                let v = valueFrom(object: nsObject)
                 arr.append(v)
             }
         }
@@ -389,7 +297,7 @@ extension Property {
     static func dictValueFrom(object: NSObject) -> [String: Any]? {
         if let wrappedValueType = (self as! DictionaryTypeProtocol.Type).getWrappedValueType() as? Property.Type {
             if let dict = object as? NSDictionary {
-                return wrappedValueType.composeToDictionary(dict)
+                return wrappedValueType.composeToDictionary(nsDict: dict)
             }
         }
         return nil
@@ -398,7 +306,7 @@ extension Property {
     static func composeToDictionary(nsDict: NSDictionary) -> [String: Any] {
         var dict = [String: Any]()
         nsDict.forEach { (key, value) in
-            if let sKey = key as? String, nsObject = value as? NSObject, value = valueFrom(nsObject) {
+            if let sKey = key as? String, let nsObject = value as? NSObject, let value = valueFrom(object: nsObject) {
                 dict[sKey] = value
             }
         }
@@ -407,6 +315,6 @@ extension Property {
 
     // keep in mind, self type is the same with type of value
     static func codeIntoMemory(pointer: UnsafePointer<Byte>, value: Property) {
-        (UnsafeMutablePointer(pointer) as UnsafeMutablePointer<Self>).memory = value as! Self
+        pointer.withMemoryRebound(to: Self.self, capacity: 1, { return $0 }).pointee = value as! Self
     }
 }

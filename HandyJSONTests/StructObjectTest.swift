@@ -40,7 +40,7 @@ class StructObjectTest: XCTestCase {
 
     func testSimpleStruct() {
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        guard let a = JSONDeserializer<A>.deserializeFrom(jsonString) else {
+        guard let a = JSONDeserializer<A>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -57,7 +57,7 @@ class StructObjectTest: XCTestCase {
 
     func testStructWithArrayProperty() {
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let b = JSONDeserializer<B>.deserializeFrom(jsonString) else {
+        guard let b = JSONDeserializer<B>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -71,12 +71,12 @@ class StructObjectTest: XCTestCase {
     struct C: HandyJSON {
         var id: Int?
         var arr1: Array<Int?>!
-        var arr2: Array<String!>?
+        var arr2: Array<String?>?
     }
 
     func testStructWithiImpliicitlyUnwrappedOptionalProperty() {
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let c = JSONDeserializer<C>.deserializeFrom(jsonString) else {
+        guard let c = JSONDeserializer<C>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -84,7 +84,7 @@ class StructObjectTest: XCTestCase {
         XCTAssert(c.arr1.count == 6)
         XCTAssert(c.arr2?.count == 5)
         XCTAssert((c.arr1.last ?? 0) == 6)
-        XCTAssert(c.arr2?.last == "e")
+        XCTAssert((c.arr2?.last ?? "") == "e")
     }
 
     struct D: HandyJSON {
@@ -98,7 +98,7 @@ class StructObjectTest: XCTestCase {
 
     func testStructWithDummyProperty() {
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let d = JSONDeserializer<D>.deserializeFrom(jsonString) else {
+        guard let d = JSONDeserializer<D>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -112,12 +112,12 @@ class StructObjectTest: XCTestCase {
     struct E: HandyJSON {
         var id: Int?
         var arr1: Array<Int?>!
-        var arr2: Array<String!>?
+        var arr2: Array<String?>?
     }
 
     func testStructWithiDummyiJsonField() {
         let jsonString = "{\"id\":123456,\"dummy1\":23334,\"arr1\":[1,2,3,4,5,6],\"dummy2\":\"string\",\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let e = JSONDeserializer<E>.deserializeFrom(jsonString) else {
+        guard let e = JSONDeserializer<E>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -125,18 +125,18 @@ class StructObjectTest: XCTestCase {
         XCTAssert(e.arr1.count == 6)
         XCTAssert(e.arr2?.count == 5)
         XCTAssert((e.arr1.last ?? 0) == 6)
-        XCTAssert(e.arr2?.last == "e")
+        XCTAssert((e.arr2?.last ?? "") == "e")
     }
 
     struct F: HandyJSON {
         var id: Int?
         var arr1: Array<Int?>!
-        var arr2: Array<String!>?
+        var arr2: Array<String?>?
     }
 
     func testStructWithiDesiginatePath() {
         let jsonString = "{\"data\":{\"result\":{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}},\"code\":200}"
-        guard let f = JSONDeserializer<E>.deserializeFrom(jsonString, designatedPath: "data.result") else {
+        guard let f = JSONDeserializer<E>.deserializeFrom(json: jsonString, designatedPath: "data.result") else {
             XCTAssert(false)
             return
         }
@@ -144,6 +144,6 @@ class StructObjectTest: XCTestCase {
         XCTAssert(f.arr1.count == 6)
         XCTAssert(f.arr2?.count == 5)
         XCTAssert((f.arr1.last ?? 0) == 6)
-        XCTAssert(f.arr2?.last == "e")
+        XCTAssert((f.arr2?.last ?? "") == "e")
     }
 }
