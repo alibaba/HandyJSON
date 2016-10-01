@@ -38,8 +38,8 @@ extension Property {
     mutating func headPointerOfClass() -> UnsafePointer<Byte> {
 
         let opaquePointer = Unmanaged.passUnretained(self as AnyObject).toOpaque()
-        let mutablePointer = opaquePointer.bindMemory(to: Byte.self, capacity: MemoryLayout<Self>.stride)
-        return UnsafePointer<Byte>(mutablePointer)
+        let mutableTypedPointer = opaquePointer.bindMemory(to: Byte.self, capacity: MemoryLayout<Self>.stride)
+        return UnsafePointer<Byte>(mutableTypedPointer)
     }
 
     // memory size occupy by self object
