@@ -21,7 +21,7 @@ import Foundation
 
 public class JSONDeserializer<T: HandyJSON> {
     public static func deserializeFrom(dict: NSDictionary) -> T? {
-        return T.transform(dict, toType: T.self) as? T
+        return T._transform(dict, toType: T.self) as? T
     }
 
     public static func deserializeFrom(dict: NSDictionary, designatedPath: String?) -> T? {
@@ -59,132 +59,39 @@ public class JSONDeserializer<T: HandyJSON> {
     }
 }
 
-
-public class JSONSerializer {
-    
-    public static func serializeToJSON(object: Any?, prettify: Bool = false) -> String? {
-        if let _object = object {
-            var json = _serializeToJSON(_object)
-            
-            if prettify {
-                let jsonData = json.dataUsingEncoding(NSUTF8StringEncoding)!
-                let jsonObject:AnyObject = try! NSJSONSerialization.JSONObjectWithData(jsonData, options: [])
-                let prettyJsonData = try! NSJSONSerialization.dataWithJSONObject(jsonObject, options: .PrettyPrinted)
-                json = NSString(data: prettyJsonData, encoding: NSUTF8StringEncoding)! as String
-            }
-            return json
-        } else {
-            return nil
-        }
-    }
-    
-    static func _serializeToJSON(object: Any) -> String {
-        
-        if (object.dynamicType is String.Type || object.dynamicType is NSString.Type ) {
-            let json = "\"" + String(object)  + "\""
-            return json
-        } else if (object.dynamicType is BasePropertyProtocol.Type) {
-            let json = String(object) ?? "null"
-            return json
-        }
-        
-        var json = String()
-        let mirror = Mirror(reflecting: object)
-        
-        if mirror.displayStyle == .Class || mirror.displayStyle == .Struct {
-            var handledValue = String()
-            var children = [(label: String?, value: Any)]()
-            let mirrorChildrenCollection = AnyRandomAccessCollection(mirror.children)!
-            children += mirrorChildrenCollection
-            
-            var currentMirror = mirror
-            while let superclassChildren = currentMirror.superclassMirror()?.children {
-                let randomCollection = AnyRandomAccessCollection(superclassChildren)!
-                children += randomCollection
-                currentMirror = currentMirror.superclassMirror()!
-            }
-            
-            children.enumerate().forEach({ (index, element) in
-                handledValue = _serializeToJSON(element.value)
-                json += "\"\(element.label ?? "")\":\(handledValue)" + (index < children.count-1 ? "," : "")
-            })
-            
-            return "{" + json + "}"
-        } else if mirror.displayStyle == .Enum {
-            return  "\"" + String(object) + "\""
-        } else if  mirror.displayStyle == .Optional {
-            if mirror.children.count != 0 {
-                let (_, some) = mirror.children.first!
-                return _serializeToJSON(some)
-            } else {
-                return "null"
-            }
-        } else if mirror.displayStyle == .Collection || mirror.displayStyle == .Set {
-            json = "["
-            
-            let count = mirror.children.count
-            mirror.children.enumerate().forEach({ (index, element) in
-                let transformValue = _serializeToJSON(element.value)
-                json += transformValue
-                json += (index < count-1 ? "," : "")
-            })
-            
-            json += "]"
-            return json
-        } else if mirror.displayStyle == .Dictionary {
-            json += "{"
-            mirror.children.enumerate().forEach({ (index, element) in
-                let _mirror = Mirror(reflecting: element.value)
-                _mirror.children.enumerate().forEach({ (_index, _element) in
-                    if _index == 0 {
-                        json += _serializeToJSON(_element.value) + ":"
-                    } else {
-                        json += _serializeToJSON(_element.value)
-                        json += (index < mirror.children.count-1 ? "," : "")
-                    }
-                })
-            })
-            json += "}"
-            return json
-        } else {
-            return String(object) != "nil" ? "\"\(object)\"" : "null"
-        }
-    }
-}
-
 extension Property {
     
-    internal static func transform(dict: NSDictionary, withMapper: CustomMapper, withPointer: UnsafePointer<Byte>, withCurrentOffset: Int, byMirror: Mirror) -> Int {
+    internal static func _transform(rawData dict: NSDictionary, toPointer pointer: UnsafePointer<Byte>, toOffset currentOffset: Int, byMirror mirror: Mirror, withMapper mapper: HelpingMapper) -> Int {
         
-        var currentOffset = withCurrentOffset
-        if let superMirror = byMirror.superclassMirror() {
-            currentOffset = transform(dict, withMapper: withMapper, withPointer: withPointer, withCurrentOffset: currentOffset, byMirror: superMirror)
+        var currentOffset = currentOffset
+        if let superMirror = mirror.superclassMirror() {
+            currentOffset = _transform(rawData: dict, toPointer: pointer, toOffset: currentOffset, byMirror: superMirror, withMapper: mapper)
         }
 
-        var pointer = withPointer.advancedBy(currentOffset)
-        byMirror.children.forEach({ (child) in
+        var mutablePointer = pointer.advancedBy(currentOffset)
+        mirror.children.forEach({ (child) in
 
             var offset = 0, size = 0
 
-            guard let p = child.value.dynamicType as? Property.Type else {
+            guard let propertyType = child.value.dynamicType as? Property.Type else {
                 fatalError("Each property should be handyjson-property type")
             }
 
-            size = p.size()
-            offset = p.offsetToAlignment(currentOffset, align: p.align())
+            size = propertyType.size()
+            offset = propertyType.offsetToAlignment(currentOffset, align: propertyType.align())
 
-            pointer = pointer.advancedBy(offset)
+            mutablePointer = mutablePointer.advancedBy(offset)
             currentOffset += offset
 
             guard let label = child.label else {
-                pointer = pointer.advancedBy(size)
+                mutablePointer = mutablePointer.advancedBy(size)
                 currentOffset += size
                 return
             }
 
             var key = label
 
-            if let converter = withMapper.getConverter(pointer.hashValue) {
+            if let converter = mapper.getNameAndConverter(mutablePointer.hashValue) {
                 // if specific key is set, replace the label
                 if let specifyKey = converter.0 {
                     key = specifyKey
@@ -196,57 +103,57 @@ extension Property {
                         specifyConverter(ocValue)
                     }
 
-                    pointer = pointer.advancedBy(size)
+                    mutablePointer = mutablePointer.advancedBy(size)
                     currentOffset += size
                     return
                 }
             }
 
             guard let value = dict[key] as? NSObject else {
-                pointer = pointer.advancedBy(size)
+                mutablePointer = mutablePointer.advancedBy(size)
                 currentOffset += size
                 return
             }
 
-            if let sv = p.valueFrom(value) {
-                p.codeIntoMemory(pointer, value: sv)
+            if let sv = propertyType.valueFrom(value) {
+                propertyType.codeIntoMemory(mutablePointer, value: sv)
             }
 
-            pointer = pointer.advancedBy(size)
+            mutablePointer = mutablePointer.advancedBy(size)
             currentOffset += size
         })
         return currentOffset
     }
 
-    public static func transform(dict: NSDictionary, toType: HandyJSON.Type) -> HandyJSON {
-        var any = toType.init()
-        let mirror = Mirror(reflecting: any)
+    public static func _transform(dict: NSDictionary, toType type: HandyJSON.Type) -> HandyJSON {
+        var instance = type.init()
+        let mirror = Mirror(reflecting: instance)
 
         guard let dStyle = mirror.displayStyle else {
             fatalError("Target type must has a display type")
         }
 
         var pointer: UnsafePointer<Byte>!
-        let mapper = CustomMapper()
+        let mapper = HelpingMapper()
         var currentOffset = 0
 
         // do user-specified mapping first
-        any.mapping(mapper)
+        instance.mapping(mapper)
 
         if dStyle == .Class {
-            pointer = any.headPointerOfClass()
+            pointer = instance.headPointerOfClass()
             // for 64bit architecture, it's 16
             // for 32bit architecture, it's 12
             currentOffset = 8 + sizeof(Int)
         } else if dStyle == .Struct {
-            pointer = any.headPointerOfStruct()
+            pointer = instance.headPointerOfStruct()
         } else {
             fatalError("Target object must be class or struct")
         }
 
-        transform(dict, withMapper: mapper, withPointer: pointer, withCurrentOffset: currentOffset, byMirror: mirror)
+        _transform(rawData: dict, toPointer: pointer, toOffset: currentOffset, byMirror: mirror, withMapper: mapper)
 
-        return any
+        return instance
     }
 
     static func valueFrom(object: NSObject) -> Self? {
@@ -288,7 +195,7 @@ extension Property {
 
             if let dict = object as? NSDictionary {
                 // nested object, transform recursively
-                return transform(dict, toType: self as! HandyJSON.Type) as? Self
+                return _transform(dict, toType: self as! HandyJSON.Type) as? Self
             }
         }
         return nil

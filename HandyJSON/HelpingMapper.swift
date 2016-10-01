@@ -19,7 +19,7 @@
 
 import Foundation
 
-public class CustomMapper {
+public class HelpingMapper {
 
     private var mapping = Dictionary<Int, (String?, (String -> ())?)>()
 
@@ -45,7 +45,7 @@ public class CustomMapper {
         self.mapping[key] = (name, assign)
     }
 
-    internal func getConverter(key: Int) -> (String?, (String -> ())?)? {
+    internal func getNameAndConverter(key: Int) -> (String?, (String -> ())?)? {
         return mapping[key]
     }
 }
