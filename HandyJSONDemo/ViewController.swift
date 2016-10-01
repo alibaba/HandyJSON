@@ -27,21 +27,6 @@ class ViewController: UIViewController {
 
         self.serialization()
         self.deserialization()
-        self.simpleDeserialization()
-    }
-
-    func simpleDeserialization() {
-        class Cat: HandyJSON {
-            var id: Int?
-
-            required init() {}
-        }
-
-        if let cat = JSONDeserializer<Cat>.deserializeFrom(json: "{\"id\": 12}") {
-            print(cat.id)
-        } else {
-            print("nothing")
-        }
     }
 
     override func didReceiveMemoryWarning() {
