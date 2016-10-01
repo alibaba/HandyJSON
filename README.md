@@ -238,7 +238,7 @@ class Cat: HandyJSON {
 
     required init() {}
 
-    func mapping(mapper: CustomMapper) {
+    func mapping(mapper: HelpingMapper) {
         // specify 'cat_id' field in json map to 'id' property in object
         mapper.specify(&id, name: "cat_id")
 
