@@ -14,8 +14,10 @@ Compared with others, the most significant feature of HandyJSON is that it does 
 ```
 struct Animal: HandyJSON {
     var name: String?
-    var height: Int?
+    var height: Double?
 }
+
+let json = "{\"name\": \"Tom\", \"height\": 25.0}"
 
 if let cat = JSONDeserializer<Animal>.deserializeFrom(json) {
     print(cat)
@@ -27,15 +29,15 @@ if let cat = JSONDeserializer<Animal>.deserializeFrom(json) {
 ```
 class Animal {
     var name: String?
-    var height: Int?
+    var height: Double?
 
-    init(name: String, height: Int) {
+    init(name: String, height: Double) {
         self.name = name
         self.height = height
     }
 }
 
-let cat = Animal(name: "cat", height: 30)
+let cat = Animal(name: "cat", height: 25.0)
 
 print(JSONSerializer.serializeToJSON(cat)!)
 print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
@@ -86,7 +88,7 @@ print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
 Add the following lines to your podfile:
 
 ```
-pod 'HandyJSON', '~> 0.2.0'
+pod 'HandyJSON', '~> 0.3.0'
 ```
 
 Then, run the following command:
@@ -330,16 +332,6 @@ print(JSONSerializer.serializeToJSON(student, prettify: true)!)
 
 # Compatibility
 
-* Pass test on 32-bit/64bit simulator/real device
+* Pass tests on 32bit/64bit simulator/real device
 
-* Pass test on iOS 8.0+/9.0+/10.0+
-
-* Pass test while compiled with Swift 2.2、2.3、3.0 beta
-
-# To Do
-
-* Support non-object (such as basic type, array, dictionany) type deserializing directly
-
-* A branch for Swift 3.0
-
-* Support macOS
+* Pass tests on iOS 8.0+/9.0+/10.0+
