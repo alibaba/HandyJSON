@@ -16,7 +16,7 @@ Compared with others, the most significant feature of HandyJSON is that it does 
 ```
 struct Animal: HandyJSON {
     var name: String?
-    var height: Int?
+    var height: Double?
 }
 
 let json = "{\"name\": \"Tom\", \"height\": 25.0}"
@@ -31,15 +31,15 @@ if let cat = JSONDeserializer<Animal>.deserializeFrom(json: json) {
 ```
 class Animal {
     var name: String?
-    var height: Int?
+    var height: Double?
 
-    init(name: String, height: Int) {
+    init(name: String, height: Double) {
         self.name = name
         self.height = height
     }
 }
 
-let cat = Animal(name: "cat", height: 30)
+let cat = Animal(name: "cat", height: 25.0)
 
 print(JSONSerializer.serializeToJSON(object: cat)!)
 print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
@@ -85,7 +85,7 @@ print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
 
 # Installation
 
-**To use with Swift 2.x using == 0.2.0**
+**To use with Swift 2.x using == 0.3.0**
 
 **To use with Swift 3.x using >= 1.0.0**
 
@@ -343,8 +343,6 @@ print(JSONSerializer.serializeToJSON(object: student, prettify: true)!)
 * Pass tests on 32-bit/64bit simulator/real device
 
 * Pass tests on iOS 8.0+/9.0+/10.0+
-
-* Pass tests while compiled with Swift 2.3、3.0
 
 # To Do
 
