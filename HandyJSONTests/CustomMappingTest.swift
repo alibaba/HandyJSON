@@ -43,7 +43,7 @@ class CustomMappingTest: XCTestCase {
             var id: String?
             var height: Int?
 
-            mutating func mapping(mapper: CustomMapper) {
+            mutating func mapping(mapper: HelpingMapper) {
                 // specify json field name
                 mapper.specify(&name, name: "json_name")
 
@@ -80,7 +80,7 @@ class CustomMappingTest: XCTestCase {
 
             required init() {}
 
-            func mapping(mapper: CustomMapper) {
+            func mapping(mapper: HelpingMapper) {
                 // specify json field name
                 mapper.specify(&name, name: "json_name")
 

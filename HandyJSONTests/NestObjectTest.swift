@@ -49,7 +49,7 @@ class NestObjectTest: XCTestCase {
     
         required init() {}
 
-        func mapping(mapper: CustomMapper) {
+        func mapping(mapper: HelpingMapper) {
             mapper.specify(&gender) {
                 print("gender", $0)
                 return Gender(rawValue: $0)
@@ -77,7 +77,7 @@ class NestObjectTest: XCTestCase {
     
         required init() {}
 
-        func mapping(mapper: CustomMapper) {
+        func mapping(mapper: HelpingMapper) {
             mapper.specify(&gender) {
                 return Gender(rawValue: $0)
             }

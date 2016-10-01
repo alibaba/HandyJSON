@@ -61,7 +61,7 @@ public class JSONDeserializer<T: HandyJSON> {
 
 extension Property {
     
-    internal static func _transform(rawData dict: NSDictionary, toPointer pointer: UnsafePointer<Byte>, toOffset currentOffset: Int, byMirror mirror: Mirror, withMapper mapper: CustomMapper) -> Int {
+    internal static func _transform(rawData dict: NSDictionary, toPointer pointer: UnsafePointer<Byte>, toOffset currentOffset: Int, byMirror mirror: Mirror, withMapper mapper: HelpingMapper) -> Int {
         
         var currentOffset = currentOffset
         if let superMirror = mirror.superclassMirror() {
@@ -91,7 +91,7 @@ extension Property {
 
             var key = label
 
-            if let converter = mapper.getConverter(mutablePointer.hashValue) {
+            if let converter = mapper.getNameAndConverter(mutablePointer.hashValue) {
                 // if specific key is set, replace the label
                 if let specifyKey = converter.0 {
                     key = specifyKey
@@ -134,7 +134,7 @@ extension Property {
         }
 
         var pointer: UnsafePointer<Byte>!
-        let mapper = CustomMapper()
+        let mapper = HelpingMapper()
         var currentOffset = 0
 
         // do user-specified mapping first
