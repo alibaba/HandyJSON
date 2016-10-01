@@ -28,22 +28,28 @@ extension Property {
 
     // locate the head of a struct type object in memory
     mutating func headPointerOfStruct() -> UnsafePointer<Byte> {
-        return withUnsafePointer(&self) { UnsafePointer($0) }
+
+        return withUnsafePointer(to: &self) {
+            return UnsafeRawPointer($0).bindMemory(to: Byte.self, capacity: MemoryLayout<Self>.stride)
+        }
     }
 
     // locating the head of a class type object in memory
     mutating func headPointerOfClass() -> UnsafePointer<Byte> {
-        return UnsafePointer(bitPattern: unsafeAddressOf(self as! AnyObject).hashValue)
+
+        let opaquePointer = Unmanaged.passUnretained(self as AnyObject).toOpaque()
+        let mutablePointer = opaquePointer.bindMemory(to: Byte.self, capacity: MemoryLayout<Self>.stride)
+        return UnsafePointer<Byte>(mutablePointer)
     }
 
     // memory size occupy by self object
     static func size() -> Int {
-        return sizeof(self)
+        return MemoryLayout<Self>.size
     }
 
     // align
     static func align() -> Int {
-        return alignof(self)
+        return MemoryLayout<Self>.alignment
     }
 
     // Returns the offset to the next integer that is greater than
@@ -72,6 +78,10 @@ protocol OptionalTypeProtocol: HandyJSON {
 }
 
 extension Optional: OptionalTypeProtocol {
+    public init() {
+        self = nil
+    }
+
     static func getWrappedType() -> Any.Type {
         return Wrapped.self
     }

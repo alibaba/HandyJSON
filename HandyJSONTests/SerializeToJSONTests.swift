@@ -33,18 +33,18 @@ class serializeToJSONTests: XCTestCase {
         super.tearDown()
     }
     
-    func stringCompareHelper(actual: String?, _ expected: String?) {
+    func stringCompareHelper(_ actual: String?, _ expected: String?) {
         print(actual)
         print(expected)
         XCTAssertTrue(expected == actual, "expected value:\(expected) not equal to actual:\(actual)")
     }
 
     func test_value() {
-        stringCompareHelper(JSONSerializer.serializeToJSON(1), "1")
-        stringCompareHelper(JSONSerializer.serializeToJSON("HandyJSON"), "\"HandyJSON\"")
-        stringCompareHelper(JSONSerializer.serializeToJSON(1.2), "1.2")
-        stringCompareHelper(JSONSerializer.serializeToJSON(10), "10")
-        stringCompareHelper(JSONSerializer.serializeToJSON(true), "true")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: 1), "1")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: "HandyJSON"), "\"HandyJSON\"")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: 1.2), "1.2")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: 10), "10")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: true), "true")
 
         enum Week: String {
             case Monday
@@ -56,24 +56,24 @@ class serializeToJSONTests: XCTestCase {
             case Sunday
         }
 
-        stringCompareHelper(JSONSerializer.serializeToJSON(Week.Friday), "\"Friday\"")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: Week.Friday), "\"Friday\"")
     }
 
     func test_Int_Array() {
         let array = [1,2,3,4]
-        let json = JSONSerializer.serializeToJSON(array)
+        let json = JSONSerializer.serializeToJSON(object: array)
         stringCompareHelper(json, "[1,2,3,4]")
     }
    
     func test_String_Array() {
         let array = ["Monday", "Tuesday", "Wednesday"]
-        let json = JSONSerializer.serializeToJSON(array)
+        let json = JSONSerializer.serializeToJSON(object: array)
         stringCompareHelper(json, "[\"Monday\",\"Tuesday\",\"Wednesday\"]")
     }
 
     func test_NSDictionary() {
         let dic: NSDictionary = NSDictionary.init(dictionary: ["Today": "Monday"])
-        let json = JSONSerializer.serializeToJSON(dic)
+        let json = JSONSerializer.serializeToJSON(object: dic)
         stringCompareHelper(json, "{\"Today\":\"Monday\"}")
     }
 
@@ -98,7 +98,7 @@ class serializeToJSONTests: XCTestCase {
             let dic = ["today": "Monday", "tomorrow": "Tuesday"]
         }
 
-        stringCompareHelper(JSONSerializer.serializeToJSON(ClassA()), "{\"month\":4,\"day\":18,\"year\":1994,\"today\":\"Monday\",\"name\":\"cijian\",\"time\":[\"Morning\",\"Afternoon\",\"Night\"],\"dic\":{\"tomorrow\":\"Tuesday\",\"today\":\"Monday\"}}")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: ClassA()), "{\"month\":4,\"day\":18,\"year\":1994,\"today\":\"Monday\",\"name\":\"cijian\",\"time\":[\"Morning\",\"Afternoon\",\"Night\"],\"dic\":{\"tomorrow\":\"Tuesday\",\"today\":\"Monday\"}}")
     }
 
     func test_Optional() {
@@ -112,10 +112,10 @@ class serializeToJSONTests: XCTestCase {
         optianlBool = false
         optianlDouble = 1.23
 
-        stringCompareHelper(JSONSerializer.serializeToJSON(optianlInt),"10")
-        stringCompareHelper(JSONSerializer.serializeToJSON(optianlString),"\"hello\"")
-        stringCompareHelper(JSONSerializer.serializeToJSON(optianlBool),"false")
-        stringCompareHelper(JSONSerializer.serializeToJSON(optianlDouble),"1.23")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: optianlInt),"10")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: optianlString),"\"hello\"")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: optianlBool),"false")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: optianlDouble),"1.23")
     }
 
     func test_Optional_In_Array() {
@@ -127,14 +127,14 @@ class serializeToJSONTests: XCTestCase {
         array.append(optionalvalue)
         optionalvalue = 50
         array.append(optionalvalue)
-        stringCompareHelper(JSONSerializer.serializeToJSON(array),"[1,10,50]")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: array),"[1,10,50]")
     }
 
     func test_Optinal_In_Class() {
         class ClassA {
             var value: Int? = 2
         }
-        stringCompareHelper(JSONSerializer.serializeToJSON(ClassA()),"{\"value\":2}")
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: ClassA()),"{\"value\":2}")
     }
 
     func test_Enum_String() {
@@ -156,7 +156,7 @@ class serializeToJSONTests: XCTestCase {
         
         let expected = "{\"today\":\"Monday\",\"tomorrow\":\"Tuesday\"}"
         
-        let json = JSONSerializer.serializeToJSON(ClassA())
+        let json = JSONSerializer.serializeToJSON(object: ClassA())
         
         stringCompareHelper(json, expected)
     }
@@ -183,7 +183,7 @@ class serializeToJSONTests: XCTestCase {
         
         let expected = "{\"today\":\"Monday\",\"tomorrow\":\"Tuesday\"}"
         
-        let json = JSONSerializer.serializeToJSON(m) ?? ""
+        let json = JSONSerializer.serializeToJSON(object: m) ?? ""
         
         stringCompareHelper(json, expected)
     }
@@ -209,7 +209,7 @@ class serializeToJSONTests: XCTestCase {
         
         let expected = "{\"today\":\"Monday\",\"tomorrow\":\"Tuesday\"}"
         
-        let json = JSONSerializer.serializeToJSON(m) ?? ""
+        let json = JSONSerializer.serializeToJSON(object: m) ?? ""
         
         stringCompareHelper(json, expected)
     }
@@ -223,7 +223,7 @@ class serializeToJSONTests: XCTestCase {
         
         let expected = "{\"dic\":{2:\"Worker\",1:\"Teacher\"}}"
         
-        let json = JSONSerializer.serializeToJSON(m) ?? ""
+        let json = JSONSerializer.serializeToJSON(object: m) ?? ""
         
         stringCompareHelper(json, expected)
     }
@@ -237,7 +237,7 @@ class serializeToJSONTests: XCTestCase {
         
         let expected = "{\"dic\":{\"tomorrow\":\"Tuesday\",\"today\":\"Monday\"}}"
         
-        let json = JSONSerializer.serializeToJSON(m) ?? ""
+        let json = JSONSerializer.serializeToJSON(object: m) ?? ""
         
         stringCompareHelper(json, expected)
     }
@@ -259,7 +259,7 @@ class serializeToJSONTests: XCTestCase {
         
         let expected = "{\"dic\":{\"tomorrow\":{\"value\":2},\"today\":{\"value\":1}}}"
     
-        let json = JSONSerializer.serializeToJSON(m) ?? ""
+        let json = JSONSerializer.serializeToJSON(object: m) ?? ""
         
         stringCompareHelper(json, expected)
         
@@ -276,7 +276,7 @@ class serializeToJSONTests: XCTestCase {
             
             let expected = "{\"dic\":{\"tomorrow\":\"Tuesday\",\"today\":\"Monday\"}}"
             
-            let json = JSONSerializer.serializeToJSON(m) ?? ""
+            let json = JSONSerializer.serializeToJSON(object: m) ?? ""
             
             stringCompareHelper(json, expected)
         
@@ -290,7 +290,7 @@ class serializeToJSONTests: XCTestCase {
        
         let expected = "[2,3,1,4]"
         
-        let json = JSONSerializer.serializeToJSON(set) ?? ""
+        let json = JSONSerializer.serializeToJSON(object: set) ?? ""
         stringCompareHelper(json, expected)
     }
     
@@ -300,7 +300,7 @@ class serializeToJSONTests: XCTestCase {
             let set: Set = [1, 2, 3, 4]
         }
         
-        let json = JSONSerializer.serializeToJSON(ClassA()) ?? ""
+        let json = JSONSerializer.serializeToJSON(object: ClassA()) ?? ""
         stringCompareHelper(json, "{\"set\":[2,3,1,4]}")
     }
     
@@ -309,7 +309,7 @@ class serializeToJSONTests: XCTestCase {
             var dic = ["today": "Monday", "tomorrow": "Tuesday"]
         }
         
-        let json = JSONSerializer.serializeToJSON(ClassA()) ?? ""
+        let json = JSONSerializer.serializeToJSON(object: ClassA()) ?? ""
         stringCompareHelper(json, "{\"dic\":{\"tomorrow\":\"Tuesday\",\"today\":\"Monday\"}}")
     }
 }

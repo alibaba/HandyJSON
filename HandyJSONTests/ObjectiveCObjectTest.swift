@@ -42,7 +42,7 @@ class ObjectiveCObjectTest: XCTestCase {
 
     func testSimpleClass() {
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        guard let a = JSONDeserializer<A>.deserializeFrom(jsonString) else {
+        guard let a = JSONDeserializer<A>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -61,14 +61,14 @@ class ObjectiveCObjectTest: XCTestCase {
 
     func testClassWithArrayProperty() {
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let b = JSONDeserializer<B>.deserializeFrom(jsonString) else {
+        guard let b = JSONDeserializer<B>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
         XCTAssert(b.id == 123456)
         XCTAssert(b.arr1?.count == 6)
         XCTAssert(b.arr2?.count == 5)
-        XCTAssert(b.arr1?.objectAtIndex(5).integerValue == 6)
-        XCTAssert((b.arr2?.objectAtIndex(4) as? NSString)?.isEqualToString("e") == true)
+        XCTAssert((b.arr1?.object(at: 5) as? NSNumber)?.intValue == 6)
+        XCTAssert((b.arr2?.object(at: 4) as? NSString)?.isEqual(to: "e") == true)
     }
 }

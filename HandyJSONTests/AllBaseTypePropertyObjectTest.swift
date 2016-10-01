@@ -71,7 +71,7 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
         **/
         let jsonString = "{\"aInt\":-12345678,\"aInt8\":-8,\"aInt16\":-16,\"aInt32\":-32,\"aInt64\":-64,\"aUInt\":12345678,\"aUInt8\":8,\"aUInt16\":16,\"aUInt32\":32,\"aUInt64\":64,\"aBool\":true,\"aFloat\":12.34,\"aDouble\":12.34,\"aString\":\"hello world!\"}"
 
-        guard let aStruct = JSONDeserializer<AStruct>.deserializeFrom(jsonString) else {
+        guard let aStruct = JSONDeserializer<AStruct>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -133,7 +133,7 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
         **/
         let jsonString = "{\"aInt\":-12345678,\"aInt8\":-8,\"aInt16\":-16,\"aInt32\":-32,\"aInt64\":-64,\"aUInt\":12345678,\"aUInt8\":8,\"aUInt16\":16,\"aUInt32\":32,\"aUInt64\":64,\"aBool\":true,\"aFloat\":12.34,\"aDouble\":12.34,\"aString\":\"hello world!\"}"
 
-        guard let aStruct = JSONDeserializer<AStruct>.deserializeFrom(jsonString) else {
+        guard let aStruct = JSONDeserializer<AStruct>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }
@@ -195,7 +195,7 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
         **/
         let jsonString = "{\"aInt\":-12345678,\"aInt8\":-8,\"aInt16\":-16,\"aInt32\":-32,\"aInt64\":-64,\"aUInt\":12345678,\"aUInt8\":8,\"aUInt16\":16,\"aUInt32\":32,\"aUInt64\":64,\"aBool\":true,\"aFloat\":12.34,\"aDouble\":12.34,\"aString\":\"hello world!\"}"
 
-        guard let aStruct = JSONDeserializer<AStruct>.deserializeFrom(jsonString) else {
+        guard let aStruct = JSONDeserializer<AStruct>.deserializeFrom(json: jsonString) else {
             XCTAssert(false)
             return
         }

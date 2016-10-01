@@ -25,13 +25,13 @@ public class JSONSerializer {
 
     public static func serializeToJSON(object: Any?, prettify: Bool = false) -> String? {
         if let _object = object {
-            var json = _serializeToJSON(_object)
+            var json = _serializeToJSON(object: _object)
 
             if prettify {
-                let jsonData = json.dataUsingEncoding(NSUTF8StringEncoding)!
-                let jsonObject:AnyObject = try! NSJSONSerialization.JSONObjectWithData(jsonData, options: [])
-                let prettyJsonData = try! NSJSONSerialization.dataWithJSONObject(jsonObject, options: .PrettyPrinted)
-                json = NSString(data: prettyJsonData, encoding: NSUTF8StringEncoding)! as String
+                let jsonData = json.data(using: String.Encoding.utf8)!
+                let jsonObject:AnyObject = try! JSONSerialization.jsonObject(with: jsonData, options: []) as AnyObject
+                let prettyJsonData = try! JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
+                json = NSString(data: prettyJsonData, encoding: String.Encoding.utf8.rawValue)! as String
             }
             return json
         } else {
@@ -41,66 +41,66 @@ public class JSONSerializer {
 
     static func _serializeToJSON(object: Any) -> String {
 
-        if (object.dynamicType is String.Type || object.dynamicType is NSString.Type ) {
-            let json = "\"" + String(object)  + "\""
+        if (type(of: object) is String.Type || type(of: object) is NSString.Type ) {
+            let json = "\"" + String(describing: object)  + "\""
             return json
-        } else if (object.dynamicType is BasePropertyProtocol.Type) {
-            let json = String(object) ?? "null"
+        } else if (type(of: object) is BasePropertyProtocol.Type) {
+            let json = String(describing: object)
             return json
         }
 
         var json = String()
         let mirror = Mirror(reflecting: object)
 
-        if mirror.displayStyle == .Class || mirror.displayStyle == .Struct {
+        if mirror.displayStyle == .class || mirror.displayStyle == .struct {
             var handledValue = String()
             var children = [(label: String?, value: Any)]()
             let mirrorChildrenCollection = AnyRandomAccessCollection(mirror.children)!
             children += mirrorChildrenCollection
 
             var currentMirror = mirror
-            while let superclassChildren = currentMirror.superclassMirror()?.children {
+            while let superclassChildren = currentMirror.superclassMirror?.children {
                 let randomCollection = AnyRandomAccessCollection(superclassChildren)!
                 children += randomCollection
-                currentMirror = currentMirror.superclassMirror()!
+                currentMirror = currentMirror.superclassMirror!
             }
 
-            children.enumerate().forEach({ (index, element) in
-                handledValue = _serializeToJSON(element.value)
+            children.enumerated().forEach({ (index, element) in
+                handledValue = _serializeToJSON(object: element.value)
                 json += "\"\(element.label ?? "")\":\(handledValue)" + (index < children.count-1 ? "," : "")
             })
 
             return "{" + json + "}"
-        } else if mirror.displayStyle == .Enum {
-            return  "\"" + String(object) + "\""
-        } else if  mirror.displayStyle == .Optional {
+        } else if mirror.displayStyle == .enum {
+            return  "\"" + String(describing: object) + "\""
+        } else if  mirror.displayStyle == .optional {
             if mirror.children.count != 0 {
                 let (_, some) = mirror.children.first!
-                return _serializeToJSON(some)
+                return _serializeToJSON(object: some)
             } else {
                 return "null"
             }
-        } else if mirror.displayStyle == .Collection || mirror.displayStyle == .Set {
+        } else if mirror.displayStyle == .collection || mirror.displayStyle == .set {
             json = "["
 
             let count = mirror.children.count
-            mirror.children.enumerate().forEach({ (index, element) in
-                let transformValue = _serializeToJSON(element.value)
+            mirror.children.enumerated().forEach({ (index, element) in
+                let transformValue = _serializeToJSON(object: element.value)
                 json += transformValue
                 json += (index < count-1 ? "," : "")
             })
 
             json += "]"
             return json
-        } else if mirror.displayStyle == .Dictionary {
+        } else if mirror.displayStyle == .dictionary {
             json += "{"
-            mirror.children.enumerate().forEach({ (index, element) in
+            mirror.children.enumerated().forEach({ (index, element) in
                 let _mirror = Mirror(reflecting: element.value)
-                _mirror.children.enumerate().forEach({ (_index, _element) in
+                _mirror.children.enumerated().forEach({ (_index, _element) in
                     if _index == 0 {
-                        json += _serializeToJSON(_element.value) + ":"
+                        json += _serializeToJSON(object: _element.value) + ":"
                     } else {
-                        json += _serializeToJSON(_element.value)
+                        json += _serializeToJSON(object: _element.value)
                         json += (index < mirror.children.count-1 ? "," : "")
                     }
                 })
@@ -108,7 +108,7 @@ public class JSONSerializer {
             json += "}"
             return json
         } else {
-            return String(object) != "nil" ? "\"\(object)\"" : "null"
+            return String(describing: object) != "nil" ? "\"\(object)\"" : "null"
         }
     }
 }
