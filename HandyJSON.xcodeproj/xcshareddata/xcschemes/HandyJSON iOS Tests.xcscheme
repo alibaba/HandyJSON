@@ -18,8 +18,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "217B046C1D571B9F0035A8E2"
-               BuildableName = "HandyJSONTests.xctest"
-               BlueprintName = "HandyJSONTests"
+               BuildableName = "HandyJSON iOS Tests.xctest"
+               BlueprintName = "HandyJSON iOS Tests"
                ReferencedContainer = "container:HandyJSON.xcodeproj">
             </BuildableReference>
          </TestableReference>

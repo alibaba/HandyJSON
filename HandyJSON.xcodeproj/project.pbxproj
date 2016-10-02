@@ -81,7 +81,7 @@
 		2179B6B21D911DB4007B0320 /* HelpingMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpingMapper.swift; sourceTree = "<group>"; };
 		2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectiveCObjectTest.swift; sourceTree = "<group>"; };
 		217B04671D56D2B50035A8E2 /* Converter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
-		217B046D1D571B9F0035A8E2 /* HandyJSONTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandyJSONTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		217B046D1D571B9F0035A8E2 /* HandyJSON iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HandyJSON iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructObjectTest.swift; sourceTree = "<group>"; };
 		217B04711D571B9F0035A8E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
@@ -134,7 +134,7 @@
 			children = (
 				21520C441D3341B200F53111 /* HandyJSON.framework */,
 				21520C5B1D3344A900F53111 /* HandyJSONDemo.app */,
-				217B046D1D571B9F0035A8E2 /* HandyJSONTests.xctest */,
+				217B046D1D571B9F0035A8E2 /* HandyJSON iOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -198,9 +198,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		21520C431D3341B200F53111 /* HandyJSON */ = {
+		21520C431D3341B200F53111 /* HandyJSON iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 21520C4C1D3341B200F53111 /* Build configuration list for PBXNativeTarget "HandyJSON" */;
+			buildConfigurationList = 21520C4C1D3341B200F53111 /* Build configuration list for PBXNativeTarget "HandyJSON iOS" */;
 			buildPhases = (
 				21520C3F1D3341B200F53111 /* Sources */,
 				21520C401D3341B200F53111 /* Frameworks */,
@@ -211,7 +211,7 @@
 			);
 			dependencies = (
 			);
-			name = HandyJSON;
+			name = "HandyJSON iOS";
 			productName = HandyJSON;
 			productReference = 21520C441D3341B200F53111 /* HandyJSON.framework */;
 			productType = "com.apple.product-type.framework";
@@ -235,9 +235,9 @@
 			productReference = 21520C5B1D3344A900F53111 /* HandyJSONDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		217B046C1D571B9F0035A8E2 /* HandyJSONTests */ = {
+		217B046C1D571B9F0035A8E2 /* HandyJSON iOS Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 217B04751D571B9F0035A8E2 /* Build configuration list for PBXNativeTarget "HandyJSONTests" */;
+			buildConfigurationList = 217B04751D571B9F0035A8E2 /* Build configuration list for PBXNativeTarget "HandyJSON iOS Tests" */;
 			buildPhases = (
 				217B04691D571B9F0035A8E2 /* Sources */,
 				217B046A1D571B9F0035A8E2 /* Frameworks */,
@@ -248,9 +248,9 @@
 			dependencies = (
 				217B04741D571B9F0035A8E2 /* PBXTargetDependency */,
 			);
-			name = HandyJSONTests;
+			name = "HandyJSON iOS Tests";
 			productName = HandyJSONTests;
-			productReference = 217B046D1D571B9F0035A8E2 /* HandyJSONTests.xctest */;
+			productReference = 217B046D1D571B9F0035A8E2 /* HandyJSON iOS Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -293,9 +293,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				21520C431D3341B200F53111 /* HandyJSON */,
+				21520C431D3341B200F53111 /* HandyJSON iOS */,
 				21520C5A1D3344A900F53111 /* HandyJSONDemo */,
-				217B046C1D571B9F0035A8E2 /* HandyJSONTests */,
+				217B046C1D571B9F0035A8E2 /* HandyJSON iOS Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -371,12 +371,12 @@
 /* Begin PBXTargetDependency section */
 		21520C6E1D33452200F53111 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 21520C431D3341B200F53111 /* HandyJSON */;
+			target = 21520C431D3341B200F53111 /* HandyJSON iOS */;
 			targetProxy = 21520C6D1D33452200F53111 /* PBXContainerItemProxy */;
 		};
 		217B04741D571B9F0035A8E2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 21520C431D3341B200F53111 /* HandyJSON */;
+			target = 21520C431D3341B200F53111 /* HandyJSON iOS */;
 			targetProxy = 217B04731D571B9F0035A8E2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -513,7 +513,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSON;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 2.3;
@@ -536,7 +536,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSON;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 2.3;
 			};
@@ -616,7 +616,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		21520C4C1D3341B200F53111 /* Build configuration list for PBXNativeTarget "HandyJSON" */ = {
+		21520C4C1D3341B200F53111 /* Build configuration list for PBXNativeTarget "HandyJSON iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21520C4D1D3341B200F53111 /* Debug */,
@@ -634,7 +634,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		217B04751D571B9F0035A8E2 /* Build configuration list for PBXNativeTarget "HandyJSONTests" */ = {
+		217B04751D571B9F0035A8E2 /* Build configuration list for PBXNativeTarget "HandyJSON iOS Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				217B04761D571B9F0035A8E2 /* Debug */,
