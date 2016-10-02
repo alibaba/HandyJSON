@@ -31,11 +31,11 @@ class MemoryLayoutValidationTest: XCTestCase {
         super.tearDown()
     }
 
-    class A {
-        var m1: Int8 = 0
-    }
-
     func testHeadOfClass() {
+        class A {
+            var m1: Int8 = 0
+        }
+
         let a = A()
         let basePtr = Unmanaged.passUnretained(a).toOpaque().advanced(by: 8 + MemoryLayout<Int>.size)
         let realPtr = UnsafeMutablePointer<Int8>(bitPattern: basePtr.hashValue)
@@ -43,11 +43,11 @@ class MemoryLayoutValidationTest: XCTestCase {
         XCTAssert(a.m1 == 11)
     }
 
-    struct B {
-        var m1: Int8 = 0
-    }
-
     func testHeadOfStruct() {
+        struct B {
+            var m1: Int8 = 0
+        }
+
         var b = B()
         let basePtr = UnsafePointer<Int8>(bitPattern: withUnsafePointer(to: &b, {
             return UnsafeRawPointer($0).bindMemory(to: Int8.self, capacity: MemoryLayout<B>.stride)
