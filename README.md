@@ -9,6 +9,8 @@ Compared with others, the most significant feature of HandyJSON is that it does 
 [![Cocoapods Platform](https://img.shields.io/cocoapods/p/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
 [![Codecov branch](https://img.shields.io/codecov/c/github/alibaba/HandyJSON/master.svg?style=flat)](https://codecov.io/gh/alibaba/HandyJSON/branch/master)
 
+## [中文文档](http://www.jianshu.com/p/cbed87d8656d)
+
 ## Sample Code
 
 ### Deserialization
@@ -251,10 +253,10 @@ class Cat: HandyJSON {
         mapper.specify(property: &id, name: "cat_id")
 
         // specify 'parent' field in json parse as following to 'parent' property in object
-        mapper.specify(property: &parent) {
-            let parentName = $0.characters.split{$0 == "/"}.map(String.init)
-            return (parentName[0], parentName[1])
-        }
+        mapper.specify(property: &parent, converter: { (rawString) -> (String, String) in
+            let parentNames = rawString.characters.split{$0 == "/"}.map(String.init)
+            return (parentNames[0], parentNames[1])
+        })
     }
 }
 
