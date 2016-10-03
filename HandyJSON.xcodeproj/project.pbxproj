@@ -1083,7 +1083,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				INFOPLIST_FILE = HandyJSONTests/Info.plist;
+				INFOPLIST_FILE = "HandyJSONTests/Info-tvOS.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1100,7 +1100,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				INFOPLIST_FILE = HandyJSONTests/Info.plist;
+				INFOPLIST_FILE = "HandyJSONTests/Info-tvOS.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1244,6 +1244,7 @@
 				393E0FA21DA1650E00B3BC12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		393E0FC21DA2441E00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON tvOS" */ = {
 			isa = XCConfigurationList;
@@ -1252,6 +1253,7 @@
 				393E0FC41DA2441E00B3BC12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		393E0FC51DA2441E00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON tvOS Tests" */ = {
 			isa = XCConfigurationList;
@@ -1260,6 +1262,7 @@
 				393E0FC71DA2441E00B3BC12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		393E0FF21DA2494F00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON macOS" */ = {
 			isa = XCConfigurationList;
@@ -1268,6 +1271,7 @@
 				393E0FF41DA2494F00B3BC12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		393E0FF51DA2494F00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON macOS Tests" */ = {
 			isa = XCConfigurationList;
@@ -1276,6 +1280,7 @@
 				393E0FF71DA2494F00B3BC12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
