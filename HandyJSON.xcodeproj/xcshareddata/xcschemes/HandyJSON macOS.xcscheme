@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "393E0FB01DA2441E00B3BC12"
-               BuildableName = "HandyJSON.framework"
-               BlueprintName = "HandyJSON tvOS"
+               BlueprintIdentifier = "393E0FE01DA2494F00B3BC12"
+               BuildableName = "HandyJSON macOS.framework"
+               BlueprintName = "HandyJSON macOS"
                ReferencedContainer = "container:HandyJSON.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "393E0FB81DA2441E00B3BC12"
-               BuildableName = "HandyJSON tvOS Tests.xctest"
-               BlueprintName = "HandyJSON tvOS Tests"
+               BlueprintIdentifier = "393E0FE81DA2494F00B3BC12"
+               BuildableName = "HandyJSON macOS Tests.xctest"
+               BlueprintName = "HandyJSON macOS Tests"
                ReferencedContainer = "container:HandyJSON.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -42,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "393E0FB01DA2441E00B3BC12"
-            BuildableName = "HandyJSON.framework"
-            BlueprintName = "HandyJSON tvOS"
+            BlueprintIdentifier = "393E0FE01DA2494F00B3BC12"
+            BuildableName = "HandyJSON macOS.framework"
+            BlueprintName = "HandyJSON macOS"
             ReferencedContainer = "container:HandyJSON.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "393E0FB01DA2441E00B3BC12"
-            BuildableName = "HandyJSON.framework"
-            BlueprintName = "HandyJSON tvOS"
+            BlueprintIdentifier = "393E0FE01DA2494F00B3BC12"
+            BuildableName = "HandyJSON macOS.framework"
+            BlueprintName = "HandyJSON macOS"
             ReferencedContainer = "container:HandyJSON.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -82,9 +82,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "393E0FB01DA2441E00B3BC12"
-            BuildableName = "HandyJSON.framework"
-            BlueprintName = "HandyJSON tvOS"
+            BlueprintIdentifier = "393E0FE01DA2494F00B3BC12"
+            BuildableName = "HandyJSON macOS.framework"
+            BlueprintName = "HandyJSON macOS"
             ReferencedContainer = "container:HandyJSON.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
