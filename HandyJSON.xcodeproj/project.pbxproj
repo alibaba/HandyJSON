@@ -279,6 +279,7 @@
 		217B046E1D571B9F0035A8E2 /* HandyJSONTests */ = {
 			isa = PBXGroup;
 			children = (
+				392628001DA3E8E100B0C28D /* Supporting Files */,
 				217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */,
 				21F252AB1D595F3900B214BB /* ClassObjectTest.swift */,
 				21F252A91D58BE9100B214BB /* NestObjectTest.swift */,
@@ -288,9 +289,6 @@
 				21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */,
 				21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */,
 				39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */,
-				393E0FCA1DA2481000B3BC12 /* Info-tvOS.plist */,
-				217B04711D571B9F0035A8E2 /* Info-iOS.plist */,
-				393E10081DA249F100B3BC12 /* Info-macOS.plist */,
 			);
 			path = HandyJSONTests;
 			sourceTree = SOURCE_ROOT;
@@ -302,6 +300,16 @@
 				393E0FC81DA245E300B3BC12 /* Info-tvOS.plist */,
 				393E100A1DA24A0600B3BC12 /* Info-macOS.plist */,
 				393E0FA31DA165CE00B3BC12 /* Info-watchOS.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		392628001DA3E8E100B0C28D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				393E0FCA1DA2481000B3BC12 /* Info-tvOS.plist */,
+				217B04711D571B9F0035A8E2 /* Info-iOS.plist */,
+				393E10081DA249F100B3BC12 /* Info-macOS.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
