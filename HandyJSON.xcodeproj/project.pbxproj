@@ -29,7 +29,6 @@
 		21F252B01D596A7000B214BB /* MemoryLayoutValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AF1D596A7000B214BB /* MemoryLayoutValidationTest.swift */; };
 		21F252B21D59718100B214BB /* AllBaseTypePropertyObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */; };
 		21F252B41D599DE200B214BB /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
-		393E0FA41DA165CE00B3BC12 /* Info-watchOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 393E0FA31DA165CE00B3BC12 /* Info-watchOS.plist */; };
 		393E0FA51DA165E300B3BC12 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B04671D56D2B50035A8E2 /* Converter.swift */; };
 		393E0FA61DA165E300B3BC12 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C501D3341FC00F53111 /* Extension.swift */; };
 		393E0FA71DA165E300B3BC12 /* HelpingMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B21D911DB4007B0320 /* HelpingMapper.swift */; };
@@ -38,7 +37,6 @@
 		393E0FAA1DA165E300B3BC12 /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */; };
 		393E0FAB1DA165F900B3BC12 /* HandyJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 21520C471D3341B200F53111 /* HandyJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		393E0FBA1DA2441E00B3BC12 /* HandyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393E0FB11DA2441E00B3BC12 /* HandyJSON.framework */; };
-		393E0FC91DA245E300B3BC12 /* Info-tvOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 393E0FC81DA245E300B3BC12 /* Info-tvOS.plist */; };
 		393E0FCB1DA2481000B3BC12 /* Info-tvOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 393E0FCA1DA2481000B3BC12 /* Info-tvOS.plist */; };
 		393E0FCC1DA2484F00B3BC12 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B04671D56D2B50035A8E2 /* Converter.swift */; };
 		393E0FCD1DA2484F00B3BC12 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C501D3341FC00F53111 /* Extension.swift */; };
@@ -73,7 +71,6 @@
 		393E10051DA249DC00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */; };
 		393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
 		393E10071DA249DC00B3BC12 /* SerializeToJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */; };
-		393E100B1DA24A0600B3BC12 /* Info-macOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 393E100A1DA24A0600B3BC12 /* Info-macOS.plist */; };
 		393E100C1DA24A0B00B3BC12 /* Info-macOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 393E10081DA249F100B3BC12 /* Info-macOS.plist */; };
 		39B36C241D8D780200AD2A3F /* SerializeToJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */; };
 /* End PBXBuildFile section */
@@ -261,10 +258,7 @@
 				21520C511D3341FC00F53111 /* Property.swift */,
 				21520C521D3341FC00F53111 /* JSONDeserializer.swift */,
 				21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */,
-				21520C491D3341B200F53111 /* Info-iOS.plist */,
-				393E0FC81DA245E300B3BC12 /* Info-tvOS.plist */,
-				393E100A1DA24A0600B3BC12 /* Info-macOS.plist */,
-				393E0FA31DA165CE00B3BC12 /* Info-watchOS.plist */,
+				392627FF1DA3E1A400B0C28D /* Supporting Files */,
 			);
 			path = HandyJSON;
 			sourceTree = "<group>";
@@ -300,6 +294,17 @@
 			);
 			path = HandyJSONTests;
 			sourceTree = SOURCE_ROOT;
+		};
+		392627FF1DA3E1A400B0C28D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				21520C491D3341B200F53111 /* Info-iOS.plist */,
+				393E0FC81DA245E300B3BC12 /* Info-tvOS.plist */,
+				393E100A1DA24A0600B3BC12 /* Info-macOS.plist */,
+				393E0FA31DA165CE00B3BC12 /* Info-watchOS.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -583,7 +588,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				393E0FA41DA165CE00B3BC12 /* Info-watchOS.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,7 +595,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				393E0FC91DA245E300B3BC12 /* Info-tvOS.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,7 +610,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				393E100B1DA24A0600B3BC12 /* Info-macOS.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
