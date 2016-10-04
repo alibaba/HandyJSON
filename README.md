@@ -77,7 +77,7 @@ print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
 
 # Requirements
 
-* iOS 8.0+
+* iOS 8.0+/OSX 10.9+/watchOS 2.0+/tvOS 9.0+
 
 * Swift 2.3+
 
@@ -88,7 +88,7 @@ print(JSONSerializer.serializeToJSON(cat, prettify: true)!)
 Add the following lines to your podfile:
 
 ```
-pod 'HandyJSON', '~> 0.3.0'
+pod 'HandyJSON', '~> 0.4.0'
 ```
 
 Then, run the following command:
