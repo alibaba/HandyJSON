@@ -29,6 +29,52 @@
 		21F252B01D596A7000B214BB /* MemoryLayoutValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AF1D596A7000B214BB /* MemoryLayoutValidationTest.swift */; };
 		21F252B21D59718100B214BB /* AllBaseTypePropertyObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */; };
 		21F252B41D599DE200B214BB /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
+		393E0FA41DA165CE00B3BC12 /* Info-watchOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 393E0FA31DA165CE00B3BC12 /* Info-watchOS.plist */; };
+		393E0FA51DA165E300B3BC12 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B04671D56D2B50035A8E2 /* Converter.swift */; };
+		393E0FA61DA165E300B3BC12 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C501D3341FC00F53111 /* Extension.swift */; };
+		393E0FA71DA165E300B3BC12 /* HelpingMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B21D911DB4007B0320 /* HelpingMapper.swift */; };
+		393E0FA81DA165E300B3BC12 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C511D3341FC00F53111 /* Property.swift */; };
+		393E0FA91DA165E300B3BC12 /* JSONDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C521D3341FC00F53111 /* JSONDeserializer.swift */; };
+		393E0FAA1DA165E300B3BC12 /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */; };
+		393E0FAB1DA165F900B3BC12 /* HandyJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 21520C471D3341B200F53111 /* HandyJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		393E0FBA1DA2441E00B3BC12 /* HandyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393E0FB11DA2441E00B3BC12 /* HandyJSON.framework */; };
+		393E0FC91DA245E300B3BC12 /* Info-tvOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 393E0FC81DA245E300B3BC12 /* Info-tvOS.plist */; };
+		393E0FCB1DA2481000B3BC12 /* Info-tvOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 393E0FCA1DA2481000B3BC12 /* Info-tvOS.plist */; };
+		393E0FCC1DA2484F00B3BC12 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B04671D56D2B50035A8E2 /* Converter.swift */; };
+		393E0FCD1DA2484F00B3BC12 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C501D3341FC00F53111 /* Extension.swift */; };
+		393E0FCE1DA2484F00B3BC12 /* HelpingMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B21D911DB4007B0320 /* HelpingMapper.swift */; };
+		393E0FCF1DA2484F00B3BC12 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C511D3341FC00F53111 /* Property.swift */; };
+		393E0FD01DA2484F00B3BC12 /* JSONDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C521D3341FC00F53111 /* JSONDeserializer.swift */; };
+		393E0FD11DA2484F00B3BC12 /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */; };
+		393E0FD21DA2485800B3BC12 /* HandyJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 21520C471D3341B200F53111 /* HandyJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		393E0FD31DA2486C00B3BC12 /* StructObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */; };
+		393E0FD41DA2486C00B3BC12 /* ClassObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AB1D595F3900B214BB /* ClassObjectTest.swift */; };
+		393E0FD51DA2486C00B3BC12 /* NestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestObjectTest.swift */; };
+		393E0FD61DA2486C00B3BC12 /* CustomMappingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */; };
+		393E0FD71DA2486C00B3BC12 /* ObjectiveCObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */; };
+		393E0FD81DA2486C00B3BC12 /* MemoryLayoutValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AF1D596A7000B214BB /* MemoryLayoutValidationTest.swift */; };
+		393E0FD91DA2486C00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */; };
+		393E0FDA1DA2486C00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
+		393E0FDB1DA2486C00B3BC12 /* SerializeToJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */; };
+		393E0FEA1DA2494F00B3BC12 /* HandyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393E0FE11DA2494F00B3BC12 /* HandyJSON.framework */; };
+		393E0FF81DA2495900B3BC12 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B04671D56D2B50035A8E2 /* Converter.swift */; };
+		393E0FF91DA2495900B3BC12 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C501D3341FC00F53111 /* Extension.swift */; };
+		393E0FFA1DA2495900B3BC12 /* HelpingMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B21D911DB4007B0320 /* HelpingMapper.swift */; };
+		393E0FFB1DA2495900B3BC12 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C511D3341FC00F53111 /* Property.swift */; };
+		393E0FFC1DA2495900B3BC12 /* JSONDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C521D3341FC00F53111 /* JSONDeserializer.swift */; };
+		393E0FFD1DA2495900B3BC12 /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */; };
+		393E0FFE1DA249D000B3BC12 /* HandyJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 21520C471D3341B200F53111 /* HandyJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		393E0FFF1DA249DC00B3BC12 /* StructObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */; };
+		393E10001DA249DC00B3BC12 /* ClassObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AB1D595F3900B214BB /* ClassObjectTest.swift */; };
+		393E10011DA249DC00B3BC12 /* NestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestObjectTest.swift */; };
+		393E10021DA249DC00B3BC12 /* CustomMappingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */; };
+		393E10031DA249DC00B3BC12 /* ObjectiveCObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */; };
+		393E10041DA249DC00B3BC12 /* MemoryLayoutValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AF1D596A7000B214BB /* MemoryLayoutValidationTest.swift */; };
+		393E10051DA249DC00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */; };
+		393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
+		393E10071DA249DC00B3BC12 /* SerializeToJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */; };
+		393E100B1DA24A0600B3BC12 /* Info-macOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 393E100A1DA24A0600B3BC12 /* Info-macOS.plist */; };
+		393E100C1DA24A0B00B3BC12 /* Info-macOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 393E10081DA249F100B3BC12 /* Info-macOS.plist */; };
 		39B36C241D8D780200AD2A3F /* SerializeToJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +92,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 21520C431D3341B200F53111;
 			remoteInfo = HandyJSON;
+		};
+		393E0FBB1DA2441E00B3BC12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21520C3B1D3341B200F53111 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 393E0FB01DA2441E00B3BC12;
+			remoteInfo = "HandyJSON tvOS";
+		};
+		393E0FEB1DA2494F00B3BC12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21520C3B1D3341B200F53111 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 393E0FE01DA2494F00B3BC12;
+			remoteInfo = "HandyJSON macOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -67,7 +127,7 @@
 		2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMappingTest.swift; sourceTree = "<group>"; };
 		21520C441D3341B200F53111 /* HandyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HandyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21520C471D3341B200F53111 /* HandyJSON.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandyJSON.h; sourceTree = "<group>"; };
-		21520C491D3341B200F53111 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		21520C491D3341B200F53111 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 		21520C501D3341FC00F53111 /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		21520C511D3341FC00F53111 /* Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		21520C521D3341FC00F53111 /* JSONDeserializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONDeserializer.swift; sourceTree = "<group>"; };
@@ -81,15 +141,25 @@
 		2179B6B21D911DB4007B0320 /* HelpingMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpingMapper.swift; sourceTree = "<group>"; };
 		2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectiveCObjectTest.swift; sourceTree = "<group>"; };
 		217B04671D56D2B50035A8E2 /* Converter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
-		217B046D1D571B9F0035A8E2 /* HandyJSONTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandyJSONTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		217B046D1D571B9F0035A8E2 /* HandyJSON iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HandyJSON iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructObjectTest.swift; sourceTree = "<group>"; };
-		217B04711D571B9F0035A8E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		217B04711D571B9F0035A8E2 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 		21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
 		21F252A91D58BE9100B214BB /* NestObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NestObjectTest.swift; sourceTree = "<group>"; };
 		21F252AB1D595F3900B214BB /* ClassObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassObjectTest.swift; sourceTree = "<group>"; };
 		21F252AF1D596A7000B214BB /* MemoryLayoutValidationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryLayoutValidationTest.swift; sourceTree = "<group>"; };
 		21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllBaseTypePropertyObjectTest.swift; sourceTree = "<group>"; };
 		21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvalidStateHandlingTest.swift; sourceTree = "<group>"; };
+		393E0F9B1DA1650E00B3BC12 /* HandyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HandyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		393E0FA31DA165CE00B3BC12 /* Info-watchOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-watchOS.plist"; sourceTree = "<group>"; };
+		393E0FB11DA2441E00B3BC12 /* HandyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HandyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		393E0FB91DA2441E00B3BC12 /* HandyJSON tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HandyJSON tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		393E0FC81DA245E300B3BC12 /* Info-tvOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
+		393E0FCA1DA2481000B3BC12 /* Info-tvOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
+		393E0FE11DA2494F00B3BC12 /* HandyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HandyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		393E0FE91DA2494F00B3BC12 /* HandyJSON macOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HandyJSON macOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		393E10081DA249F100B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
+		393E100A1DA24A0600B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializeToJSONTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +186,43 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		393E0F971DA1650E00B3BC12 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FAD1DA2441E00B3BC12 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FB61DA2441E00B3BC12 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FBA1DA2441E00B3BC12 /* HandyJSON.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FDD1DA2494F00B3BC12 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FE61DA2494F00B3BC12 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FEA1DA2494F00B3BC12 /* HandyJSON.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -134,7 +241,12 @@
 			children = (
 				21520C441D3341B200F53111 /* HandyJSON.framework */,
 				21520C5B1D3344A900F53111 /* HandyJSONDemo.app */,
-				217B046D1D571B9F0035A8E2 /* HandyJSONTests.xctest */,
+				217B046D1D571B9F0035A8E2 /* HandyJSON iOS Tests.xctest */,
+				393E0F9B1DA1650E00B3BC12 /* HandyJSON.framework */,
+				393E0FB11DA2441E00B3BC12 /* HandyJSON.framework */,
+				393E0FB91DA2441E00B3BC12 /* HandyJSON tvOS Tests.xctest */,
+				393E0FE11DA2494F00B3BC12 /* HandyJSON.framework */,
+				393E0FE91DA2494F00B3BC12 /* HandyJSON macOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -149,7 +261,10 @@
 				21520C511D3341FC00F53111 /* Property.swift */,
 				21520C521D3341FC00F53111 /* JSONDeserializer.swift */,
 				21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */,
-				21520C491D3341B200F53111 /* Info.plist */,
+				21520C491D3341B200F53111 /* Info-iOS.plist */,
+				393E0FC81DA245E300B3BC12 /* Info-tvOS.plist */,
+				393E100A1DA24A0600B3BC12 /* Info-macOS.plist */,
+				393E0FA31DA165CE00B3BC12 /* Info-watchOS.plist */,
 			);
 			path = HandyJSON;
 			sourceTree = "<group>";
@@ -179,7 +294,9 @@
 				21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */,
 				21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */,
 				39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */,
-				217B04711D571B9F0035A8E2 /* Info.plist */,
+				393E0FCA1DA2481000B3BC12 /* Info-tvOS.plist */,
+				217B04711D571B9F0035A8E2 /* Info-iOS.plist */,
+				393E10081DA249F100B3BC12 /* Info-macOS.plist */,
 			);
 			path = HandyJSONTests;
 			sourceTree = SOURCE_ROOT;
@@ -195,12 +312,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		393E0F981DA1650E00B3BC12 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FAB1DA165F900B3BC12 /* HandyJSON.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FAE1DA2441E00B3BC12 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FD21DA2485800B3BC12 /* HandyJSON.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FDE1DA2494F00B3BC12 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FFE1DA249D000B3BC12 /* HandyJSON.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		21520C431D3341B200F53111 /* HandyJSON */ = {
+		21520C431D3341B200F53111 /* HandyJSON iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 21520C4C1D3341B200F53111 /* Build configuration list for PBXNativeTarget "HandyJSON" */;
+			buildConfigurationList = 21520C4C1D3341B200F53111 /* Build configuration list for PBXNativeTarget "HandyJSON iOS" */;
 			buildPhases = (
 				21520C3F1D3341B200F53111 /* Sources */,
 				21520C401D3341B200F53111 /* Frameworks */,
@@ -211,7 +352,7 @@
 			);
 			dependencies = (
 			);
-			name = HandyJSON;
+			name = "HandyJSON iOS";
 			productName = HandyJSON;
 			productReference = 21520C441D3341B200F53111 /* HandyJSON.framework */;
 			productType = "com.apple.product-type.framework";
@@ -235,9 +376,9 @@
 			productReference = 21520C5B1D3344A900F53111 /* HandyJSONDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		217B046C1D571B9F0035A8E2 /* HandyJSONTests */ = {
+		217B046C1D571B9F0035A8E2 /* HandyJSON iOS Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 217B04751D571B9F0035A8E2 /* Build configuration list for PBXNativeTarget "HandyJSONTests" */;
+			buildConfigurationList = 217B04751D571B9F0035A8E2 /* Build configuration list for PBXNativeTarget "HandyJSON iOS Tests" */;
 			buildPhases = (
 				217B04691D571B9F0035A8E2 /* Sources */,
 				217B046A1D571B9F0035A8E2 /* Frameworks */,
@@ -248,9 +389,99 @@
 			dependencies = (
 				217B04741D571B9F0035A8E2 /* PBXTargetDependency */,
 			);
-			name = HandyJSONTests;
+			name = "HandyJSON iOS Tests";
 			productName = HandyJSONTests;
-			productReference = 217B046D1D571B9F0035A8E2 /* HandyJSONTests.xctest */;
+			productReference = 217B046D1D571B9F0035A8E2 /* HandyJSON iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		393E0F9A1DA1650E00B3BC12 /* HandyJSON watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 393E0FA01DA1650E00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON watchOS" */;
+			buildPhases = (
+				393E0F961DA1650E00B3BC12 /* Sources */,
+				393E0F971DA1650E00B3BC12 /* Frameworks */,
+				393E0F981DA1650E00B3BC12 /* Headers */,
+				393E0F991DA1650E00B3BC12 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "HandyJSON watchOS";
+			productName = "HandyJSON watchOS";
+			productReference = 393E0F9B1DA1650E00B3BC12 /* HandyJSON.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		393E0FB01DA2441E00B3BC12 /* HandyJSON tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 393E0FC21DA2441E00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON tvOS" */;
+			buildPhases = (
+				393E0FAC1DA2441E00B3BC12 /* Sources */,
+				393E0FAD1DA2441E00B3BC12 /* Frameworks */,
+				393E0FAE1DA2441E00B3BC12 /* Headers */,
+				393E0FAF1DA2441E00B3BC12 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "HandyJSON tvOS";
+			productName = "HandyJSON tvOS";
+			productReference = 393E0FB11DA2441E00B3BC12 /* HandyJSON.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		393E0FB81DA2441E00B3BC12 /* HandyJSON tvOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 393E0FC51DA2441E00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON tvOS Tests" */;
+			buildPhases = (
+				393E0FB51DA2441E00B3BC12 /* Sources */,
+				393E0FB61DA2441E00B3BC12 /* Frameworks */,
+				393E0FB71DA2441E00B3BC12 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				393E0FBC1DA2441E00B3BC12 /* PBXTargetDependency */,
+			);
+			name = "HandyJSON tvOS Tests";
+			productName = "HandyJSON tvOSTests";
+			productReference = 393E0FB91DA2441E00B3BC12 /* HandyJSON tvOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		393E0FE01DA2494F00B3BC12 /* HandyJSON macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 393E0FF21DA2494F00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON macOS" */;
+			buildPhases = (
+				393E0FDC1DA2494F00B3BC12 /* Sources */,
+				393E0FDD1DA2494F00B3BC12 /* Frameworks */,
+				393E0FDE1DA2494F00B3BC12 /* Headers */,
+				393E0FDF1DA2494F00B3BC12 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "HandyJSON macOS";
+			productName = "HandyJSON macOS";
+			productReference = 393E0FE11DA2494F00B3BC12 /* HandyJSON.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		393E0FE81DA2494F00B3BC12 /* HandyJSON macOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 393E0FF51DA2494F00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON macOS Tests" */;
+			buildPhases = (
+				393E0FE51DA2494F00B3BC12 /* Sources */,
+				393E0FE61DA2494F00B3BC12 /* Frameworks */,
+				393E0FE71DA2494F00B3BC12 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				393E0FEC1DA2494F00B3BC12 /* PBXTargetDependency */,
+			);
+			name = "HandyJSON macOS Tests";
+			productName = "HandyJSON macOSTests";
+			productReference = 393E0FE91DA2494F00B3BC12 /* HandyJSON macOS Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -259,13 +490,12 @@
 		21520C3B1D3341B200F53111 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 0800;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = aliyun;
 				TargetAttributes = {
 					21520C431D3341B200F53111 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = QBMN2BBW3K;
 						LastSwiftMigration = 0800;
 					};
 					21520C5A1D3344A900F53111 = {
@@ -275,8 +505,27 @@
 					};
 					217B046C1D571B9F0035A8E2 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = SFLQ3557MD;
 						LastSwiftMigration = 0800;
+					};
+					393E0F9A1DA1650E00B3BC12 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+					393E0FB01DA2441E00B3BC12 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+					393E0FB81DA2441E00B3BC12 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+					393E0FE01DA2494F00B3BC12 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+					393E0FE81DA2494F00B3BC12 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -293,9 +542,14 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				21520C431D3341B200F53111 /* HandyJSON */,
+				21520C431D3341B200F53111 /* HandyJSON iOS */,
 				21520C5A1D3344A900F53111 /* HandyJSONDemo */,
-				217B046C1D571B9F0035A8E2 /* HandyJSONTests */,
+				217B046C1D571B9F0035A8E2 /* HandyJSON iOS Tests */,
+				393E0F9A1DA1650E00B3BC12 /* HandyJSON watchOS */,
+				393E0FB01DA2441E00B3BC12 /* HandyJSON tvOS */,
+				393E0FB81DA2441E00B3BC12 /* HandyJSON tvOS Tests */,
+				393E0FE01DA2494F00B3BC12 /* HandyJSON macOS */,
+				393E0FE81DA2494F00B3BC12 /* HandyJSON macOS Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -322,6 +576,46 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0F991DA1650E00B3BC12 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FA41DA165CE00B3BC12 /* Info-watchOS.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FAF1DA2441E00B3BC12 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FC91DA245E300B3BC12 /* Info-tvOS.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FB71DA2441E00B3BC12 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FCB1DA2481000B3BC12 /* Info-tvOS.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FDF1DA2494F00B3BC12 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E100B1DA24A0600B3BC12 /* Info-macOS.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FE71DA2494F00B3BC12 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E100C1DA24A0B00B3BC12 /* Info-macOS.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,18 +660,99 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		393E0F961DA1650E00B3BC12 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FA51DA165E300B3BC12 /* Converter.swift in Sources */,
+				393E0FA61DA165E300B3BC12 /* Extension.swift in Sources */,
+				393E0FA71DA165E300B3BC12 /* HelpingMapper.swift in Sources */,
+				393E0FA81DA165E300B3BC12 /* Property.swift in Sources */,
+				393E0FA91DA165E300B3BC12 /* JSONDeserializer.swift in Sources */,
+				393E0FAA1DA165E300B3BC12 /* JSONSerializer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FAC1DA2441E00B3BC12 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FCC1DA2484F00B3BC12 /* Converter.swift in Sources */,
+				393E0FCD1DA2484F00B3BC12 /* Extension.swift in Sources */,
+				393E0FCE1DA2484F00B3BC12 /* HelpingMapper.swift in Sources */,
+				393E0FCF1DA2484F00B3BC12 /* Property.swift in Sources */,
+				393E0FD01DA2484F00B3BC12 /* JSONDeserializer.swift in Sources */,
+				393E0FD11DA2484F00B3BC12 /* JSONSerializer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FB51DA2441E00B3BC12 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FD31DA2486C00B3BC12 /* StructObjectTest.swift in Sources */,
+				393E0FD41DA2486C00B3BC12 /* ClassObjectTest.swift in Sources */,
+				393E0FD51DA2486C00B3BC12 /* NestObjectTest.swift in Sources */,
+				393E0FD61DA2486C00B3BC12 /* CustomMappingTest.swift in Sources */,
+				393E0FD71DA2486C00B3BC12 /* ObjectiveCObjectTest.swift in Sources */,
+				393E0FD81DA2486C00B3BC12 /* MemoryLayoutValidationTest.swift in Sources */,
+				393E0FD91DA2486C00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */,
+				393E0FDA1DA2486C00B3BC12 /* InvalidStateHandlingTest.swift in Sources */,
+				393E0FDB1DA2486C00B3BC12 /* SerializeToJSONTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FDC1DA2494F00B3BC12 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FF81DA2495900B3BC12 /* Converter.swift in Sources */,
+				393E0FF91DA2495900B3BC12 /* Extension.swift in Sources */,
+				393E0FFA1DA2495900B3BC12 /* HelpingMapper.swift in Sources */,
+				393E0FFB1DA2495900B3BC12 /* Property.swift in Sources */,
+				393E0FFC1DA2495900B3BC12 /* JSONDeserializer.swift in Sources */,
+				393E0FFD1DA2495900B3BC12 /* JSONSerializer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		393E0FE51DA2494F00B3BC12 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				393E0FFF1DA249DC00B3BC12 /* StructObjectTest.swift in Sources */,
+				393E10001DA249DC00B3BC12 /* ClassObjectTest.swift in Sources */,
+				393E10011DA249DC00B3BC12 /* NestObjectTest.swift in Sources */,
+				393E10021DA249DC00B3BC12 /* CustomMappingTest.swift in Sources */,
+				393E10031DA249DC00B3BC12 /* ObjectiveCObjectTest.swift in Sources */,
+				393E10041DA249DC00B3BC12 /* MemoryLayoutValidationTest.swift in Sources */,
+				393E10051DA249DC00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */,
+				393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */,
+				393E10071DA249DC00B3BC12 /* SerializeToJSONTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		21520C6E1D33452200F53111 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 21520C431D3341B200F53111 /* HandyJSON */;
+			target = 21520C431D3341B200F53111 /* HandyJSON iOS */;
 			targetProxy = 21520C6D1D33452200F53111 /* PBXContainerItemProxy */;
 		};
 		217B04741D571B9F0035A8E2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 21520C431D3341B200F53111 /* HandyJSON */;
+			target = 21520C431D3341B200F53111 /* HandyJSON iOS */;
 			targetProxy = 217B04731D571B9F0035A8E2 /* PBXContainerItemProxy */;
+		};
+		393E0FBC1DA2441E00B3BC12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 393E0FB01DA2441E00B3BC12 /* HandyJSON tvOS */;
+			targetProxy = 393E0FBB1DA2441E00B3BC12 /* PBXContainerItemProxy */;
+		};
+		393E0FEC1DA2494F00B3BC12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 393E0FE01DA2494F00B3BC12 /* HandyJSON macOS */;
+			targetProxy = 393E0FEB1DA2494F00B3BC12 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -504,16 +879,16 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: 业灿 许 (U997QZ92HC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = QBMN2BBW3K;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = HandyJSON/Info.plist;
+				INFOPLIST_FILE = "HandyJSON/Info-iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSON;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -527,16 +902,16 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: 业灿 许 (U997QZ92HC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = QBMN2BBW3K;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = HandyJSON/Info.plist;
+				INFOPLIST_FILE = "HandyJSON/Info-iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSON;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 			};
@@ -583,7 +958,8 @@
 		217B04761D571B9F0035A8E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = HandyJSONTests/Info.plist;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = "HandyJSONTests/Info-iOS.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSONTests;
@@ -595,11 +971,228 @@
 		217B04771D571B9F0035A8E2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = HandyJSONTests/Info.plist;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = "HandyJSONTests/Info-iOS.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		393E0FA11DA1650E00B3BC12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "HandyJSON/Info-watchOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-watchOS";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		393E0FA21DA1650E00B3BC12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "HandyJSON/Info-watchOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-watchOS";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		393E0FC31DA2441E00B3BC12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "HandyJSON/Info-tvOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-tvOS";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		393E0FC41DA2441E00B3BC12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "HandyJSON/Info-tvOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-tvOS";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
+		393E0FC61DA2441E00B3BC12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				INFOPLIST_FILE = "HandyJSONTests/Info-tvOS.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		393E0FC71DA2441E00B3BC12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				INFOPLIST_FILE = "HandyJSONTests/Info-tvOS.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 3.0;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		393E0FF31DA2494F00B3BC12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "HandyJSON/Info-macOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-macOS";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		393E0FF41DA2494F00B3BC12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "HandyJSON/Info-macOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-macOS";
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		393E0FF61DA2494F00B3BC12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "HandyJSONTests/Info-macOS.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-macOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		393E0FF71DA2494F00B3BC12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "HandyJSONTests/Info-macOS.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-macOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -616,7 +1209,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		21520C4C1D3341B200F53111 /* Build configuration list for PBXNativeTarget "HandyJSON" */ = {
+		21520C4C1D3341B200F53111 /* Build configuration list for PBXNativeTarget "HandyJSON iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21520C4D1D3341B200F53111 /* Debug */,
@@ -634,11 +1227,56 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		217B04751D571B9F0035A8E2 /* Build configuration list for PBXNativeTarget "HandyJSONTests" */ = {
+		217B04751D571B9F0035A8E2 /* Build configuration list for PBXNativeTarget "HandyJSON iOS Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				217B04761D571B9F0035A8E2 /* Debug */,
 				217B04771D571B9F0035A8E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		393E0FA01DA1650E00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				393E0FA11DA1650E00B3BC12 /* Debug */,
+				393E0FA21DA1650E00B3BC12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		393E0FC21DA2441E00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				393E0FC31DA2441E00B3BC12 /* Debug */,
+				393E0FC41DA2441E00B3BC12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		393E0FC51DA2441E00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON tvOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				393E0FC61DA2441E00B3BC12 /* Debug */,
+				393E0FC71DA2441E00B3BC12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		393E0FF21DA2494F00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				393E0FF31DA2494F00B3BC12 /* Debug */,
+				393E0FF41DA2494F00B3BC12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		393E0FF51DA2494F00B3BC12 /* Build configuration list for PBXNativeTarget "HandyJSON macOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				393E0FF61DA2494F00B3BC12 /* Debug */,
+				393E0FF71DA2494F00B3BC12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
