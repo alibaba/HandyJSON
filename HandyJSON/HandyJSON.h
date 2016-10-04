@@ -17,7 +17,7 @@
 //  Created by zhouzhuo on 7/11/16.
 //
 
-#import <UIKit/UIKit.h>
+@import Foundation;
 
 //! Project version number for HandyJSON.
 FOUNDATION_EXPORT double HandyJSONVersionNumber;

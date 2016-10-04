@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "21520C431D3341B200F53111"
+               BlueprintIdentifier = "393E0F9A1DA1650E00B3BC12"
                BuildableName = "HandyJSON.framework"
-               BlueprintName = "HandyJSON"
+               BlueprintName = "HandyJSON watchOS"
                ReferencedContainer = "container:HandyJSON.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "21520C431D3341B200F53111"
+            BlueprintIdentifier = "393E0F9A1DA1650E00B3BC12"
             BuildableName = "HandyJSON.framework"
-            BlueprintName = "HandyJSON"
+            BlueprintName = "HandyJSON watchOS"
             ReferencedContainer = "container:HandyJSON.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "21520C431D3341B200F53111"
+            BlueprintIdentifier = "393E0F9A1DA1650E00B3BC12"
             BuildableName = "HandyJSON.framework"
-            BlueprintName = "HandyJSON"
+            BlueprintName = "HandyJSON watchOS"
             ReferencedContainer = "container:HandyJSON.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
