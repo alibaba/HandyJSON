@@ -53,6 +53,7 @@ print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
 - [Requirements](#requirements)
 - [Installation](#installation)
     - [Cocoapods](#cocoapods)
+    - [Carthage](#carthage)
 - [Deserialization](#deserialization)
     - [The Basics](#the-basics)
     - [Optional, ImplicitlyUnwrappedOptional, Collectiones and so on](optional-implicitlyunwrappedoptional-collectiones-and-so-on)
@@ -81,30 +82,38 @@ print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
 
 # Requirements
 
-* iOS 8.0+
+* iOS 8.0+/OSX 10.9+/watchOS 2.0+/tvOS 9.0+
 
 * Swift 2.3+ / Swift 3.0+
 
 # Installation
 
-**To use with Swift 2.x using == 0.3.0**
+**To use with Swift 2.x using == 0.4.0**
 
-**To use with Swift 3.x using >= 1.0.0**
+**To use with Swift 3.x using >= 1.1.0**
 
 For Legacy Swift support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x)
 
 ## Cocoapods
 
-Add the following lines to your podfile:
+Add the following line to your `Podfile`:
 
 ```
-pod 'HandyJSON', '~> 1.0.0'
+pod 'HandyJSON', '~> 1.1.0'
 ```
 
 Then, run the following command:
 
 ```
 $ pod install
+```
+
+## Carthage
+
+You can add a dependency on `HandyJSON` by adding the following line to your `Cartfile`:
+
+```
+github "alibaba/HandyJSON" ~> 1.1.0
 ```
 
 # Deserialization
@@ -340,16 +349,12 @@ print(JSONSerializer.serializeToJSON(object: student)!)
 print(JSONSerializer.serializeToJSON(object: student, prettify: true)!)
 ```
 
-# Compatibility
-
-* Pass tests on 32-bit/64bit simulator/real device
-
-* Pass tests on iOS 8.0+/9.0+/10.0+
-
 # To Do
 
 * Support non-object (such as basic type, array, dictionany) type deserializing directly
 
 * Improve error handling
 
-* Support macOS
+# License
+
+HandyJSON is released under the Apache License, Version 2.0. See LICENSE for details.
