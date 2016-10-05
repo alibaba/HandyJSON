@@ -1,9 +1,7 @@
 language: objective-c
 osx_image: xcode8
 
-env:
-    - ACTION=test  PLATFORM=iOS     DESTINATION='platform=iOS Simulator,name=iPhone 6S'
 script:
-    - set -o pipefail && xcodebuild -scheme HandyJSONTests -destination "$DESTINATION" $ACTION | xcpretty
+    - sh scripts/ci.sh
 after_success:
     - bash <(curl -s https://codecov.io/bash)
