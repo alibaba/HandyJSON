@@ -54,6 +54,7 @@ print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
 - [Installation](#installation)
     - [Cocoapods](#cocoapods)
     - [Carthage](#carthage)
+    - [Manually](#manually)
 - [Deserialization](#deserialization)
     - [The Basics](#the-basics)
     - [Optional, ImplicitlyUnwrappedOptional, Collectiones and so on](optional-implicitlyunwrappedoptional-collectiones-and-so-on)
@@ -115,6 +116,29 @@ You can add a dependency on `HandyJSON` by adding the following line to your `Ca
 ```
 github "alibaba/HandyJSON" ~> 1.1.0
 ```
+
+## Manually
+
+You can integrate `HandyJSON` into your project manually by doing the following steps:
+
+* Open up `Terminal`, `cd` into your top-level project directory, and add `HandyJSON` as a submodule:
+
+```
+git init && git submodule add https://github.com/alibaba/HandyJSON.git
+```
+
+* Open the new `HandyJSON` folder, drag the `HandyJSON.xcodeproj` into the `Project Navigator` of your project. 
+
+* Select your application project in the `Project Navigator`, open the `General` panel in the right window.
+
+* Click on the `+` button under the `Embedded Binaries` section.
+
+* You will see two different `HandyJSON.xcodeproj` folders each with four different versions of the HandyJSON.framework nested inside a Products folder.
+> It does not matter which Products folder you choose from, but it does matter which HandyJSON.framework you choose.
+
+* Select one of the four `HandyJSON.framework` which matches the platform your Application should run on.
+
+* Congratulations!
 
 # Deserialization
 
