@@ -60,9 +60,16 @@ class ViewController: UIViewController {
         student.name = "Jack"
         student.gender = .Female
         student.subjects = [Subject(id: 1, name: "math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
-
         print(JSONSerializer.serializeToJSON(object: student)!)
         print(JSONSerializer.serializeToJSON(object: student, prettify: true)!)
+
+        let nsDict: NSDictionary = ["a": 1, "b": [1, 2, 3], "c": "hello"]
+        print(JSONSerializer.serialize(dict: nsDict).toJSON()!)
+        print(JSONSerializer.serialize(dict: nsDict).toPrettifyJSON()!)
+
+        let nsArray: NSArray = ["a", "b", 1, 2]
+        print(JSONSerializer.serialize(array: nsArray).toJSON()!)
+        print(JSONSerializer.serialize(array: nsArray).toPrettifyJSON()!)
     }
 
     func deserialization() {
