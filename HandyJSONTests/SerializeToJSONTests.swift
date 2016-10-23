@@ -209,6 +209,66 @@ class serializeToJSONTests: XCTestCase {
         stringCompareHelper(JSONSerializer.serializeToJSON(object: ClassA()), expected)
     }
 
+    func testForCompositionClass() {
+        class A {
+            var a: String?
+            var b: Int?
+            var c: [Double]?
+            var d: Dictionary<String, String>?
+
+            init() {
+                self.a = "hello"
+                self.b = 111
+                self.c = [1, 2.1, 3, 4.0]
+                self.d = ["name1": "value1", "name2": "value2"]
+            }
+        }
+
+        class B {
+            var a: A?
+            var b: A?
+
+            init() {
+                self.a = A()
+                self.b = A()
+            }
+        }
+
+        let expected = "{\"b\":{\"b\":111,\"a\":\"hello\",\"d\":{\"name1\":\"value1\",\"name2\":\"value2\"},\"c\":[1.0,2.1,3.0,4.0]},\"a\":{\"b\":111,\"a\":\"hello\",\"d\":{\"name1\":\"value1\",\"name2\":\"value2\"},\"c\":[1.0,2.1,3.0,4.0]}}"
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: B()), expected)
+        print(JSONSerializer.serializeToJSON(object: B(), prettify: true)!)
+    }
+
+    func testForCompositionStruct() {
+        struct A {
+            var a: String?
+            var b: Int?
+            var c: [Double]?
+            var d: Dictionary<String, String>?
+
+            init() {
+                self.a = "hello"
+                self.b = 111
+                self.c = [1, 2.1, 3, 4.0]
+                self.d = ["name1": "value1", "name2": "value2"]
+            }
+        }
+
+        struct B {
+            var a: A?
+            var b: A?
+
+            init() {
+                self.a = A()
+                self.b = A()
+            }
+        }
+
+        let expected = "{\"b\":{\"b\":111,\"a\":\"hello\",\"d\":{\"name1\":\"value1\",\"name2\":\"value2\"},\"c\":[1.0,2.1,3.0,4.0]},\"a\":{\"b\":111,\"a\":\"hello\",\"d\":{\"name1\":\"value1\",\"name2\":\"value2\"},\"c\":[1.0,2.1,3.0,4.0]}}"
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: B()), expected)
+        print(JSONSerializer.serializeToJSON(object: B(), prettify: true)!)
+    }
+
     func testForClassWithComplexDictionaryProperty() {
         class ClassB {
             var value: Int?
@@ -249,5 +309,31 @@ class serializeToJSONTests: XCTestCase {
         }
 
         stringCompareHelper(JSONSerializer.serializeToJSON(object: ClassA()), "{\"set\":[2,3,1,4]}")
+    }
+
+    func testForInheritedClass() {
+        class A {
+            var a: Int?
+            var b: String?
+
+            init() {
+                self.a = 1
+                self.b = "hello"
+            }
+        }
+
+        class B: A {
+            var c: Double?
+            var d: [Bool]?
+
+            override init() {
+                super.init()
+                self.c = 123.45
+                self.d = [false, true, false]
+            }
+        }
+
+        let expected = "{\"b\":\"hello\",\"a\":1,\"d\":[false,true,false],\"c\":123.45}"
+        stringCompareHelper(JSONSerializer.serializeToJSON(object: B()), expected)
     }
 }
