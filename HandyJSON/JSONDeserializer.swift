@@ -20,6 +20,7 @@
 import Foundation
 
 public class JSONDeserializer<T: HandyJSON> {
+
     public static func deserializeFrom(dict: NSDictionary?) -> T? {
         guard let _dict = dict else {
             return nil
@@ -48,9 +49,23 @@ public class JSONDeserializer<T: HandyJSON> {
         guard let _json = json else {
             return nil
         }
-        if let dict = try? JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments) {
-            if let jsonDict = dict as? NSDictionary {
+        if let jsonObject = try? JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments) {
+            if let jsonDict = jsonObject as? NSDictionary {
                 return deserializeFrom(dict: jsonDict, designatedPath: designatedPath)
+            }
+        }
+        return nil
+    }
+
+    public static func deserializeModelArrayFrom(json: String?) -> Array<T?>? {
+        guard let _json = json else {
+            return nil
+        }
+        if let jsonObject = try? JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments) {
+            if let jsonArray = jsonObject as? NSArray {
+                return jsonArray.map({ (jsonDict) -> T? in
+                    return deserializeFrom(dict: jsonDict as? NSDictionary)
+                })
             }
         }
         return nil
