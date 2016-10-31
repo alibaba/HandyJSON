@@ -27,19 +27,19 @@ public protocol Property {
 extension Property {
 
     // locate the head of a struct type object in memory
-    mutating func headPointerOfStruct() -> UnsafePointer<Byte> {
+    mutating func headPointerOfStruct() -> UnsafeMutablePointer<Byte> {
 
-        return withUnsafePointer(to: &self) {
-            return UnsafeRawPointer($0).bindMemory(to: Byte.self, capacity: MemoryLayout<Self>.stride)
+        return withUnsafeMutablePointer(to: &self) {
+            return UnsafeMutableRawPointer($0).bindMemory(to: Byte.self, capacity: MemoryLayout<Self>.stride)
         }
     }
 
     // locating the head of a class type object in memory
-    mutating func headPointerOfClass() -> UnsafePointer<Byte> {
+    mutating func headPointerOfClass() -> UnsafeMutablePointer<Byte> {
 
         let opaquePointer = Unmanaged.passUnretained(self as AnyObject).toOpaque()
         let mutableTypedPointer = opaquePointer.bindMemory(to: Byte.self, capacity: MemoryLayout<Self>.stride)
-        return UnsafePointer<Byte>(mutableTypedPointer)
+        return UnsafeMutablePointer<Byte>(mutableTypedPointer)
     }
 
     // memory size occupy by self object
@@ -147,7 +147,7 @@ extension NSDictionary: Property {}
 
 extension Property {
 
-    internal static func _transform(rawData dict: NSDictionary, toPointer pointer: UnsafePointer<Byte>, toOffset currentOffset: Int, byMirror mirror: Mirror, withMapper mapper: HelpingMapper) -> Int {
+    internal static func _transform(rawData dict: NSDictionary, toPointer pointer: UnsafeMutablePointer<Byte>, toOffset currentOffset: Int, byMirror mirror: Mirror, withMapper mapper: HelpingMapper) -> Int {
 
         var currentOffset = currentOffset
         if let superMirror = mirror.superclassMirror {
@@ -220,7 +220,7 @@ extension Property {
             fatalError("Target type must has a display type")
         }
 
-        var pointer: UnsafePointer<Byte>!
+        var pointer: UnsafeMutablePointer<Byte>!
         let mapper = HelpingMapper()
         var currentOffset = 0
 
@@ -374,7 +374,7 @@ extension Property {
         nsArray.forEach { (anyObject) in
             if let nsObject = anyObject as? NSObject {
                 let v = valueFrom(object: nsObject)
-                arr.append(v)
+                arr.append(v as Any)
             }
         }
         return arr
@@ -400,7 +400,7 @@ extension Property {
     }
 
     // keep in mind, self type is the same with type of value
-    static func codeIntoMemory(pointer: UnsafePointer<Byte>, value: Property) {
+    static func codeIntoMemory(pointer: UnsafeMutablePointer<Byte>, value: Property) {
         pointer.withMemoryRebound(to: Self.self, capacity: 1, { return $0 }).pointee = value as! Self
     }
 }
