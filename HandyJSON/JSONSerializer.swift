@@ -57,21 +57,21 @@ class GenericObjectTransformer: ModelTransformerProtocol, ArrayTransformerProtoc
     }
 
     public func toSimpleArray() -> Array<Any>? {
-        if let result = GenericObjectTransformer.transformToSimpleObject(object: self.object) {
+        if let result = GenericObjectTransformer.transformToSimpleObject(object: self.object ?? "") {
             return result as? Array<Any>
         }
         return nil
     }
 
     public func toSimpleDictionary() -> Dictionary<String, Any>? {
-        if let result = GenericObjectTransformer.transformToSimpleObject(object: self.object) {
+        if let result = GenericObjectTransformer.transformToSimpleObject(object: self.object ?? "") {
             return result as? Dictionary<String, Any>
         }
         return nil
     }
 
     public func toJSON() -> String? {
-        if let result = GenericObjectTransformer.transformToSimpleObject(object: self.object) {
+        if let result = GenericObjectTransformer.transformToSimpleObject(object: self.object ?? "") {
             return GenericObjectTransformer.transformSimpleObjectToJSON(object: result)
         }
         return nil
