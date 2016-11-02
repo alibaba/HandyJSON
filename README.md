@@ -97,7 +97,7 @@ print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
 
 **To use with Swift 2.x using == 0.4.0**
 
-**To use with Swift 3.x using >= 1.1.0**
+**To use with Swift 3.x using >= 1.2.0**
 
 For Legacy Swift support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
 
@@ -106,7 +106,7 @@ For Legacy Swift support, take a look at the [swift2 branch](https://github.com/
 Add the following line to your `Podfile`:
 
 ```
-pod 'HandyJSON', '~> 1.1.0'
+pod 'HandyJSON', '~> 1.2.0'
 ```
 
 Then, run the following command:
@@ -120,7 +120,7 @@ $ pod install
 You can add a dependency on `HandyJSON` by adding the following line to your `Cartfile`:
 
 ```
-github "alibaba/HandyJSON" ~> 1.1.0
+github "alibaba/HandyJSON" ~> 1.2.0
 ```
 
 ## Manually

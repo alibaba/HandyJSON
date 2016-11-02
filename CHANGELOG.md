@@ -1,5 +1,63 @@
 # Change Log
 
+## [1.2.0](https://github.com/alibaba/HandyJSON/tree/1.2.0) (2016-11-01)
+[Full Changelog](https://github.com/alibaba/HandyJSON/compare/1.1.0...1.2.0)
+
+**Closed issues:**
+
+- 请问下一个版本大概什么时候能发布呢? [\#27](https://github.com/alibaba/HandyJSON/issues/27)
+- 模型中有一个，模型数组属性。 [\#25](https://github.com/alibaba/HandyJSON/issues/25)
+- How can I use this handsome library on Android platform  [\#24](https://github.com/alibaba/HandyJSON/issues/24)
+- 请问有json数组转模型数组的方法么? [\#23](https://github.com/alibaba/HandyJSON/issues/23)
+- Support Linux [\#22](https://github.com/alibaba/HandyJSON/issues/22)
+- 为什么字典转模型时 传参数是 ObjectC 的 NSDictionary 类型 而不是 Swift 的 Collection 类型 [\#21](https://github.com/alibaba/HandyJSON/issues/21)
+- 小问题 [\#20](https://github.com/alibaba/HandyJSON/issues/20)
+- Manual Installation [\#13](https://github.com/alibaba/HandyJSON/issues/13)
+
+**Merged pull requests:**
+
+- ready for 1.2.0 [\#31](https://github.com/alibaba/HandyJSON/pull/31) ([xuyecan](https://github.com/xuyecan))
+- support array formal json string [\#30](https://github.com/alibaba/HandyJSON/pull/30) ([xuyecan](https://github.com/xuyecan))
+- fix compile error on xcode8 [\#29](https://github.com/alibaba/HandyJSON/pull/29) ([aixinyunchou](https://github.com/aixinyunchou))
+- refactor serialization to support more features [\#26](https://github.com/alibaba/HandyJSON/pull/26) ([xuyecan](https://github.com/xuyecan))
+- Fix docs link [\#19](https://github.com/alibaba/HandyJSON/pull/19) ([khasinski](https://github.com/khasinski))
+- Add carthage badge [\#18](https://github.com/alibaba/HandyJSON/pull/18) ([cijianzy](https://github.com/cijianzy))
+- add the manually installation section [\#17](https://github.com/alibaba/HandyJSON/pull/17) ([xuyecan](https://github.com/xuyecan))
+
+## [1.1.0](https://github.com/alibaba/HandyJSON/tree/1.1.0) (2016-10-05)
+[Full Changelog](https://github.com/alibaba/HandyJSON/compare/0.4.0...1.1.0)
+
+**Merged pull requests:**
+
+- Update file directory && Fix copy bundle [\#16](https://github.com/alibaba/HandyJSON/pull/16) ([cijianzy](https://github.com/cijianzy))
+- Update file directory && Fix copy bundle [\#15](https://github.com/alibaba/HandyJSON/pull/15) ([cijianzy](https://github.com/cijianzy))
+
+## [0.4.0](https://github.com/alibaba/HandyJSON/tree/0.4.0) (2016-10-04)
+[Full Changelog](https://github.com/alibaba/HandyJSON/compare/1.0.0...0.4.0)
+
+**Merged pull requests:**
+
+- Support all platform [\#14](https://github.com/alibaba/HandyJSON/pull/14) ([cijianzy](https://github.com/cijianzy))
+- code formatting [\#12](https://github.com/alibaba/HandyJSON/pull/12) ([xuyecan](https://github.com/xuyecan))
+- add chinese doc link [\#11](https://github.com/alibaba/HandyJSON/pull/11) ([xuyecan](https://github.com/xuyecan))
+- release 1.0.0 [\#10](https://github.com/alibaba/HandyJSON/pull/10) ([xuyecan](https://github.com/xuyecan))
+
+## [1.0.0](https://github.com/alibaba/HandyJSON/tree/1.0.0) (2016-10-01)
+[Full Changelog](https://github.com/alibaba/HandyJSON/compare/0.3.0...1.0.0)
+
+## [0.3.0](https://github.com/alibaba/HandyJSON/tree/0.3.0) (2016-10-01)
+[Full Changelog](https://github.com/alibaba/HandyJSON/compare/0.2.0...0.3.0)
+
+**Closed issues:**
+
+- good job! [\#6](https://github.com/alibaba/HandyJSON/issues/6)
+
+**Merged pull requests:**
+
+- Travis-ci support swift3.0 [\#9](https://github.com/alibaba/HandyJSON/pull/9) ([cijianzy](https://github.com/cijianzy))
+- migrate to swift 3.0 [\#8](https://github.com/alibaba/HandyJSON/pull/8) ([xuyecan](https://github.com/xuyecan))
+- reorganize source files and optimize naming [\#7](https://github.com/alibaba/HandyJSON/pull/7) ([xuyecan](https://github.com/xuyecan))
+
 ## [0.2.0](https://github.com/alibaba/HandyJSON/tree/0.2.0) (2016-09-27)
 [Full Changelog](https://github.com/alibaba/HandyJSON/compare/0.1.0...0.2.0)
 
