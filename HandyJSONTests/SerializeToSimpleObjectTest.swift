@@ -38,8 +38,8 @@ class serializeToSimpleObjectTest: XCTestCase {
     }
 
     func stringCompareHelper(_ actual: String?, _ expected: String?) {
-        print(actual)
-        print(expected)
+        print(actual ?? "")
+        print(expected ?? "")
         XCTAssertTrue(expected == actual, "expected value:\(expected) not equal to actual:\(actual)")
     }
 
