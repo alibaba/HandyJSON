@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.2.1](https://github.com/alibaba/HandyJSON/tree/1.2.1) (2016-11-04)
+[Full Changelog](https://github.com/alibaba/HandyJSON/compare/1.2.0...1.2.1)
+
+**Closed issues:**
+
+- Xcode8.1编译报错 [\#28](https://github.com/alibaba/HandyJSON/issues/28)
+
 ## [1.2.0](https://github.com/alibaba/HandyJSON/tree/1.2.0) (2016-11-01)
 [Full Changelog](https://github.com/alibaba/HandyJSON/compare/1.1.0...1.2.0)
 
