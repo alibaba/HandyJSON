@@ -65,6 +65,7 @@ print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
     - [Designated Path](#designated-path)
     - [Composition Object](#composition-object)
     - [Inheritance Object](#inheritance-object)
+    - [Array In JSON](#array-in-json)
     - [Custom Mapping](#custom-mapping)
     - [Supported Property Type](#supported-property-type)
 - [Serialization](#serialization)
@@ -285,6 +286,28 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 }
 ```
 
+## Array In JSON
+
+If the first level of a JSON text is an array, we turn it to objects array.
+
+```
+class Cat: HandyJSON {
+    var name: String?
+    var id: String?
+
+    required init() {}
+}
+
+let jsonArrayString: String? = "[{\"name\":\"Bob\",\"id\":\"1\"}, {\"name\":\"Lily\",\"id\":\"2\"}, {\"name\":\"Lucy\",\"id\":\"3\"}]"
+if let cats = JSONDeserializer<Cat>.deserializeModelArrayFrom(json: jsonArrayString) {
+    cats.forEach({ (cat) in
+        if let _cat = cat {
+            print(_cat.id ?? "", _cat.name ?? "")
+        }
+    })
+}
+```
+
 ## Custom Mapping
 
 `HandyJSON` let you customize the key mapping to JSON fields, or parsing method of any property. All you need to do is implementing an optional `mapping` function, do things in it.
@@ -336,7 +359,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 
 ## The Basics
 
-You need to do nothing special to support serialization. Define the class/struct, get the instances, then serialize it.
+You need to do nothing special to support serialization. Define the class/struct, get the instances, then serialize it to json text, or simple dictionary.
 
 ```
 class Animal {
@@ -350,8 +373,15 @@ class Animal {
 }
 
 let cat = Animal(name: "cat", height: 30)
-print(JSONSerializer.serializeToJSON(object: cat)!)
-print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
+if let jsonStr = JSONSerializer.serialize(model: cat).toJSON() {
+    print("simple json string: ", jsonStr)
+}
+if let prettifyJSON = JSONSerializer.serialize(model: cat).toPrettifyJSON() {
+    print("prettify json string: ", prettifyJSON)
+}
+if let dict = JSONSerializer.serialize(model: cat).toSimpleDictionary() {
+    print("dictionary: ", dict)
+}
 ```
 
 ## Complex Object
@@ -359,9 +389,9 @@ print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
 Still need no extra effort.
 
 ```
-enum Gender: String {
-    case Male = "male"
-    case Female = "Female"
+enum Gender {
+    case Male
+    case Female
 }
 
 struct Subject {
@@ -385,8 +415,15 @@ student.name = "Jack"
 student.gender = .Female
 student.subjects = [Subject(id: 1, name: "math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
 
-print(JSONSerializer.serializeToJSON(object: student)!)
-print(JSONSerializer.serializeToJSON(object: student, prettify: true)!)
+if let jsonStr = JSONSerializer.serialize(model: student).toJSON() {
+    print("simple json string: ", jsonStr)
+}
+if let prettifyJSON = JSONSerializer.serialize(model: student).toPrettifyJSON() {
+    print("prettify json string: ", prettifyJSON)
+}
+if let dict = JSONSerializer.serialize(model: student).toSimpleDictionary() {
+    print("dictionary: ", dict)
+}
 ```
 
 # To Do
