@@ -46,8 +46,9 @@ class Animal {
 
 let cat = Animal(name: "cat", height: 25.0)
 
-print(JSONSerializer.serializeToJSON(object: cat)!)
-print(JSONSerializer.serializeToJSON(object: cat, prettify: true)!)
+print(JSONSerializer.serialize(model: cat).toJSON()!)
+print(JSONSerializer.serialize(model: cat).toPrettifyJSON()!)
+print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
 ```
 
 # Content
@@ -204,7 +205,7 @@ class Cat: HandyJSON {
     var alive: Bool = true
     var color: NSString?
 
-    init() {}
+    required init() {}
 }
 
 let jsonString = "{\"id\":1234567,\"name\":\"Kitty\",\"friend\":[\"Tom\",\"Jack\",\"Lily\",\"Black\"],\"weight\":15.34,\"alive\":false,\"color\":\"white\"}"
@@ -223,7 +224,7 @@ class Cat: HandyJSON {
     var id: Int64!
     var name: String!
 
-    init() {}
+    required init() {}
 }
 
 let jsonString = "{\"code\":200,\"msg\":\"success\",\"data\":{\"cat\":{\"id\":12345,\"name\":\"Kitty\"}}}"
@@ -242,7 +243,7 @@ class Component: HandyJSON {
     var aInt: Int?
     var aString: String?
 
-    init() {}
+    required init() {}
 }
 
 class Composition: HandyJSON {
@@ -250,7 +251,7 @@ class Composition: HandyJSON {
     var comp1: Component?
     var comp2: Component?
 
-    init() {}
+    required init() {}
 }
 
 let jsonString = "{\"num\":12345,\"comp1\":{\"aInt\":1,\"aString\":\"aaaaa\"},\"comp2\":{\"aInt\":2,\"aString\":\"bbbbb\"}}"
