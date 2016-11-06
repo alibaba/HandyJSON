@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "217B046C1D571B9F0035A8E2"
+               BuildableName = "HandyJSON iOS Tests.xctest"
+               BlueprintName = "HandyJSON iOS Tests"
+               ReferencedContainer = "container:HandyJSON.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "21520C431D3341B200F53111"
+            BuildableName = "HandyJSON.framework"
+            BlueprintName = "HandyJSON iOS"
+            ReferencedContainer = "container:HandyJSON.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
