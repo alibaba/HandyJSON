@@ -16,7 +16,7 @@ Compared with others, the most significant feature of HandyJSON is that it does 
 
 ### Deserialization
 
-```
+```swift
 class Animal: HandyJSON {
     var name: String?
     var height: Double?
@@ -33,7 +33,7 @@ if let cat = JSONDeserializer<Animal>.deserializeFrom(json: json) {
 
 ### Serialization
 
-```
+```swift
 class Animal {
     var name: String?
     var height: Double?
@@ -156,7 +156,7 @@ To support deserialization from JSON, a class/struct need to conform to 'HandyJS
 
 To conform to 'HandyJSON', a class need to implement an empty initializer.
 
-```
+```swift
 class Animal: HandyJSON {
     var name: String?
     var id: String?
@@ -176,7 +176,7 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
 
 For struct, since the compiler provide a default empty initializer, we use it for free.
 
-```
+```swift
 struct Animal: HandyJSON {
     var name: String?
     var id: String?
@@ -196,7 +196,7 @@ But also notice that, if you have a designated initializer to override the defau
 
 'HandyJSON' support classes/structs composed of `optional`, `implicitlyUnwrappedOptional`, `array`, `dictionary`, `objective-c base type`, `nested type` etc. properties.
 
-```
+```swift
 class Cat: HandyJSON {
     var id: Int64!
     var name: String!
@@ -219,7 +219,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 
 `HandyJSON` supports deserialization from designated path of JSON.
 
-```
+```swift
 class Cat: HandyJSON {
     var id: Int64!
     var name: String!
@@ -238,7 +238,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString, designatedP
 
 Notice that all the properties of a class/struct need to deserialized should be type conformed to `HandyJSON`.
 
-```
+```swift
 class Component: HandyJSON {
     var aInt: Int?
     var aString: String?
@@ -265,7 +265,7 @@ if let composition = JSONDeserializer<Composition>.deserializeFrom(json: jsonStr
 
 A subclass need deserialization, it's superclass need to conform to `HandyJSON`.
 
-```
+```swift
 class Animal: HandyJSON {
     var id: Int?
     var color: String?
@@ -291,7 +291,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 
 If the first level of a JSON text is an array, we turn it to objects array.
 
-```
+```swift
 class Cat: HandyJSON {
     var name: String?
     var id: String?
@@ -313,7 +313,7 @@ if let cats = JSONDeserializer<Cat>.deserializeModelArrayFrom(json: jsonArrayStr
 
 `HandyJSON` let you customize the key mapping to JSON fields, or parsing method of any property. All you need to do is implementing an optional `mapping` function, do things in it.
 
-```
+```swift
 class Cat: HandyJSON {
     var id: Int64!
     var name: String!
@@ -362,7 +362,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 
 You need to do nothing special to support serialization. Define the class/struct, get the instances, then serialize it to json text, or simple dictionary.
 
-```
+```swift
 class Animal {
     var name: String?
     var height: Int?
@@ -389,7 +389,7 @@ if let dict = JSONSerializer.serialize(model: cat).toSimpleDictionary() {
 
 Still need no extra effort.
 
-```
+```swift
 enum Gender {
     case Male
     case Female
