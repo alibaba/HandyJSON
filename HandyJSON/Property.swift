@@ -108,7 +108,7 @@ extension Array: ArrayTypeProtocol {
         return Element.self
     }
 
-    static func castArrayType(arr: [Any]) -> Array<Element> {
+    static func castArrayType(arr: [Any]) -> [Element] {
         return arr.map({ (p) -> Element in
             return p as! Element
         })
@@ -131,8 +131,8 @@ extension Dictionary: DictionaryTypeProtocol {
         return Value.self
     }
 
-    static func castDictionaryType(dict: [String: Any]) -> Dictionary<Key, Value> {
-        var result = Dictionary<Key, Value>()
+    static func castDictionaryType(dict: [String: Any]) -> [Key: Value] {
+        var result = [Key: Value]()
         dict.forEach { (key, value) in
             if let sKey = key as? Key, let sValue = value as? Value {
                 result[sKey] = sValue

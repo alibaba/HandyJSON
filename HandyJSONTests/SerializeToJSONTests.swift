@@ -214,7 +214,7 @@ class serializeToJSONTests: XCTestCase {
             var a: String?
             var b: Int?
             var c: [Double]?
-            var d: Dictionary<String, String>?
+            var d: [String: String]?
 
             init() {
                 self.a = "hello"
@@ -244,7 +244,7 @@ class serializeToJSONTests: XCTestCase {
             var a: String?
             var b: Int?
             var c: [Double]?
-            var d: Dictionary<String, String>?
+            var d: [String: String]?
 
             init() {
                 self.a = "hello"

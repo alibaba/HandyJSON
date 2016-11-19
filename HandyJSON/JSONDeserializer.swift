@@ -57,7 +57,7 @@ public class JSONDeserializer<T: HandyJSON> {
         return nil
     }
 
-    public static func deserializeModelArrayFrom(json: String?) -> Array<T?>? {
+    public static func deserializeModelArrayFrom(json: String?) -> [T?]? {
         guard let _json = json else {
             return nil
         }

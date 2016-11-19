@@ -21,7 +21,7 @@ import Foundation
 
 public class HelpingMapper {
 
-    private var mapping = Dictionary<Int, (String?, ((String) -> ())?)>()
+    private var mapping = [Int: (String?, ((String) -> ())?)]()
 
     public func specify<T>(property: inout T, name: String) {
         let key = withUnsafePointer(to: &property, { return $0 }).hashValue
