@@ -74,7 +74,7 @@ protocol BasePropertyProtocol: HandyJSON {
 }
 
 protocol OptionalTypeProtocol: HandyJSON {
-    static func getWrappedType() -> Any.Type
+    static func optionalFromNSObject(object: NSObject) -> Any?
 }
 
 extension Optional: OptionalTypeProtocol {
@@ -82,18 +82,25 @@ extension Optional: OptionalTypeProtocol {
         self = nil
     }
 
-    static func getWrappedType() -> Any.Type {
-        return Wrapped.self
+    static func optionalFromNSObject(object: NSObject) -> Any? {
+        if let value = (Wrapped.self as? Property.Type)?.valueFrom(object: object) as? Wrapped {
+            return Optional(value)
+        }
+        return nil
     }
 }
 
 protocol ImplicitlyUnwrappedTypeProtocol: HandyJSON {
-    static func getWrappedType() -> Any.Type
+    static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any?
 }
 
 extension ImplicitlyUnwrappedOptional: ImplicitlyUnwrappedTypeProtocol {
-    static func getWrappedType() -> Any.Type {
-        return Wrapped.self
+
+    static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any? {
+        if let value = (Wrapped.self as? Property.Type)?.valueFrom(object: object) as? Wrapped {
+            return ImplicitlyUnwrappedOptional(value)
+        }
+        return nil
     }
 }
 
@@ -246,11 +253,11 @@ extension Property {
         } else if self is OptionalTypeProtocol.Type {
 
             // optional type, we parse the wrapped generic type to construct the value, then wrap it to optional
-            return optionalValueFrom(object: object)
+            return (self as! OptionalTypeProtocol.Type).optionalFromNSObject(object: object) as? Self
         } else if self is ImplicitlyUnwrappedTypeProtocol.Type {
 
             // similar to optional
-            return implicitUnwrappedValueFrom(object: object)
+            return (self as! ImplicitlyUnwrappedTypeProtocol.Type).implicitlyUnwrappedOptionalFromNSObject(object: object) as? Self
         } else if self is ArrayTypeProtocol.Type {
 
             // we can't retrieve the generic type wrapped by array here, so we go into array extension to do the casting
@@ -318,37 +325,6 @@ extension Property {
             break
         }
         return nil
-    }
-
-    static func optionalValueFrom(object: NSObject) -> Self? {
-        if let wrappedType = (self as! OptionalTypeProtocol.Type).getWrappedType() as? Property.Type {
-            // only can infer v is property.type
-            if let v = wrappedType.valueFrom(object: object) {
-
-                // so the argument must be property.type of function "wrapByOptional"
-                return wrappedType.wrapByOptional(value: v) as? Self
-            }
-        }
-        return nil
-    }
-
-    static func implicitUnwrappedValueFrom(object: NSObject) -> Self? {
-        if let wrappedType = (self as! ImplicitlyUnwrappedTypeProtocol.Type).getWrappedType() as? Property.Type {
-
-            // similar to optional value processing
-            if let v = wrappedType.valueFrom(object: object) {
-                return wrappedType.wrapByImplicitUnwrapped(value: v) as? Self
-            }
-        }
-        return nil
-    }
-
-    static func wrapByOptional(value: Property) -> Optional<Self> {
-        return Optional(value as! Self)
-    }
-
-    static func wrapByImplicitUnwrapped(value: Property) -> ImplicitlyUnwrappedOptional<Self> {
-        return ImplicitlyUnwrappedOptional(value as! Self)
     }
 
     // keep in mind, self type is the same with type of value
