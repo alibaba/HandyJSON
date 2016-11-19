@@ -1,10 +1,10 @@
 # HandyJSON
 
-HandyJSON is a framework written in Swift which to make converting model objects(classes/structs) to and from JSON easy on iOS.
+HandyJSON是一个用于Swift语言中的JSON序列化/反序列化库。
 
-Compared with others, the most significant feature of HandyJSON is that it does not require the objects inherit from NSObject(**not using KVC but reflection**), neither implements a 'mapping' function(**use pointer to achieve property assignment**).
+与其他流行的Swift JSON库相比，HandyJSON的特点是，它反序列化时(把JSON转换为Model)不要求Model从`NSObject`继承(因为它不是基于`KVC`机制)，也不要求你为Model定义一个`Mapping`函数。只要你定义好Model类，声明它服从`HandyJSON`协议，HandyJSON就能自行以各个属性的属性名为Key，从JSON串中解析值。
 
-**But notice that** , HandyJSON is totally depend on the memory layout rules of Swift which we haven’t found formal specification from Apple(And I'm look forward to someone can help). The good new is that it has never changed in the past. Also We can adjust out strategy if it really change. So, I think “the potential crisis" is more likely oneday Swift make reflection more powerful, such as supporting assignment.
+需要注意，HandyJSON在反序列化时是根据Model的内存布局来为各个属性赋值的，所以，它完全依赖于Swift的内存布局规则。这个库实现里涉及的规则是从一些三方资料中找到说明，加上自己反复验证总结得到。Swift从诞生到现在一直没有改变过这些规则，但毕竟不是苹果官方说明，所以仍然存在一定的风险。如果Swift日后更新改变这些规则，HandyJSON会第一时间跟进做好兼容工作。
 
 [![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=master)](https://travis-ci.org/alibaba/HandyJSON)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -12,11 +12,9 @@ Compared with others, the most significant feature of HandyJSON is that it does 
 [![Cocoapods Platform](https://img.shields.io/cocoapods/p/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
 [![Codecov branch](https://img.shields.io/codecov/c/github/alibaba/HandyJSON/master.svg?style=flat)](https://codecov.io/gh/alibaba/HandyJSON/branch/master)
 
-## [中文文档](./README_cn.md)
+## 简单示例
 
-## Sample Code
-
-### Deserialization
+### 反序列化
 
 ```swift
 class Animal: HandyJSON {
@@ -33,7 +31,7 @@ if let cat = JSONDeserializer<Animal>.deserializeFrom(json: json) {
 }
 ```
 
-### Serialization
+### 序列化
 
 ```swift
 class Animal {
@@ -53,109 +51,59 @@ print(JSONSerializer.serialize(model: cat).toPrettifyJSON()!)
 print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
 ```
 
-# Content
+# 文档目录
 
-- [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
-    - [Cocoapods](#cocoapods)
-    - [Carthage](#carthage)
-    - [Manually](#manually)
-- [Deserialization](#deserialization)
-    - [The Basics](#the-basics)
-    - [Support Struct](#support-struct)
-    - [Optional, ImplicitlyUnwrappedOptional, Collections and so on](#optional-implicitlyunwrappedoptional-collections-and-so-on)
-    - [Designated Path](#designated-path)
-    - [Composition Object](#composition-object)
-    - [Inheritance Object](#inheritance-object)
-    - [Array In JSON](#array-in-json)
-    - [Custom Mapping](#custom-mapping)
-    - [Supported Property Type](#supported-property-type)
-- [Serialization](#serialization)
-    - [The Basics](#the-basics)
-    - [Complex Object](#complex-object)
-- [To Do](#to-do)
+- [特性](#特性)
+- [环境要求](#环境要求)
+- [安装](#安装)
+- [反序列化](#反序列化-1)
+    - [基本类型](#基本类型)
+    - [支持struct](#支持struct)
+    - [可选、隐式解包可选、集合等](#可选隐式解包可选集合等)
+    - [指定解析路径](#指定解析路径)
+    - [组合对象](#组合对象)
+    - [继承自父类的子类](#继承自父类的子类)
+    - [JSON中的数组](#json中的数组)
+    - [自定义解析规则](#自定义解析规则)
+    - [支持的属性类型](#支持的属性类型)
+- [序列化](#序列化-1)
+    - [基本类型](#基本类型-1)
+    - [复杂类型](#复杂类型)
+- [待办](#待办)
 
-# Features
+# 特性
 
-* Serialize/Deserialize Object/JSON to/From JSON/Object
+* 序列化Model到JSON、从JSON反序列化到Model
 
-* Naturally use object property name for mapping, no need to specify a mapping relationship
+* 自然地以Model的属性名称作为解析JSON的Key，不需要额外指定
 
-* Support almost all types in Swift
+* 支持Swift中大部分类型
 
-* Support struct
+* 支持class、struct定义的Model
 
-* Custom transformations for mapping
+* 支持自定义解析规则
 
-* Type-Adaption, such as string json field maps to int property, int json field maps to string property
+* 类型自适应，如JSON中是一个Int，但对应Model是String字段，会自动完成转化
 
-# Requirements
+# 环境要求
 
 * iOS 8.0+/OSX 10.9+/watchOS 2.0+/tvOS 9.0+
 
 * Swift 2.3+ / Swift 3.0+
 
-# Installation
+# 安装
 
-**To use with Swift 2.x using == 0.4.0**
+HandyJSON只在Swift3.x版本上(master分支)开发新特性，在Swift2.x中使用，参见: [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x)
 
-**To use with Swift 3.x using >= 1.2.1**
+具体操作指引参考 [英文版README](./README.md) 的 `Installation` 章节。
 
-For Legacy Swift support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
+# 反序列化
 
-## Cocoapods
+## 基本类型
 
-Add the following line to your `Podfile`:
+要支持从JSON串反序列化，Model定义时要声明服从`HandyJSON`协议。确实是一个协议，而不是继承自`NSObject`。
 
-```
-pod 'HandyJSON', '~> 1.2.1'
-```
-
-Then, run the following command:
-
-```
-$ pod install
-```
-
-## Carthage
-
-You can add a dependency on `HandyJSON` by adding the following line to your `Cartfile`:
-
-```
-github "alibaba/HandyJSON" ~> 1.2.1
-```
-
-## Manually
-
-You can integrate `HandyJSON` into your project manually by doing the following steps:
-
-* Open up `Terminal`, `cd` into your top-level project directory, and add `HandyJSON` as a submodule:
-
-```
-git init && git submodule add https://github.com/alibaba/HandyJSON.git
-```
-
-* Open the new `HandyJSON` folder, drag the `HandyJSON.xcodeproj` into the `Project Navigator` of your project.
-
-* Select your application project in the `Project Navigator`, open the `General` panel in the right window.
-
-* Click on the `+` button under the `Embedded Binaries` section.
-
-* You will see two different `HandyJSON.xcodeproj` folders each with four different versions of the HandyJSON.framework nested inside a Products folder.
-> It does not matter which Products folder you choose from, but it does matter which HandyJSON.framework you choose.
-
-* Select one of the four `HandyJSON.framework` which matches the platform your Application should run on.
-
-* Congratulations!
-
-# Deserialization
-
-## The Basics
-
-To support deserialization from JSON, a class/struct need to conform to 'HandyJSON' protocol. It's truly protocol, not some class inherited from NSObject.
-
-To conform to 'HandyJSON', a class need to implement an empty initializer.
+服从`HandyJSON`协议，需要实现一个空的`init`方法。
 
 ```swift
 class Animal: HandyJSON {
@@ -173,9 +121,9 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
 }
 ```
 
-## Support Struct
+## 支持Struct
 
-For struct, since the compiler provide a default empty initializer, we use it for free.
+对于声明为`struct`的Model，由于`struct`默认提供了空的`init`方法，所以不需要额外声明。
 
 ```swift
 struct Animal: HandyJSON {
@@ -191,11 +139,11 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
 }
 ```
 
-But also notice that, if you have a designated initializer to override the default one in the struct, you should explicitly declare an empty one.
+但需要注意，如果你为`struct`指定了别的构造函数，那就要显示声明一个空的`init`函数。
 
-## Optional, ImplicitlyUnwrappedOptional, Collections and so on
+## 可选、隐式解包可选、集合等
 
-'HandyJSON' support classes/structs composed of `optional`, `implicitlyUnwrappedOptional`, `array`, `dictionary`, `objective-c base type`, `nested type` etc. properties.
+HandyJSON支持这些非基础类型，包括嵌套结构。
 
 ```swift
 class Cat: HandyJSON {
@@ -216,9 +164,9 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 }
 ```
 
-## Designated Path
+## 指定解析路径
 
-`HandyJSON` supports deserialization from designated path of JSON.
+HandyJSON支持指定从哪个具体路径开始解析，反序列化到Model。
 
 ```swift
 class Cat: HandyJSON {
@@ -235,9 +183,11 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString, designatedP
 }
 ```
 
-## Composition Object
+## 组合对象
 
-Notice that all the properties of a class/struct need to deserialized should be type conformed to `HandyJSON`.
+注意，如果Model的属性不是基本类型或集合类型，那么它必须是一个服从`HandyJSON`协议的类型。
+
+如果是泛型集合类型，那么要求泛型实参是基本类型或者服从`HandyJSON`协议的类型。
 
 ```swift
 class Component: HandyJSON {
@@ -262,9 +212,9 @@ if let composition = JSONDeserializer<Composition>.deserializeFrom(json: jsonStr
 }
 ```
 
-## Inheritance Object
+## 继承自父类的子类
 
-A subclass need deserialization, it's superclass need to conform to `HandyJSON`.
+如果子类要支持反序列化，那么要求父类也服从`HandyJSON`协议。
 
 ```swift
 class Animal: HandyJSON {
@@ -288,9 +238,9 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 }
 ```
 
-## Array In JSON
+## JSON中的数组
 
-If the first level of a JSON text is an array, we turn it to objects array.
+如果JSON的第一层表达的是数组，可以转化它到一个Model数组。
 
 ```swift
 class Cat: HandyJSON {
@@ -310,9 +260,9 @@ if let cats = JSONDeserializer<Cat>.deserializeModelArrayFrom(json: jsonArrayStr
 }
 ```
 
-## Custom Mapping
+## 自定义解析规则
 
-`HandyJSON` let you customize the key mapping to JSON fields, or parsing method of any property. All you need to do is implementing an optional `mapping` function, do things in it.
+HandyJSON支持自定义映射关系，或者自定义解析过程。你需要实现一个可选的`mapping`函数，在里边实现`NSString`值(HandyJSON会把对应的JSON字段转换为NSString)转换为你需要的字段类型。
 
 ```swift
 class Cat: HandyJSON {
@@ -323,10 +273,11 @@ class Cat: HandyJSON {
     required init() {}
 
     func mapping(mapper: HelpingMapper) {
-        // specify 'cat_id' field in json map to 'id' property in object
+        // 指定 JSON中的`cat_id`字段映射到Model中的`id`字段
         mapper.specify(property: &id, name: "cat_id")
 
-        // specify 'parent' field in json parse as following to 'parent' property in object
+        // 指定JSON中的`parent`字段解析为Model中的`parent`字段
+        // 因为(String, String)?是一个元组，既不是基本类型，也不服从`HandyJSON`协议，所以需要自己实现解析过程
         mapper.specify(property: &parent, converter: { (rawString) -> (String, String) in
             let parentNames = rawString.characters.split{$0 == "/"}.map(String.init)
             return (parentNames[0], parentNames[1])
@@ -341,7 +292,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 }
 ```
 
-## Supported Property Type
+## 支持的属性类型
 
 * `Int`/`Bool`/`Double`/`Float`/`String`/`NSNumber`/`NSString`
 
@@ -355,13 +306,13 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 
 * `Dictionary<String, T>` // T is one of the above types
 
-* Nested of aboves
+* 以上类型的嵌套
 
-# Serialization
+# 序列化
 
-## The Basics
+## 基本类型
 
-You need to do nothing special to support serialization. Define the class/struct, get the instances, then serialize it to json text, or simple dictionary.
+不需要为序列化做额外的工作。给出Model定义，构造出实例，就可以直接调用HandyJSON把它转化为JSON文本串，或者只有基础类型的简单字典。
 
 ```swift
 class Animal {
@@ -386,9 +337,9 @@ if let dict = JSONSerializer.serialize(model: cat).toSimpleDictionary() {
 }
 ```
 
-## Complex Object
+## 复杂类型
 
-Still need no extra effort.
+仍然不需要额外的工作，直接调接口就可以。
 
 ```swift
 enum Gender {
@@ -428,13 +379,11 @@ if let dict = JSONSerializer.serialize(model: student).toSimpleDictionary() {
 }
 ```
 
-# To Do
+# 待办
 
-* More testcases
+* 完善测试
 
-* Improve error handling
-
-* <del>Support non-object (such as basic type, array, dictionany) type deserializing directly</del> (will not support)
+* 完善异常处理
 
 # License
 
