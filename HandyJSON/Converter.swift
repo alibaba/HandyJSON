@@ -205,8 +205,4 @@ extension NSObject {
         }
         return nil
     }
-
-    func toStringForcedly() -> String {
-        return self.toString() ?? ""
-    }
 }

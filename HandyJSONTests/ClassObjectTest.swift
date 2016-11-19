@@ -313,4 +313,43 @@ class ClassObjectTest: XCTestCase {
         XCTAssertTrue(model.bUInt32 == "1")
         XCTAssertTrue(model.bUInt64 == "1")
     }
+
+    func testTypeAdaptationNSNull2Others() {
+        class H: HandyJSON {
+            // from corresponding type
+            var aBool: Bool?
+            var aFloat: Float?
+            var aDouble: Double?
+            var aNSNumber: NSNumber?
+            var aInt: Int?
+            var aInt8: Int8?
+            var aInt16: Int16?
+            var aInt32: Int32?
+            var aInt64: Int64?
+            var aUInt: UInt?
+            var aUInt8: UInt8?
+            var aUInt16: UInt16?
+            var aUInt32: UInt32?
+            var aUInt64: UInt64?
+
+            required init() {}
+        }
+
+        let jsonString = "{\"aBool\":null,\"aFloat\":null,\"aDouble\":null,\"aNSNumber\":null,\"aInt\":null,\"aInt8\":null,\"aInt16\":null,\"aInt32\":null,\"aInt64\":null,\"aUInt\":null,\"aUInt8\":null,\"aUInt16\":null,\"aUInt32\":null,\"aUInt64\":null}"
+        let model = JSONDeserializer<H>.deserializeFrom(json: jsonString)!
+        XCTAssertNil(model.aBool)
+        XCTAssertNil(model.aFloat)
+        XCTAssertNil(model.aDouble)
+        XCTAssertNil(model.aNSNumber)
+        XCTAssertNil(model.aInt)
+        XCTAssertNil(model.aInt8)
+        XCTAssertNil(model.aInt16)
+        XCTAssertNil(model.aInt32)
+        XCTAssertNil(model.aInt64)
+        XCTAssertNil(model.aUInt)
+        XCTAssertNil(model.aUInt8)
+        XCTAssertNil(model.aUInt16)
+        XCTAssertNil(model.aUInt32)
+        XCTAssertNil(model.aUInt64)
+    }
 }

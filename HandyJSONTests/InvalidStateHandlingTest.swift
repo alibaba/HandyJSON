@@ -18,6 +18,7 @@
 //
 
 import XCTest
+import HandyJSON
 
 class InvalidStateHandlingTest: XCTestCase {
     
@@ -29,5 +30,37 @@ class InvalidStateHandlingTest: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+    }
+
+    func testDeserializeFromInvalidJSONString() {
+        class A: HandyJSON {
+            var name: String?
+            var id: String?
+            var height: Int?
+
+            required init() {}
+        }
+
+        let jsonString = "{\"name\"\"Bob\",\"id\":\"12345\",\"height\":180}"
+        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)
+        XCTAssertNil(a)
+        let b = JSONDeserializer<A>.deserializeModelArrayFrom(json: jsonString)
+        XCTAssertNil(b)
+    }
+
+    func testDeserializeByIncorrectDesignatedPath() {
+        class B: HandyJSON {
+            var name: String?
+            var id: String?
+            var height: Int?
+
+            required init() {}
+        }
+
+        let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
+        let a = JSONDeserializer<B>.deserializeFrom(json: jsonString, designatedPath: "wrong")
+        XCTAssertNil(a)
+        let b = JSONDeserializer<B>.deserializeFrom(json: jsonString, designatedPath: "name.name")
+        XCTAssertNil(b)
     }
 }
