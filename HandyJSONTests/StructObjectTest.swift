@@ -126,7 +126,36 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"data\":{\"result\":{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}},\"code\":200}"
-        let f = JSONDeserializer<F>.deserializeFrom(json: jsonString, designatedPath: "data.result")!
+        var f = JSONDeserializer<F>.deserializeFrom(json: jsonString, designatedPath: "data.result")!
+        XCTAssert(f.id == 123456)
+        XCTAssert(f.arr1.count == 6)
+        XCTAssert(f.arr2?.count == 5)
+        XCTAssert((f.arr1.last ?? 0) == 6)
+        XCTAssert((f.arr2?.last ?? "") == "e")
+
+        f = JSONDeserializer<F>.deserializeFrom(json: jsonString, designatedPath: "data.result.")!
+        XCTAssert(f.id == 123456)
+        XCTAssert(f.arr1.count == 6)
+        XCTAssert(f.arr2?.count == 5)
+        XCTAssert((f.arr1.last ?? 0) == 6)
+        XCTAssert((f.arr2?.last ?? "") == "e")
+
+        f = JSONDeserializer<F>.deserializeFrom(json: jsonString, designatedPath: ".data.result.")!
+        XCTAssert(f.id == 123456)
+        XCTAssert(f.arr1.count == 6)
+        XCTAssert(f.arr2?.count == 5)
+        XCTAssert((f.arr1.last ?? 0) == 6)
+        XCTAssert((f.arr2?.last ?? "") == "e")
+
+        let targetJsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
+        f = JSONDeserializer<F>.deserializeFrom(json: targetJsonString, designatedPath: "")!
+        XCTAssert(f.id == 123456)
+        XCTAssert(f.arr1.count == 6)
+        XCTAssert(f.arr2?.count == 5)
+        XCTAssert((f.arr1.last ?? 0) == 6)
+        XCTAssert((f.arr2?.last ?? "") == "e")
+
+        f = JSONDeserializer<F>.deserializeFrom(json: targetJsonString, designatedPath: ".")!
         XCTAssert(f.id == 123456)
         XCTAssert(f.arr1.count == 6)
         XCTAssert(f.arr2?.count == 5)

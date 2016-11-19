@@ -32,6 +32,9 @@ public class JSONDeserializer<T: HandyJSON> {
         var nodeValue: AnyObject? = dict
         if let paths = designatedPath?.components(separatedBy: "."), paths.count > 0 {
             paths.forEach({ (seg) in
+                if seg == "" {
+                    return
+                }
                 nodeValue = (nodeValue as? NSDictionary)?.object(forKey: seg) as AnyObject?
             })
         }
