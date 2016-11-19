@@ -27,7 +27,7 @@ public protocol ModelTransformerProtocol {
 
     func toPrettifyJSON() -> String?
 
-    func toSimpleDictionary() -> Dictionary<String, Any>?
+    func toSimpleDictionary() -> [String: Any]?
 }
 
 public protocol ArrayTransformerProtocol {
@@ -36,7 +36,7 @@ public protocol ArrayTransformerProtocol {
 
     func toPrettifyJSON() -> String?
 
-    func toSimpleArray() -> Array<Any>?
+    func toSimpleArray() -> [Any]?
 }
 
 public protocol DictionaryTransformerProtocol {
@@ -45,7 +45,7 @@ public protocol DictionaryTransformerProtocol {
 
     func toPrettifyJSON() -> String?
 
-    func toSimpleDictionary() -> Dictionary<String, Any>?
+    func toSimpleDictionary() -> [String: Any]?
 }
 
 class GenericObjectTransformer: ModelTransformerProtocol, ArrayTransformerProtocol, DictionaryTransformerProtocol {
@@ -56,16 +56,16 @@ class GenericObjectTransformer: ModelTransformerProtocol, ArrayTransformerProtoc
         self.object = object
     }
 
-    public func toSimpleArray() -> Array<Any>? {
+    public func toSimpleArray() -> [Any]? {
         if let _object = self.object, let result = GenericObjectTransformer.transformToSimpleObject(object: _object) {
-            return result as? Array<Any>
+            return result as? [Any]
         }
         return nil
     }
 
-    public func toSimpleDictionary() -> Dictionary<String, Any>? {
+    public func toSimpleDictionary() -> [String: Any]? {
         if let _object = self.object, let result = GenericObjectTransformer.transformToSimpleObject(object: _object) {
-            return result as? Dictionary<String, Any>
+            return result as? [String: Any]
         }
         return nil
     }
@@ -175,7 +175,7 @@ extension GenericObjectTransformer {
             let json = String(describing: object)
             return json
         case is ArrayTypeProtocol.Type:
-            let array = object as! Array<Any>
+            let array = object as! [Any]
             var json = ""
             array.enumerated().forEach({ (index, element) in
                 if index != 0 {
@@ -185,7 +185,7 @@ extension GenericObjectTransformer {
             })
             return "[" + json + "]"
         case is DictionaryTypeProtocol.Type:
-            let dict = object as! Dictionary<String, Any>
+            let dict = object as! [String: Any]
             var json = ""
             dict.enumerated().forEach({ (index, kv) in
                 if index != 0 {
@@ -210,11 +210,11 @@ public class JSONSerializer {
         return GenericObjectTransformer(of: model)
     }
 
-    public static func serialize(array: Array<Any>?) -> ArrayTransformerProtocol {
+    public static func serialize(array: [Any]?) -> ArrayTransformerProtocol {
         return GenericObjectTransformer(of: array)
     }
 
-    public static func serialize(array: Array<AnyObject>?) -> ArrayTransformerProtocol {
+    public static func serialize(array: [AnyObject]?) -> ArrayTransformerProtocol {
         return GenericObjectTransformer(of: array)
     }
 
@@ -222,11 +222,11 @@ public class JSONSerializer {
         return GenericObjectTransformer(of: array)
     }
 
-    public static func serialize(dict: Dictionary<String, Any>?) -> DictionaryTransformerProtocol {
+    public static func serialize(dict: [String: Any]?) -> DictionaryTransformerProtocol {
         return GenericObjectTransformer(of: dict)
     }
 
-    public static func serialize(dict: Dictionary<String, AnyObject>?) -> DictionaryTransformerProtocol {
+    public static func serialize(dict: [String: AnyObject]?) -> DictionaryTransformerProtocol {
         return GenericObjectTransformer(of: dict)
     }
 

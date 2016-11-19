@@ -52,8 +52,8 @@ class StructObjectTest: XCTestCase {
     func testStructWithArrayProperty() {
         struct B: HandyJSON {
             var id: Int?
-            var arr1: Array<Int>?
-            var arr2: Array<String>?
+            var arr1: [Int]?
+            var arr2: [String]?
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
@@ -71,8 +71,8 @@ class StructObjectTest: XCTestCase {
     func testStructWithiImpliicitlyUnwrappedOptionalProperty() {
         struct C: HandyJSON {
             var id: Int?
-            var arr1: Array<Int?>!
-            var arr2: Array<String?>?
+            var arr1: [Int?]!
+            var arr2: [String?]?
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
@@ -90,15 +90,15 @@ class StructObjectTest: XCTestCase {
     func testStructWithDummyProperty() {
         struct C: HandyJSON {
             var id: Int?
-            var arr1: Array<Int?>!
-            var arr2: Array<String?>?
+            var arr1: [Int?]!
+            var arr2: [String?]?
         }
         struct D: HandyJSON {
             var dummy1: String?
             var id: Int!
-            var arr1: Array<Int>?
+            var arr1: [Int]?
             var dummy2: C?
-            var arr2: Array<String> = Array<String>()
+            var arr2: [String] = [String]()
             var dumimy3: C!
         }
 
@@ -117,8 +117,8 @@ class StructObjectTest: XCTestCase {
     func testStructWithiDummyiJsonField() {
         struct E: HandyJSON {
             var id: Int?
-            var arr1: Array<Int?>!
-            var arr2: Array<String?>?
+            var arr1: [Int?]!
+            var arr2: [String?]?
         }
 
         let jsonString = "{\"id\":123456,\"dummy1\":23334,\"arr1\":[1,2,3,4,5,6],\"dummy2\":\"string\",\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
@@ -136,8 +136,8 @@ class StructObjectTest: XCTestCase {
     func testStructWithiDesiginatePath() {
         struct F: HandyJSON {
             var id: Int?
-            var arr1: Array<Int?>!
-            var arr2: Array<String?>?
+            var arr1: [Int?]!
+            var arr2: [String?]?
         }
 
         let jsonString = "{\"data\":{\"result\":{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}},\"code\":200}"

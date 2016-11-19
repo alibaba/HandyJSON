@@ -54,8 +54,8 @@ class ClassObjectTest: XCTestCase {
     func testClassWithArrayProperty() {
         class B: NSObject, HandyJSON {
             var id: Int?
-            var arr1: Array<Int>?
-            var arr2: Array<String>?
+            var arr1: [Int]?
+            var arr2: [String]?
 
             required override init() {}
         }
@@ -75,8 +75,8 @@ class ClassObjectTest: XCTestCase {
     func testClassWithImplicitlyUnwrappedOptionalProperty() {
         class C: NSObject, HandyJSON {
             var id: Int?
-            var arr1: Array<Int?>!
-            var arr2: Array<String>?
+            var arr1: [Int?]!
+            var arr2: [String]?
 
             required override init() {}
         }
@@ -96,17 +96,17 @@ class ClassObjectTest: XCTestCase {
     func testClassWithDummyProperty() {
         class C: NSObject, HandyJSON {
             var id: Int?
-            var arr1: Array<Int?>!
-            var arr2: Array<String>?
+            var arr1: [Int?]!
+            var arr2: [String]?
 
             required override init() {}
         }
         class D: HandyJSON {
             var dummy1: String?
             var id: Int!
-            var arr1: Array<Int>?
+            var arr1: [Int]?
             var dummy2: C?
-            var arr2: Array<String> = Array<String>()
+            var arr2: [String] = [String]()
             var dummy3: C!
 
             required init() {}
@@ -127,8 +127,8 @@ class ClassObjectTest: XCTestCase {
     func testClassWithDummyJsonField() {
         class E: HandyJSON {
             var id: Int?
-            var arr1: Array<Int?>!
-            var arr2: Array<String>?
+            var arr1: [Int?]!
+            var arr2: [String]?
 
             required init() {}
         }
