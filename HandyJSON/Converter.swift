@@ -158,9 +158,7 @@ extension NSObject {
     }
 
     func toString() -> String? {
-        if self is NSNull {
-            return "null"
-        } else if self is NSString {
+        if self is NSString {
             return self as? String
         } else if self is NSNumber {
             // Boolean Type Inside
