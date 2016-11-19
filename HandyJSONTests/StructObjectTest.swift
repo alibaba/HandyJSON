@@ -40,10 +40,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        guard let a = JSONDeserializer<A>.deserializeFrom(json: jsonString) else {
-            XCTAssert(false)
-            return
-        }
+        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
@@ -57,10 +54,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let b = JSONDeserializer<B>.deserializeFrom(json: jsonString) else {
-            XCTAssert(false)
-            return
-        }
+        let b = JSONDeserializer<B>.deserializeFrom(json: jsonString)!
         XCTAssert(b.id == 123456)
         XCTAssert(b.arr1?.count == 6)
         XCTAssert(b.arr2?.count == 5)
@@ -76,10 +70,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let c = JSONDeserializer<C>.deserializeFrom(json: jsonString) else {
-            XCTAssert(false)
-            return
-        }
+        let c = JSONDeserializer<C>.deserializeFrom(json: jsonString)!
         XCTAssert(c.id == 123456)
         XCTAssert(c.arr1.count == 6)
         XCTAssert(c.arr2?.count == 5)
@@ -103,10 +94,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let d = JSONDeserializer<D>.deserializeFrom(json: jsonString) else {
-            XCTAssert(false)
-            return
-        }
+        let d = JSONDeserializer<D>.deserializeFrom(json: jsonString)!
         XCTAssert(d.id == 123456)
         XCTAssert(d.arr1?.count == 6)
         XCTAssert(d.arr2.count == 5)
@@ -122,10 +110,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"dummy1\":23334,\"arr1\":[1,2,3,4,5,6],\"dummy2\":\"string\",\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        guard let e = JSONDeserializer<E>.deserializeFrom(json: jsonString) else {
-            XCTAssert(false)
-            return
-        }
+        let e = JSONDeserializer<E>.deserializeFrom(json: jsonString)!
         XCTAssert(e.id == 123456)
         XCTAssert(e.arr1.count == 6)
         XCTAssert(e.arr2?.count == 5)
@@ -141,10 +126,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"data\":{\"result\":{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}},\"code\":200}"
-        guard let f = JSONDeserializer<F>.deserializeFrom(json: jsonString, designatedPath: "data.result") else {
-            XCTAssert(false)
-            return
-        }
+        let f = JSONDeserializer<F>.deserializeFrom(json: jsonString, designatedPath: "data.result")!
         XCTAssert(f.id == 123456)
         XCTAssert(f.arr1.count == 6)
         XCTAssert(f.arr2?.count == 5)

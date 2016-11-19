@@ -159,17 +159,28 @@ extension NSObject {
 
     func toString() -> String? {
         if self is NSString {
-            return (self as! NSString) as String
+            return self as? String
+        } else if self is NSNumber {
+            // Boolean Type Inside
+            if NSStringFromClass(type(of: self)) == "__NSCFBoolean" {
+                if (self as! NSNumber).boolValue {
+                    return "true"
+                } else {
+                    return "false"
+                }
+            }
+            return (self as! NSNumber).stringValue
+        } else if self is NSArray {
+            return "\(self as! NSArray)"
+        } else if self is NSDictionary {
+            return "\(self as! NSDictionary)"
         }
         return nil
     }
 
     func toNSString() -> NSString? {
-        if self is NSString {
-            return self as? NSString
-        }
-        if self is NSNumber {
-            return (self as! NSNumber).stringValue as NSString
+        if let s = self.toString() {
+            return s as NSString
         }
         return nil
     }
@@ -179,6 +190,15 @@ extension NSObject {
             return self as? NSNumber
         }
         if self is NSString {
+            // true/false
+            if (self as! NSString).lowercased == "true" {
+                return NSNumber(booleanLiteral: true)
+            }
+            if (self as! NSString).lowercased == "false" {
+                return NSNumber(booleanLiteral: false)
+            }
+
+            // normal number
             let formatter = NumberFormatter()
             formatter.numberStyle = .decimal
             return formatter.number(from: (self as? NSString)! as String)
@@ -187,17 +207,6 @@ extension NSObject {
     }
 
     func toStringForcedly() -> String {
-        if self is NSNull {
-            return "null"
-        } else if self is NSString {
-            return self as! String
-        } else if self is NSNumber {
-            return (self as! NSNumber).stringValue
-        } else if self is NSArray {
-            return "\(self as! NSArray)"
-        } else if self is NSDictionary {
-            return "\(self as! NSDictionary)"
-        }
-        return "null"
+        return self.toString() ?? ""
     }
 }

@@ -61,11 +61,7 @@ class CustomMappingTest: XCTestCase {
         }
 
         let jsonString = "{\"json_name\":\"Bob\",\"id\":\"12345\",\"json_height\":180}"
-        guard let a = JSONDeserializer<A>.deserializeFrom(json: jsonString) else {
-            XCTAssert(false)
-            return
-        }
-        print(a)
+        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "json_12345")
         XCTAssert(a.height == 180)
@@ -98,10 +94,7 @@ class CustomMappingTest: XCTestCase {
         }
 
         let jsonString = "{\"json_name\":\"Bob\",\"id\":\"12345\",\"json_height\":180}"
-        guard let a = JSONDeserializer<A>.deserializeFrom(json: jsonString) else {
-            XCTAssert(false)
-            return
-        }
+        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "json_12345")
         XCTAssert(a.height == 180)
