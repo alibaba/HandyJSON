@@ -188,9 +188,8 @@ extension Property {
 
                 // if specific converter is set, use it the assign value to the property
                 if let specifyConverter = converter.1 {
-                    if let ocValue = (dict[key] as? NSObject)?.toStringForcedly() {
-                        specifyConverter(ocValue)
-                    }
+                    let ocValue = (dict[key] as? NSObject)?.toString()
+                    specifyConverter(ocValue ?? "")
 
                     mutablePointer = mutablePointer.advanced(by: size)
                     currentOffset += size
