@@ -52,10 +52,13 @@ public class JSONDeserializer<T: HandyJSON> {
         guard let _json = json else {
             return nil
         }
-        if let jsonObject = try? JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments) {
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
             if let jsonDict = jsonObject as? NSDictionary {
                 return deserializeFrom(dict: jsonDict, designatedPath: designatedPath)
             }
+        } catch let error {
+            print(error)
         }
         return nil
     }
@@ -64,12 +67,15 @@ public class JSONDeserializer<T: HandyJSON> {
         guard let _json = json else {
             return nil
         }
-        if let jsonObject = try? JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments) {
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
             if let jsonArray = jsonObject as? NSArray {
                 return jsonArray.map({ (jsonDict) -> T? in
                     return deserializeFrom(dict: jsonDict as? NSDictionary)
                 })
             }
+        } catch let error {
+            print(error)
         }
         return nil
     }
