@@ -48,7 +48,7 @@ class ViewController: UIViewController {
 
     func serialization() {
         enum Gender: String {
-            case Male = "male"
+            case Male = "Male"
             case Female = "Female"
         }
 
@@ -71,7 +71,7 @@ class ViewController: UIViewController {
         let student = Student()
         student.name = "Jack"
         student.gender = .Female
-        student.subjects = [Subject(id: 1, name: "math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
+        student.subjects = [Subject(id: 1, name: "Math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
         print(JSONSerializer.serializeToJSON(object: student)!)
         print(JSONSerializer.serializeToJSON(object: student, prettify: true)!)
 
