@@ -70,6 +70,30 @@ public extension HandyJSON {
     public mutating func mapping(mapper: HelpingMapper) {}
 }
 
+public protocol InitWrapperProtocol {
+    func convertToEnum(object: NSObject) -> Any?
+}
+
+public struct InitWrapper<T: Property>: InitWrapperProtocol {
+
+    var _init: ((T) -> Any?)?
+
+    public init(rawInit: @escaping ((T) -> Any?)) {
+        self._init = rawInit
+    }
+
+    public func convertToEnum(object: NSObject) -> Any? {
+        if let typedValue = T.valueFrom(object: object) {
+            return _init?(typedValue)
+        }
+        return nil
+    }
+}
+
+public protocol HandyJSONEnum: Property {
+    static func makeInitWrapper() -> InitWrapperProtocol?
+}
+
 protocol BasePropertyProtocol: HandyJSON {
 }
 
@@ -245,7 +269,15 @@ extension Property {
     }
 
     static func valueFrom(object: NSObject) -> Self? {
-        if self is BasePropertyProtocol.Type {
+        if self is HandyJSONEnum.Type {
+
+            if let initWrapper = (self as? HandyJSONEnum.Type)?.makeInitWrapper() {
+                if let resultValue = initWrapper.convertToEnum(object: object) {
+                    return resultValue as? Self
+                }
+            }
+            return nil
+        } else if self is BasePropertyProtocol.Type {
 
             // base type can be transformed directly
             return baseValueFrom(object: object)
