@@ -19,6 +19,18 @@
 import UIKit
 import HandyJSON
 
+enum Grade: Int {
+    case One = 1
+    case Two = 2
+    case Three = 3
+}
+
+extension Grade: HandyJSONEnum {
+    static func makeInitWrapper() -> InitWrapperProtocol? {
+        return InitWrapper<Int>(rawInit: Grade.init)
+    }
+}
+
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -73,12 +85,12 @@ class ViewController: UIViewController {
     }
 
     func deserialization() {
-        enum Gender: String, HandyJSON {
+        enum Gender: String, HandyJSONEnum {
             case Male = "Male"
             case Female = "Female"
 
-            init() {
-                self = .Male
+            static func makeInitWrapper() -> InitWrapperProtocol? {
+                return InitWrapper<String>(rawInit: Gender.init)
             }
         }
 
@@ -87,12 +99,6 @@ class ViewController: UIViewController {
             var age: Int?
             var height: Int?
             var gender: Gender?
-
-            mutating func mapping(mapper: HelpingMapper) {
-                mapper.specify(property: &gender) {
-                    return Gender(rawValue: $0)
-                }
-            }
         }
 
         struct Subject: HandyJSON {
@@ -106,6 +112,7 @@ class ViewController: UIViewController {
             var id: String?
             var name: String?
             var age: Int?
+            var grade: Grade = .One
             var height: Int?
             var gender: Gender?
             var className: String?
@@ -114,37 +121,15 @@ class ViewController: UIViewController {
             var seat: String?
 
             required init() {}
-
-            func mapping(mapper: HelpingMapper) {
-                mapper.specify(property: &gender) {
-                    return Gender(rawValue: $0)
-                }
-            }
         }
 
-        let jsonString = "{\"id\":\"77544\",\"name\":\"Tom Li\",\"age\":18,\"height\":180,\"gender\":\"Male\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subject\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
+        let jsonString = "{\"id\":\"77544\",\"name\":\"Tom Li\",\"age\":18,\"grade\":2,\"height\":180,\"gender\":\"Male\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subject\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
 
         if let student = JSONDeserializer<Student>.deserializeFrom(json: jsonString) {
-            print(student)
-            print(student.id)
-            print(student.name)
-            print(student.age)
-            print(student.height)
-            print(student.gender)
-            print(student.className)
-            print(student.teacher?.name)
-            print(student.teacher?.age)
-            print(student.teacher?.height)
-            print(student.teacher?.gender)
-            print(student.subject?.first?.name)
-            print(student.subject?.first?.id)
-            print(student.subject?.first?.credit)
-            print(student.subject?.first?.lessonPeriod)
-            print(student.subject?.last?.name)
-            print(student.subject?.last?.id)
-            print(student.subject?.last?.credit)
-            print(student.subject?.last?.lessonPeriod)
-            print(student.seat)
+            print("\(student)")
+            print("\(student.grade)")
+            print("\(student.gender)")
+            print("\(student.subject)")
         }
     }
 }
