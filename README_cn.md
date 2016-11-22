@@ -19,12 +19,12 @@ HandyJSON是一个用于Swift语言中的JSON序列化/反序列化库。
 ```swift
 class Animal: HandyJSON {
     var name: String?
-    var height: Double?
+    var count: Int?
 
-    init() {}
+    required init() {}
 }
 
-let json = "{\"name\": \"Tom\", \"height\": 25.0}"
+let json = "{\"name\": \"Cat\", \"count\": 5}"
 
 if let cat = JSONDeserializer<Animal>.deserializeFrom(json: json) {
     print(cat)
@@ -36,15 +36,15 @@ if let cat = JSONDeserializer<Animal>.deserializeFrom(json: json) {
 ```swift
 class Animal {
     var name: String?
-    var height: Double?
+    var count: Int?
 
-    init(name: String, height: Double) {
+    init(name: String, count: Int) {
         self.name = name
-        self.height = height
+        self.count = count
     }
 }
 
-let cat = Animal(name: "cat", height: 25.0)
+let cat = Animal(name: "cat", count: 5)
 
 print(JSONSerializer.serialize(model: cat).toJSON()!)
 print(JSONSerializer.serialize(model: cat).toPrettifyJSON()!)
@@ -59,6 +59,7 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
 - [反序列化](#反序列化-1)
     - [基本类型](#基本类型)
     - [支持struct](#支持struct)
+    - [支持enum](#支持enum)
     - [可选、隐式解包可选、集合等](#可选隐式解包可选集合等)
     - [指定解析路径](#指定解析路径)
     - [组合对象](#组合对象)
@@ -121,7 +122,7 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
 }
 ```
 
-## 支持Struct
+## 支持struct
 
 对于声明为`struct`的Model，由于`struct`默认提供了空的`init`方法，所以不需要额外声明。
 
@@ -140,6 +141,54 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
 ```
 
 但需要注意，如果你为`struct`指定了别的构造函数，那就要显示声明一个空的`init`函数。
+
+## 支持enum
+
+由于受到类型转换的一些限制，对`enum`的支持需要一些特殊处理。要支持反序列化的`enum`类型需要服从`HandyJSONEnum`协议，并实现协议要求的`makeInitWrapper`函数。
+
+```swift
+enum AnimalType: String, HandyJSONEnum {
+    case Cat = "cat"
+    case Dog = "dog"
+    case Bird = "bird"
+
+    static func makeInitWrapper() -> InitWrapperProtocol? {
+        return InitWrapper<String>(rawInit: AnimalType.init)
+    }
+}
+
+class Animal: HandyJSON {
+    var type: AnimalType?
+    var name: String?
+
+    required init() {}
+}
+
+let jsonString = "{\"type\":\"cat\",\"name\":\"Tom\"}"
+if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
+    print(animal)
+}
+```
+
+在`makeInitWrapper`函数中将`RawRepresentable`的`init`函数包装一下，返回就可以了。如果觉得对代码有侵入，可以考虑用扩展实现。
+
+```swift
+enum AnimalType: String {
+    case Cat = "cat"
+    case Dog = "dog"
+    case Bird = "bird"
+}
+
+extension AnimalType: HandyJSONEnum {
+    static func makeInitWrapper() -> InitWrapperProtocol? {
+        return InitWrapper<String>(rawInit: AnimalType.init)
+    }
+}
+
+...
+```
+
+这样对原来的`enum`类型就没有侵入了。
 
 ## 可选、隐式解包可选、集合等
 

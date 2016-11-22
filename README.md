@@ -4,7 +4,7 @@ HandyJSON is a framework written in Swift which to make converting model objects
 
 Compared with others, the most significant feature of HandyJSON is that it does not require the objects inherit from NSObject(**not using KVC but reflection**), neither implements a 'mapping' function(**use pointer to achieve property assignment**).
 
-**But notice that** , HandyJSON is totally depend on the memory layout rules of Swift which we haven’t found formal specification from Apple(And I'm look forward to someone can help). The good new is that it has never changed in the past. Also We can adjust out strategy if it really change. So, I think “the potential crisis" is more likely oneday Swift make reflection more powerful, such as supporting assignment.
+**Notice that** , HandyJSON is totally depend on the memory layout rules of Swift which we haven’t found formal specification from Apple(And I'm looking forward to someone can help). The good new is that it has never changed in the past. Also We can adjust out strategy if it really change. So, I think “the potential crisis" is more likely oneday Swift make reflection more powerful, such as supporting assignment.
 
 [![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=master)](https://travis-ci.org/alibaba/HandyJSON)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -21,12 +21,12 @@ Compared with others, the most significant feature of HandyJSON is that it does 
 ```swift
 class Animal: HandyJSON {
     var name: String?
-    var height: Double?
+    var count: Int?
 
-    init() {}
+    required init() {}
 }
 
-let json = "{\"name\": \"Tom\", \"height\": 25.0}"
+let json = "{\"name\": \"Cat\", \"count\": 5}"
 
 if let cat = JSONDeserializer<Animal>.deserializeFrom(json: json) {
     print(cat)
@@ -38,15 +38,15 @@ if let cat = JSONDeserializer<Animal>.deserializeFrom(json: json) {
 ```swift
 class Animal {
     var name: String?
-    var height: Double?
+    var count: Int?
 
-    init(name: String, height: Double) {
+    init(name: String, count: Int) {
         self.name = name
-        self.height = height
+        self.count = count
     }
 }
 
-let cat = Animal(name: "cat", height: 25.0)
+let cat = Animal(name: "cat", count: 5)
 
 print(JSONSerializer.serialize(model: cat).toJSON()!)
 print(JSONSerializer.serialize(model: cat).toPrettifyJSON()!)
@@ -64,6 +64,7 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
 - [Deserialization](#deserialization)
     - [The Basics](#the-basics)
     - [Support Struct](#support-struct)
+    - [Support Enum Property](#support-enum-property)
     - [Optional, ImplicitlyUnwrappedOptional, Collections and so on](#optional-implicitlyunwrappedoptional-collections-and-so-on)
     - [Designated Path](#designated-path)
     - [Composition Object](#composition-object)
@@ -82,7 +83,7 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
 
 * Naturally use object property name for mapping, no need to specify a mapping relationship
 
-* Support almost all types in Swift
+* Support almost all types in Swift, including enum
 
 * Support struct
 
@@ -100,7 +101,7 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
 
 **To use with Swift 2.x using == 0.4.0**
 
-**To use with Swift 3.x using >= 1.2.1**
+**To use with Swift 3.x using >= 1.3.0**
 
 For Legacy Swift support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
 
@@ -109,7 +110,7 @@ For Legacy Swift support, take a look at the [swift2 branch](https://github.com/
 Add the following line to your `Podfile`:
 
 ```
-pod 'HandyJSON', '~> 1.2.1'
+pod 'HandyJSON', '~> 1.3.0'
 ```
 
 Then, run the following command:
@@ -123,7 +124,7 @@ $ pod install
 You can add a dependency on `HandyJSON` by adding the following line to your `Cartfile`:
 
 ```
-github "alibaba/HandyJSON" ~> 1.2.1
+github "alibaba/HandyJSON" ~> 1.3.0
 ```
 
 ## Manually
@@ -191,7 +192,55 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
 }
 ```
 
-But also notice that, if you have a designated initializer to override the default one in the struct, you should explicitly declare an empty one.
+But also notice that, if you have a designated initializer to override the default one in the struct, you should explicitly declare an empty one(no `required` modifier need).
+
+## Support Enum Property
+
+Limited by some type converting problems, supporting `enum` type is a little special here. To be convertable, An `enum` must conform to `HandyJSONEnum` protocol and implement a `makeInitWrapper` function.
+
+```swift
+enum AnimalType: String, HandyJSONEnum {
+    case Cat = "cat"
+    case Dog = "dog"
+    case Bird = "bird"
+
+    static func makeInitWrapper() -> InitWrapperProtocol? {
+        return InitWrapper<String>(rawInit: AnimalType.init)
+    }
+}
+
+class Animal: HandyJSON {
+    var type: AnimalType?
+    var name: String?
+
+    required init() {}
+}
+
+let jsonString = "{\"type\":\"cat\",\"name\":\"Tom\"}"
+if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
+    print(animal)
+}
+```
+
+It’s not that troublesome. Just wrap the `init` funcion of a `RawRepresentable` enum and return. You can even do this in an extension.
+
+```swift
+enum AnimalType: String {
+    case Cat = "cat"
+    case Dog = "dog"
+    case Bird = "bird"
+}
+
+extension AnimalType: HandyJSONEnum {
+    static func makeInitWrapper() -> InitWrapperProtocol? {
+        return InitWrapper<String>(rawInit: AnimalType.init)
+    }
+}
+
+...
+```
+
+Now it’s totally non-intrusive.
 
 ## Optional, ImplicitlyUnwrappedOptional, Collections and so on
 
@@ -345,6 +394,8 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 
 * `Int`/`Bool`/`Double`/`Float`/`String`/`NSNumber`/`NSString`
 
+* `RawRepresentable` enum
+
 * `NSArray/NSDictionary`
 
 * `Int8/Int16/Int32/Int64`/`UInt8/UInt16/UInt23/UInt64`
@@ -430,7 +481,7 @@ if let dict = JSONSerializer.serialize(model: student).toSimpleDictionary() {
 
 # To Do
 
-* More testcases
+* Improve testcases
 
 * Improve error handling
 
