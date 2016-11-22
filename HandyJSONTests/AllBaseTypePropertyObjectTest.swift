@@ -203,4 +203,75 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
         XCTAssert(aClass.aDouble == 12.34)
         XCTAssert(aClass.aString == "hello world!")
     }
+
+    /**
+     {
+        "aEnum1": 1,
+        "bEnum1": 2,
+        "cEnum1": 3,
+        "aEnum2": "a",
+        "bEnum2": "b",
+        "cEnum2": "c",
+        "aEnum3": 1.1,
+        "bEnum3": 2.2,
+        "cEnum3": 3.3
+        "aEnumArr": [1, 2, 3],
+        "bEnumArr": ["a", "b", "c"],
+        "cEnumArr": [1.1, 2.2, 3.3]
+     }
+     */
+    func testEnumTypeOfCommonRawType() {
+        enum AEnum: Int, HandyJSONEnum {
+            case A = 1, B = 2, C = 3
+
+            static func makeInitWrapper() -> InitWrapperProtocol? {
+                return InitWrapper<Int>(rawInit: AEnum.init)
+            }
+        }
+
+        enum BEnum: String, HandyJSONEnum {
+            case A = "a", B = "b", C = "c"
+
+            static func makeInitWrapper() -> InitWrapperProtocol? {
+                return InitWrapper<String>(rawInit: BEnum.init)
+            }
+        }
+
+        enum CEnum: Double, HandyJSONEnum {
+            case A = 1.1, B = 2.2, C = 3.3
+
+            static func makeInitWrapper() -> InitWrapperProtocol? {
+                return InitWrapper<Double>(rawInit: CEnum.init)
+            }
+        }
+
+        struct TestEnum: HandyJSON {
+            var aEnum1: AEnum?
+            var bEnum1: BEnum?
+            var cEnum1: CEnum?
+
+            var aEnum2: AEnum = .A
+            var bEnum2: BEnum = .A
+            var cEnum2: CEnum = .A
+
+            var aEnum3: AEnum!
+            var bEnum3: BEnum!
+            var cEnum3: CEnum!
+
+            var aEnumArr: [AEnum]?
+            var bEnumArr: [BEnum]!
+            var cEnumArr: [CEnum] = []
+        }
+
+        let jsonString = "{\"aEnum1\":1,\"bEnum1\":2,\"cEnum1\":3,\"aEnum2\":\"a\",\"bEnum2\":\"b\",\"cEnum2\":\"c\",\"aEnum3\":1.1,\"bEnum3\":2.2,\"cEnum3\":3.3,\"aEnumArr\":[1,2,3],\"bEnumArr\":[\"a\",\"b\",\"c\"],\"cEnumArr\":[1.1,2.2,3.3]}"
+        let model = JSONDeserializer<TestEnum>.deserializeFrom(json: jsonString)!
+
+        XCTAssert(model.aEnum1 == .A)
+        XCTAssert(model.bEnum2 == .B)
+        XCTAssert(model.cEnum3 == .C)
+
+        XCTAssert(model.aEnumArr?[0] == .A)
+        XCTAssert(model.bEnumArr[1] == .B)
+        XCTAssert(model.cEnumArr[2] == .C)
+    }
 }

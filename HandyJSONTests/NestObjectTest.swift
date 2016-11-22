@@ -26,21 +26,21 @@ class NestObjectTest: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
 
-    enum Gender: String, HandyJSON {
+    enum Gender: String, HandyJSONEnum {
         case Male = "Male"
         case Female = "Female"
 
-        init() {
-            self = .Male
+        static func makeInitWrapper() -> InitWrapperProtocol? {
+            return InitWrapper<String>(rawInit: Gender.init)
         }
     }
-    
+
     class Teacher: HandyJSON {
         var name: String?
         var age: Int?
@@ -48,22 +48,15 @@ class NestObjectTest: XCTestCase {
         var gender: Gender?
     
         required init() {}
-
-        func mapping(mapper: HelpingMapper) {
-            mapper.specify(property: &gender) {
-                print("gender", $0)
-                return Gender(rawValue: $0)
-            }
-        }
     }
-    
+
     struct Subject: HandyJSON {
         var name: String?
         var id: Int64?
         var credit: Int?
         var lessonPeriod: Int?
     }
-    
+
     class Student: HandyJSON {
         var id: String?
         var name: String?
@@ -74,14 +67,8 @@ class NestObjectTest: XCTestCase {
         var teacher: Teacher?
         var subject: [Subject]?
         var seat: String?
-    
-        required init() {}
 
-        func mapping(mapper: HelpingMapper) {
-            mapper.specify(property: &gender) {
-                return Gender(rawValue: $0)
-            }
-        }
+        required init() {}
     }
 
     func testNormalNestObject() {

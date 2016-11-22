@@ -21,6 +21,7 @@ import Foundation
 
 public class JSONDeserializer<T: HandyJSON> {
 
+    /// Converts a NSDictionary to Model if the properties match
     public static func deserializeFrom(dict: NSDictionary?) -> T? {
         guard let _dict = dict else {
             return nil
@@ -28,49 +29,78 @@ public class JSONDeserializer<T: HandyJSON> {
         return T._transform(dict: _dict, toType: T.self) as? T
     }
 
+    /// Finds the internal NSDictionary in `dict` as the `designatedPath` specified, and converts it to a Model
+    /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer
     public static func deserializeFrom(dict: NSDictionary?, designatedPath: String?) -> T? {
-        var nodeValue: AnyObject? = dict
-        if let paths = designatedPath?.components(separatedBy: "."), paths.count > 0 {
-            paths.forEach({ (seg) in
-                if seg == "" {
-                    return
-                }
-                nodeValue = (nodeValue as? NSDictionary)?.object(forKey: seg) as AnyObject?
-            })
-        }
-        if let targetDict = nodeValue as? NSDictionary {
-            return deserializeFrom(dict: targetDict)
+        if let targetDict = self.getObject(inside: dict, by: designatedPath) as? NSDictionary {
+            return self.deserializeFrom(dict: targetDict)
         }
         return nil
     }
 
+    /// Converts a JSON string to Model if the properties match
+    /// return `nil` if the string is not in valid JSON format
     public static func deserializeFrom(json: String?) -> T? {
-        return deserializeFrom(json: json, designatedPath: nil)
+        return self.deserializeFrom(json: json, designatedPath: nil)
     }
 
+    /// Finds the internal JSON field in `json` as the `designatedPath` specified, and converts it to a Model
+    /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer
     public static func deserializeFrom(json: String?, designatedPath: String?) -> T? {
         guard let _json = json else {
             return nil
         }
-        if let jsonObject = try? JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments) {
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
             if let jsonDict = jsonObject as? NSDictionary {
-                return deserializeFrom(dict: jsonDict, designatedPath: designatedPath)
+                return self.deserializeFrom(dict: jsonDict, designatedPath: designatedPath)
             }
+        } catch let error {
+            print(error)
         }
         return nil
     }
 
+    /// if `json` is representing a array, such as `[{...}, {...}, {...}]`,
+    /// this method converts it to a Models array
     public static func deserializeModelArrayFrom(json: String?) -> [T?]? {
+        return self.deserializeModelArrayFrom(json: json, designatedPath: nil)
+    }
+
+    /// if the JSON field finded by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
+    /// this method converts it to a Models array
+    public static func deserializeModelArrayFrom(json: String?, designatedPath: String?) -> [T?]? {
         guard let _json = json else {
             return nil
         }
-        if let jsonObject = try? JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments) {
-            if let jsonArray = jsonObject as? NSArray {
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
+            if let jsonArray = self.getObject(inside: jsonObject as? NSObject, by: designatedPath) as? NSArray {
                 return jsonArray.map({ (jsonDict) -> T? in
-                    return deserializeFrom(dict: jsonDict as? NSDictionary)
+                    return self.deserializeFrom(dict: jsonDict as? NSDictionary)
                 })
             }
+        } catch let error {
+            print(error)
         }
         return nil
+    }
+
+    internal static func getObject(inside jsonObject: NSObject?, by designatedPath: String?) -> NSObject? {
+        var nodeValue: NSObject? = jsonObject
+        var abort = false
+        if let paths = designatedPath?.components(separatedBy: "."), paths.count > 0 {
+            paths.forEach({ (seg) in
+                if seg.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) == "" || abort {
+                    return
+                }
+                if let next = (nodeValue as? NSDictionary)?.object(forKey: seg) as? NSObject {
+                    nodeValue = next
+                } else {
+                    abort = true
+                }
+            })
+        }
+        return abort ? nil : nodeValue
     }
 }

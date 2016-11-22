@@ -176,6 +176,28 @@ class ClassObjectTest: XCTestCase {
         XCTAssert(arr[2]?.height == 160)
     }
 
+    func testArrayJSONDeserializationWithDesignatePath() {
+        class A: HandyJSON {
+            var name: String?
+            var id: String?
+            var height: Int?
+
+            required init() {}
+        }
+
+        let jsonArrayString: String? = "{\"result\":{\"data\":[{\"name\":\"Bob\",\"id\":\"1\",\"height\":180},{\"name\":\"Lily\",\"id\":\"2\",\"height\":150},{\"name\":\"Lucy\",\"id\":\"3\",\"height\":160}]}}"
+        let arr = JSONDeserializer<A>.deserializeModelArrayFrom(json: jsonArrayString, designatedPath: "result.data")!
+        XCTAssert(arr[0]?.name == "Bob")
+        XCTAssert(arr[0]?.id == "1")
+        XCTAssert(arr[0]?.height == 180)
+        XCTAssert(arr[1]?.name == "Lily")
+        XCTAssert(arr[1]?.id == "2")
+        XCTAssert(arr[1]?.height == 150)
+        XCTAssert(arr[2]?.name == "Lucy")
+        XCTAssert(arr[2]?.id == "3")
+        XCTAssert(arr[2]?.height == 160)
+    }
+
     func testTypeAdaptationString2Others() {
         class F: HandyJSON {
             // from corresponding type
