@@ -1,5 +1,42 @@
 # Change Log
 
+## [Unreleased](https://github.com/alibaba/HandyJSON/tree/HEAD)
+
+[Full Changelog](https://github.com/alibaba/HandyJSON/compare/1.3.0...HEAD)
+
+**Closed issues:**
+
+- sub class object missed during deserialization [\#53](https://github.com/alibaba/HandyJSON/issues/53)
+- pod 只找到0.1.0版本 [\#49](https://github.com/alibaba/HandyJSON/issues/49)
+
+## [1.3.0](https://github.com/alibaba/HandyJSON/tree/1.3.0) (2016-11-22)
+[Full Changelog](https://github.com/alibaba/HandyJSON/compare/1.2.1...1.3.0)
+
+**Closed issues:**
+
+- deserializeModelArrayFrom 为什么没有 designatedPath参数？ [\#48](https://github.com/alibaba/HandyJSON/issues/48)
+- 对于JSON中某个String字段是一个JSON字符串有没有简便的转化方式 [\#45](https://github.com/alibaba/HandyJSON/issues/45)
+- 能否实现Int到String的自动转换 [\#44](https://github.com/alibaba/HandyJSON/issues/44)
+- 对枚举类型的实现效果不佳 [\#43](https://github.com/alibaba/HandyJSON/issues/43)
+- Undefined symbols for architecture i386: [\#42](https://github.com/alibaba/HandyJSON/issues/42)
+- deserializeModelArrayFrom\(\)返回 \[T\]? 使用起来是不是会更方便一些? [\#40](https://github.com/alibaba/HandyJSON/issues/40)
+- 当model中某个String变量，存的是json字符格式解析不出来 [\#37](https://github.com/alibaba/HandyJSON/issues/37)
+- crash  [\#36](https://github.com/alibaba/HandyJSON/issues/36)
+- 如何应对服务端和前端命名不一致的问题？ [\#34](https://github.com/alibaba/HandyJSON/issues/34)
+- Carthage warning [\#32](https://github.com/alibaba/HandyJSON/issues/32)
+
+**Merged pull requests:**
+
+- add testcases/deserialize array support designating path [\#52](https://github.com/alibaba/HandyJSON/pull/52) ([xuyecan](https://github.com/xuyecan))
+- fix warnning [\#51](https://github.com/alibaba/HandyJSON/pull/51) ([cijianzy](https://github.com/cijianzy))
+- support enum perfectly [\#50](https://github.com/alibaba/HandyJSON/pull/50) ([xuyecan](https://github.com/xuyecan))
+- fix designated path issue & add cn readme [\#47](https://github.com/alibaba/HandyJSON/pull/47) ([xuyecan](https://github.com/xuyecan))
+- do some optimization & add testcases [\#46](https://github.com/alibaba/HandyJSON/pull/46) ([xuyecan](https://github.com/xuyecan))
+- Use Swift's Syntactic Sugar [\#41](https://github.com/alibaba/HandyJSON/pull/41) ([wongzigii](https://github.com/wongzigii))
+- update README.md, use `require` instead of `need`. [\#39](https://github.com/alibaba/HandyJSON/pull/39) ([swwlqw](https://github.com/swwlqw))
+- Syntax highlightion in README [\#38](https://github.com/alibaba/HandyJSON/pull/38) ([wongzigii](https://github.com/wongzigii))
+- Add iOS test target [\#35](https://github.com/alibaba/HandyJSON/pull/35) ([cijianzy](https://github.com/cijianzy))
+
 ## [1.2.1](https://github.com/alibaba/HandyJSON/tree/1.2.1) (2016-11-04)
 [Full Changelog](https://github.com/alibaba/HandyJSON/compare/1.2.0...1.2.1)
 
