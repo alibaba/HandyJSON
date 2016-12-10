@@ -185,6 +185,17 @@ extension Property {
 
             var offset = 0, size = 0
 
+            if let excludedPropertyLayout = mapper.exclude(key: mutablePointer.hashValue) {
+                let m = currentOffset % excludedPropertyLayout.1
+                offset =  (m == 0 ? 0 : (excludedPropertyLayout.1 - m))
+                mutablePointer = mutablePointer.advanced(by: offset)
+
+                size = excludedPropertyLayout.0
+                mutablePointer = mutablePointer.advanced(by: size)
+                currentOffset += size
+                return
+            }
+
             guard let propertyType = type(of: child.value) as? Property.Type else {
                 print("label: ", child.label ?? "", "type: ", "\(type(of: child.value))")
                 fatalError("Each property should be handyjson-property type")

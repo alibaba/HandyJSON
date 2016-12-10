@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		214329261DFBDC1400CA386A /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214329251DFBDC1400CA386A /* TestUtils.swift */; };
+		214329271DFBDC1400CA386A /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214329251DFBDC1400CA386A /* TestUtils.swift */; };
+		214329281DFBDC1400CA386A /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214329251DFBDC1400CA386A /* TestUtils.swift */; };
 		2144A50E1D9A7A770090F50E /* CustomMappingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */; };
 		21520C481D3341B200F53111 /* HandyJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 21520C471D3341B200F53111 /* HandyJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21520C541D3341FC00F53111 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C501D3341FC00F53111 /* Extension.swift */; };
@@ -122,6 +125,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		214329251DFBDC1400CA386A /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMappingTest.swift; sourceTree = "<group>"; };
 		21520C441D3341B200F53111 /* HandyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HandyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21520C471D3341B200F53111 /* HandyJSON.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandyJSON.h; sourceTree = "<group>"; };
@@ -291,6 +295,7 @@
 				21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */,
 				39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */,
 				21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */,
+				214329251DFBDC1400CA386A /* TestUtils.swift */,
 				392628001DA3E8E100B0C28D /* Supporting Files */,
 			);
 			path = HandyJSONTests;
@@ -663,6 +668,7 @@
 			files = (
 				21F252B41D599DE200B214BB /* InvalidStateHandlingTest.swift in Sources */,
 				2144A50E1D9A7A770090F50E /* CustomMappingTest.swift in Sources */,
+				214329261DFBDC1400CA386A /* TestUtils.swift in Sources */,
 				39B36C241D8D780200AD2A3F /* SerializeToJSONTests.swift in Sources */,
 				21F252B21D59718100B214BB /* AllBaseTypePropertyObjectTest.swift in Sources */,
 				21AC1A001DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */,
@@ -706,6 +712,7 @@
 			files = (
 				393E0FD31DA2486C00B3BC12 /* StructObjectTest.swift in Sources */,
 				393E0FD41DA2486C00B3BC12 /* ClassObjectTest.swift in Sources */,
+				214329271DFBDC1400CA386A /* TestUtils.swift in Sources */,
 				393E0FD51DA2486C00B3BC12 /* NestObjectTest.swift in Sources */,
 				393E0FD61DA2486C00B3BC12 /* CustomMappingTest.swift in Sources */,
 				21AC1A011DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */,
@@ -736,6 +743,7 @@
 			files = (
 				393E0FFF1DA249DC00B3BC12 /* StructObjectTest.swift in Sources */,
 				393E10001DA249DC00B3BC12 /* ClassObjectTest.swift in Sources */,
+				214329281DFBDC1400CA386A /* TestUtils.swift in Sources */,
 				393E10011DA249DC00B3BC12 /* NestObjectTest.swift in Sources */,
 				393E10021DA249DC00B3BC12 /* CustomMappingTest.swift in Sources */,
 				21AC1A021DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */,

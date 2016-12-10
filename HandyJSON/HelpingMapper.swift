@@ -22,6 +22,7 @@ import Foundation
 public class HelpingMapper {
 
     private var mapping = [Int: (String?, ((String) -> ())?)]()
+    private var exclude = [Int: (Int, Int)]()
 
     public func specify<T>(property: inout T, name: String) {
         let key = withUnsafePointer(to: &property, { return $0 }).hashValue
@@ -46,7 +47,16 @@ public class HelpingMapper {
         self.mapping[key] = (name, assign)
     }
 
+    public func exclude<T>(property: inout T) {
+        let pointer = withUnsafePointer(to: &property, { return $0 })
+        self.exclude[pointer.hashValue] = (MemoryLayout<T>.size, MemoryLayout<T>.alignment)
+    }
+
     internal func getNameAndConverter(key: Int) -> (String?, ((String) -> ())?)? {
         return mapping[key]
+    }
+
+    internal func exclude(key: Int) -> (Int, Int)? {
+        return self.exclude[key]
     }
 }

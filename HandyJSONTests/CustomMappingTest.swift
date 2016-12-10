@@ -99,4 +99,48 @@ class CustomMappingTest: XCTestCase {
         XCTAssert(a.id == "json_12345")
         XCTAssert(a.height == 180)
     }
+
+    func testExlucdePropertyForClass() {
+        struct NotHandyJSON {
+            var empty: String?
+        }
+        class A: HandyJSON {
+            var notHandyJSONProperty: NotHandyJSON?
+            var name: String?
+            var id: String?
+            var height: Int?
+
+            required init() {}
+
+            func mapping(mapper: HelpingMapper) {
+                mapper.exclude(property: &notHandyJSONProperty)
+            }
+        }
+        let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
+        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        XCTAssert(a.name == "Bob")
+        XCTAssert(a.id == "12345")
+        XCTAssert(a.height == 180)
+    }
+
+    func testExlucdePropertyForStruct() {
+        class NotHandyJSON {
+            var empty: String?
+        }
+        struct A: HandyJSON {
+            var notHandyJSONProperty: NotHandyJSON?
+            var name: String?
+            var id: String?
+            var height: Int?
+
+            mutating func mapping(mapper: HelpingMapper) {
+                mapper.exclude(property: &notHandyJSONProperty)
+            }
+        }
+        let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
+        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        XCTAssert(a.name == "Bob")
+        XCTAssert(a.id == "12345")
+        XCTAssert(a.height == 180)
+    }
 }
