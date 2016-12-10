@@ -66,6 +66,7 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
     - [继承自父类的子类](#继承自父类的子类)
     - [JSON中的数组](#json中的数组)
     - [自定义解析规则](#自定义解析规则)
+    - [排除指定属性](#排除指定属性)
     - [支持的属性类型](#支持的属性类型)
 - [序列化](#序列化-1)
     - [基本类型](#基本类型-1)
@@ -335,6 +336,36 @@ class Cat: HandyJSON {
 }
 
 let jsonString = "{\"cat_id\":12345,\"name\":\"Kitty\",\"parent\":\"Tom/Lily\"}"
+
+if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
+    print(cat)
+}
+```
+
+## 排除指定属性
+
+如果在Model中存在因为某些原因不能实现`HandyJSON`协议的字段，或者说不希望反序列化影响某个字段，可以在`mapping`函数中将它排除。如果不这么做，没实现`HandyJSON`协议的字段可能会导致`fatalError`。
+
+```swift
+class NotHandyJSONType {
+    var dummy: String?
+}
+
+class Cat: HandyJSON {
+    var id: Int64!
+    var name: String!
+    var notHandyJSONTypeProperty: NotHandyJSONType?
+    var basicTypeButNotWantedProperty: String?
+
+    required init() {}
+
+    func mapping(mapper: HelpingMapper) {
+        mapper.exclude(property: &notHandyJSONTypeProperty)
+        mapper.exclude(property: &basicTypeButNotWantedProperty)
+    }
+}
+
+let jsonString = "{\"name\":\"cat\",\"id\":\"12345\"}"
 
 if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
     print(cat)

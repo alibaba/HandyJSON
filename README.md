@@ -71,6 +71,7 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
     - [Inheritance Object](#inheritance-object)
     - [Array In JSON](#array-in-json)
     - [Custom Mapping](#custom-mapping)
+    - [Exclude Property](#exclude-property)
     - [Supported Property Type](#supported-property-type)
 - [Serialization](#serialization)
     - [The Basics](#the-basics)
@@ -101,7 +102,7 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
 
 **To use with Swift 2.x using == 0.4.0**
 
-**To use with Swift 3.x using >= 1.3.0**
+**To use with Swift 3.x using >= 1.4.0**
 
 For Legacy Swift support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
 
@@ -110,7 +111,7 @@ For Legacy Swift support, take a look at the [swift2 branch](https://github.com/
 Add the following line to your `Podfile`:
 
 ```
-pod 'HandyJSON', '~> 1.3.0'
+pod 'HandyJSON', '~> 1.4.0'
 ```
 
 Then, run the following command:
@@ -124,7 +125,7 @@ $ pod install
 You can add a dependency on `HandyJSON` by adding the following line to your `Cartfile`:
 
 ```
-github "alibaba/HandyJSON" ~> 1.3.0
+github "alibaba/HandyJSON" ~> 1.4.0
 ```
 
 ## Manually
@@ -384,6 +385,36 @@ class Cat: HandyJSON {
 }
 
 let jsonString = "{\"cat_id\":12345,\"name\":\"Kitty\",\"parent\":\"Tom/Lily\"}"
+
+if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
+    print(cat)
+}
+```
+
+## Exclude Property
+
+If any property of a class/struct could not conform to `HandyJSON` or you just do not want to do the deserialization with it, you should exclude it in the mapping function.
+
+```swift
+class NotHandyJSONType {
+    var dummy: String?
+}
+
+class Cat: HandyJSON {
+    var id: Int64!
+    var name: String!
+    var notHandyJSONTypeProperty: NotHandyJSONType?
+    var basicTypeButNotWantedProperty: String?
+
+    required init() {}
+
+    func mapping(mapper: HelpingMapper) {
+        mapper.exclude(property: &notHandyJSONTypeProperty)
+        mapper.exclude(property: &basicTypeButNotWantedProperty)
+    }
+}
+
+let jsonString = "{\"name\":\"cat\",\"id\":\"12345\"}"
 
 if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
     print(cat)
