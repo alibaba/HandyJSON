@@ -21,42 +21,76 @@ import Foundation
 
 public class HelpingMapper {
 
-    private var mapping = [Int: (String?, ((String) -> ())?)]()
+    private var mappers = [Int: (String?, ((Any?) -> ())?)]()
     private var exclude = [Int: (Int, Int)]()
-
-    public func specify<T>(property: inout T, name: String) {
-        let key = withUnsafePointer(to: &property, { return $0 }).hashValue
-        self.mapping[key] = (name, nil)
-    }
-
-    public func specify<T>(property: inout T, converter: @escaping (String) -> T) {
-        let pointer = withUnsafePointer(to: &property, { return $0 })
-        let key = pointer.hashValue
-        let assign = { (rawValue: String) in
-            UnsafeMutablePointer<T>(mutating: pointer).pointee = converter(rawValue)
-        }
-        self.mapping[key] = (nil, assign)
-    }
-
-    public func specify<T>(property: inout T, name: String, converter: @escaping (String) -> T) {
-        let pointer = withUnsafePointer(to: &property, { return $0 })
-        let key = pointer.hashValue
-        let assign = { (rawValue: String) in
-            UnsafeMutablePointer<T>(mutating: pointer).pointee = converter(rawValue)
-        }
-        self.mapping[key] = (name, assign)
-    }
 
     public func exclude<T>(property: inout T) {
         let pointer = withUnsafePointer(to: &property, { return $0 })
         self.exclude[pointer.hashValue] = (MemoryLayout<T>.size, MemoryLayout<T>.alignment)
     }
 
-    internal func getNameAndConverter(key: Int) -> (String?, ((String) -> ())?)? {
-        return mapping[key]
+    internal func getNameAndTransformer(key: Int) -> (String?, ((Any?) -> ())?)? {
+        return self.mappers[key]
     }
 
     internal func exclude(key: Int) -> (Int, Int)? {
         return self.exclude[key]
+    }
+
+    public func specify<T>(property: inout T, name: String) {
+        self.specify(property: &property, name: name, converter: nil)
+    }
+
+    public func specify<T>(property: inout T, converter: @escaping (String) -> T) {
+        self.specify(property: &property, name: nil, converter: converter)
+    }
+
+    public func specify<T>(property: inout T, name: String?, converter: ((String) -> T)?) {
+        let pointer = withUnsafePointer(to: &property, { return $0 })
+        let key = pointer.hashValue
+
+        if let _converter = converter {
+            let assign = { (rawValue: Any?) in
+                if let _value = rawValue, let _valueStr = (_value as? NSObject)?.toString() {
+                    UnsafeMutablePointer<T>(mutating: pointer).pointee = _converter(_valueStr)
+                }
+            }
+            self.mappers[key] = (name, assign)
+        } else {
+            self.mappers[key] = (name, nil)
+        }
+    }
+
+    public func specify<Transform: TransformType>(property: inout Transform.Object, transformer: Transform) {
+        let pointer = withUnsafePointer(to: &property, { return $0 })
+        let key = pointer.hashValue
+        let assign = { (rawValue: Any?) in
+            if let value = transformer.transformFromJSON(rawValue) {
+                UnsafeMutablePointer<Transform.Object>(mutating: pointer).pointee = value
+            }
+        }
+        self.mappers[key] = (nil, assign)
+    }
+
+    public func specify<Transform: TransformType>(property: inout Transform.Object?, transformer: Transform) {
+        let pointer = withUnsafePointer(to: &property, { return $0 })
+        let key = pointer.hashValue
+        let assign = { (rawValue: Any?) in
+            if let value = transformer.transformFromJSON(rawValue) {
+                UnsafeMutablePointer<Transform.Object?>(mutating: pointer).pointee = value
+            }
+        }
+        self.mappers[key] = (nil, assign)
+    }
+
+    public func specify<Transform: TransformType>(property: inout Transform.Object!, transformer: Transform) {
+        let pointer = withUnsafePointer(to: &property, { return $0 })
+        let key = pointer.hashValue
+        let assign = { (rawValue: Any?) in
+            if let value = transformer.transformFromJSON(rawValue) {
+                UnsafeMutablePointer<Transform.Object!>(mutating: pointer).pointee = value
+            }
+        }
+        self.mappers[key] = (nil, assign)
     }
 }

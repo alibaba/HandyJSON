@@ -215,16 +215,15 @@ extension Property {
 
             var key = label
 
-            if let converter = mapper.getNameAndConverter(key: mutablePointer.hashValue) {
+            if let customTransform = mapper.getNameAndTransformer(key: mutablePointer.hashValue) {
                 // if specific key is set, replace the label
-                if let specifyKey = converter.0 {
+                if let specifyKey = customTransform.0 {
                     key = specifyKey
                 }
 
-                // if specific converter is set, use it the assign value to the property
-                if let specifyConverter = converter.1 {
-                    let ocValue = (dict[key] as? NSObject)?.toString()
-                    specifyConverter(ocValue ?? "")
+                if let transformer = customTransform.1 {
+                    // execute the transform closure
+                    transformer(dict[key])
 
                     mutablePointer = mutablePointer.advanced(by: size)
                     currentOffset += size
