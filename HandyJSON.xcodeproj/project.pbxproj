@@ -30,6 +30,50 @@
 		21AC1A001DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */; };
 		21AC1A011DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */; };
 		21AC1A021DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */; };
+		21DFCA561E18EB9C00856775 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA521E18EB9C00856775 /* DateTransform.swift */; };
+		21DFCA571E18EB9C00856775 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA521E18EB9C00856775 /* DateTransform.swift */; };
+		21DFCA581E18EB9C00856775 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA521E18EB9C00856775 /* DateTransform.swift */; };
+		21DFCA591E18EB9C00856775 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA521E18EB9C00856775 /* DateTransform.swift */; };
+		21DFCA5A1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA531E18EB9C00856775 /* DateFormatterTransform.swift */; };
+		21DFCA5B1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA531E18EB9C00856775 /* DateFormatterTransform.swift */; };
+		21DFCA5C1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA531E18EB9C00856775 /* DateFormatterTransform.swift */; };
+		21DFCA5D1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA531E18EB9C00856775 /* DateFormatterTransform.swift */; };
+		21DFCA5E1E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA541E18EB9C00856775 /* ISO8601DateTransform.swift */; };
+		21DFCA5F1E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA541E18EB9C00856775 /* ISO8601DateTransform.swift */; };
+		21DFCA601E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA541E18EB9C00856775 /* ISO8601DateTransform.swift */; };
+		21DFCA611E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA541E18EB9C00856775 /* ISO8601DateTransform.swift */; };
+		21DFCA621E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA551E18EB9C00856775 /* CustomDateFormatTransform.swift */; };
+		21DFCA631E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA551E18EB9C00856775 /* CustomDateFormatTransform.swift */; };
+		21DFCA641E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA551E18EB9C00856775 /* CustomDateFormatTransform.swift */; };
+		21DFCA651E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA551E18EB9C00856775 /* CustomDateFormatTransform.swift */; };
+		21DFCA6E1E18EBA600856775 /* TransformOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA661E18EBA600856775 /* TransformOf.swift */; };
+		21DFCA6F1E18EBA600856775 /* TransformOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA661E18EBA600856775 /* TransformOf.swift */; };
+		21DFCA701E18EBA600856775 /* TransformOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA661E18EBA600856775 /* TransformOf.swift */; };
+		21DFCA711E18EBA600856775 /* TransformOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA661E18EBA600856775 /* TransformOf.swift */; };
+		21DFCA721E18EBA600856775 /* TransformType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA671E18EBA600856775 /* TransformType.swift */; };
+		21DFCA731E18EBA600856775 /* TransformType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA671E18EBA600856775 /* TransformType.swift */; };
+		21DFCA741E18EBA600856775 /* TransformType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA671E18EBA600856775 /* TransformType.swift */; };
+		21DFCA751E18EBA600856775 /* TransformType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA671E18EBA600856775 /* TransformType.swift */; };
+		21DFCA761E18EBA600856775 /* URLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA681E18EBA600856775 /* URLTransform.swift */; };
+		21DFCA771E18EBA600856775 /* URLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA681E18EBA600856775 /* URLTransform.swift */; };
+		21DFCA781E18EBA600856775 /* URLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA681E18EBA600856775 /* URLTransform.swift */; };
+		21DFCA791E18EBA600856775 /* URLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA681E18EBA600856775 /* URLTransform.swift */; };
+		21DFCA7A1E18EBA600856775 /* EnumTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA691E18EBA600856775 /* EnumTransform.swift */; };
+		21DFCA7B1E18EBA600856775 /* EnumTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA691E18EBA600856775 /* EnumTransform.swift */; };
+		21DFCA7C1E18EBA600856775 /* EnumTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA691E18EBA600856775 /* EnumTransform.swift */; };
+		21DFCA7D1E18EBA600856775 /* EnumTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA691E18EBA600856775 /* EnumTransform.swift */; };
+		21DFCA7E1E18EBA600856775 /* NSDecimalNumberTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6A1E18EBA600856775 /* NSDecimalNumberTransform.swift */; };
+		21DFCA7F1E18EBA600856775 /* NSDecimalNumberTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6A1E18EBA600856775 /* NSDecimalNumberTransform.swift */; };
+		21DFCA801E18EBA600856775 /* NSDecimalNumberTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6A1E18EBA600856775 /* NSDecimalNumberTransform.swift */; };
+		21DFCA811E18EBA600856775 /* NSDecimalNumberTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6A1E18EBA600856775 /* NSDecimalNumberTransform.swift */; };
+		21DFCA861E18EBA600856775 /* DataTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6C1E18EBA600856775 /* DataTransform.swift */; };
+		21DFCA871E18EBA600856775 /* DataTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6C1E18EBA600856775 /* DataTransform.swift */; };
+		21DFCA881E18EBA600856775 /* DataTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6C1E18EBA600856775 /* DataTransform.swift */; };
+		21DFCA891E18EBA600856775 /* DataTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6C1E18EBA600856775 /* DataTransform.swift */; };
+		21DFCA8A1E18EBA600856775 /* HexColorTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */; };
+		21DFCA8B1E18EBA600856775 /* HexColorTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */; };
+		21DFCA8C1E18EBA600856775 /* HexColorTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */; };
+		21DFCA8D1E18EBA600856775 /* HexColorTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */; };
 		21F252AA1D58BE9100B214BB /* NestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestObjectTest.swift */; };
 		21F252AC1D595F3900B214BB /* ClassObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AB1D595F3900B214BB /* ClassObjectTest.swift */; };
 		21F252B01D596A7000B214BB /* MemoryLayoutValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AF1D596A7000B214BB /* MemoryLayoutValidationTest.swift */; };
@@ -148,6 +192,17 @@
 		217B04711D571B9F0035A8E2 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 		21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
 		21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializeToSimpleObjectTest.swift; sourceTree = "<group>"; };
+		21DFCA521E18EB9C00856775 /* DateTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTransform.swift; sourceTree = "<group>"; };
+		21DFCA531E18EB9C00856775 /* DateFormatterTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatterTransform.swift; sourceTree = "<group>"; };
+		21DFCA541E18EB9C00856775 /* ISO8601DateTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISO8601DateTransform.swift; sourceTree = "<group>"; };
+		21DFCA551E18EB9C00856775 /* CustomDateFormatTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomDateFormatTransform.swift; sourceTree = "<group>"; };
+		21DFCA661E18EBA600856775 /* TransformOf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformOf.swift; sourceTree = "<group>"; };
+		21DFCA671E18EBA600856775 /* TransformType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformType.swift; sourceTree = "<group>"; };
+		21DFCA681E18EBA600856775 /* URLTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLTransform.swift; sourceTree = "<group>"; };
+		21DFCA691E18EBA600856775 /* EnumTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumTransform.swift; sourceTree = "<group>"; };
+		21DFCA6A1E18EBA600856775 /* NSDecimalNumberTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDecimalNumberTransform.swift; sourceTree = "<group>"; };
+		21DFCA6C1E18EBA600856775 /* DataTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataTransform.swift; sourceTree = "<group>"; };
+		21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexColorTransform.swift; sourceTree = "<group>"; };
 		21F252A91D58BE9100B214BB /* NestObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NestObjectTest.swift; sourceTree = "<group>"; };
 		21F252AB1D595F3900B214BB /* ClassObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassObjectTest.swift; sourceTree = "<group>"; };
 		21F252AF1D596A7000B214BB /* MemoryLayoutValidationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryLayoutValidationTest.swift; sourceTree = "<group>"; };
@@ -264,6 +319,7 @@
 				21520C511D3341FC00F53111 /* Property.swift */,
 				21520C521D3341FC00F53111 /* JSONDeserializer.swift */,
 				21A7A59C1D9EBF450015E3F0 /* JSONSerializer.swift */,
+				21DFCA381E18EA9E00856775 /* Transforms */,
 				392627FF1DA3E1A400B0C28D /* Supporting Files */,
 			);
 			path = HandyJSON;
@@ -300,6 +356,32 @@
 			);
 			path = HandyJSONTests;
 			sourceTree = SOURCE_ROOT;
+		};
+		21DFCA381E18EA9E00856775 /* Transforms */ = {
+			isa = PBXGroup;
+			children = (
+				21DFCA661E18EBA600856775 /* TransformOf.swift */,
+				21DFCA671E18EBA600856775 /* TransformType.swift */,
+				21DFCA681E18EBA600856775 /* URLTransform.swift */,
+				21DFCA691E18EBA600856775 /* EnumTransform.swift */,
+				21DFCA6A1E18EBA600856775 /* NSDecimalNumberTransform.swift */,
+				21DFCA6C1E18EBA600856775 /* DataTransform.swift */,
+				21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */,
+				21DFCA391E18EAC700856775 /* Date */,
+			);
+			name = Transforms;
+			sourceTree = "<group>";
+		};
+		21DFCA391E18EAC700856775 /* Date */ = {
+			isa = PBXGroup;
+			children = (
+				21DFCA521E18EB9C00856775 /* DateTransform.swift */,
+				21DFCA531E18EB9C00856775 /* DateFormatterTransform.swift */,
+				21DFCA541E18EB9C00856775 /* ISO8601DateTransform.swift */,
+				21DFCA551E18EB9C00856775 /* CustomDateFormatTransform.swift */,
+			);
+			name = Date;
+			sourceTree = "<group>";
 		};
 		392627FF1DA3E1A400B0C28D /* Supporting Files */ = {
 			isa = PBXGroup;
@@ -512,7 +594,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = aliyun;
 				TargetAttributes = {
 					21520C431D3341B200F53111 = {
@@ -644,12 +726,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21DFCA6E1E18EBA600856775 /* TransformOf.swift in Sources */,
+				21DFCA621E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */,
+				21DFCA561E18EB9C00856775 /* DateTransform.swift in Sources */,
 				21520C551D3341FC00F53111 /* Property.swift in Sources */,
+				21DFCA7E1E18EBA600856775 /* NSDecimalNumberTransform.swift in Sources */,
+				21DFCA721E18EBA600856775 /* TransformType.swift in Sources */,
+				21DFCA8A1E18EBA600856775 /* HexColorTransform.swift in Sources */,
+				21DFCA7A1E18EBA600856775 /* EnumTransform.swift in Sources */,
 				21A7A59D1D9EBF450015E3F0 /* JSONSerializer.swift in Sources */,
+				21DFCA861E18EBA600856775 /* DataTransform.swift in Sources */,
 				21520C561D3341FC00F53111 /* JSONDeserializer.swift in Sources */,
 				21520C541D3341FC00F53111 /* Extension.swift in Sources */,
+				21DFCA5A1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */,
+				21DFCA5E1E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */,
 				217B04681D56D2B50035A8E2 /* Converter.swift in Sources */,
 				2179B6B31D911DB4007B0320 /* HelpingMapper.swift in Sources */,
+				21DFCA761E18EBA600856775 /* URLTransform.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -684,12 +777,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21DFCA6F1E18EBA600856775 /* TransformOf.swift in Sources */,
+				21DFCA631E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */,
+				21DFCA571E18EB9C00856775 /* DateTransform.swift in Sources */,
 				393E0FA51DA165E300B3BC12 /* Converter.swift in Sources */,
+				21DFCA7F1E18EBA600856775 /* NSDecimalNumberTransform.swift in Sources */,
+				21DFCA731E18EBA600856775 /* TransformType.swift in Sources */,
+				21DFCA8B1E18EBA600856775 /* HexColorTransform.swift in Sources */,
+				21DFCA7B1E18EBA600856775 /* EnumTransform.swift in Sources */,
 				393E0FA61DA165E300B3BC12 /* Extension.swift in Sources */,
+				21DFCA871E18EBA600856775 /* DataTransform.swift in Sources */,
 				393E0FA71DA165E300B3BC12 /* HelpingMapper.swift in Sources */,
 				393E0FA81DA165E300B3BC12 /* Property.swift in Sources */,
+				21DFCA5B1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */,
+				21DFCA5F1E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */,
 				393E0FA91DA165E300B3BC12 /* JSONDeserializer.swift in Sources */,
 				393E0FAA1DA165E300B3BC12 /* JSONSerializer.swift in Sources */,
+				21DFCA771E18EBA600856775 /* URLTransform.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,12 +801,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21DFCA701E18EBA600856775 /* TransformOf.swift in Sources */,
+				21DFCA641E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */,
+				21DFCA581E18EB9C00856775 /* DateTransform.swift in Sources */,
 				393E0FCC1DA2484F00B3BC12 /* Converter.swift in Sources */,
+				21DFCA801E18EBA600856775 /* NSDecimalNumberTransform.swift in Sources */,
+				21DFCA741E18EBA600856775 /* TransformType.swift in Sources */,
+				21DFCA8C1E18EBA600856775 /* HexColorTransform.swift in Sources */,
+				21DFCA7C1E18EBA600856775 /* EnumTransform.swift in Sources */,
 				393E0FCD1DA2484F00B3BC12 /* Extension.swift in Sources */,
+				21DFCA881E18EBA600856775 /* DataTransform.swift in Sources */,
 				393E0FCE1DA2484F00B3BC12 /* HelpingMapper.swift in Sources */,
 				393E0FCF1DA2484F00B3BC12 /* Property.swift in Sources */,
+				21DFCA5C1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */,
+				21DFCA601E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */,
 				393E0FD01DA2484F00B3BC12 /* JSONDeserializer.swift in Sources */,
 				393E0FD11DA2484F00B3BC12 /* JSONSerializer.swift in Sources */,
+				21DFCA781E18EBA600856775 /* URLTransform.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -728,12 +843,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21DFCA711E18EBA600856775 /* TransformOf.swift in Sources */,
+				21DFCA651E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */,
+				21DFCA591E18EB9C00856775 /* DateTransform.swift in Sources */,
 				393E0FF81DA2495900B3BC12 /* Converter.swift in Sources */,
+				21DFCA811E18EBA600856775 /* NSDecimalNumberTransform.swift in Sources */,
+				21DFCA751E18EBA600856775 /* TransformType.swift in Sources */,
+				21DFCA8D1E18EBA600856775 /* HexColorTransform.swift in Sources */,
+				21DFCA7D1E18EBA600856775 /* EnumTransform.swift in Sources */,
 				393E0FF91DA2495900B3BC12 /* Extension.swift in Sources */,
+				21DFCA891E18EBA600856775 /* DataTransform.swift in Sources */,
 				393E0FFA1DA2495900B3BC12 /* HelpingMapper.swift in Sources */,
 				393E0FFB1DA2495900B3BC12 /* Property.swift in Sources */,
+				21DFCA5D1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */,
+				21DFCA611E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */,
 				393E0FFC1DA2495900B3BC12 /* JSONDeserializer.swift in Sources */,
 				393E0FFD1DA2495900B3BC12 /* JSONSerializer.swift in Sources */,
+				21DFCA791E18EBA600856775 /* URLTransform.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -901,7 +1027,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: 业灿 许 (U997QZ92HC)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9E6X9UPZWJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -924,7 +1050,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: 业灿 许 (U997QZ92HC)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9E6X9UPZWJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
