@@ -376,7 +376,146 @@ extension Property {
 
 extension Property {
 
-    // internal func _serializeToDictionary() -> [String: Any] {
+    internal static func _serializeToDictionary(propertys: [(String?, Any)], headPointer: UnsafeMutablePointer<Byte>, currentOffset: Int, mapper: HelpingMapper) -> [String: Any] {
 
-    // }
+        var dict = [String: Any]()
+        var currentOffset = currentOffset
+        var mutablePointer = headPointer.advanced(by: currentOffset)
+
+        propertys.forEach { (label, value) in
+            guard let _label = label else {
+                return
+            }
+            var key = _label
+
+            var offset = 0, size = 0
+
+            if let excludedPropertyLayout = mapper.exclude(key: mutablePointer.hashValue) {
+                let m = currentOffset % excludedPropertyLayout.1
+                offset =  (m == 0 ? 0 : (excludedPropertyLayout.1 - m))
+                mutablePointer = mutablePointer.advanced(by: offset)
+
+                size = excludedPropertyLayout.0
+                mutablePointer = mutablePointer.advanced(by: size)
+                currentOffset += size
+                return
+            }
+
+            guard let typedProperty = type(of: value) as? Property.Type else {
+                print("label: ", key, "type: ", "\(type(of: value))")
+                fatalError("Each property should be handyjson-property type")
+            }
+
+            size = typedProperty.size()
+            offset = typedProperty.offsetToAlignment(value: currentOffset, align: typedProperty.align())
+
+            mutablePointer = mutablePointer.advanced(by: offset)
+            currentOffset += offset
+
+            if let customTransform = mapper.getNameAndTransformer(key: mutablePointer.hashValue) {
+                // if specific key is set, replace the label
+                if let specifyKey = customTransform.0 {
+                    key = specifyKey
+                }
+
+                if let transformer = customTransform.2 {
+                    // execute the transform closure
+                    if let value = transformer(value) {
+                        dict[key] = value
+                    }
+
+                    mutablePointer = mutablePointer.advanced(by: size)
+                    currentOffset += size
+                    return
+                }
+            }
+        }
+        return dict
+    }
+
+    internal static func _serializeToSimpleObject(from object: HandyJSON) -> Any? {
+        if type(of: object) is BasePropertyProtocol.Type {
+            return object
+        }
+
+        var mutableObject = object
+        let mirror = Mirror(reflecting: mutableObject)
+
+        guard let displayStyle = mirror.displayStyle else {
+            return self
+        }
+
+        switch displayStyle {
+        case .class, .struct:
+
+            var headPointer: UnsafeMutablePointer<Byte>!
+            let mapper = HelpingMapper()
+            var currentOffset = 0
+
+            // do user-specified mapping first
+            mutableObject.mapping(mapper: mapper)
+
+            if displayStyle == .class {
+                headPointer = mutableObject.headPointerOfClass()
+                // for 64bit architecture, it's 16
+                // for 32bit architecture, it's 12
+                currentOffset = 8 + MemoryLayout<Int>.size
+            } else if displayStyle == .struct {
+                headPointer = mutableObject.headPointerOfStruct()
+            }
+
+            var children = [(label: String?, value: Any)]()
+            let mirrorChildrenCollection = AnyRandomAccessCollection(mirror.children)!
+            children += mirrorChildrenCollection
+
+            var currentMirror = mirror
+            while let superclassChildren = currentMirror.superclassMirror?.children {
+                let randomCollection = AnyRandomAccessCollection(superclassChildren)!
+                children += randomCollection
+                currentMirror = currentMirror.superclassMirror!
+            }
+
+            return Self._serializeToDictionary(propertys: children, headPointer: headPointer, currentOffset: currentOffset, mapper: mapper) as Any
+        case .enum:
+            return self as Any
+        case .optional:
+            if mirror.children.count != 0 {
+                let (_, some) = mirror.children.first!
+                if let _value = some as? HandyJSON {
+                    return Self._serializeToSimpleObject(from: _value)
+                }
+            }
+            return nil
+        case .collection, .set:
+            var array = [Any]()
+            mirror.children.enumerated().forEach({ (index, element) in
+                if let _value = element.value as? HandyJSON, let transformedValue = Self._serializeToSimpleObject(from: _value) {
+                    array.append(transformedValue)
+                }
+            })
+            return array as Any
+        case .dictionary:
+            var dict = [String: Any]()
+            mirror.children.enumerated().forEach({ (index, element) in
+                let _mirror = Mirror(reflecting: element.value)
+                var key: String?
+                var value: Any?
+                _mirror.children.enumerated().forEach({ (_index, _element) in
+                    if _index == 0 {
+                        key = "\(_element.value)"
+                    } else {
+                        if let _value = _element.value as? HandyJSON {
+                            value = Self._serializeToSimpleObject(from: _value)
+                        }
+                    }
+                })
+                if (key ?? "") != "" && value != nil {
+                    dict[key!] = value!
+                }
+            })
+            return dict as Any
+        default:
+            return self as Any
+        }
+    }
 }
