@@ -247,7 +247,7 @@ extension Property {
         return currentOffset
     }
 
-    public static func _transform(dict: NSDictionary, toType type: HandyJSON.Type) -> HandyJSON {
+    internal static func _transform(dict: NSDictionary, toType type: HandyJSON.Type) -> HandyJSON {
         var instance = type.init()
         let mirror = Mirror(reflecting: instance)
 
@@ -278,7 +278,7 @@ extension Property {
         return instance
     }
 
-    static func valueFrom(object: NSObject) -> Self? {
+    internal static func valueFrom(object: NSObject) -> Self? {
         if self is HandyJSONEnum.Type {
 
             if let initWrapper = (self as? HandyJSONEnum.Type)?.makeInitWrapper() {
@@ -328,7 +328,7 @@ extension Property {
     }
 
     // base type supported parsing directly
-    static func baseValueFrom(object: NSObject) -> Self? {
+    internal static func baseValueFrom(object: NSObject) -> Self? {
         switch self {
         case is Int8.Type:
             return object.toInt8() as? Self
@@ -369,7 +369,7 @@ extension Property {
     }
 
     // keep in mind, self type is the same with type of value
-    static func codeIntoMemory(pointer: UnsafeMutablePointer<Byte>, value: Property) {
+    internal static func codeIntoMemory(pointer: UnsafeMutablePointer<Byte>, value: Property) {
         pointer.withMemoryRebound(to: Self.self, capacity: 1, { return $0 }).pointee = value as! Self
     }
 }
