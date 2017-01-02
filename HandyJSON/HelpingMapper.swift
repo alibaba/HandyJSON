@@ -19,9 +19,12 @@
 
 import Foundation
 
+public typealias CustomMappingValueTuple = (String?, ((Any?) -> ())?)
+public typealias CustomMappingKeyValueTuple = (Int, String?, ((Any?) -> ())?)
+
 public class HelpingMapper {
 
-    private var mappers = [Int: (String?, ((Any?) -> ())?)]()
+    private var mappers = [Int: CustomMappingValueTuple]()
     private var exclude = [Int: (Int, Int)]()
 
     public func exclude<T>(property: inout T) {
@@ -29,7 +32,7 @@ public class HelpingMapper {
         self.exclude[pointer.hashValue] = (MemoryLayout<T>.size, MemoryLayout<T>.alignment)
     }
 
-    internal func getNameAndTransformer(key: Int) -> (String?, ((Any?) -> ())?)? {
+    internal func getNameAndTransformer(key: Int) -> CustomMappingValueTuple? {
         return self.mappers[key]
     }
 
@@ -50,47 +53,77 @@ public class HelpingMapper {
         let key = pointer.hashValue
 
         if let _converter = converter {
-            let assign = { (rawValue: Any?) in
+            let assignmentClosure = { (rawValue: Any?) in
                 if let _value = rawValue, let _valueStr = (_value as? NSObject)?.toString() {
                     UnsafeMutablePointer<T>(mutating: pointer).pointee = _converter(_valueStr)
                 }
             }
-            self.mappers[key] = (name, assign)
+            self.mappers[key] = (name, assignmentClosure)
         } else {
             self.mappers[key] = (name, nil)
         }
     }
 
-    public func specify<Transform: TransformType>(property: inout Transform.Object, transformer: Transform) {
-        let pointer = withUnsafePointer(to: &property, { return $0 })
-        let key = pointer.hashValue
-        let assign = { (rawValue: Any?) in
-            if let value = transformer.transformFromJSON(rawValue) {
-                UnsafeMutablePointer<Transform.Object>(mutating: pointer).pointee = value
-            }
-        }
-        self.mappers[key] = (nil, assign)
+    fileprivate func addCustomMapping(key: Int, name: String?, assignmentClosure: ((Any?) -> ())?) {
+        self.mappers[key] = (name, assignmentClosure)
     }
+}
 
-    public func specify<Transform: TransformType>(property: inout Transform.Object?, transformer: Transform) {
-        let pointer = withUnsafePointer(to: &property, { return $0 })
-        let key = pointer.hashValue
-        let assign = { (rawValue: Any?) in
-            if let value = transformer.transformFromJSON(rawValue) {
-                UnsafeMutablePointer<Transform.Object?>(mutating: pointer).pointee = value
-            }
-        }
-        self.mappers[key] = (nil, assign)
-    }
+infix operator <- : LogicalConjunctionPrecedence
 
-    public func specify<Transform: TransformType>(property: inout Transform.Object!, transformer: Transform) {
-        let pointer = withUnsafePointer(to: &property, { return $0 })
-        let key = pointer.hashValue
-        let assign = { (rawValue: Any?) in
-            if let value = transformer.transformFromJSON(rawValue) {
-                UnsafeMutablePointer<Transform.Object!>(mutating: pointer).pointee = value
-            }
+public func <- <T>(property: inout T, name: String) -> CustomMappingKeyValueTuple {
+    let pointer = withUnsafePointer(to: &property, { return $0 })
+    let key = pointer.hashValue
+    return (key, name, nil)
+}
+
+public func <- <Transform: TransformType>(property: inout Transform.Object, transformer: Transform) -> CustomMappingKeyValueTuple {
+    return property <- (nil, transformer)
+}
+
+public func <- <Transform: TransformType>(property: inout Transform.Object, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
+    let pointer = withUnsafePointer(to: &property, { return $0 })
+    let key = pointer.hashValue
+    let assignmentClosure = { (rawValue: Any?) in
+        if let value = transformer.1?.transformFromJSON(rawValue) {
+            UnsafeMutablePointer<Transform.Object>(mutating: pointer).pointee = value
         }
-        self.mappers[key] = (nil, assign)
     }
+    return (key, transformer.0, assignmentClosure)
+}
+
+public func <- <Transform: TransformType>(property: inout Transform.Object?, transformer: Transform) -> CustomMappingKeyValueTuple {
+    return property <- (nil, transformer)
+}
+
+public func <- <Transform: TransformType>(property: inout Transform.Object?, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
+    let pointer = withUnsafePointer(to: &property, { return $0 })
+    let key = pointer.hashValue
+    let assignmentClosure = { (rawValue: Any?) in
+        if let value = transformer.1?.transformFromJSON(rawValue) {
+            UnsafeMutablePointer<Transform.Object?>(mutating: pointer).pointee = value
+        }
+    }
+    return (key, transformer.0, assignmentClosure)
+}
+
+public func <- <Transform: TransformType>(property: inout Transform.Object!, transformer: Transform) -> CustomMappingKeyValueTuple {
+    return property <- (nil, transformer)
+}
+
+public func <- <Transform: TransformType>(property: inout Transform.Object!, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
+    let pointer = withUnsafePointer(to: &property, { return $0 })
+    let key = pointer.hashValue
+    let assignmentClosure = { (rawValue: Any?) in
+        if let value = transformer.1?.transformFromJSON(rawValue) {
+            UnsafeMutablePointer<Transform.Object!>(mutating: pointer).pointee = value
+        }
+    }
+    return (key, transformer.0, assignmentClosure)
+}
+
+infix operator <<< : AssignmentPrecedence
+
+public func <<< (mapper: HelpingMapper, mapping: (Int, String?, ((Any?) -> ())?)) {
+    mapper.addCustomMapping(key: mapping.0, name: mapping.1, assignmentClosure: mapping.2)
 }

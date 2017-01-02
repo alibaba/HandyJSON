@@ -373,3 +373,10 @@ extension Property {
         pointer.withMemoryRebound(to: Self.self, capacity: 1, { return $0 }).pointee = value as! Self
     }
 }
+
+extension Property {
+
+    // internal func _serializeToDictionary() -> [String: Any] {
+
+    // }
+}

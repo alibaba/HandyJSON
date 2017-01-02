@@ -124,21 +124,28 @@ class ViewController: UIViewController {
 
             func mapping(mapper: HelpingMapper) {
 
-                mapper.specify(property: &age, transformer: TransformOf<Int, Int>(fromJSON: { return ($0 ?? 0) + 2 }, toJSON: { return $0 }))
-                mapper.specify(property: &gender, transformer: TransformOf<Gender, String>(fromJSON: { (rawString) -> Gender? in
-                    if let _str = rawString, _str == Gender.Female.rawValue {
-                        return .Female
-                    }
-                    return .Male
-                }, toJSON: { (rawEnum) -> String? in
-                    return ""
-                }))
+                mapper <<<
+                    self.age <- TransformOf<Int, Int>(fromJSON: { return ($0 ?? 0) + 2 }, toJSON: { return $0 })
+
+                mapper <<<
+                    self.gender <- TransformOf<Gender, String>(fromJSON: { (rawString) -> Gender? in
+                        if let _str = rawString, _str == Gender.Female.rawValue {
+                            return .Female
+                        }
+                        return .Male
+                    }, toJSON: { (enumValue) -> String? in
+                        return ""
+                    })
+
+                mapper <<<
+                    self.name <- ("json_name", TransformOf<String, String>(fromJSON: { $0 }, toJSON: { $0 }))
             }
         }
 
-        let jsonString = "{\"id\":\"77544\",\"name\":\"Tom Li\",\"age\":18,\"grade\":2,\"height\":180,\"gender\":\"Female\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subject\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
+        let jsonString = "{\"id\":\"77544\",\"json_name\":\"Tom Li\",\"age\":18,\"grade\":2,\"height\":180,\"gender\":\"Female\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subject\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
 
         if let student = JSONDeserializer<Student>.deserializeFrom(json: jsonString) {
+            print("\(student.name)")
             print("\(student.age)")
             print("\(student.gender)")
         }
