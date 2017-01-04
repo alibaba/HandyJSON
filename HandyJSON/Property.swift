@@ -429,11 +429,19 @@ extension Property {
                     return
                 }
             }
+
+            if let typedValue = value as? HandyJSON {
+                if let result = self._serialize(from: typedValue) {
+                    dict[key] = result
+                }
+            }
+            mutablePointer = mutablePointer.advanced(by: size)
+            currentOffset += size
         }
         return dict
     }
 
-    internal static func _serializeToSimpleObject(from object: HandyJSON) -> Any? {
+    internal static func _serialize(from object: HandyJSON) -> Any? {
         if type(of: object) is BasePropertyProtocol.Type {
             return object
         }
@@ -482,14 +490,14 @@ extension Property {
             if mirror.children.count != 0 {
                 let (_, some) = mirror.children.first!
                 if let _value = some as? HandyJSON {
-                    return Self._serializeToSimpleObject(from: _value)
+                    return Self._serialize(from: _value)
                 }
             }
             return nil
         case .collection, .set:
             var array = [Any]()
             mirror.children.enumerated().forEach({ (index, element) in
-                if let _value = element.value as? HandyJSON, let transformedValue = Self._serializeToSimpleObject(from: _value) {
+                if let _value = element.value as? HandyJSON, let transformedValue = Self._serialize(from: _value) {
                     array.append(transformedValue)
                 }
             })
@@ -505,7 +513,7 @@ extension Property {
                         key = "\(_element.value)"
                     } else {
                         if let _value = _element.value as? HandyJSON {
-                            value = Self._serializeToSimpleObject(from: _value)
+                            value = Self._serialize(from: _value)
                         }
                     }
                 })

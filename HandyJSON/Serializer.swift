@@ -21,6 +21,102 @@
 //  Created by zhouzhuo on 9/30/16.
 //
 
+public extension HandyJSON {
+
+    public func toJSON() -> [String: Any]? {
+
+        if let dict = Self._serialize(from: self) as? [String: Any] {
+            return dict
+        }
+        return nil
+    }
+
+    public func toJSONString(prettyPrint: Bool = false) -> String? {
+
+        if let anyObject = Self._serialize(from: self) {
+            if JSONSerialization.isValidJSONObject(anyObject) {
+                do {
+                    let jsonData: Data
+                    if prettyPrint {
+                        jsonData = try JSONSerialization.data(withJSONObject: anyObject, options: [.prettyPrinted])
+                    } else {
+                        jsonData = try JSONSerialization.data(withJSONObject: anyObject, options: [])
+                    }
+                    return String(data: jsonData, encoding: .utf8)
+                } catch let error {
+                    print(error)
+                }
+            }
+        }
+        return nil
+    }
+}
+
+public extension Array where Element: HandyJSON {
+
+    public func toJSON() -> [[String: Any]?] {
+
+        return self.map({ (object) -> [String: Any]? in
+            return Element._serialize(from: object) as? [String: Any]
+        })
+    }
+
+    public func toJSONString(prettyPrint: Bool = false) -> String? {
+
+        let anyArray = self.map({ (object) -> [String: Any]? in
+            return Element._serialize(from: object) as? [String: Any]
+        })
+        if JSONSerialization.isValidJSONObject(anyArray) {
+            do {
+                let jsonData: Data
+                if prettyPrint {
+                    jsonData = try JSONSerialization.data(withJSONObject: anyArray, options: [.prettyPrinted])
+                } else {
+                    jsonData = try JSONSerialization.data(withJSONObject: anyArray, options: [])
+                }
+                return String(data: jsonData, encoding: .utf8)
+            } catch let error {
+                print(error)
+            }
+        }
+        return nil
+    }
+}
+
+public extension Set where Element: HandyJSON {
+
+    public func toJSON() -> [[String: Any]?] {
+
+        return self.map({ (object) -> [String: Any]? in
+            return Element._serialize(from: object) as? [String: Any]
+        })
+    }
+
+    public func toJSONString(prettyPrint: Bool = false) -> String? {
+
+        let anyArray = self.map({ (object) -> [String: Any]? in
+            return Element._serialize(from: object) as? [String: Any]
+        })
+        if JSONSerialization.isValidJSONObject(anyArray) {
+            do {
+                let jsonData: Data
+                if prettyPrint {
+                    jsonData = try JSONSerialization.data(withJSONObject: anyArray, options: [.prettyPrinted])
+                } else {
+                    jsonData = try JSONSerialization.data(withJSONObject: anyArray, options: [])
+                }
+                return String(data: jsonData, encoding: .utf8)
+            } catch let error {
+                print(error)
+            }
+        }
+        return nil
+    }
+}
+
+
+//////////// the below APIs is deprecated ///////////////
+
 public protocol ModelTransformerProtocol {
 
     func toJSON() -> String?
