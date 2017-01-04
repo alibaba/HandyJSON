@@ -185,7 +185,7 @@ extension Property {
 
             var offset = 0, size = 0
 
-            if let excludedPropertyLayout = mapper.exclude(key: mutablePointer.hashValue) {
+            if let excludedPropertyLayout = mapper.getExcludedPropertyInfo(key: mutablePointer.hashValue) {
                 let m = currentOffset % excludedPropertyLayout.1
                 offset =  (m == 0 ? 0 : (excludedPropertyLayout.1 - m))
                 mutablePointer = mutablePointer.advanced(by: offset)
@@ -390,7 +390,7 @@ extension Property {
 
             var offset = 0, size = 0
 
-            if let excludedPropertyLayout = mapper.exclude(key: mutablePointer.hashValue) {
+            if let excludedPropertyLayout = mapper.getExcludedPropertyInfo(key: mutablePointer.hashValue) {
                 let m = currentOffset % excludedPropertyLayout.1
                 offset =  (m == 0 ? 0 : (excludedPropertyLayout.1 - m))
                 mutablePointer = mutablePointer.advanced(by: offset)

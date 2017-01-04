@@ -27,16 +27,11 @@ public class HelpingMapper {
     private var mappers = [Int: CustomMappingValueTuple]()
     private var exclude = [Int: (Int, Int)]()
 
-    public func exclude<T>(property: inout T) {
-        let pointer = withUnsafePointer(to: &property, { return $0 })
-        self.exclude[pointer.hashValue] = (MemoryLayout<T>.size, MemoryLayout<T>.alignment)
-    }
-
     internal func getNameAndTransformer(key: Int) -> CustomMappingValueTuple? {
         return self.mappers[key]
     }
 
-    internal func exclude(key: Int) -> (Int, Int)? {
+    internal func getExcludedPropertyInfo(key: Int) -> (Int, Int)? {
         return self.exclude[key]
     }
 
@@ -64,8 +59,17 @@ public class HelpingMapper {
         }
     }
 
+    public func exclude<T>(property: inout T) {
+        self._exclude(property: &property)
+    }
+
     fileprivate func addCustomMapping(key: Int, name: String?, assignmentClosure: ((Any?) -> ())?, takeValueClosure: ((Any?) -> (Any?))?) {
         self.mappers[key] = (name, assignmentClosure, takeValueClosure)
+    }
+
+    fileprivate func _exclude<T>(property: inout T) {
+        let pointer = withUnsafePointer(to: &property, { return $0 })
+        self.exclude[pointer.hashValue] = (MemoryLayout<T>.size, MemoryLayout<T>.alignment)
     }
 }
 
@@ -144,4 +148,10 @@ infix operator <<< : AssignmentPrecedence
 
 public func <<< (mapper: HelpingMapper, mapping: CustomMappingKeyValueTuple) {
     mapper.addCustomMapping(key: mapping.0, name: mapping.1, assignmentClosure: mapping.2, takeValueClosure: mapping.3)
+}
+
+infix operator >>> : AssignmentPrecedence
+
+public func >>> <T> (mapper: HelpingMapper, property: inout T) {
+    mapper._exclude(property: &property)
 }
