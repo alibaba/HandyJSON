@@ -114,8 +114,8 @@ class ViewController: UIViewController {
         print(student.toJSONString()!)
         print(student.toJSONString(prettyPrint: true)!)
 
-        // will crash cause array conform to handyjson
-        print([student].toJSON()!)
+        print([student].toJSON())
+        print([student].toJSONString()!)
         print([student].toJSONString(prettyPrint: true)!)
     }
 

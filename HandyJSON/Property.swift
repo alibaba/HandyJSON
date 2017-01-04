@@ -61,12 +61,12 @@ extension Property {
     }
 }
 
-public protocol HandyJSON: Property {
+public protocol TransformableProperty: Property {
     init()
     mutating func mapping(mapper: HelpingMapper)
 }
 
-public extension HandyJSON {
+extension TransformableProperty {
     public mutating func mapping(mapper: HelpingMapper) {}
 }
 
@@ -94,10 +94,10 @@ public protocol HandyJSONEnum: Property {
     static func makeInitWrapper() -> InitWrapperProtocol?
 }
 
-protocol BasePropertyProtocol: HandyJSON {
+protocol BasePropertyProtocol: TransformableProperty {
 }
 
-protocol OptionalTypeProtocol: HandyJSON {
+protocol OptionalTypeProtocol: TransformableProperty {
     static func optionalFromNSObject(object: NSObject) -> Any?
 }
 
@@ -114,7 +114,7 @@ extension Optional: OptionalTypeProtocol {
     }
 }
 
-protocol ImplicitlyUnwrappedTypeProtocol: HandyJSON {
+protocol ImplicitlyUnwrappedTypeProtocol: TransformableProperty {
     static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any?
 }
 
@@ -128,7 +128,7 @@ extension ImplicitlyUnwrappedOptional: ImplicitlyUnwrappedTypeProtocol {
     }
 }
 
-protocol ArrayTypeProtocol: HandyJSON {
+protocol ArrayTypeProtocol: TransformableProperty {
     static func arrayFromNSObject(object: NSObject) -> Any?
 }
 
@@ -148,7 +148,7 @@ extension Array: ArrayTypeProtocol {
     }
 }
 
-protocol DictionaryTypeProtocol: HandyJSON {
+protocol DictionaryTypeProtocol: TransformableProperty {
     static func dictionaryFromNSObject(object: NSObject) -> Any?
 }
 
@@ -247,7 +247,7 @@ extension Property {
         return currentOffset
     }
 
-    internal static func _transform(dict: NSDictionary, toType type: HandyJSON.Type) -> HandyJSON {
+    internal static func _transform(dict: NSDictionary, toType type: TransformableProperty.Type) -> TransformableProperty {
         var instance = type.init()
         let mirror = Mirror(reflecting: instance)
 
@@ -317,11 +317,11 @@ extension Property {
             if let dict = object as? NSDictionary {
                 return dict as? Self
             }
-        } else if self is HandyJSON.Type {
+        } else if self is TransformableProperty.Type {
 
             if let dict = object as? NSDictionary {
                 // nested object, transform recursively
-                return _transform(dict: dict, toType: self as! HandyJSON.Type) as? Self
+                return _transform(dict: dict, toType: self as! TransformableProperty.Type) as? Self
             }
         }
         return nil
@@ -430,7 +430,7 @@ extension Property {
                 }
             }
 
-            if let typedValue = value as? HandyJSON {
+            if let typedValue = value as? TransformableProperty {
                 if let result = self._serialize(from: typedValue) {
                     dict[key] = result
                 }
@@ -441,7 +441,7 @@ extension Property {
         return dict
     }
 
-    internal static func _serialize(from object: HandyJSON) -> Any? {
+    internal static func _serialize(from object: TransformableProperty) -> Any? {
         if type(of: object) is BasePropertyProtocol.Type {
             return object
         }
@@ -489,7 +489,7 @@ extension Property {
         case .optional:
             if mirror.children.count != 0 {
                 let (_, some) = mirror.children.first!
-                if let _value = some as? HandyJSON {
+                if let _value = some as? TransformableProperty {
                     return Self._serialize(from: _value)
                 }
             }
@@ -497,7 +497,7 @@ extension Property {
         case .collection, .set:
             var array = [Any]()
             mirror.children.enumerated().forEach({ (index, element) in
-                if let _value = element.value as? HandyJSON, let transformedValue = Self._serialize(from: _value) {
+                if let _value = element.value as? TransformableProperty, let transformedValue = Self._serialize(from: _value) {
                     array.append(transformedValue)
                 }
             })
@@ -512,7 +512,7 @@ extension Property {
                     if _index == 0 {
                         key = "\(_element.value)"
                     } else {
-                        if let _value = _element.value as? HandyJSON {
+                        if let _value = _element.value as? TransformableProperty {
                             value = Self._serialize(from: _value)
                         }
                     }
@@ -527,3 +527,6 @@ extension Property {
         }
     }
 }
+
+// expose HandyJSON protocol
+public protocol HandyJSON: TransformableProperty {}
