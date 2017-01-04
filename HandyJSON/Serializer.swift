@@ -119,28 +119,37 @@ public extension Set where Element: HandyJSON {
 
 public protocol ModelTransformerProtocol {
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     func toJSON() -> String?
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     func toPrettifyJSON() -> String?
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     func toSimpleDictionary() -> [String: Any]?
 }
 
 public protocol ArrayTransformerProtocol {
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     func toJSON() -> String?
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     func toPrettifyJSON() -> String?
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     func toSimpleArray() -> [Any]?
 }
 
 public protocol DictionaryTransformerProtocol {
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     func toJSON() -> String?
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     func toPrettifyJSON() -> String?
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     func toSimpleDictionary() -> [String: Any]?
 }
 
@@ -152,6 +161,7 @@ class GenericObjectTransformer: ModelTransformerProtocol, ArrayTransformerProtoc
         self.object = object
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public func toSimpleArray() -> [Any]? {
         if let _object = self.object, let result = GenericObjectTransformer.transformToSimpleObject(object: _object) {
             return result as? [Any]
@@ -159,6 +169,7 @@ class GenericObjectTransformer: ModelTransformerProtocol, ArrayTransformerProtoc
         return nil
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public func toSimpleDictionary() -> [String: Any]? {
         if let _object = self.object, let result = GenericObjectTransformer.transformToSimpleObject(object: _object) {
             return result as? [String: Any]
@@ -166,6 +177,7 @@ class GenericObjectTransformer: ModelTransformerProtocol, ArrayTransformerProtoc
         return nil
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public func toJSON() -> String? {
         if let _object = self.object, let result = GenericObjectTransformer.transformToSimpleObject(object: _object) {
             return GenericObjectTransformer.transformSimpleObjectToJSON(object: result)
@@ -173,6 +185,7 @@ class GenericObjectTransformer: ModelTransformerProtocol, ArrayTransformerProtoc
         return nil
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public func toPrettifyJSON() -> String? {
         if let result = toJSON() {
             let jsonData = result.data(using: String.Encoding.utf8)!
@@ -298,38 +311,47 @@ extension GenericObjectTransformer {
 
 public class JSONSerializer {
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public static func serialize(model: Any?) -> ModelTransformerProtocol {
         return GenericObjectTransformer(of: model)
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public static func serialize(model: AnyObject?) -> ModelTransformerProtocol {
         return GenericObjectTransformer(of: model)
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public static func serialize(array: [Any]?) -> ArrayTransformerProtocol {
         return GenericObjectTransformer(of: array)
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public static func serialize(array: [AnyObject]?) -> ArrayTransformerProtocol {
         return GenericObjectTransformer(of: array)
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public static func serialize(array: NSArray?) -> ArrayTransformerProtocol {
         return GenericObjectTransformer(of: array)
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public static func serialize(dict: [String: Any]?) -> DictionaryTransformerProtocol {
         return GenericObjectTransformer(of: dict)
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public static func serialize(dict: [String: AnyObject]?) -> DictionaryTransformerProtocol {
         return GenericObjectTransformer(of: dict)
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public static func serialize(dict: NSDictionary?) -> DictionaryTransformerProtocol {
         return GenericObjectTransformer(of: dict)
     }
 
+    @available(*, deprecated, message: "This method will be removed in the future, see the replacement serialization methods at: https://github.com/alibaba/handyjson")
     public static func serializeToJSON(object: Any?, prettify: Bool = false) -> String? {
         if prettify {
             return JSONSerializer.serialize(model: object).toPrettifyJSON()
