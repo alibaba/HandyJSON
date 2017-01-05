@@ -183,6 +183,12 @@ public func <<< (mapper: HelpingMapper, mapping: CustomMappingKeyValueTuple) {
     mapper.addCustomMapping(key: mapping.0, mappingInfo: mapping.1)
 }
 
+public func <<< (mapper: HelpingMapper, mappings: [CustomMappingKeyValueTuple]) {
+    mappings.forEach { (mapping) in
+        mapper.addCustomMapping(key: mapping.0, mappingInfo: mapping.1)
+    }
+}
+
 infix operator >>> : AssignmentPrecedence
 
 public func >>> <T> (mapper: HelpingMapper, property: inout T) {
