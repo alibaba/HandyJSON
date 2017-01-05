@@ -396,13 +396,11 @@ extension Property {
 
         propertys.forEach { (label, value) in
 
-            var transformablePropertyType: Property.Type?
             var key = label ?? ""
 
             var size = 0
 
             if let propertyType = type(of: value) as? Property.Type {
-                transformablePropertyType = propertyType
                 // if this property is conform to Property, we get it's memory layout directly
                 size = propertyType.size()
                 let distanceToCurrentProperty = propertyType.offsetToAlignment(value: currentOffset, align: propertyType.align())
