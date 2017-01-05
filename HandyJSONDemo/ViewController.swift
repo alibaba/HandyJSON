@@ -95,7 +95,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
 
         self.serialization()
-        // self.deserialization()
+        self.deserialization()
     }
 
     override func didReceiveMemoryWarning() {

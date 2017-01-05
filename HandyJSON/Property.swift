@@ -61,6 +61,13 @@ extension Property {
     }
 }
 
+fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInfo: (Int, Int)) -> Int {
+    let m = currentOffset % layoutInfo.1
+    let offset =  (m == 0 ? 0 : (layoutInfo.1 - m))
+    let size = layoutInfo.0
+    return size + offset
+}
+
 public protocol TransformableProperty: Property {
     init()
     mutating func mapping(mapper: HelpingMapper)
@@ -183,50 +190,55 @@ extension Property {
         var mutablePointer = pointer.advanced(by: currentOffset)
         mirror.children.forEach({ (child) in
 
-            var offset = 0, size = 0
+            var transformablePropertyType: Property.Type?
+            var key = child.label ?? ""
 
-            if let excludedPropertyLayout = mapper.getExcludedPropertyInfo(key: mutablePointer.hashValue) {
-                let m = currentOffset % excludedPropertyLayout.1
-                offset =  (m == 0 ? 0 : (excludedPropertyLayout.1 - m))
-                mutablePointer = mutablePointer.advanced(by: offset)
+            var size = 0
 
-                size = excludedPropertyLayout.0
-                mutablePointer = mutablePointer.advanced(by: size)
-                currentOffset += size
+            if let propertyType = type(of: child.value) as? Property.Type {
+                transformablePropertyType = propertyType
+                // if this property is conform to Property, we get it's memory layout directly
+                size = propertyType.size()
+                let distanceToCurrentProperty = propertyType.offsetToAlignment(value: currentOffset, align: propertyType.align())
+
+                // move to the beginning of the current property
+                mutablePointer = mutablePointer.advanced(by: distanceToCurrentProperty)
+                currentOffset += distanceToCurrentProperty
+            } else {
+                // else, the user should specify it by mapping or exluding, we find it out
+                if let shouldBeStartPosition = mapper.nextGreaterThanOrEqualKey(toKey: mutablePointer.hashValue) {
+                    let distance = shouldBeStartPosition - mutablePointer.hashValue
+
+                    // move to the beginning of the current property
+                    mutablePointer = mutablePointer.advanced(by: distance)
+                    currentOffset += distance
+                } else {
+                    // current property is not conform to Property, and user hasn't specify a explicit rule for it
+                    // we are unable to get its memory layout, the proccess should abort
+                    fatalError("the \(key) property should conform to HandyJSON protocol, or specify a Mapping/Exclude rule for it")
+                }
+            }
+
+            if let handler = mapper.getPropertyHandler(key: mutablePointer.hashValue), handler is ExcludePropertyHandler {
+                let excludeHandler = handler as! ExcludePropertyHandler
+                mutablePointer = mutablePointer.advanced(by: excludeHandler.propertySize)
+                currentOffset += excludeHandler.propertySize
                 return
             }
 
-            guard let propertyType = type(of: child.value) as? Property.Type else {
-                print("label: ", child.label ?? "", "type: ", "\(type(of: child.value))")
-                fatalError("Each property should be handyjson-property type")
-            }
-
-            size = propertyType.size()
-            offset = propertyType.offsetToAlignment(value: currentOffset, align: propertyType.align())
-
-            mutablePointer = mutablePointer.advanced(by: offset)
-            currentOffset += offset
-
-            guard let label = child.label else {
-                mutablePointer = mutablePointer.advanced(by: size)
-                currentOffset += size
-                return
-            }
-
-            var key = label
-
-            if let customTransform = mapper.getNameAndTransformer(key: mutablePointer.hashValue) {
+            if let handler = mapper.getPropertyHandler(key: mutablePointer.hashValue), handler is MappingPropertyHandler {
+                let mappingHandler = handler as! MappingPropertyHandler
                 // if specific key is set, replace the label
-                if let specifyKey = customTransform.0 {
+                if let specifyKey = mappingHandler.mappingName {
                     key = specifyKey
                 }
 
-                if let transformer = customTransform.1 {
+                if let transformer = mappingHandler.assignmentClosure {
                     // execute the transform closure
                     transformer(dict[key])
 
-                    mutablePointer = mutablePointer.advanced(by: size)
-                    currentOffset += size
+                    mutablePointer = mutablePointer.advanced(by: mappingHandler.propertySize)
+                    currentOffset += mappingHandler.propertySize
                     return
                 }
             }
@@ -237,8 +249,8 @@ extension Property {
                 return
             }
 
-            if let sv = propertyType.valueFrom(object: value) {
-                propertyType.codeIntoMemory(pointer: mutablePointer, value: sv)
+            if let sv = transformablePropertyType?.valueFrom(object: value) {
+                transformablePropertyType?.codeIntoMemory(pointer: mutablePointer, value: sv)
             }
 
             mutablePointer = mutablePointer.advanced(by: size)
@@ -383,49 +395,56 @@ extension Property {
         var mutablePointer = headPointer.advanced(by: currentOffset)
 
         propertys.forEach { (label, value) in
-            guard let _label = label else {
+
+            var transformablePropertyType: Property.Type?
+            var key = label ?? ""
+
+            var size = 0
+
+            if let propertyType = type(of: value) as? Property.Type {
+                transformablePropertyType = propertyType
+                // if this property is conform to Property, we get it's memory layout directly
+                size = propertyType.size()
+                let distanceToCurrentProperty = propertyType.offsetToAlignment(value: currentOffset, align: propertyType.align())
+
+                // move to the beginning of the current property
+                mutablePointer = mutablePointer.advanced(by: distanceToCurrentProperty)
+                currentOffset += distanceToCurrentProperty
+            } else {
+                // else, the user should specify it by mapping or exluding, we find it out
+                if let shouldBeStartPosition = mapper.nextGreaterThanOrEqualKey(toKey: mutablePointer.hashValue) {
+                    let distance = shouldBeStartPosition - mutablePointer.hashValue
+
+                    // move to the beginning of the current property
+                    mutablePointer = mutablePointer.advanced(by: distance)
+                    currentOffset += distance
+                } else {
+                    // current property is not conform to Property, and user hasn't specify a explicit rule for it
+                    // we are unable to get its memory layout, the proccess should abort
+                    fatalError("the \(key) property should conform to HandyJSON protocol, or specify a Mapping/Exclude rule for it")
+                }
+            }
+
+            if let handler = mapper.getPropertyHandler(key: mutablePointer.hashValue), handler is ExcludePropertyHandler {
+                let excludeHandler = handler as! ExcludePropertyHandler
+                mutablePointer = mutablePointer.advanced(by: excludeHandler.propertySize)
+                currentOffset += excludeHandler.propertySize
                 return
             }
-            var key = _label
 
-            var offset = 0, size = 0
-
-            if let excludedPropertyLayout = mapper.getExcludedPropertyInfo(key: mutablePointer.hashValue) {
-                let m = currentOffset % excludedPropertyLayout.1
-                offset =  (m == 0 ? 0 : (excludedPropertyLayout.1 - m))
-                mutablePointer = mutablePointer.advanced(by: offset)
-
-                size = excludedPropertyLayout.0
-                mutablePointer = mutablePointer.advanced(by: size)
-                currentOffset += size
-                return
-            }
-
-            guard let typedProperty = type(of: value) as? Property.Type else {
-                print("label: ", key, "type: ", "\(type(of: value))")
-                fatalError("Each property should be handyjson-property type")
-            }
-
-            size = typedProperty.size()
-            offset = typedProperty.offsetToAlignment(value: currentOffset, align: typedProperty.align())
-
-            mutablePointer = mutablePointer.advanced(by: offset)
-            currentOffset += offset
-
-            if let customTransform = mapper.getNameAndTransformer(key: mutablePointer.hashValue) {
+            if let handler = mapper.getPropertyHandler(key: mutablePointer.hashValue), handler is MappingPropertyHandler {
+                let mappingHandler = handler as! MappingPropertyHandler
                 // if specific key is set, replace the label
-                if let specifyKey = customTransform.0 {
+                if let specifyKey = mappingHandler.mappingName {
                     key = specifyKey
                 }
 
-                if let transformer = customTransform.2 {
-                    // execute the transform closure
-                    if let value = transformer(value) {
-                        dict[key] = value
+                if let transformer = mappingHandler.takeValueClosure {
+                    if let _transformedValue = transformer(value) {
+                        dict[key] = _transformedValue
                     }
-
-                    mutablePointer = mutablePointer.advanced(by: size)
-                    currentOffset += size
+                    mutablePointer = mutablePointer.advanced(by: mappingHandler.propertySize)
+                    currentOffset += mappingHandler.propertySize
                     return
                 }
             }
@@ -435,6 +454,7 @@ extension Property {
                     dict[key] = result
                 }
             }
+
             mutablePointer = mutablePointer.advanced(by: size)
             currentOffset += size
         }

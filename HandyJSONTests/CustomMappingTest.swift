@@ -128,16 +128,16 @@ class CustomMappingTest: XCTestCase {
             var empty: String?
         }
         struct A: HandyJSON {
-            var notHandyJSONProperty: NotHandyJSON?
             var name: String?
             var id: String?
             var height: Int?
+            var notHandyJSONProperty: NotHandyJSON?
 
             mutating func mapping(mapper: HelpingMapper) {
                 mapper.exclude(property: &notHandyJSONProperty)
             }
         }
-        let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
+        let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180, \"notHandyJSONProperty\":\"value\"}"
         let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "12345")
