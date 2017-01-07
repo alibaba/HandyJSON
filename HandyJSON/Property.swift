@@ -97,10 +97,6 @@ public struct InitWrapper<T: Property>: InitWrapperProtocol {
     }
 }
 
-public protocol HandyJSONEnum: Property {
-    static func makeInitWrapper() -> InitWrapperProtocol?
-}
-
 protocol BasePropertyProtocol: TransformableProperty {
 }
 
@@ -215,7 +211,7 @@ extension Property {
                 } else {
                     // current property is not conform to Property, and user hasn't specify a explicit rule for it
                     // we are unable to get its memory layout, the proccess should abort
-                    fatalError("the \(key) property should conform to HandyJSON protocol, or specify a Mapping/Exclude rule for it")
+                    fatalError("the \(key) property should conform to HandyJSON/HandyJSONEnum protocol, or specify a Mapping/Exclude rule for it")
                 }
             }
 
@@ -419,7 +415,7 @@ extension Property {
                 } else {
                     // current property is not conform to Property, and user hasn't specify a explicit rule for it
                     // we are unable to get its memory layout, the proccess should abort
-                    fatalError("the \(key) property should conform to HandyJSON protocol, or specify a Mapping/Exclude rule for it")
+                    fatalError("the \(key) property should conform to HandyJSON/HandyJSONEnum protocol, or specify a Mapping/Exclude rule for it")
                 }
             }
 
@@ -503,12 +499,19 @@ extension Property {
 
             return Self._serializeToDictionary(propertys: children, headPointer: headPointer, currentOffset: currentOffset, mapper: mapper) as Any
         case .enum:
-            return self as Any
+            if let _value = mirror.children.first?.value {
+                if let typedValue = _value as? TransformableProperty {
+                    return Self._serialize(from: typedValue)
+                }
+            }
+            return nil
         case .optional:
             if mirror.children.count != 0 {
                 let (_, some) = mirror.children.first!
                 if let _value = some as? TransformableProperty {
                     return Self._serialize(from: _value)
+                } else if let _value = some as? HandyJSONEnum {
+                    return _value
                 }
             }
             return nil
@@ -541,10 +544,15 @@ extension Property {
             })
             return dict as Any
         default:
-            return self as Any
+            return object as Any
         }
     }
 }
 
 // expose HandyJSON protocol
 public protocol HandyJSON: TransformableProperty {}
+
+public protocol HandyJSONEnum: Property {
+    static func makeInitWrapper() -> InitWrapperProtocol?
+}
+
