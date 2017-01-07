@@ -21,10 +21,9 @@ import Foundation
 
 typealias Byte = Int8
 
-public protocol Property {
-}
+public protocol Metrizable {}
 
-extension Property {
+extension Metrizable {
 
     // locate the head of a struct type object in memory
     mutating func headPointerOfStruct() -> UnsafeMutablePointer<Byte> {
@@ -68,7 +67,7 @@ fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInf
     return size + offset
 }
 
-public protocol TransformableProperty: Property {
+public protocol TransformableProperty: Metrizable {
     init()
     mutating func mapping(mapper: HelpingMapper)
 }
@@ -81,7 +80,7 @@ public protocol InitWrapperProtocol {
     func convertToEnum(object: NSObject) -> Any?
 }
 
-public struct InitWrapper<T: Property>: InitWrapperProtocol {
+public struct InitWrapper<T: Metrizable>: InitWrapperProtocol {
 
     var _init: ((T) -> Any?)?
 
@@ -92,6 +91,26 @@ public struct InitWrapper<T: Property>: InitWrapperProtocol {
     public func convertToEnum(object: NSObject) -> Any? {
         if let typedValue = T.valueFrom(object: object) {
             return _init?(typedValue)
+        }
+        return nil
+    }
+}
+
+public protocol TakeValueProtocol {
+    func rawValue(fromEnum: Any) -> Any?
+}
+
+public struct TakeValueWrapper<U>: TakeValueProtocol {
+
+    var _take: ((U) -> Any?)?
+
+    public init(takeValue: @escaping ((U) -> Any?)) {
+        self._take = takeValue
+    }
+
+    public func rawValue(fromEnum: Any) -> Any? {
+        if let take = self._take, let _enum = fromEnum as? U {
+            return take(_enum)
         }
         return nil
     }
@@ -110,7 +129,7 @@ extension Optional: OptionalTypeProtocol {
     }
 
     static func optionalFromNSObject(object: NSObject) -> Any? {
-        if let value = (Wrapped.self as? Property.Type)?.valueFrom(object: object) as? Wrapped {
+        if let value = (Wrapped.self as? Metrizable.Type)?.valueFrom(object: object) as? Wrapped {
             return Optional(value)
         }
         return nil
@@ -124,7 +143,7 @@ protocol ImplicitlyUnwrappedTypeProtocol: TransformableProperty {
 extension ImplicitlyUnwrappedOptional: ImplicitlyUnwrappedTypeProtocol {
 
     static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any? {
-        if let value = (Wrapped.self as? Property.Type)?.valueFrom(object: object) as? Wrapped {
+        if let value = (Wrapped.self as? Metrizable.Type)?.valueFrom(object: object) as? Wrapped {
             return ImplicitlyUnwrappedOptional(value)
         }
         return nil
@@ -143,7 +162,7 @@ extension Array: ArrayTypeProtocol {
         }
         var result: [Element] = [Element]()
         nsArray.forEach { (each) in
-            if let nsObject = each as? NSObject, let element = (Element.self as? Property.Type)?.valueFrom(object: nsObject) as? Element {
+            if let nsObject = each as? NSObject, let element = (Element.self as? Metrizable.Type)?.valueFrom(object: nsObject) as? Element {
                 result.append(element)
             }
         }
@@ -163,7 +182,7 @@ extension Dictionary: DictionaryTypeProtocol {
         }
         var result: [Key: Value] = [Key: Value]()
         nsDict.forEach { (key, value) in
-            if let sKey = key as? Key, let nsValue = value as? NSObject, let nValue = (Value.self as? Property.Type)?.valueFrom(object: nsValue) as? Value {
+            if let sKey = key as? Key, let nsValue = value as? NSObject, let nValue = (Value.self as? Metrizable.Type)?.valueFrom(object: nsValue) as? Value {
                 result[sKey] = nValue
             }
         }
@@ -171,117 +190,72 @@ extension Dictionary: DictionaryTypeProtocol {
     }
 }
 
-extension NSArray: Property {}
-extension NSDictionary: Property {}
+extension NSArray: Metrizable {}
+extension NSDictionary: Metrizable {}
 
-extension Property {
+extension Metrizable {
 
-    internal static func _transform(rawData dict: NSDictionary, toPointer pointer: UnsafeMutablePointer<Byte>, toOffset currentOffset: Int, byMirror mirror: Mirror, withMapper mapper: HelpingMapper) -> Int {
+    internal static func _transform(rawPointer: UnsafeMutableRawPointer, property: Property.Description, dict: NSDictionary, mapper: HelpingMapper) {
+        var key = property.key
+        let mutablePointer = rawPointer.advanced(by: property.offset)
 
-        var currentOffset = currentOffset
-        if let superMirror = mirror.superclassMirror {
-            currentOffset = _transform(rawData: dict, toPointer: pointer, toOffset: currentOffset, byMirror: superMirror, withMapper: mapper)
+        if let handler = mapper.getPropertyHandler(key: mutablePointer.hashValue), handler is ExcludePropertyHandler {
+            return
         }
 
-        var mutablePointer = pointer.advanced(by: currentOffset)
-        mirror.children.forEach({ (child) in
-
-            var transformablePropertyType: Property.Type?
-            var key = child.label ?? ""
-
-            var size = 0
-
-            if let propertyType = type(of: child.value) as? Property.Type {
-                transformablePropertyType = propertyType
-                // if this property is conform to Property, we get it's memory layout directly
-                size = propertyType.size()
-                let distanceToCurrentProperty = propertyType.offsetToAlignment(value: currentOffset, align: propertyType.align())
-
-                // move to the beginning of the current property
-                mutablePointer = mutablePointer.advanced(by: distanceToCurrentProperty)
-                currentOffset += distanceToCurrentProperty
-            } else {
-                // else, the user should specify it by mapping or exluding, we find it out
-                if let shouldBeStartPosition = mapper.nextGreaterThanOrEqualKey(toKey: mutablePointer.hashValue) {
-                    let distance = shouldBeStartPosition - mutablePointer.hashValue
-
-                    // move to the beginning of the current property
-                    mutablePointer = mutablePointer.advanced(by: distance)
-                    currentOffset += distance
-                } else {
-                    // current property is not conform to Property, and user hasn't specify a explicit rule for it
-                    // we are unable to get its memory layout, the proccess should abort
-                    fatalError("the \(key) property should conform to HandyJSON/HandyJSONEnum protocol, or specify a Mapping/Exclude rule for it")
-                }
+        if let handler = mapper.getPropertyHandler(key: mutablePointer.hashValue), handler is MappingPropertyHandler {
+            let mappingHandler = handler as! MappingPropertyHandler
+            // if specific key is set, replace the label
+            if let specifyKey = mappingHandler.mappingName {
+                key = specifyKey
             }
 
-            if let handler = mapper.getPropertyHandler(key: mutablePointer.hashValue), handler is ExcludePropertyHandler {
-                let excludeHandler = handler as! ExcludePropertyHandler
-                mutablePointer = mutablePointer.advanced(by: excludeHandler.propertySize)
-                currentOffset += excludeHandler.propertySize
+            if let transformer = mappingHandler.assignmentClosure {
+                // execute the transform closure
+                transformer(dict[key])
                 return
             }
+        }
 
-            if let handler = mapper.getPropertyHandler(key: mutablePointer.hashValue), handler is MappingPropertyHandler {
-                let mappingHandler = handler as! MappingPropertyHandler
-                // if specific key is set, replace the label
-                if let specifyKey = mappingHandler.mappingName {
-                    key = specifyKey
-                }
+        guard let rawValue = dict[key] as? NSObject else {
+            return
+        }
 
-                if let transformer = mappingHandler.assignmentClosure {
-                    // execute the transform closure
-                    transformer(dict[key])
-
-                    mutablePointer = mutablePointer.advanced(by: mappingHandler.propertySize)
-                    currentOffset += mappingHandler.propertySize
-                    return
-                }
-            }
-
-            guard let value = dict[key] as? NSObject else {
-                mutablePointer = mutablePointer.advanced(by: size)
-                currentOffset += size
+        if let transformableType = property.type as? TransformableProperty.Type {
+            if let sv = transformableType.valueFrom(object: rawValue) {
+                extensions(of: transformableType).write(sv, to: mutablePointer)
                 return
             }
-
-            if let sv = transformablePropertyType?.valueFrom(object: value) {
-                transformablePropertyType?.codeIntoMemory(pointer: mutablePointer, value: sv)
+        } else {
+            if let sv = extensions(of: property.type).tryTakeValue(rawValue) {
+                extensions(of: property.type).write(sv, to: mutablePointer)
+                return
             }
-
-            mutablePointer = mutablePointer.advanced(by: size)
-            currentOffset += size
-        })
-        return currentOffset
+        }
+        print("property: \(property.key) hasn't been written in")
     }
 
-    internal static func _transform(dict: NSDictionary, toType type: TransformableProperty.Type) -> TransformableProperty {
+    internal static func _transform(dict: NSDictionary, toType type: TransformableProperty.Type) -> TransformableProperty? {
         var instance = type.init()
-        let mirror = Mirror(reflecting: instance)
 
-        guard let dStyle = mirror.displayStyle else {
-            fatalError("Target type must has a display type")
+        guard let properties = getProperties(forType: type) else {
+            return nil
         }
 
-        var pointer: UnsafeMutablePointer<Byte>!
         let mapper = HelpingMapper()
-        var currentOffset = 0
-
         // do user-specified mapping first
         instance.mapping(mapper: mapper)
 
-        if dStyle == .class {
-            pointer = instance.headPointerOfClass()
-            // for 64bit architecture, it's 16
-            // for 32bit architecture, it's 12
-            currentOffset = 8 + MemoryLayout<Int>.size
-        } else if dStyle == .struct {
-            pointer = instance.headPointerOfStruct()
+        let rawPointer: UnsafeMutableRawPointer
+        if type is AnyClass {
+            rawPointer = UnsafeMutableRawPointer(instance.headPointerOfClass())
         } else {
-            fatalError("Target object must be class or struct")
+            rawPointer = UnsafeMutableRawPointer(instance.headPointerOfStruct())
         }
 
-        _ = _transform(rawData: dict, toPointer: pointer, toOffset: currentOffset, byMirror: mirror, withMapper: mapper)
+        properties.forEach { (property) in
+            _transform(rawPointer: rawPointer, property: property, dict: dict, mapper: mapper)
+        }
 
         return instance
     }
@@ -375,14 +349,9 @@ extension Property {
         }
         return nil
     }
-
-    // keep in mind, self type is the same with type of value
-    internal static func codeIntoMemory(pointer: UnsafeMutablePointer<Byte>, value: Property) {
-        pointer.withMemoryRebound(to: Self.self, capacity: 1, { return $0 }).pointee = value as! Self
-    }
 }
 
-extension Property {
+extension Metrizable {
 
     internal static func _serializeToDictionary(propertys: [(String?, Any)], headPointer: UnsafeMutablePointer<Byte>, currentOffset: Int, mapper: HelpingMapper) -> [String: Any] {
 
@@ -396,8 +365,8 @@ extension Property {
 
             var size = 0
 
-            if let propertyType = type(of: value) as? Property.Type {
-                // if this property is conform to Property, we get it's memory layout directly
+            if let propertyType = type(of: value) as? Metrizable.Type {
+                // if this property is conform to Metrizable, we get it's memory layout directly
                 size = propertyType.size()
                 let distanceToCurrentProperty = propertyType.offsetToAlignment(value: currentOffset, align: propertyType.align())
 
@@ -413,7 +382,7 @@ extension Property {
                     mutablePointer = mutablePointer.advanced(by: distance)
                     currentOffset += distance
                 } else {
-                    // current property is not conform to Property, and user hasn't specify a explicit rule for it
+                    // current property is not conform to Metrizable, and user hasn't specify a explicit rule for it
                     // we are unable to get its memory layout, the proccess should abort
                     fatalError("the \(key) property should conform to HandyJSON/HandyJSONEnum protocol, or specify a Mapping/Exclude rule for it")
                 }
@@ -552,7 +521,8 @@ extension Property {
 // expose HandyJSON protocol
 public protocol HandyJSON: TransformableProperty {}
 
-public protocol HandyJSONEnum: Property {
-    static func makeInitWrapper() -> InitWrapperProtocol?
+public protocol HandyJSONEnum: Metrizable {
+    static func makeInitWrapper() -> InitWrapperProtocol
+    static func takeValueWrapper() -> TakeValueProtocol
 }
 

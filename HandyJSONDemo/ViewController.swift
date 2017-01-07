@@ -26,8 +26,11 @@ enum Grade: Int {
 }
 
 extension Grade: HandyJSONEnum {
-    static func makeInitWrapper() -> InitWrapperProtocol? {
+    static func makeInitWrapper() -> InitWrapperProtocol {
         return InitWrapper<Int>(rawInit: Grade.init)
+    }
+    static func takeValueWrapper() -> TakeValueProtocol {
+        return TakeValueWrapper<Grade>(takeValue: { $0.rawValue })
     }
 }
 
@@ -35,8 +38,11 @@ enum Gender: String, HandyJSONEnum {
     case Male = "Male"
     case Female = "Female"
 
-    static func makeInitWrapper() -> InitWrapperProtocol? {
+    static func makeInitWrapper() -> InitWrapperProtocol {
         return InitWrapper<String>(rawInit: Gender.init)
+    }
+    static func takeValueWrapper() -> TakeValueProtocol {
+        return TakeValueWrapper<Gender>(takeValue: { $0.rawValue })
     }
 }
 
@@ -70,22 +76,22 @@ class Student: HandyJSON {
 
     func mapping(mapper: HelpingMapper) {
 
-        mapper <<< [
-            self.age <- TransformOf<Int, Int>(fromJSON: { return ($0 ?? 0) + 2 }, toJSON: { return $0 }),
+        // mapper <<< [
+        //     self.age <- TransformOf<Int, Int>(fromJSON: { return ($0 ?? 0) + 2 }, toJSON: { return $0 }),
 
-            self.gender <- TransformOf<Gender, String>(fromJSON: { (rawString) -> Gender? in
-                if let _str = rawString, _str == Gender.Female.rawValue {
-                    return .Female
-                }
-                return .Male
-            }, toJSON: { (enumValue) -> String? in
-                return enumValue?.rawValue
-            }),
+        //     self.gender <- TransformOf<Gender, String>(fromJSON: { (rawString) -> Gender? in
+        //         if let _str = rawString, _str == Gender.Female.rawValue {
+        //             return .Female
+        //         }
+        //         return .Male
+        //     }, toJSON: { (enumValue) -> String? in
+        //         return enumValue?.rawValue
+        //     }),
 
-            self.name <- ("json_name", TransformOf<String, String>(fromJSON: { $0 }, toJSON: { $0 }))
-        ]
+        //     self.name <- ("json_name", TransformOf<String, String>(fromJSON: { $0 }, toJSON: { $0 }))
+        // ]
 
-        mapper >>> self.teacher
+        // mapper >>> self.teacher
     }
 }
 
@@ -111,7 +117,7 @@ class ViewController: UIViewController {
         let student = Student()
         student.name = "Jack"
         student.gender = .Female
-        student.subjects = [Subject(name: "Math", id: 1, credit: 23, lessonPeriod: 64), Subject(name: "English", id: 2, credit: 12, lessonPeriod: 32)]
+        // student.subjects = [Subject(name: "Math", id: 1, credit: 23, lessonPeriod: 64), Subject(name: "English", id: 2, credit: 12, lessonPeriod: 32)]
 
         print(student.toJSON()!)
         print(student.toJSONString()!)
@@ -123,7 +129,7 @@ class ViewController: UIViewController {
     }
 
     func deserialization() {
-        let jsonString = "{\"id\":\"77544\",\"json_name\":\"Tom Li\",\"age\":18,\"grade\":2,\"height\":180,\"gender\":\"Female\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subject\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
+        let jsonString = "{\"id\":\"77544\",\"json_name\":\"Tom Li\",\"age\":18,\"grade\":2,\"height\":180,\"gender\":\"Female\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subjects\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
 
         if let student = JSONDeserializer<Student>.deserializeFrom(json: jsonString) {
             print(student.toJSON()!)
