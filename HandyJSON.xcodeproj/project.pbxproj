@@ -63,6 +63,14 @@
 		21A191F41E21E62500CD7609 /* BasicTypesTestsFromJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A191F31E21E62500CD7609 /* BasicTypesTestsFromJSON.swift */; };
 		21A191F51E21E62E00CD7609 /* BasicTypesTestsFromJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A191F31E21E62500CD7609 /* BasicTypesTestsFromJSON.swift */; };
 		21A191F61E21E63100CD7609 /* BasicTypesTestsFromJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A191F31E21E62500CD7609 /* BasicTypesTestsFromJSON.swift */; };
+		21A191FD1E222E8C00CD7609 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A191FC1E222E8C00CD7609 /* Logger.swift */; };
+		21A191FE1E222E8C00CD7609 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A191FC1E222E8C00CD7609 /* Logger.swift */; };
+		21A191FF1E222E8C00CD7609 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A191FC1E222E8C00CD7609 /* Logger.swift */; };
+		21A192001E222E8C00CD7609 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A191FC1E222E8C00CD7609 /* Logger.swift */; };
+		21A192021E22332000CD7609 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A192011E22332000CD7609 /* Configuration.swift */; };
+		21A192031E22332000CD7609 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A192011E22332000CD7609 /* Configuration.swift */; };
+		21A192041E22332000CD7609 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A192011E22332000CD7609 /* Configuration.swift */; };
+		21A192051E22332000CD7609 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A192011E22332000CD7609 /* Configuration.swift */; };
 		21A7A59D1D9EBF450015E3F0 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* Serializer.swift */; };
 		21AC1A001DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */; };
 		21AC1A011DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */; };
@@ -235,6 +243,8 @@
 		217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructObjectTest.swift; sourceTree = "<group>"; };
 		217B04711D571B9F0035A8E2 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 		21A191F31E21E62500CD7609 /* BasicTypesTestsFromJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTypesTestsFromJSON.swift; sourceTree = "<group>"; };
+		21A191FC1E222E8C00CD7609 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		21A192011E22332000CD7609 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		21A7A59C1D9EBF450015E3F0 /* Serializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serializer.swift; sourceTree = "<group>"; };
 		21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializeToSimpleObjectTest.swift; sourceTree = "<group>"; };
 		21DFCA521E18EB9C00856775 /* DateTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTransform.swift; sourceTree = "<group>"; };
@@ -378,6 +388,8 @@
 				21520C511D3341FC00F53111 /* Protocol.swift */,
 				21520C521D3341FC00F53111 /* Deserializer.swift */,
 				21A7A59C1D9EBF450015E3F0 /* Serializer.swift */,
+				21A191FC1E222E8C00CD7609 /* Logger.swift */,
+				21A192011E22332000CD7609 /* Configuration.swift */,
 				210A76271E210F5B000C3DDD /* Reflection */,
 				21DFCA381E18EA9E00856775 /* Transforms */,
 				392627FF1DA3E1A400B0C28D /* Supporting Files */,
@@ -812,6 +824,8 @@
 				21520C541D3341FC00F53111 /* BasicType.swift in Sources */,
 				21DFCA5A1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */,
 				21DFCA5E1E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */,
+				21A192021E22332000CD7609 /* Configuration.swift in Sources */,
+				21A191FD1E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76801E210FBB000C3DDD /* Properties.swift in Sources */,
 				217B04681D56D2B50035A8E2 /* Converter.swift in Sources */,
 				2179B6B31D911DB4007B0320 /* HelpingMapper.swift in Sources */,
@@ -872,6 +886,8 @@
 				393E0FA81DA165E300B3BC12 /* Protocol.swift in Sources */,
 				21DFCA5B1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */,
 				21DFCA5F1E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */,
+				21A192031E22332000CD7609 /* Configuration.swift in Sources */,
+				21A191FE1E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76811E210FBB000C3DDD /* Properties.swift in Sources */,
 				393E0FA91DA165E300B3BC12 /* Deserializer.swift in Sources */,
 				393E0FAA1DA165E300B3BC12 /* Serializer.swift in Sources */,
@@ -903,6 +919,8 @@
 				393E0FCF1DA2484F00B3BC12 /* Protocol.swift in Sources */,
 				21DFCA5C1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */,
 				21DFCA601E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */,
+				21A192041E22332000CD7609 /* Configuration.swift in Sources */,
+				21A191FF1E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76821E210FBB000C3DDD /* Properties.swift in Sources */,
 				393E0FD01DA2484F00B3BC12 /* Deserializer.swift in Sources */,
 				393E0FD11DA2484F00B3BC12 /* Serializer.swift in Sources */,
@@ -952,6 +970,8 @@
 				393E0FFB1DA2495900B3BC12 /* Protocol.swift in Sources */,
 				21DFCA5D1E18EB9C00856775 /* DateFormatterTransform.swift in Sources */,
 				21DFCA611E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */,
+				21A192051E22332000CD7609 /* Configuration.swift in Sources */,
+				21A192001E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76831E210FBB000C3DDD /* Properties.swift in Sources */,
 				393E0FFC1DA2495900B3BC12 /* Deserializer.swift in Sources */,
 				393E0FFD1DA2495900B3BC12 /* Serializer.swift in Sources */,

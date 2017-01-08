@@ -169,6 +169,9 @@ extension Array: ArrayTypeProtocol {
 
     static func arrayFromNSObject(object: NSObject) -> Any? {
         guard let nsArray = object as? NSArray else {
+            ClosureExecutor.executeWhenDebug {
+                print("Expect object to be an NSArray but it's not")
+            }
             return nil
         }
         var result: [Element] = [Element]()
@@ -200,6 +203,9 @@ extension Set: SetTypeProtocol {
 
     static func setFromNSObject(object: NSObject) -> Any? {
         guard let nsArray = object as? NSArray else {
+            ClosureExecutor.executeWhenDebug {
+                print("Expect object to be an NSArray but it's not")
+            }
             return nil
         }
         var result: Set<Element> = Set<Element>()
@@ -231,6 +237,9 @@ extension Dictionary: DictionaryTypeProtocol {
 
     static func dictionaryFromNSObject(object: NSObject) -> Any? {
         guard let nsDict = object as? NSDictionary else {
+            ClosureExecutor.executeWhenDebug {
+                print("Expect object to be an NSDictionary but it's not")
+            }
             return nil
         }
         var result: [Key: Value] = [Key: Value]()

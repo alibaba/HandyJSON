@@ -32,6 +32,9 @@ extension PropertiesMappable {
             var key = label ?? ""
 
             guard let offset = offsetInfo[key] else {
+                ClosureExecutor.executeWhenError {
+                    print("Can not find offset info for property: \(key)")
+                }
                 return
             }
 
@@ -58,6 +61,22 @@ extension PropertiesMappable {
             if let typedValue = value as? PropertiesTransformable {
                 if let result = self._serializeAny(object: typedValue) {
                     dict[key] = result
+                    return
+                }
+            }
+
+            ClosureExecutor.executeWhenDebug {
+                print("The value for key: \(key) is not transformable type")
+            }
+
+            // if the value is not nil, insert to the resut dict directly
+            if let optional = value as? OptionalTypeProtocol {
+                if let _value = optional.getWrappedValue() {
+                    dict[key] = _value
+                }
+            } else if let implicit = value as? ImplicitlyUnwrappedTypeProtocol {
+                if let _value = implicit.getWrappedValue() {
+                    dict[key] = _value
                 }
             }
         }
@@ -129,6 +148,9 @@ extension PropertiesMappable {
             let mapper = HelpingMapper()
             // do user-specified mapping first
             if !(object is PropertiesMappable) {
+                ClosureExecutor.executeWhenError {
+                    print("This model of type: \(type(of: object)) is not mappable")
+                }
                 return nil
             }
             var mutableObject = object as! PropertiesMappable
@@ -154,6 +176,9 @@ extension PropertiesMappable {
 
             var offsetInfo = [String: Int]()
             guard let properties = getProperties(forType: type(of: object)) else {
+                ClosureExecutor.executeWhenError {
+                    print("Can not get properties info for type: \(type(of: object))")
+                }
                 return nil
             }
 
@@ -192,7 +217,9 @@ public extension HandyJSON {
                     }
                     return String(data: jsonData, encoding: .utf8)
                 } catch let error {
-                    print(error)
+                    ClosureExecutor.executeWhenError {
+                        print(error)
+                    }
                 }
             }
         }
@@ -222,7 +249,9 @@ public extension Array where Element: HandyJSON {
                 }
                 return String(data: jsonData, encoding: .utf8)
             } catch let error {
-                print(error)
+                ClosureExecutor.executeWhenError {
+                    print(error)
+                }
             }
         }
         return nil
@@ -251,7 +280,9 @@ public extension Set where Element: HandyJSON {
                 }
                 return String(data: jsonData, encoding: .utf8)
             } catch let error {
-                print(error)
+                ClosureExecutor.executeWhenError {
+                    print(error)
+                }
             }
         }
         return nil

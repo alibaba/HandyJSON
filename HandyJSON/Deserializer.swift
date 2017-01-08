@@ -21,11 +21,14 @@ import Foundation
 
 extension PropertiesMappable {
 
-    internal static func _transform(rawPointer: UnsafeMutableRawPointer, property: Property.Description, dict: NSDictionary, mapper: HelpingMapper) {
+    static func _transform(rawPointer: UnsafeMutableRawPointer, property: Property.Description, dict: NSDictionary, mapper: HelpingMapper) {
         var key = property.key
         let mutablePointer = rawPointer.advanced(by: property.offset)
 
         if mapper.propertyExcluded(key: mutablePointer.hashValue) {
+            ClosureExecutor.executeWhenDebug {
+                print("Exclude property: \(key)")
+            }
             return
         }
 
@@ -43,6 +46,9 @@ extension PropertiesMappable {
         }
 
         guard let rawValue = dict[key] as? NSObject else {
+            ClosureExecutor.executeWhenDebug {
+                print("Can not find a value from dictionary for property: \(key)")
+            }
             return
         }
 
@@ -57,13 +63,18 @@ extension PropertiesMappable {
                 return
             }
         }
-        print("property: \(property.key) hasn't been written in")
+        ClosureExecutor.executeWhenDebug {
+            print("Property: \(property.key) hasn't been written in")
+        }
     }
 
-    internal static func _transform(dict: NSDictionary, toType: PropertiesMappable.Type) -> PropertiesMappable? {
+    static func _transform(dict: NSDictionary, toType: PropertiesMappable.Type) -> PropertiesMappable? {
         var instance = toType.init()
 
         guard let properties = getProperties(forType: toType) else {
+            ClosureExecutor.executeWhenError {
+                print("Failed when try to get properties from type: \(type(of: toType))")
+            }
             return nil
         }
 
@@ -125,7 +136,9 @@ public class JSONDeserializer<T: HandyJSON> {
                 return self.deserializeFrom(dict: jsonDict, designatedPath: designatedPath)
             }
         } catch let error {
-            print(error)
+            ClosureExecutor.executeWhenError {
+                print(error)
+            }
         }
         return nil
     }
@@ -150,12 +163,14 @@ public class JSONDeserializer<T: HandyJSON> {
                 })
             }
         } catch let error {
-            print(error)
+            ClosureExecutor.executeWhenError {
+                print(error)
+            }
         }
         return nil
     }
 
-    internal static func getObject(inside jsonObject: NSObject?, by designatedPath: String?) -> NSObject? {
+    static func getObject(inside jsonObject: NSObject?, by designatedPath: String?) -> NSObject? {
         var nodeValue: NSObject? = jsonObject
         var abort = false
         if let paths = designatedPath?.components(separatedBy: "."), paths.count > 0 {
