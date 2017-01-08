@@ -411,4 +411,19 @@ class BasicTypesTestsFromJSON: XCTestCase {
         XCTAssertTrue(testSet.dictStringDouble.count > 0)
         XCTAssertTrue(testSet.dictStringFloat.count > 0)
     }
+
+    func testCaseInsensitiveMappingFromJSON() {
+        HandyJSONConfiguration.deserializeOptions = .caseInsensitive
+
+        let value: Bool = true
+        let JSONString = "{\"Bool\" : \(value), \"booloptIonal\" : \(value), \"BOOLIMPLICITLYUNWRAPPED\" : \(value)}"
+
+        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString)
+
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject?.bool, value)
+        XCTAssertEqual(mappedObject?.boolOptional, value)
+        XCTAssertEqual(mappedObject?.boolImplicitlyUnwrapped, value)
+        HandyJSONConfiguration.deserializeOptions = .defaultOptions
+    }
 }

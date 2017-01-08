@@ -23,6 +23,11 @@ extension PropertiesMappable {
 
     static func _transform(rawPointer: UnsafeMutableRawPointer, property: Property.Description, dict: NSDictionary, mapper: HelpingMapper) {
         var key = property.key
+
+        if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
+            key = key.lowercased()
+        }
+
         let mutablePointer = rawPointer.advanced(by: property.offset)
 
         if mapper.propertyExcluded(key: mutablePointer.hashValue) {
@@ -89,13 +94,25 @@ extension PropertiesMappable {
             rawPointer = UnsafeMutableRawPointer(instance.headPointerOfStruct())
         }
 
+        var _dict = dict
+        if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
+            let newDict = NSMutableDictionary()
+            dict.allKeys.forEach({ (key) in
+                if let sKey = key as? String {
+                    newDict[sKey.lowercased()] = dict[key]
+                } else {
+                    newDict[key] = dict[key]
+                }
+            })
+            _dict = newDict
+        }
+
         properties.forEach { (property) in
-            _transform(rawPointer: rawPointer, property: property, dict: dict, mapper: mapper)
+            _transform(rawPointer: rawPointer, property: property, dict: _dict, mapper: mapper)
         }
 
         return instance
     }
-
 }
 
 
