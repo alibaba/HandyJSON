@@ -71,27 +71,57 @@ extension Metrizable {
             return enumType.takeValueWrapper().rawValue(fromEnum: object)
         } else if objectType is BasePropertyProtocol.Type {
             return object
-        }
-
-        let mirror = Mirror(reflecting: object)
-
-        if objectType is ImplicitlyUnwrappedTypeProtocol.Type {
-            if let _value = mirror.children.first?.value {
+        } else if let optional = object as? OptionalTypeProtocol {
+            if let _value = optional.getWrappedValue() {
                 if let _transformable = _value as? Metrizable {
                     return Self._serialize(from: _transformable)
                 }
                 return _value
             }
             return nil
+        } else if let implicit = object as? ImplicitlyUnwrappedTypeProtocol {
+            if let _value = implicit.getWrappedValue() {
+                if let _transformable = _value as? Metrizable {
+                    return Self._serialize(from: _transformable)
+                }
+                return _value
+            }
+            return nil
+        } else if let arrayObject = object as? ArrayTypeProtocol {
+            let _value = arrayObject.customMap({ (each) -> (Any?) in
+                if let _transformable = each as? Metrizable {
+                    return Self._serialize(from: _transformable)
+                }
+                return each
+            })
+            return _value
+        } else if let setObject = object as? SetTypeProtocol {
+            let _value = setObject.customMap({ (each) -> (Any?) in
+                if let _transformable = each as? Metrizable {
+                    return Self._serialize(from: _transformable)
+                }
+                return each
+            })
+            return _value
+        } else if let dictObject = object as? DictionaryTypeProtocol {
+            let _value = dictObject.customMap({ (eachValue) -> Any? in
+                if let _transformable = eachValue as? Metrizable {
+                    return Self._serialize(from: _transformable)
+                }
+                return eachValue
+            })
+            return _value
         }
+
+        let mirror = Mirror(reflecting: object)
 
         guard let displayStyle = mirror.displayStyle else {
             return self
         }
 
+        // after filtered by protocols above, now we expect the type is pure struct/class
         switch displayStyle {
         case .class, .struct:
-
             let mapper = HelpingMapper()
             // do user-specified mapping first
             if !(object is TransformableProperty) {
@@ -134,46 +164,6 @@ extension Metrizable {
             })
 
             return Self._serializeToDictionary(propertys: children, headPointer: rawPointer, offsetInfo: offsetInfo, mapper: mapper) as Any
-        case .enum:
-            return object as Any
-        case .optional:
-            if mirror.children.count != 0 {
-                let (_, some) = mirror.children.first!
-                if let _value = some as? Metrizable {
-                    return Self._serialize(from: _value)
-                } else {
-                    return some
-                }
-            }
-            return nil
-        case .collection, .set:
-            var array = [Any]()
-            mirror.children.enumerated().forEach({ (index, element) in
-                if let _value = element.value as? Metrizable, let transformedValue = Self._serialize(from: _value) {
-                    array.append(transformedValue)
-                }
-            })
-            return array as Any
-        case .dictionary:
-            var dict = [String: Any]()
-            mirror.children.enumerated().forEach({ (index, element) in
-                let _mirror = Mirror(reflecting: element.value)
-                var key: String?
-                var value: Any?
-                _mirror.children.enumerated().forEach({ (_index, _element) in
-                    if _index == 0 {
-                        key = "\(_element.value)"
-                    } else {
-                        if let _value = _element.value as? Metrizable {
-                            value = Self._serialize(from: _value)
-                        }
-                    }
-                })
-                if (key ?? "") != "" && value != nil {
-                    dict[key!] = value!
-                }
-            })
-            return dict as Any
         default:
             return object as Any
         }

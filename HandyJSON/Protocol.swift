@@ -121,6 +121,7 @@ protocol BasePropertyProtocol: TransformableProperty {
 
 protocol OptionalTypeProtocol: TransformableProperty {
     static func optionalFromNSObject(object: NSObject) -> Any?
+    func getWrappedValue() -> Any?
 }
 
 extension Optional: OptionalTypeProtocol {
@@ -136,10 +137,17 @@ extension Optional: OptionalTypeProtocol {
         }
         return nil
     }
+
+    func getWrappedValue() -> Any? {
+        return self.map({ (wrapped) -> Any in
+            return wrapped as Any
+        })
+    }
 }
 
 protocol ImplicitlyUnwrappedTypeProtocol: TransformableProperty {
     static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any?
+    func getWrappedValue() -> Any?
 }
 
 extension ImplicitlyUnwrappedOptional: ImplicitlyUnwrappedTypeProtocol {
@@ -152,10 +160,18 @@ extension ImplicitlyUnwrappedOptional: ImplicitlyUnwrappedTypeProtocol {
         }
         return nil
     }
+
+    func getWrappedValue() -> Any? {
+        if case let .some(x) = self {
+            return x
+        }
+        return nil
+    }
 }
 
 protocol ArrayTypeProtocol: TransformableProperty {
     static func arrayFromNSObject(object: NSObject) -> Any?
+    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]?
 }
 
 extension Array: ArrayTypeProtocol {
@@ -176,10 +192,17 @@ extension Array: ArrayTypeProtocol {
         }
         return result
     }
+
+    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]? {
+        return self.map({ (each) -> Any? in
+            return transform(each)
+        })
+    }
 }
 
 protocol SetTypeProtocol: TransformableProperty {
     static func setFromNSObject(object: NSObject) -> Any?
+    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]?
 }
 
 extension Set: SetTypeProtocol {
@@ -200,10 +223,17 @@ extension Set: SetTypeProtocol {
         }
         return result
     }
+
+    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]? {
+        return self.map({ (each) -> Any? in
+            return transform(each)
+        })
+    }
 }
 
 protocol DictionaryTypeProtocol: TransformableProperty {
     static func dictionaryFromNSObject(object: NSObject) -> Any?
+    func customMap(_ transformValue: ((Any) -> Any?)) -> [String: Any?]?
 }
 
 extension Dictionary: DictionaryTypeProtocol {
@@ -222,6 +252,16 @@ extension Dictionary: DictionaryTypeProtocol {
                 }
             }
         }
+        return result
+    }
+
+    func customMap(_ transformValue: ((Any) -> Any?)) -> [String: Any?]? {
+        var result = [String: Any?]()
+        self.forEach({ (key, value) in
+            if let sKey = key as? String, let _value = transformValue(value) {
+                result[sKey] = _value
+            }
+        })
         return result
     }
 }
