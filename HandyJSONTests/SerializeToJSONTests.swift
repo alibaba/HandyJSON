@@ -230,7 +230,6 @@ class serializeToJSONTests: XCTestCase {
 
         let expected = "{\"b\":{\"b\":111,\"a\":\"hello\",\"d\":{\"name1\":\"value1\",\"name2\":\"value2\"},\"c\":[1.0,2.1,3.0,4.0]},\"a\":{\"b\":111,\"a\":\"hello\",\"d\":{\"name1\":\"value1\",\"name2\":\"value2\"},\"c\":[1.0,2.1,3.0,4.0]}}"
         jsonStringCompareHelper(JSONSerializer.serializeToJSON(object: B()), expected)
-        print(JSONSerializer.serializeToJSON(object: B(), prettify: true)!)
     }
 
     func testForCompositionStruct() {
@@ -260,7 +259,6 @@ class serializeToJSONTests: XCTestCase {
 
         let expected = "{\"b\":{\"b\":111,\"a\":\"hello\",\"d\":{\"name1\":\"value1\",\"name2\":\"value2\"},\"c\":[1.0,2.1,3.0,4.0]},\"a\":{\"b\":111,\"a\":\"hello\",\"d\":{\"name1\":\"value1\",\"name2\":\"value2\"},\"c\":[1.0,2.1,3.0,4.0]}}"
         jsonStringCompareHelper(JSONSerializer.serializeToJSON(object: B()), expected)
-        print(JSONSerializer.serializeToJSON(object: B(), prettify: true)!)
     }
 
     func testForClassWithComplexDictionaryProperty() {

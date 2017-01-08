@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
-
-xcodebuild -scheme "HandyJSON iOS Tests" -destination "platform=iOS Simulator,name=iPhone 6" test
+xcodebuild -scheme "HandyJSON iOS Tests" -sdk "iphonesimulator10.2" -destination "OS=10.2,name=iPhone 7" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c;
 
 xcodebuild -scheme "HandyJSON macOS" test
 

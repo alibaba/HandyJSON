@@ -224,24 +224,36 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
         enum AEnum: Int, HandyJSONEnum {
             case A = 1, B = 2, C = 3
 
-            static func makeInitWrapper() -> InitWrapperProtocol? {
+            static func makeInitWrapper() -> InitWrapperProtocol {
                 return InitWrapper<Int>(rawInit: AEnum.init)
+            }
+
+            static func takeValueWrapper() -> TakeValueProtocol {
+                return TakeValueWrapper<AEnum>(takeValue: { $0.rawValue })
             }
         }
 
         enum BEnum: String, HandyJSONEnum {
             case A = "a", B = "b", C = "c"
 
-            static func makeInitWrapper() -> InitWrapperProtocol? {
+            static func makeInitWrapper() -> InitWrapperProtocol {
                 return InitWrapper<String>(rawInit: BEnum.init)
+            }
+
+            static func takeValueWrapper() -> TakeValueProtocol {
+                return TakeValueWrapper<BEnum>(takeValue: { $0.rawValue })
             }
         }
 
         enum CEnum: Double, HandyJSONEnum {
             case A = 1.1, B = 2.2, C = 3.3
 
-            static func makeInitWrapper() -> InitWrapperProtocol? {
+            static func makeInitWrapper() -> InitWrapperProtocol {
                 return InitWrapper<Double>(rawInit: CEnum.init)
+            }
+
+            static func takeValueWrapper() -> TakeValueProtocol {
+                return TakeValueWrapper<CEnum>(takeValue: { $0.rawValue })
             }
         }
 

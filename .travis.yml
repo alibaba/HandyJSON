@@ -1,9 +1,32 @@
 language: objective-c
-osx_image: xcode8
+osx_image: xcode8.2
+
+env:
+  global:
+    - IOS_FRAMEWORK_SCHEME="HandyJSON iOS"
+    - OSX_FRAMEWORK_SCHEME="HandyJSON Mac"
+    - TVOS_FRAMEWORK_SCHEME="HandyJSON tvOS"
+    - WATCHOS_FRAMEWORK_SCHEME="HandyJSON watchOS"
+    - IOS_SDK=iphonesimulator10.2
+    - OSX_SDK=macosx10.12
 
 before_install:
-    - rvm get head
+  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+
 script:
-    - sh scripts/ci.sh
+  - set -o pipefail
+  - xcodebuild -version
+  - xcodebuild -showsdks
+
+  - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "OS=10.1,name=iPhone 7 Plus" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
+
+  - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "OS=9.3,name=iPhone 6" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
+
+  - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "OS=8.1,name=iPhone 5" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
+
+  - xcodebuild -scheme "HandyJSON macOS" test
+
+  - xcodebuild -scheme "HandyJSON tvOS" -destination "platform=tvOS Simulator,name=Apple TV 1080p" test
+
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)

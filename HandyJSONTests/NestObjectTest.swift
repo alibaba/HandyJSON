@@ -36,8 +36,12 @@ class NestObjectTest: XCTestCase {
         case Male = "Male"
         case Female = "Female"
 
-        static func makeInitWrapper() -> InitWrapperProtocol? {
+        static func makeInitWrapper() -> InitWrapperProtocol {
             return InitWrapper<String>(rawInit: Gender.init)
+        }
+
+        static func takeValueWrapper() -> TakeValueProtocol {
+            return TakeValueWrapper<Gender>(takeValue: { $0.rawValue })
         }
     }
 

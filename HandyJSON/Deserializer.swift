@@ -19,6 +19,103 @@
 
 import Foundation
 
+extension PropertiesMappable {
+
+    static func _transform(rawPointer: UnsafeMutableRawPointer, property: Property.Description, dict: NSDictionary, mapper: HelpingMapper) {
+        var key = property.key
+
+        if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
+            key = key.lowercased()
+        }
+
+        let mutablePointer = rawPointer.advanced(by: property.offset)
+
+        if mapper.propertyExcluded(key: mutablePointer.hashValue) {
+            ClosureExecutor.executeWhenDebug {
+                print("Exclude property: \(key)")
+            }
+            return
+        }
+
+        if let mappingHandler = mapper.getMappingHandler(key: mutablePointer.hashValue) {
+            // if specific key is set, replace the label
+            if let specifyKey = mappingHandler.mappingName {
+                key = specifyKey
+            }
+
+            if let transformer = mappingHandler.assignmentClosure {
+                // execute the transform closure
+                transformer(dict[key])
+                return
+            }
+        }
+
+        guard let rawValue = dict[key] as? NSObject else {
+            ClosureExecutor.executeWhenDebug {
+                print("Can not find a value from dictionary for property: \(key)")
+            }
+            return
+        }
+
+        if let transformableType = property.type as? PropertiesTransformable.Type {
+            if let sv = transformableType.valueFrom(object: rawValue) {
+                extensions(of: transformableType).write(sv, to: mutablePointer)
+                return
+            }
+        } else {
+            if let sv = extensions(of: property.type).takeValue(from: rawValue) {
+                extensions(of: property.type).write(sv, to: mutablePointer)
+                return
+            }
+        }
+        ClosureExecutor.executeWhenDebug {
+            print("Property: \(property.key) hasn't been written in")
+        }
+    }
+
+    static func _transform(dict: NSDictionary, toType: PropertiesMappable.Type) -> PropertiesMappable? {
+        var instance = toType.init()
+
+        guard let properties = getProperties(forType: toType) else {
+            ClosureExecutor.executeWhenError {
+                print("Failed when try to get properties from type: \(type(of: toType))")
+            }
+            return nil
+        }
+
+        let mapper = HelpingMapper()
+        // do user-specified mapping first
+        instance.mapping(mapper: mapper)
+
+        let rawPointer: UnsafeMutableRawPointer
+        if toType is AnyClass {
+            rawPointer = UnsafeMutableRawPointer(instance.headPointerOfClass())
+        } else {
+            rawPointer = UnsafeMutableRawPointer(instance.headPointerOfStruct())
+        }
+
+        var _dict = dict
+        if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
+            let newDict = NSMutableDictionary()
+            dict.allKeys.forEach({ (key) in
+                if let sKey = key as? String {
+                    newDict[sKey.lowercased()] = dict[key]
+                } else {
+                    newDict[key] = dict[key]
+                }
+            })
+            _dict = newDict
+        }
+
+        properties.forEach { (property) in
+            _transform(rawPointer: rawPointer, property: property, dict: _dict, mapper: mapper)
+        }
+
+        return instance
+    }
+}
+
+
 public class JSONDeserializer<T: HandyJSON> {
 
     /// Converts a NSDictionary to Model if the properties match
@@ -56,7 +153,9 @@ public class JSONDeserializer<T: HandyJSON> {
                 return self.deserializeFrom(dict: jsonDict, designatedPath: designatedPath)
             }
         } catch let error {
-            print(error)
+            ClosureExecutor.executeWhenError {
+                print(error)
+            }
         }
         return nil
     }
@@ -81,12 +180,14 @@ public class JSONDeserializer<T: HandyJSON> {
                 })
             }
         } catch let error {
-            print(error)
+            ClosureExecutor.executeWhenError {
+                print(error)
+            }
         }
         return nil
     }
 
-    internal static func getObject(inside jsonObject: NSObject?, by designatedPath: String?) -> NSObject? {
+    static func getObject(inside jsonObject: NSObject?, by designatedPath: String?) -> NSObject? {
         var nodeValue: NSObject? = jsonObject
         var abort = false
         if let paths = designatedPath?.components(separatedBy: "."), paths.count > 0 {

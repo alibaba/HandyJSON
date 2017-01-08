@@ -21,10 +21,9 @@ import Foundation
 
 typealias Byte = Int8
 
-public protocol Property {
-}
+public protocol PropertiesMetrizable {}
 
-extension Property {
+extension PropertiesMetrizable {
 
     // locate the head of a struct type object in memory
     mutating func headPointerOfStruct() -> UnsafeMutablePointer<Byte> {
@@ -61,20 +60,18 @@ extension Property {
     }
 }
 
-public protocol HandyJSON: Property {
-    init()
-    mutating func mapping(mapper: HelpingMapper)
-}
-
-public extension HandyJSON {
-    public mutating func mapping(mapper: HelpingMapper) {}
+fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInfo: (Int, Int)) -> Int {
+    let m = currentOffset % layoutInfo.1
+    let offset =  (m == 0 ? 0 : (layoutInfo.1 - m))
+    let size = layoutInfo.0
+    return size + offset
 }
 
 public protocol InitWrapperProtocol {
     func convertToEnum(object: NSObject) -> Any?
 }
 
-public struct InitWrapper<T: Property>: InitWrapperProtocol {
+public struct InitWrapper<T: PropertiesTransformable>: InitWrapperProtocol {
 
     var _init: ((T) -> Any?)?
 
@@ -90,15 +87,32 @@ public struct InitWrapper<T: Property>: InitWrapperProtocol {
     }
 }
 
-public protocol HandyJSONEnum: Property {
-    static func makeInitWrapper() -> InitWrapperProtocol?
+public protocol TakeValueProtocol {
+    func rawValue(fromEnum: Any) -> Any?
 }
 
-protocol BasePropertyProtocol: HandyJSON {
+public struct TakeValueWrapper<U>: TakeValueProtocol {
+
+    var _take: ((U) -> Any?)?
+
+    public init(takeValue: @escaping ((U) -> Any?)) {
+        self._take = takeValue
+    }
+
+    public func rawValue(fromEnum: Any) -> Any? {
+        if let take = self._take, let _enum = fromEnum as? U {
+            return take(_enum)
+        }
+        return nil
+    }
 }
 
-protocol OptionalTypeProtocol: HandyJSON {
+protocol BasePropertyProtocol: PropertiesTransformable {
+}
+
+protocol OptionalTypeProtocol: PropertiesTransformable {
     static func optionalFromNSObject(object: NSObject) -> Any?
+    func getWrappedValue() -> Any?
 }
 
 extension Optional: OptionalTypeProtocol {
@@ -107,179 +121,165 @@ extension Optional: OptionalTypeProtocol {
     }
 
     static func optionalFromNSObject(object: NSObject) -> Any? {
-        if let value = (Wrapped.self as? Property.Type)?.valueFrom(object: object) as? Wrapped {
+        if let value = (Wrapped.self as? PropertiesTransformable.Type)?.valueFrom(object: object) as? Wrapped {
+            return Optional(value)
+        } else if let value = object as? Wrapped {
             return Optional(value)
         }
         return nil
     }
+
+    func getWrappedValue() -> Any? {
+        return self.map({ (wrapped) -> Any in
+            return wrapped as Any
+        })
+    }
 }
 
-protocol ImplicitlyUnwrappedTypeProtocol: HandyJSON {
+protocol ImplicitlyUnwrappedTypeProtocol: PropertiesTransformable {
     static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any?
+    func getWrappedValue() -> Any?
 }
 
 extension ImplicitlyUnwrappedOptional: ImplicitlyUnwrappedTypeProtocol {
 
     static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any? {
-        if let value = (Wrapped.self as? Property.Type)?.valueFrom(object: object) as? Wrapped {
+        if let value = (Wrapped.self as? PropertiesTransformable.Type)?.valueFrom(object: object) as? Wrapped {
             return ImplicitlyUnwrappedOptional(value)
+        } else if let value = object as? Wrapped {
+            return ImplicitlyUnwrappedOptional(value)
+        }
+        return nil
+    }
+
+    func getWrappedValue() -> Any? {
+        if case let .some(x) = self {
+            return x
         }
         return nil
     }
 }
 
-protocol ArrayTypeProtocol: HandyJSON {
+protocol ArrayTypeProtocol: PropertiesTransformable {
     static func arrayFromNSObject(object: NSObject) -> Any?
+    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]?
 }
 
 extension Array: ArrayTypeProtocol {
 
     static func arrayFromNSObject(object: NSObject) -> Any? {
         guard let nsArray = object as? NSArray else {
+            ClosureExecutor.executeWhenDebug {
+                print("Expect object to be an NSArray but it's not")
+            }
             return nil
         }
         var result: [Element] = [Element]()
         nsArray.forEach { (each) in
-            if let nsObject = each as? NSObject, let element = (Element.self as? Property.Type)?.valueFrom(object: nsObject) as? Element {
-                result.append(element)
+            if let nsObject = each as? NSObject {
+                if let element = (Element.self as? PropertiesTransformable.Type)?.valueFrom(object: nsObject) as? Element {
+                    result.append(element)
+                } else if let element = nsObject as? Element {
+                    result.append(element)
+                }
             }
         }
         return result
     }
+
+    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]? {
+        return self.map({ (each) -> Any? in
+            return transform(each)
+        })
+    }
 }
 
-protocol DictionaryTypeProtocol: HandyJSON {
+protocol SetTypeProtocol: PropertiesTransformable {
+    static func setFromNSObject(object: NSObject) -> Any?
+    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]?
+}
+
+extension Set: SetTypeProtocol {
+
+    static func setFromNSObject(object: NSObject) -> Any? {
+        guard let nsArray = object as? NSArray else {
+            ClosureExecutor.executeWhenDebug {
+                print("Expect object to be an NSArray but it's not")
+            }
+            return nil
+        }
+        var result: Set<Element> = Set<Element>()
+        nsArray.forEach { (each) in
+            if let nsObject = each as? NSObject {
+                if let element = (Element.self as? PropertiesTransformable.Type)?.valueFrom(object: nsObject) as? Element {
+                    result.insert(element)
+                } else if let element = nsObject as? Element {
+                    result.insert(element)
+                }
+            }
+        }
+        return result
+    }
+
+    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]? {
+        return self.map({ (each) -> Any? in
+            return transform(each)
+        })
+    }
+}
+
+protocol DictionaryTypeProtocol: PropertiesTransformable {
     static func dictionaryFromNSObject(object: NSObject) -> Any?
+    func customMap(_ transformValue: ((Any) -> Any?)) -> [String: Any?]?
 }
 
 extension Dictionary: DictionaryTypeProtocol {
 
     static func dictionaryFromNSObject(object: NSObject) -> Any? {
         guard let nsDict = object as? NSDictionary else {
+            ClosureExecutor.executeWhenDebug {
+                print("Expect object to be an NSDictionary but it's not")
+            }
             return nil
         }
         var result: [Key: Value] = [Key: Value]()
         nsDict.forEach { (key, value) in
-            if let sKey = key as? Key, let nsValue = value as? NSObject, let nValue = (Value.self as? Property.Type)?.valueFrom(object: nsValue) as? Value {
-                result[sKey] = nValue
+            if let sKey = key as? Key, let nsValue = value as? NSObject {
+                if let nValue = (Value.self as? PropertiesTransformable.Type)?.valueFrom(object: nsValue) as? Value {
+                    result[sKey] = nValue
+                } else if let nValue = nsValue as? Value {
+                    result[sKey] = nValue
+                }
             }
         }
         return result
     }
+
+    func customMap(_ transformValue: ((Any) -> Any?)) -> [String: Any?]? {
+        var result = [String: Any?]()
+        self.forEach({ (key, value) in
+            if let sKey = key as? String, let _value = transformValue(value) {
+                result[sKey] = _value
+            }
+        })
+        return result
+    }
 }
 
-extension NSArray: Property {}
-extension NSDictionary: Property {}
+public protocol PropertiesTransformable: PropertiesMetrizable {}
 
-extension Property {
+public protocol PropertiesMappable: PropertiesTransformable {
+    init()
+    mutating func mapping(mapper: HelpingMapper)
+}
 
-    internal static func _transform(rawData dict: NSDictionary, toPointer pointer: UnsafeMutablePointer<Byte>, toOffset currentOffset: Int, byMirror mirror: Mirror, withMapper mapper: HelpingMapper) -> Int {
+extension PropertiesMappable {
+    public mutating func mapping(mapper: HelpingMapper) {}
+}
 
-        var currentOffset = currentOffset
-        if let superMirror = mirror.superclassMirror {
-            currentOffset = _transform(rawData: dict, toPointer: pointer, toOffset: currentOffset, byMirror: superMirror, withMapper: mapper)
-        }
+extension PropertiesTransformable {
 
-        var mutablePointer = pointer.advanced(by: currentOffset)
-        mirror.children.forEach({ (child) in
-
-            var offset = 0, size = 0
-
-            if let excludedPropertyLayout = mapper.exclude(key: mutablePointer.hashValue) {
-                let m = currentOffset % excludedPropertyLayout.1
-                offset =  (m == 0 ? 0 : (excludedPropertyLayout.1 - m))
-                mutablePointer = mutablePointer.advanced(by: offset)
-
-                size = excludedPropertyLayout.0
-                mutablePointer = mutablePointer.advanced(by: size)
-                currentOffset += size
-                return
-            }
-
-            guard let propertyType = type(of: child.value) as? Property.Type else {
-                print("label: ", child.label ?? "", "type: ", "\(type(of: child.value))")
-                fatalError("Each property should be handyjson-property type")
-            }
-
-            size = propertyType.size()
-            offset = propertyType.offsetToAlignment(value: currentOffset, align: propertyType.align())
-
-            mutablePointer = mutablePointer.advanced(by: offset)
-            currentOffset += offset
-
-            guard let label = child.label else {
-                mutablePointer = mutablePointer.advanced(by: size)
-                currentOffset += size
-                return
-            }
-
-            var key = label
-
-            if let converter = mapper.getNameAndConverter(key: mutablePointer.hashValue) {
-                // if specific key is set, replace the label
-                if let specifyKey = converter.0 {
-                    key = specifyKey
-                }
-
-                // if specific converter is set, use it the assign value to the property
-                if let specifyConverter = converter.1 {
-                    let ocValue = (dict[key] as? NSObject)?.toString()
-                    specifyConverter(ocValue ?? "")
-
-                    mutablePointer = mutablePointer.advanced(by: size)
-                    currentOffset += size
-                    return
-                }
-            }
-
-            guard let value = dict[key] as? NSObject else {
-                mutablePointer = mutablePointer.advanced(by: size)
-                currentOffset += size
-                return
-            }
-
-            if let sv = propertyType.valueFrom(object: value) {
-                propertyType.codeIntoMemory(pointer: mutablePointer, value: sv)
-            }
-
-            mutablePointer = mutablePointer.advanced(by: size)
-            currentOffset += size
-        })
-        return currentOffset
-    }
-
-    public static func _transform(dict: NSDictionary, toType type: HandyJSON.Type) -> HandyJSON {
-        var instance = type.init()
-        let mirror = Mirror(reflecting: instance)
-
-        guard let dStyle = mirror.displayStyle else {
-            fatalError("Target type must has a display type")
-        }
-
-        var pointer: UnsafeMutablePointer<Byte>!
-        let mapper = HelpingMapper()
-        var currentOffset = 0
-
-        // do user-specified mapping first
-        instance.mapping(mapper: mapper)
-
-        if dStyle == .class {
-            pointer = instance.headPointerOfClass()
-            // for 64bit architecture, it's 16
-            // for 32bit architecture, it's 12
-            currentOffset = 8 + MemoryLayout<Int>.size
-        } else if dStyle == .struct {
-            pointer = instance.headPointerOfStruct()
-        } else {
-            fatalError("Target object must be class or struct")
-        }
-
-        _ = _transform(rawData: dict, toPointer: pointer, toOffset: currentOffset, byMirror: mirror, withMapper: mapper)
-
-        return instance
-    }
-
-    static func valueFrom(object: NSObject) -> Self? {
+    internal static func valueFrom(object: NSObject) -> Self? {
         if self is HandyJSONEnum.Type {
 
             if let initWrapper = (self as? HandyJSONEnum.Type)?.makeInitWrapper() {
@@ -304,6 +304,10 @@ extension Property {
 
             // we can't retrieve the generic type wrapped by array here, so we go into array extension to do the casting
             return (self as! ArrayTypeProtocol.Type).arrayFromNSObject(object: object) as? Self
+        } else if self is SetTypeProtocol.Type {
+
+            // we can't retrieve the generic type wrapped by array here, so we go into array extension to do the casting
+            return (self as! SetTypeProtocol.Type).setFromNSObject(object: object) as? Self
         } else if self is DictionaryTypeProtocol.Type {
 
             // similar to array
@@ -318,18 +322,18 @@ extension Property {
             if let dict = object as? NSDictionary {
                 return dict as? Self
             }
-        } else if self is HandyJSON.Type {
+        } else if let mappableType = self as? PropertiesMappable.Type {
 
             if let dict = object as? NSDictionary {
                 // nested object, transform recursively
-                return _transform(dict: dict, toType: self as! HandyJSON.Type) as? Self
+                return mappableType._transform(dict: dict, toType: mappableType) as? Self
             }
         }
         return nil
     }
 
     // base type supported parsing directly
-    static func baseValueFrom(object: NSObject) -> Self? {
+    internal static func baseValueFrom(object: NSObject) -> Self? {
         switch self {
         case is Int8.Type:
             return object.toInt8() as? Self
@@ -368,9 +372,13 @@ extension Property {
         }
         return nil
     }
-
-    // keep in mind, self type is the same with type of value
-    static func codeIntoMemory(pointer: UnsafeMutablePointer<Byte>, value: Property) {
-        pointer.withMemoryRebound(to: Self.self, capacity: 1, { return $0 }).pointee = value as! Self
-    }
 }
+
+// expose HandyJSON protocol
+public protocol HandyJSON: PropertiesMappable {}
+
+public protocol HandyJSONEnum: PropertiesTransformable {
+    static func makeInitWrapper() -> InitWrapperProtocol
+    static func takeValueWrapper() -> TakeValueProtocol
+}
+
