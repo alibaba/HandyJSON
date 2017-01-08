@@ -21,9 +21,9 @@
 //  Created by zhouzhuo on 9/30/16.
 //
 
-extension Metrizable {
+extension PropertiesMappable {
 
-    internal static func _serializeToDictionary(propertys: [(String?, Any)], headPointer: UnsafeMutableRawPointer, offsetInfo: [String: Int] , mapper: HelpingMapper) -> [String: Any] {
+    static func _serializeModelObject(propertys: [(String?, Any)], headPointer: UnsafeMutableRawPointer, offsetInfo: [String: Int] , mapper: HelpingMapper) -> [String: Any] {
 
         var dict = [String: Any]()
 
@@ -55,8 +55,8 @@ extension Metrizable {
                 }
             }
 
-            if let typedValue = value as? Metrizable {
-                if let result = self._serialize(from: typedValue) {
+            if let typedValue = value as? PropertiesTransformable {
+                if let result = self._serializeAny(object: typedValue) {
                     dict[key] = result
                 }
             }
@@ -64,7 +64,7 @@ extension Metrizable {
         return dict
     }
 
-    internal static func _serialize(from object: Metrizable) -> Any? {
+    static func _serializeNoneModelObject(object: PropertiesTransformable) -> Any? {
         let objectType = type(of: object)
 
         if let enumType = objectType as? HandyJSONEnum.Type {
@@ -73,50 +73,54 @@ extension Metrizable {
             return object
         } else if let optional = object as? OptionalTypeProtocol {
             if let _value = optional.getWrappedValue() {
-                if let _transformable = _value as? Metrizable {
-                    return Self._serialize(from: _transformable)
+                if let _transformable = _value as? PropertiesTransformable {
+                    return _serializeAny(object: _transformable)
                 }
                 return _value
             }
             return nil
         } else if let implicit = object as? ImplicitlyUnwrappedTypeProtocol {
             if let _value = implicit.getWrappedValue() {
-                if let _transformable = _value as? Metrizable {
-                    return Self._serialize(from: _transformable)
+                if let _transformable = _value as? PropertiesTransformable {
+                    return _serializeAny(object: _transformable)
                 }
                 return _value
             }
             return nil
         } else if let arrayObject = object as? ArrayTypeProtocol {
             let _value = arrayObject.customMap({ (each) -> (Any?) in
-                if let _transformable = each as? Metrizable {
-                    return Self._serialize(from: _transformable)
+                if let _transformable = each as? PropertiesTransformable {
+                    return _serializeAny(object: _transformable)
                 }
                 return each
             })
             return _value
         } else if let setObject = object as? SetTypeProtocol {
             let _value = setObject.customMap({ (each) -> (Any?) in
-                if let _transformable = each as? Metrizable {
-                    return Self._serialize(from: _transformable)
+                if let _transformable = each as? PropertiesTransformable {
+                    return _serializeAny(object: _transformable)
                 }
                 return each
             })
             return _value
         } else if let dictObject = object as? DictionaryTypeProtocol {
             let _value = dictObject.customMap({ (eachValue) -> Any? in
-                if let _transformable = eachValue as? Metrizable {
-                    return Self._serialize(from: _transformable)
+                if let _transformable = eachValue as? PropertiesTransformable {
+                    return _serializeAny(object: _transformable)
                 }
                 return eachValue
             })
             return _value
         }
+        return object
+    }
+
+    static func _serializeAny(object: PropertiesTransformable) -> Any? {
 
         let mirror = Mirror(reflecting: object)
 
         guard let displayStyle = mirror.displayStyle else {
-            return self
+            return _serializeNoneModelObject(object: object)
         }
 
         // after filtered by protocols above, now we expect the type is pure struct/class
@@ -124,14 +128,14 @@ extension Metrizable {
         case .class, .struct:
             let mapper = HelpingMapper()
             // do user-specified mapping first
-            if !(object is TransformableProperty) {
+            if !(object is PropertiesMappable) {
                 return nil
             }
-            var mutableObject = object as! TransformableProperty
+            var mutableObject = object as! PropertiesMappable
             mutableObject.mapping(mapper: mapper)
 
             let rawPointer: UnsafeMutableRawPointer
-            if objectType is AnyClass {
+            if type(of: object) is AnyClass {
                 rawPointer = UnsafeMutableRawPointer(mutableObject.headPointerOfClass())
             } else {
                 rawPointer = UnsafeMutableRawPointer(mutableObject.headPointerOfStruct())
@@ -149,23 +153,17 @@ extension Metrizable {
             }
 
             var offsetInfo = [String: Int]()
-            guard let properties = getProperties(forType: objectType) else {
+            guard let properties = getProperties(forType: type(of: object)) else {
                 return nil
-            }
-
-            if let pp = getProperties(forInstance: mutableObject) {
-                pp.forEach({ (ppp) in
-                    print(ppp.key, ppp.value)
-                })
             }
 
             properties.forEach({ (desc) in
                 offsetInfo[desc.key] = desc.offset
             })
 
-            return Self._serializeToDictionary(propertys: children, headPointer: rawPointer, offsetInfo: offsetInfo, mapper: mapper) as Any
+            return _serializeModelObject(propertys: children, headPointer: rawPointer, offsetInfo: offsetInfo, mapper: mapper) as Any
         default:
-            return object as Any
+            return _serializeNoneModelObject(object: object)
         }
     }
 }
@@ -175,7 +173,7 @@ public extension HandyJSON {
 
     public func toJSON() -> [String: Any]? {
 
-        if let dict = Self._serialize(from: self) as? [String: Any] {
+        if let dict = Self._serializeAny(object: self) as? [String: Any] {
             return dict
         }
         return nil
@@ -183,7 +181,7 @@ public extension HandyJSON {
 
     public func toJSONString(prettyPrint: Bool = false) -> String? {
 
-        if let anyObject = Self._serialize(from: self) {
+        if let anyObject = self.toJSON() {
             if JSONSerialization.isValidJSONObject(anyObject) {
                 do {
                     let jsonData: Data
@@ -207,15 +205,13 @@ public extension Array where Element: HandyJSON {
     public func toJSON() -> [[String: Any]?] {
 
         return self.map({ (object) -> [String: Any]? in
-            return Element._serialize(from: object) as? [String: Any]
+            return Element._serializeAny(object: object) as? [String: Any]
         })
     }
 
     public func toJSONString(prettyPrint: Bool = false) -> String? {
 
-        let anyArray = self.map({ (object) -> [String: Any]? in
-            return Element._serialize(from: object) as? [String: Any]
-        })
+        let anyArray = self.toJSON()
         if JSONSerialization.isValidJSONObject(anyArray) {
             do {
                 let jsonData: Data
@@ -238,15 +234,13 @@ public extension Set where Element: HandyJSON {
     public func toJSON() -> [[String: Any]?] {
 
         return self.map({ (object) -> [String: Any]? in
-            return Element._serialize(from: object) as? [String: Any]
+            return Element._serializeAny(object: object) as? [String: Any]
         })
     }
 
     public func toJSONString(prettyPrint: Bool = false) -> String? {
 
-        let anyArray = self.map({ (object) -> [String: Any]? in
-            return Element._serialize(from: object) as? [String: Any]
-        })
+        let anyArray = self.toJSON()
         if JSONSerialization.isValidJSONObject(anyArray) {
             do {
                 let jsonData: Data

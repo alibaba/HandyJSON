@@ -21,9 +21,9 @@ import Foundation
 
 typealias Byte = Int8
 
-public protocol Metrizable {}
+public protocol PropertiesMetrizable {}
 
-extension Metrizable {
+extension PropertiesMetrizable {
 
     // locate the head of a struct type object in memory
     mutating func headPointerOfStruct() -> UnsafeMutablePointer<Byte> {
@@ -67,20 +67,11 @@ fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInf
     return size + offset
 }
 
-public protocol TransformableProperty: Metrizable {
-    init()
-    mutating func mapping(mapper: HelpingMapper)
-}
-
-extension TransformableProperty {
-    public mutating func mapping(mapper: HelpingMapper) {}
-}
-
 public protocol InitWrapperProtocol {
     func convertToEnum(object: NSObject) -> Any?
 }
 
-public struct InitWrapper<T: Metrizable>: InitWrapperProtocol {
+public struct InitWrapper<T: PropertiesTransformable>: InitWrapperProtocol {
 
     var _init: ((T) -> Any?)?
 
@@ -116,10 +107,10 @@ public struct TakeValueWrapper<U>: TakeValueProtocol {
     }
 }
 
-protocol BasePropertyProtocol: TransformableProperty {
+protocol BasePropertyProtocol: PropertiesTransformable {
 }
 
-protocol OptionalTypeProtocol: TransformableProperty {
+protocol OptionalTypeProtocol: PropertiesTransformable {
     static func optionalFromNSObject(object: NSObject) -> Any?
     func getWrappedValue() -> Any?
 }
@@ -130,7 +121,7 @@ extension Optional: OptionalTypeProtocol {
     }
 
     static func optionalFromNSObject(object: NSObject) -> Any? {
-        if let value = (Wrapped.self as? Metrizable.Type)?.valueFrom(object: object) as? Wrapped {
+        if let value = (Wrapped.self as? PropertiesTransformable.Type)?.valueFrom(object: object) as? Wrapped {
             return Optional(value)
         } else if let value = object as? Wrapped {
             return Optional(value)
@@ -145,7 +136,7 @@ extension Optional: OptionalTypeProtocol {
     }
 }
 
-protocol ImplicitlyUnwrappedTypeProtocol: TransformableProperty {
+protocol ImplicitlyUnwrappedTypeProtocol: PropertiesTransformable {
     static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any?
     func getWrappedValue() -> Any?
 }
@@ -153,7 +144,7 @@ protocol ImplicitlyUnwrappedTypeProtocol: TransformableProperty {
 extension ImplicitlyUnwrappedOptional: ImplicitlyUnwrappedTypeProtocol {
 
     static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any? {
-        if let value = (Wrapped.self as? Metrizable.Type)?.valueFrom(object: object) as? Wrapped {
+        if let value = (Wrapped.self as? PropertiesTransformable.Type)?.valueFrom(object: object) as? Wrapped {
             return ImplicitlyUnwrappedOptional(value)
         } else if let value = object as? Wrapped {
             return ImplicitlyUnwrappedOptional(value)
@@ -169,7 +160,7 @@ extension ImplicitlyUnwrappedOptional: ImplicitlyUnwrappedTypeProtocol {
     }
 }
 
-protocol ArrayTypeProtocol: TransformableProperty {
+protocol ArrayTypeProtocol: PropertiesTransformable {
     static func arrayFromNSObject(object: NSObject) -> Any?
     func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]?
 }
@@ -183,7 +174,7 @@ extension Array: ArrayTypeProtocol {
         var result: [Element] = [Element]()
         nsArray.forEach { (each) in
             if let nsObject = each as? NSObject {
-                if let element = (Element.self as? Metrizable.Type)?.valueFrom(object: nsObject) as? Element {
+                if let element = (Element.self as? PropertiesTransformable.Type)?.valueFrom(object: nsObject) as? Element {
                     result.append(element)
                 } else if let element = nsObject as? Element {
                     result.append(element)
@@ -200,7 +191,7 @@ extension Array: ArrayTypeProtocol {
     }
 }
 
-protocol SetTypeProtocol: TransformableProperty {
+protocol SetTypeProtocol: PropertiesTransformable {
     static func setFromNSObject(object: NSObject) -> Any?
     func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]?
 }
@@ -214,7 +205,7 @@ extension Set: SetTypeProtocol {
         var result: Set<Element> = Set<Element>()
         nsArray.forEach { (each) in
             if let nsObject = each as? NSObject {
-                if let element = (Element.self as? Metrizable.Type)?.valueFrom(object: nsObject) as? Element {
+                if let element = (Element.self as? PropertiesTransformable.Type)?.valueFrom(object: nsObject) as? Element {
                     result.insert(element)
                 } else if let element = nsObject as? Element {
                     result.insert(element)
@@ -231,7 +222,7 @@ extension Set: SetTypeProtocol {
     }
 }
 
-protocol DictionaryTypeProtocol: TransformableProperty {
+protocol DictionaryTypeProtocol: PropertiesTransformable {
     static func dictionaryFromNSObject(object: NSObject) -> Any?
     func customMap(_ transformValue: ((Any) -> Any?)) -> [String: Any?]?
 }
@@ -245,7 +236,7 @@ extension Dictionary: DictionaryTypeProtocol {
         var result: [Key: Value] = [Key: Value]()
         nsDict.forEach { (key, value) in
             if let sKey = key as? Key, let nsValue = value as? NSObject {
-                if let nValue = (Value.self as? Metrizable.Type)?.valueFrom(object: nsValue) as? Value {
+                if let nValue = (Value.self as? PropertiesTransformable.Type)?.valueFrom(object: nsValue) as? Value {
                     result[sKey] = nValue
                 } else if let nValue = nsValue as? Value {
                     result[sKey] = nValue
@@ -266,13 +257,118 @@ extension Dictionary: DictionaryTypeProtocol {
     }
 }
 
-extension NSArray: Metrizable {}
-extension NSDictionary: Metrizable {}
+public protocol PropertiesTransformable: PropertiesMetrizable {}
+
+public protocol PropertiesMappable: PropertiesTransformable {
+    init()
+    mutating func mapping(mapper: HelpingMapper)
+}
+
+extension PropertiesMappable {
+    public mutating func mapping(mapper: HelpingMapper) {}
+}
+
+extension PropertiesTransformable {
+
+    internal static func valueFrom(object: NSObject) -> Self? {
+        if self is HandyJSONEnum.Type {
+
+            if let initWrapper = (self as? HandyJSONEnum.Type)?.makeInitWrapper() {
+                if let resultValue = initWrapper.convertToEnum(object: object) {
+                    return resultValue as? Self
+                }
+            }
+            return nil
+        } else if self is BasePropertyProtocol.Type {
+
+            // base type can be transformed directly
+            return baseValueFrom(object: object)
+        } else if self is OptionalTypeProtocol.Type {
+
+            // optional type, we parse the wrapped generic type to construct the value, then wrap it to optional
+            return (self as! OptionalTypeProtocol.Type).optionalFromNSObject(object: object) as? Self
+        } else if self is ImplicitlyUnwrappedTypeProtocol.Type {
+
+            // similar to optional
+            return (self as! ImplicitlyUnwrappedTypeProtocol.Type).implicitlyUnwrappedOptionalFromNSObject(object: object) as? Self
+        } else if self is ArrayTypeProtocol.Type {
+
+            // we can't retrieve the generic type wrapped by array here, so we go into array extension to do the casting
+            return (self as! ArrayTypeProtocol.Type).arrayFromNSObject(object: object) as? Self
+        } else if self is SetTypeProtocol.Type {
+
+            // we can't retrieve the generic type wrapped by array here, so we go into array extension to do the casting
+            return (self as! SetTypeProtocol.Type).setFromNSObject(object: object) as? Self
+        } else if self is DictionaryTypeProtocol.Type {
+
+            // similar to array
+            return (self as! DictionaryTypeProtocol.Type).dictionaryFromNSObject(object: object) as? Self
+        } else if self is NSArray.Type {
+
+            if let arr = object as? NSArray {
+                return arr as? Self
+            }
+        } else if self is NSDictionary.Type {
+
+            if let dict = object as? NSDictionary {
+                return dict as? Self
+            }
+        } else if let mappableType = self as? PropertiesMappable.Type {
+
+            if let dict = object as? NSDictionary {
+                // nested object, transform recursively
+                return mappableType._transform(dict: dict, toType: mappableType) as? Self
+            }
+        }
+        return nil
+    }
+
+    // base type supported parsing directly
+    internal static func baseValueFrom(object: NSObject) -> Self? {
+        switch self {
+        case is Int8.Type:
+            return object.toInt8() as? Self
+        case is UInt8.Type:
+            return object.toUInt8() as? Self
+        case is Int16.Type:
+            return object.toInt16() as? Self
+        case is UInt16.Type:
+            return object.toUInt16() as? Self
+        case is Int32.Type:
+            return object.toInt32() as? Self
+        case is UInt32.Type:
+            return object.toUInt32() as? Self
+        case is Int64.Type:
+            return object.toInt64() as? Self
+        case is UInt64.Type:
+            return object.toUInt64() as? Self
+        case is Bool.Type:
+            return object.toBool() as? Self
+        case is Int.Type:
+            return object.toInt() as? Self
+        case is UInt.Type:
+            return object.toUInt() as? Self
+        case is Float.Type:
+            return object.toFloat() as? Self
+        case is Double.Type:
+            return object.toDouble() as? Self
+        case is String.Type:
+            return object.toString() as? Self
+        case is NSString.Type:
+            return object.toNSString() as? Self
+        case is NSNumber.Type:
+            return object.toNSNumber() as? Self
+        default:
+            break
+        }
+        return nil
+    }
+}
 
 // expose HandyJSON protocol
-public protocol HandyJSON: TransformableProperty {}
+public protocol HandyJSON: PropertiesMappable {}
 
-public protocol HandyJSONEnum: Metrizable {
+public protocol HandyJSONEnum: PropertiesTransformable {
     static func makeInitWrapper() -> InitWrapperProtocol
     static func takeValueWrapper() -> TakeValueProtocol
 }
