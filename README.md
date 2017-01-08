@@ -88,6 +88,8 @@ print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON strin
 
 * Type-Adaption, such as string json field maps to int property, int json field maps to string property
 
+An overview of types supported can be found at file: [BasicTypes.swift](./HandyJSONTest/BasicTypes.swift)
+
 # Requirements
 
 * iOS 8.0+/OSX 10.9+/watchOS 2.0+/tvOS 9.0+
