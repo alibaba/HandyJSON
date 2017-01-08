@@ -130,7 +130,6 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.anyObjectImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        print(JSONString!)
         let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
 
         XCTAssertNotNil(mappedObject)
@@ -394,7 +393,6 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.enumDoubleImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        print(JSONString!)
         let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
 
         XCTAssertNotNil(mappedObject)

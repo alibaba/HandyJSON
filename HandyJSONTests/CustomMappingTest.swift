@@ -54,7 +54,6 @@ class CustomMappingTest: XCTestCase {
 
                 // specify both
                 mapper.specify(property: &height, name: "json_height", converter: { rawValue -> Int in
-                    print("classMapping: ", rawValue)
                     return Int(rawValue) ?? 0
                 })
             }
@@ -87,7 +86,6 @@ class CustomMappingTest: XCTestCase {
 
                 // specify both
                 mapper.specify(property: &height, name: "json_height", converter: { rawValue -> Int? in
-                    print("classMapping: ", rawValue)
                     return Int(rawValue)
                 })
             }
