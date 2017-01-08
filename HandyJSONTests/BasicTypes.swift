@@ -84,14 +84,6 @@ class BasicTypes: HandyJSON {
     enum EnumInt: Int, HandyJSONEnum {
         case Default
         case Another
-
-        static func makeInitWrapper() -> InitWrapperProtocol {
-            return InitWrapper<Int>(rawInit: self.init)
-        }
-
-        static func takeValueWrapper() -> TakeValueProtocol {
-            return TakeValueWrapper<EnumInt>(takeValue: { $0.rawValue })
-        }
     }
     var enumInt: EnumInt = .Default
     var enumIntOptional: EnumInt?
@@ -100,14 +92,6 @@ class BasicTypes: HandyJSON {
     enum EnumDouble: Double, HandyJSONEnum {
         case Default
         case Another
-
-        static func makeInitWrapper() -> InitWrapperProtocol {
-            return InitWrapper<Double>(rawInit: self.init)
-        }
-
-        static func takeValueWrapper() -> TakeValueProtocol {
-            return TakeValueWrapper<EnumDouble>(takeValue: { $0.rawValue })
-        }
     }
     var enumDouble: EnumDouble = .Default
     var enumDoubleOptional: EnumDouble?
@@ -116,14 +100,6 @@ class BasicTypes: HandyJSON {
     enum EnumFloat: Float, HandyJSONEnum {
         case Default
         case Another
-
-        static func makeInitWrapper() -> InitWrapperProtocol {
-            return InitWrapper<Float>(rawInit: self.init)
-        }
-
-        static func takeValueWrapper() -> TakeValueProtocol {
-            return TakeValueWrapper<EnumFloat>(takeValue: { $0.rawValue })
-        }
     }
     var enumFloat: EnumFloat = .Default
     var enumFloatOptional: EnumFloat?
@@ -132,14 +108,6 @@ class BasicTypes: HandyJSON {
     enum EnumString: String, HandyJSONEnum {
         case Default = "Default"
         case Another = "Another"
-
-        static func makeInitWrapper() -> InitWrapperProtocol {
-            return InitWrapper<String>(rawInit: self.init)
-        }
-
-        static func takeValueWrapper() -> TakeValueProtocol {
-            return TakeValueWrapper<EnumString>(takeValue: { $0.rawValue })
-        }
     }
     var enumString: EnumString = .Default
     var enumStringOptional: EnumString?

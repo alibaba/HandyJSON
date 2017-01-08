@@ -67,41 +67,22 @@ fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInf
     return size + offset
 }
 
-public protocol InitWrapperProtocol {
-    func convertToEnum(object: NSObject) -> Any?
+public protocol RawEnumProtocol: PropertiesTransformable {
+    func takeRawValue() -> Any?
+    static func from(rawObject: NSObject) -> Self?
 }
 
-public struct InitWrapper<T: PropertiesTransformable>: InitWrapperProtocol {
+public extension RawRepresentable where Self: RawEnumProtocol {
 
-    var _init: ((T) -> Any?)?
-
-    public init(rawInit: @escaping ((T) -> Any?)) {
-        self._init = rawInit
+    func takeRawValue() -> Any? {
+        return self.rawValue
     }
 
-    public func convertToEnum(object: NSObject) -> Any? {
-        if let typedValue = T.valueFrom(object: object) {
-            return _init?(typedValue)
-        }
-        return nil
-    }
-}
-
-public protocol TakeValueProtocol {
-    func rawValue(fromEnum: Any) -> Any?
-}
-
-public struct TakeValueWrapper<U>: TakeValueProtocol {
-
-    var _take: ((U) -> Any?)?
-
-    public init(takeValue: @escaping ((U) -> Any?)) {
-        self._take = takeValue
-    }
-
-    public func rawValue(fromEnum: Any) -> Any? {
-        if let take = self._take, let _enum = fromEnum as? U {
-            return take(_enum)
+    static func from(rawObject: NSObject) -> Self? {
+        if let transformableType = RawValue.self as? PropertiesTransformable.Type {
+            if let typedValue = transformableType.valueFrom(object: rawObject) {
+                return Self(rawValue: typedValue as! RawValue)
+            }
         }
         return nil
     }
@@ -280,10 +261,10 @@ extension PropertiesMappable {
 extension PropertiesTransformable {
 
     internal static func valueFrom(object: NSObject) -> Self? {
-        if self is HandyJSONEnum.Type {
+        if self is RawEnumProtocol.Type {
 
-            if let initWrapper = (self as? HandyJSONEnum.Type)?.makeInitWrapper() {
-                if let resultValue = initWrapper.convertToEnum(object: object) {
+            if let rawEnumType = self as? RawEnumProtocol.Type {
+                if let resultValue = rawEnumType.from(rawObject: object) {
                     return resultValue as? Self
                 }
             }
@@ -377,8 +358,5 @@ extension PropertiesTransformable {
 // expose HandyJSON protocol
 public protocol HandyJSON: PropertiesMappable {}
 
-public protocol HandyJSONEnum: PropertiesTransformable {
-    static func makeInitWrapper() -> InitWrapperProtocol
-    static func takeValueWrapper() -> TakeValueProtocol
-}
+public protocol HandyJSONEnum: RawEnumProtocol {}
 
