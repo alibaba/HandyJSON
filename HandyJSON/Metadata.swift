@@ -120,7 +120,8 @@ extension Metadata {
 
         func properties() -> [Property.Description]? {
             if let properties = fetchProperties(nominalType: self) {
-                guard let superclass = superclass, String(describing: unsafeBitCast(superclass.pointer, to: Any.Type.self)) != "SwiftObject" else {
+                guard let superclass = superclass,
+                    String(describing: unsafeBitCast(superclass.pointer, to: Any.Type.self)) != "SwiftObject" else {
                     return properties
                 }
                 if let superclassProperties = superclass.properties() {

@@ -35,14 +35,6 @@ class NestObjectTest: XCTestCase {
     enum Gender: String, HandyJSONEnum {
         case Male = "Male"
         case Female = "Female"
-
-        static func makeInitWrapper() -> InitWrapperProtocol {
-            return InitWrapper<String>(rawInit: Gender.init)
-        }
-
-        static func takeValueWrapper() -> TakeValueProtocol {
-            return TakeValueWrapper<Gender>(takeValue: { $0.rawValue })
-        }
     }
 
     class Teacher: HandyJSON {

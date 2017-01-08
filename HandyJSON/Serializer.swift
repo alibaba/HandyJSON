@@ -86,8 +86,8 @@ extension PropertiesMappable {
     static func _serializeNoneModelObject(object: PropertiesTransformable) -> Any? {
         let objectType = type(of: object)
 
-        if let enumType = objectType as? HandyJSONEnum.Type {
-            return enumType.takeValueWrapper().rawValue(fromEnum: object)
+        if let enumValue = object as? RawEnumProtocol {
+            return enumValue.takeRawValue()
         } else if objectType is BasePropertyProtocol.Type {
             return object
         } else if let optional = object as? OptionalTypeProtocol {
@@ -221,6 +221,10 @@ public extension HandyJSON {
                         print(error)
                     }
                 }
+            } else {
+                ClosureExecutor.executeWhenDebug {
+                    print("\(self.toJSON()) is not a valid JSON Object")
+                }
             }
         }
         return nil
@@ -253,6 +257,10 @@ public extension Array where Element: HandyJSON {
                     print(error)
                 }
             }
+        } else {
+            ClosureExecutor.executeWhenDebug {
+                print("\(self.toJSON()) is not a valid JSON Object")
+            }
         }
         return nil
     }
@@ -283,6 +291,10 @@ public extension Set where Element: HandyJSON {
                 ClosureExecutor.executeWhenError {
                     print(error)
                 }
+            }
+        } else {
+            ClosureExecutor.executeWhenDebug {
+                print("\(self.toJSON()) is not a valid JSON Object")
             }
         }
         return nil
