@@ -148,10 +148,10 @@ extension PropertiesMappable {
             let mapper = HelpingMapper()
             // do user-specified mapping first
             if !(object is PropertiesMappable) {
-                ClosureExecutor.executeWhenError {
-                    print("This model of type: \(type(of: object)) is not mappable")
+                ClosureExecutor.executeWhenDebug {
+                    print("This model of type: \(type(of: object)) is not mappable but is class/struct type")
                 }
-                return nil
+                return object
             }
             var mutableObject = object as! PropertiesMappable
             mutableObject.mapping(mapper: mapper)
