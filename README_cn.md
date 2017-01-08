@@ -2,9 +2,9 @@
 
 HandyJSON是一个用于Swift语言中的JSON序列化/反序列化库。
 
-与其他流行的Swift JSON库相比，HandyJSON的特点是，它反序列化时(把JSON转换为Model)不要求Model从`NSObject`继承(因为它不是基于`KVC`机制)，也不要求你为Model定义一个`Mapping`函数。只要你定义好Model类，声明它服从`HandyJSON`协议，HandyJSON就能自行以各个属性的属性名为Key，从JSON串中解析值。
+与其他流行的Swift JSON库相比，HandyJSON的特点是，它支持纯swift类，使用也简单。它反序列化时(把JSON转换为Model)不要求Model从`NSObject`继承(因为它不是基于`KVC`机制)，也不要求你为Model定义一个`Mapping`函数。只要你定义好Model类，声明它服从`HandyJSON`协议，HandyJSON就能自行以各个属性的属性名为Key，从JSON串中解析值。
 
-需要注意，HandyJSON在反序列化时是根据Model的内存布局来为各个属性赋值的，所以，它完全依赖于Swift的内存布局规则。这个库实现里涉及的规则是从一些三方资料中找到说明，加上自己反复验证总结得到。Swift从诞生到现在一直没有改变过这些规则，但毕竟不是苹果官方说明，所以仍然存在一定的风险。如果Swift日后更新改变这些规则，HandyJSON会第一时间跟进做好兼容工作。
+HandyJSON目前依赖于从Swift Runtime源码中推断的内存规则，任何变动我们将随时跟进。
 
 [![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=master)](https://travis-ci.org/alibaba/HandyJSON)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -17,38 +17,33 @@ HandyJSON是一个用于Swift语言中的JSON序列化/反序列化库。
 ### 反序列化
 
 ```swift
-class Animal: HandyJSON {
-    var name: String?
-    var count: Int?
+class BasicTypes: HandyJSON {
+    var int: Int = 2
+    var doubleOptional: Double?
+    var stringImplicitlyUnwrapped: String!
 
     required init() {}
 }
 
-let json = "{\"name\": \"Cat\", \"count\": 5}"
-
-if let cat = JSONDeserializer<Animal>.deserializeFrom(json: json) {
-    print(cat)
+let jsonString = "{\"doubleOptional\":1.1,\"stringImplicitlyUnwrapped\":\"hello\",\"int\":1}"
+if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+    print(object.int)
+    print(object.doubleOptional!)
+    print(object.stringImplicitlyUnwrapped)
 }
 ```
 
 ### 序列化
 
 ```swift
-class Animal {
-    var name: String?
-    var count: Int?
+let object = BasicTypes()
+object.int = 1
+object.doubleOptional = 1.1
+object.stringImplicitlyUnwrapped = “hello"
 
-    init(name: String, count: Int) {
-        self.name = name
-        self.count = count
-    }
-}
-
-let cat = Animal(name: "cat", count: 5)
-
-print(JSONSerializer.serialize(model: cat).toJSON()!)
-print(JSONSerializer.serialize(model: cat).toPrettifyJSON()!)
-print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
+print(object.toJSON()!) // serialize to dictionary
+print(object.toJSONString()!) // serialize to JSON string
+print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON string
 ```
 
 # 文档目录
@@ -70,7 +65,7 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
     - [支持的属性类型](#支持的属性类型)
 - [序列化](#序列化-1)
     - [基本类型](#基本类型-1)
-    - [复杂类型](#复杂类型)
+    - [自定义映射和排除型](#自定义映射和排除)
 - [待办](#待办)
 
 # 特性
@@ -86,6 +81,8 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
 * 支持自定义解析规则
 
 * 类型自适应，如JSON中是一个Int，但对应Model是String字段，会自动完成转化
+
+具体支持的类型，可以参考代码文件: [BasicTypes](./HandyJSONTests/BasicTypes.swift)。
 
 # 环境要求
 
@@ -108,18 +105,17 @@ HandyJSON只在Swift3.x版本上(master分支)开发新特性，在Swift2.x中�
 服从`HandyJSON`协议，需要实现一个空的`init`方法。
 
 ```swift
-class Animal: HandyJSON {
-    var name: String?
-    var id: String?
-    var num: Int?
+class BasicTypes: HandyJSON {
+    var int: Int = 2
+    var doubleOptional: Double?
+    var stringImplicitlyUnwrapped: String!
 
     required init() {}
 }
 
-let jsonString = "{\"name\":\"cat\",\"id\":\"12345\",\"num\":180}"
-
-if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
-    print(animal)
+let jsonString = "{\"doubleOptional\":1.1,\"stringImplicitlyUnwrapped\":\"hello\",\"int\":1}"
+if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+    // …
 }
 ```
 
@@ -128,16 +124,15 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
 对于声明为`struct`的Model，由于`struct`默认提供了空的`init`方法，所以不需要额外声明。
 
 ```swift
-struct Animal: HandyJSON {
-    var name: String?
-    var id: String?
-    var num: Int?
+struct BasicTypes: HandyJSON {
+    var int: Int = 2
+    var doubleOptional: Double?
+    var stringImplicitlyUnwrapped: String!
 }
 
-let jsonString = "{\"name\":\"cat\",\"id\":\"12345\",\"num\":180}"
-
-if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
-    print(animal)
+let jsonString = "{\"doubleOptional\":1.1,\"stringImplicitlyUnwrapped\":\"hello\",\"int\":1}"
+if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+    // …
 }
 ```
 
@@ -145,72 +140,63 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
 
 ## 支持enum
 
-由于受到类型转换的一些限制，对`enum`的支持需要一些特殊处理。要支持反序列化的`enum`类型需要服从`HandyJSONEnum`协议，并实现协议要求的`makeInitWrapper`函数。
+支持值类型的enum，且需要声明服从`HandyJSONEnum`协议。不再需要其他特殊处理了。
 
 ```swift
 enum AnimalType: String, HandyJSONEnum {
     case Cat = "cat"
     case Dog = "dog"
     case Bird = "bird"
-
-    static func makeInitWrapper() -> InitWrapperProtocol? {
-        return InitWrapper<String>(rawInit: AnimalType.init)
-    }
 }
 
-class Animal: HandyJSON {
-    var type: AnimalType?
+struct Animal: HandyJSON {
     var name: String?
-
-    required init() {}
+    var type: AnimalType?
 }
 
 let jsonString = "{\"type\":\"cat\",\"name\":\"Tom\"}"
 if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
-    print(animal)
+    print(animal.type?.rawValue)
 }
 ```
-
-在`makeInitWrapper`函数中将`RawRepresentable`的`init`函数包装一下，返回就可以了。如果觉得对代码有侵入，可以考虑用扩展实现。
-
-```swift
-enum AnimalType: String {
-    case Cat = "cat"
-    case Dog = "dog"
-    case Bird = "bird"
-}
-
-extension AnimalType: HandyJSONEnum {
-    static func makeInitWrapper() -> InitWrapperProtocol? {
-        return InitWrapper<String>(rawInit: AnimalType.init)
-    }
-}
-
-...
-```
-
-这样对原来的`enum`类型就没有侵入了。
 
 ## 可选、隐式解包可选、集合等
 
 HandyJSON支持这些非基础类型，包括嵌套结构。
 
 ```swift
-class Cat: HandyJSON {
-    var id: Int64!
-    var name: String!
-    var friend: [String]?
-    var weight: Double?
-    var alive: Bool = true
-    var color: NSString?
+class BasicTypes: HandyJSON {
+    var bool: Bool = true
+    var intOptional: Int?
+    var doubleImplicitlyUnwrapped: Double!
+    var anyObjectOptional: Any?
+
+    var arrayInt: Array<Int> = []
+    var arrayStringOptional: Array<String>?
+    var setInt: Set<Int>?
+    var dictAnyObject: Dictionary<String, Any> = [:]
+
+    var nsNumber = 2
+    var nsString: NSString?
 
     required init() {}
 }
 
-let jsonString = "{\"id\":1234567,\"name\":\"Kitty\",\"friend\":[\"Tom\",\"Jack\",\"Lily\",\"Black\"],\"weight\":15.34,\"alive\":false,\"color\":\"white\"}"
+let object = BasicTypes()
+object.intOptional = 1
+object.doubleImplicitlyUnwrapped = 1.1
+object.anyObjectOptional = "StringValue"
+object.arrayInt = [1, 2]
+object.arrayStringOptional = ["a", "b"]
+object.setInt = [1, 2]
+object.dictAnyObject = ["key1": 1, "key2": "stringValue"]
+object.nsNumber = 2
+object.nsString = "nsStringValue"
 
-if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
-    print(cat)
+let jsonString = object.toJSONString()!
+
+if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+    // ...
 }
 ```
 
@@ -274,7 +260,6 @@ class Animal: HandyJSON {
     required init() {}
 }
 
-
 class Cat: Animal {
     var name: String?
 
@@ -288,7 +273,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 }
 ```
 
-## JSON中的数组
+## JSON数组
 
 如果JSON的第一层表达的是数组，可以转化它到一个Model数组。
 
@@ -303,9 +288,7 @@ class Cat: HandyJSON {
 let jsonArrayString: String? = "[{\"name\":\"Bob\",\"id\":\"1\"}, {\"name\":\"Lily\",\"id\":\"2\"}, {\"name\":\"Lucy\",\"id\":\"3\"}]"
 if let cats = JSONDeserializer<Cat>.deserializeModelArrayFrom(json: jsonArrayString) {
     cats.forEach({ (cat) in
-        if let _cat = cat {
-            print(_cat.id ?? "", _cat.name ?? "")
-        }
+        // ...
     })
 }
 ```
@@ -323,28 +306,37 @@ class Cat: HandyJSON {
     required init() {}
 
     func mapping(mapper: HelpingMapper) {
-        // 指定 JSON中的`cat_id`字段映射到Model中的`id`字段
-        mapper.specify(property: &id, name: "cat_id")
+        // specify 'cat_id' field in json map to 'id' property in object
+        mapper <<<
+            self.id <- "cat_id"
 
-        // 指定JSON中的`parent`字段解析为Model中的`parent`字段
-        // 因为(String, String)?是一个元组，既不是基本类型，也不服从`HandyJSON`协议，所以需要自己实现解析过程
-        mapper.specify(property: &parent, converter: { (rawString) -> (String, String) in
-            let parentNames = rawString.characters.split{$0 == "/"}.map(String.init)
-            return (parentNames[0], parentNames[1])
-        })
+        // specify 'parent' field in json parse as following to 'parent' property in object
+        mapper <<<
+            self.parent <- TransformOf<(String, String), String>(fromJSON: { (rawString) -> (String, String)? in
+                if let parentNames = rawString?.characters.split(separator: "/").map(String.init) {
+                    return (parentNames[0], parentNames[1])
+                }
+                return nil
+            }, toJSON: { (tuple) -> String? in
+                if let _tuple = tuple {
+                    return "\(_tuple.0)/\(_tuple.1)"
+                }
+                return nil
+            })
     }
 }
 
 let jsonString = "{\"cat_id\":12345,\"name\":\"Kitty\",\"parent\":\"Tom/Lily\"}"
 
 if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
-    print(cat)
+    print(cat.id)
+    print(cat.parent)
 }
 ```
 
 ## 排除指定属性
 
-如果在Model中存在因为某些原因不能实现`HandyJSON`协议的字段，或者说不希望反序列化影响某个字段，可以在`mapping`函数中将它排除。如果不这么做，没实现`HandyJSON`协议的字段可能会导致`fatalError`。
+如果在Model中存在因为某些原因不能实现`HandyJSON`协议的非基本字段，或者不能实现`HandyJSONEnum`协议的枚举字段，又或者说不希望反序列化影响某个字段，可以在`mapping`函数中将它排除。如果不这么做，可能会出现未定义的行为。
 
 ```swift
 class NotHandyJSONType {
@@ -360,8 +352,8 @@ class Cat: HandyJSON {
     required init() {}
 
     func mapping(mapper: HelpingMapper) {
-        mapper.exclude(property: &notHandyJSONTypeProperty)
-        mapper.exclude(property: &basicTypeButNotWantedProperty)
+        mapper >>> self.notHandyJSONTypeProperty
+        mapper >>> self.basicTypeButNotWantedProperty
     }
 }
 
@@ -392,78 +384,38 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 
 ## 基本类型
 
-不需要为序列化做额外的工作。给出Model定义，构造出实例，就可以直接调用HandyJSON把它转化为JSON文本串，或者只有基础类型的简单字典。
+现在，序列化也要求Model声明服从`HandyJSON`协议。
 
 ```swift
-class Animal {
-    var name: String?
-    var height: Int?
+class BasicTypes: HandyJSON {
+    var int: Int = 2
+    var doubleOptional: Double?
+    var stringImplicitlyUnwrapped: String!
 
-    init(name: String, height: Int) {
-        self.name = name
-        self.height = height
-    }
+    required init() {}
 }
 
-let cat = Animal(name: "cat", height: 30)
-if let jsonStr = JSONSerializer.serialize(model: cat).toJSON() {
-    print("simple json string: ", jsonStr)
-}
-if let prettifyJSON = JSONSerializer.serialize(model: cat).toPrettifyJSON() {
-    print("prettify json string: ", prettifyJSON)
-}
-if let dict = JSONSerializer.serialize(model: cat).toSimpleDictionary() {
-    print("dictionary: ", dict)
-}
+let object = BasicTypes()
+object.int = 1
+object.doubleOptional = 1.1
+object.stringImplicitlyUnwrapped = “hello"
+
+print(object.toJSON()!) // serialize to dictionary
+print(object.toJSONString()!) // serialize to JSON string
+print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON string
 ```
 
-## 复杂类型
+## 自定义映射和排除
 
-仍然不需要额外的工作，直接调接口就可以。
-
-```swift
-enum Gender {
-    case Male
-    case Female
-}
-
-struct Subject {
-    var id: Int64?
-    var name: String?
-
-    init(id: Int64, name: String) {
-        self.id = id
-        self.name = name
-    }
-}
-
-class Student {
-    var name: String?
-    var gender: Gender?
-    var subjects: [Subject]?
-}
-
-let student = Student()
-student.name = "Jack"
-student.gender = .Female
-student.subjects = [Subject(id: 1, name: "math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
-
-if let jsonStr = JSONSerializer.serialize(model: student).toJSON() {
-    print("simple json string: ", jsonStr)
-}
-if let prettifyJSON = JSONSerializer.serialize(model: student).toPrettifyJSON() {
-    print("prettify json string: ", prettifyJSON)
-}
-if let dict = JSONSerializer.serialize(model: student).toSimpleDictionary() {
-    print("dictionary: ", dict)
-}
-```
+和反序列化一样，只要定义`mapping`和`exclude`就可以了。被排除的属性，序列化和反序列化都不再影响到它。而在`mapping`中定义的`Transformer`，同时定义了序列化和反序列的规则，所以只要为属性指明一个`Transformer`关系就可以了。
 
 # 待办
 
 * 完善测试
 
 * 完善异常处理
+
+* 简化API风格
 
 # License
 
