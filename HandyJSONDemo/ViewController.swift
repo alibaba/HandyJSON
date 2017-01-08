@@ -102,14 +102,27 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
 
         print("\n--------------------- serilization ---------------------\n")
-        self.serialization()
+        // self.serialization()
         print("\n--------------------- deserilization ---------------------\n")
-        self.deserialization()
+        // self.deserialization()
+        self.debug()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+    func debug() {
+        let value: String = "Stringgggg"
+        let object = BasicTypes()
+        object.arrayAnyObject = [value]
+        object.arrayAnyObjectOptional = [value]
+        object.arrayAnyObjectImplicitlyUnwrapped = [value]
+
+        print(object.toJSON())
+        let JSONString = object.toJSONString(prettyPrint: true)
+        // let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
     }
 
     func serialization() {
@@ -135,4 +148,26 @@ class ViewController: UIViewController {
             print(student.toJSON()!)
         }
     }
+}
+
+class BasicTypes: HandyJSON {
+    var arrayAnyObject: Array<Any> = []
+    var arrayAnyObjectOptional: Array<Any>?
+    var arrayAnyObjectImplicitlyUnwrapped: Array<Any>!
+    enum EnumInt: Int, HandyJSONEnum {
+        case Default
+        case Another
+
+        static func makeInitWrapper() -> InitWrapperProtocol {
+            return InitWrapper<Int>(rawInit: self.init)
+        }
+
+        static func takeValueWrapper() -> TakeValueProtocol {
+            return TakeValueWrapper<EnumInt>(takeValue: { $0.rawValue })
+        }
+    }
+    var enumInt: EnumInt = .Default
+    var enumIntOptional: EnumInt?
+    var enumIntImplicitlyUnwrapped: EnumInt!
+    required init() {}
 }

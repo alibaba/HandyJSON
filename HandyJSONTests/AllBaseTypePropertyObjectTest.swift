@@ -278,12 +278,12 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
         let jsonString = "{\"aEnum1\":1,\"bEnum1\":2,\"cEnum1\":3,\"aEnum2\":\"a\",\"bEnum2\":\"b\",\"cEnum2\":\"c\",\"aEnum3\":1.1,\"bEnum3\":2.2,\"cEnum3\":3.3,\"aEnumArr\":[1,2,3],\"bEnumArr\":[\"a\",\"b\",\"c\"],\"cEnumArr\":[1.1,2.2,3.3]}"
         let model = JSONDeserializer<TestEnum>.deserializeFrom(json: jsonString)!
 
-        // XCTAssert(model.aEnum1 == .A)
-        // XCTAssert(model.bEnum2 == .B)
-        // XCTAssert(model.cEnum3 == .C)
+        XCTAssert(model.aEnum1 == .A)
+        XCTAssert(model.bEnum2 == .B)
+        XCTAssert(model.cEnum3 == .C)
 
-        // XCTAssert(model.aEnumArr?[0] == .A)
-        // XCTAssert(model.bEnumArr[1] == .B)
-        // XCTAssert(model.cEnumArr[2] == .C)
+        XCTAssert(model.aEnumArr?[0] == .A)
+        XCTAssert(model.bEnumArr[1] == .B)
+        XCTAssert(model.cEnumArr[2] == .C)
     }
 }

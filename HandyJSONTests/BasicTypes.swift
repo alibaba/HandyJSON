@@ -26,57 +26,57 @@ import HandyJSON
 class BasicTypes: HandyJSON {
     var bool: Bool = true
     var boolOptional: Bool?
-    var boolImplicityUnwrapped: Bool!
+    var boolImplicitlyUnwrapped: Bool!
     var int: Int = 0
     var intOptional: Int?
-    var intImplicityUnwrapped: Int!
+    var intImplicitlyUnwrapped: Int!
     var double: Double = 1.1
     var doubleOptional: Double?
-    var doubleImplicityUnwrapped: Double!
+    var doubleImplicitlyUnwrapped: Double!
     var float: Float = 1.11
     var floatOptional: Float?
-    var floatImplicityUnwrapped: Float!
+    var floatImplicitlyUnwrapped: Float!
     var string: String = ""
     var stringOptional: String?
-    var stringImplicityUnwrapped: String!
+    var stringImplicitlyUnwrapped: String!
     var anyObject: Any = true
     var anyObjectOptional: Any?
     var anyObjectImplicitlyUnwrapped: Any!
 
     var arrayBool: Array<Bool> = []
     var arrayBoolOptional: Array<Bool>?
-    var arrayBoolImplicityUnwrapped: Array<Bool>!
+    var arrayBoolImplicitlyUnwrapped: Array<Bool>!
     var arrayInt: Array<Int> = []
     var arrayIntOptional: Array<Int>?
-    var arrayIntImplicityUnwrapped: Array<Int>!
+    var arrayIntImplicitlyUnwrapped: Array<Int>!
     var arrayDouble: Array<Double> = []
     var arrayDoubleOptional: Array<Double>?
-    var arrayDoubleImplicityUnwrapped: Array<Double>!
+    var arrayDoubleImplicitlyUnwrapped: Array<Double>!
     var arrayFloat: Array<Float> = []
     var arrayFloatOptional: Array<Float>?
-    var arrayFloatImplicityUnwrapped: Array<Float>!
+    var arrayFloatImplicitlyUnwrapped: Array<Float>!
     var arrayString: Array<String> = []
     var arrayStringOptional: Array<String>?
-    var arrayStringImplicityUnwrapped: Array<String>!
+    var arrayStringImplicitlyUnwrapped: Array<String>!
     var arrayAnyObject: Array<Any> = []
     var arrayAnyObjectOptional: Array<Any>?
     var arrayAnyObjectImplicitlyUnwrapped: Array<Any>!
 
     var dictBool: Dictionary<String,Bool> = [:]
     var dictBoolOptional: Dictionary<String, Bool>?
-    var dictBoolImplicityUnwrapped: Dictionary<String, Bool>!
+    var dictBoolImplicitlyUnwrapped: Dictionary<String, Bool>!
     var dictInt: Dictionary<String,Int> = [:]
     var dictIntOptional: Dictionary<String,Int>?
-    var dictIntImplicityUnwrapped: Dictionary<String,Int>!
+    var dictIntImplicitlyUnwrapped: Dictionary<String,Int>!
     var dictDouble: Dictionary<String,Double> = [:]
     var dictDoubleOptional: Dictionary<String,Double>?
-    var dictDoubleImplicityUnwrapped: Dictionary<String,Double>!
+    var dictDoubleImplicitlyUnwrapped: Dictionary<String,Double>!
     var dictFloat: Dictionary<String,Float> = [:]
     var dictFloatOptional: Dictionary<String,Float>?
-    var dictFloatImplicityUnwrapped: Dictionary<String,Float>!
+    var dictFloatImplicitlyUnwrapped: Dictionary<String,Float>!
     var dictString: Dictionary<String,String> = [:]
     var dictStringOptional: Dictionary<String,String>?
-    var dictStringImplicityUnwrapped: Dictionary<String,String>!
+    var dictStringImplicitlyUnwrapped: Dictionary<String,String>!
     var dictAnyObject: Dictionary<String, Any> = [:]
     var dictAnyObjectOptional: Dictionary<String, Any>?
     var dictAnyObjectImplicitlyUnwrapped: Dictionary<String, Any>!

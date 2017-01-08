@@ -21,25 +21,12 @@ import Foundation
 
 public typealias CustomMappingKeyValueTuple = (Int, MappingPropertyHandler)
 
-public class BasicPropertyHandler {
-    var propertySize: Int
-
-    public init(propertySize: Int) {
-        self.propertySize = propertySize
-    }
-}
-
-public class ExcludePropertyHandler: BasicPropertyHandler {
-}
-
-public class MappingPropertyHandler: BasicPropertyHandler {
+public class MappingPropertyHandler {
     var mappingName: String?
     var assignmentClosure: ((Any?) -> ())?
     var takeValueClosure: ((Any?) -> (Any?))?
 
-    public init(mappingName: String?, assignmentClosure: ((Any?) -> ())?, takeValueClosure: ((Any?) -> (Any?))?, propertySize: Int) {
-
-        super.init(propertySize: propertySize)
+    public init(mappingName: String?, assignmentClosure: ((Any?) -> ())?, takeValueClosure: ((Any?) -> (Any?))?) {
         self.mappingName = mappingName
         self.assignmentClosure = assignmentClosure
         self.takeValueClosure = takeValueClosure
@@ -48,19 +35,15 @@ public class MappingPropertyHandler: BasicPropertyHandler {
 
 public class HelpingMapper {
 
-    private var handlers = [Int: BasicPropertyHandler]()
+    private var mappingHandlers = [Int: MappingPropertyHandler]()
+    private var excludeProperties = [Int]()
 
-    internal func nextGreaterThanOrEqualKey(toKey: Int) -> Int? {
-        for each in handlers.keys.sorted(by: <) {
-            if each == toKey || each > toKey {
-                return each
-            }
-        }
-        return nil
+    internal func getMappingHandler(key: Int) -> MappingPropertyHandler? {
+        return self.mappingHandlers[key]
     }
 
-    internal func getPropertyHandler(key: Int) -> BasicPropertyHandler? {
-        return self.handlers[key]
+    internal func propertyExcluded(key: Int) -> Bool {
+        return self.excludeProperties.contains(key)
     }
 
     public func specify<T>(property: inout T, name: String) {
@@ -74,7 +57,6 @@ public class HelpingMapper {
     public func specify<T>(property: inout T, name: String?, converter: ((String) -> T)?) {
         let pointer = withUnsafePointer(to: &property, { return $0 })
         let key = pointer.hashValue
-        let size = MemoryLayout<T>.size
 
         if let _converter = converter {
             let assignmentClosure = { (jsonValue: Any?) in
@@ -82,9 +64,9 @@ public class HelpingMapper {
                     UnsafeMutablePointer<T>(mutating: pointer).pointee = _converter(_valueStr)
                 }
             }
-            self.handlers[key] = MappingPropertyHandler(mappingName: name, assignmentClosure: assignmentClosure, takeValueClosure: nil, propertySize: size)
+            self.mappingHandlers[key] = MappingPropertyHandler(mappingName: name, assignmentClosure: assignmentClosure, takeValueClosure: nil)
         } else {
-            self.handlers[key] = MappingPropertyHandler(mappingName: name, assignmentClosure: nil, takeValueClosure: nil, propertySize: size)
+            self.mappingHandlers[key] = MappingPropertyHandler(mappingName: name, assignmentClosure: nil, takeValueClosure: nil)
         }
     }
 
@@ -93,12 +75,12 @@ public class HelpingMapper {
     }
 
     fileprivate func addCustomMapping(key: Int, mappingInfo: MappingPropertyHandler) {
-        self.handlers[key] = mappingInfo
+        self.mappingHandlers[key] = mappingInfo
     }
 
     fileprivate func _exclude<T>(property: inout T) {
         let pointer = withUnsafePointer(to: &property, { return $0 })
-        self.handlers[pointer.hashValue] = ExcludePropertyHandler(propertySize: MemoryLayout<T>.size)
+        self.excludeProperties.append(pointer.hashValue)
     }
 }
 
@@ -107,8 +89,7 @@ infix operator <- : LogicalConjunctionPrecedence
 public func <- <T>(property: inout T, name: String) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
-    let size = MemoryLayout<T>.size
-    return (key, MappingPropertyHandler(mappingName: name, assignmentClosure: nil, takeValueClosure: nil, propertySize: size))
+    return (key, MappingPropertyHandler(mappingName: name, assignmentClosure: nil, takeValueClosure: nil))
 }
 
 public func <- <Transform: TransformType>(property: inout Transform.Object, transformer: Transform) -> CustomMappingKeyValueTuple {
@@ -118,7 +99,6 @@ public func <- <Transform: TransformType>(property: inout Transform.Object, tran
 public func <- <Transform: TransformType>(property: inout Transform.Object, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
-    let size = MemoryLayout<Transform.Object>.size
     let assignmentClosure = { (jsonValue: Any?) in
         if let value = transformer.1?.transformFromJSON(jsonValue) {
             UnsafeMutablePointer<Transform.Object>(mutating: pointer).pointee = value
@@ -130,7 +110,7 @@ public func <- <Transform: TransformType>(property: inout Transform.Object, tran
         }
         return nil
     }
-    return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure, propertySize: size))
+    return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
 public func <- <Transform: TransformType>(property: inout Transform.Object?, transformer: Transform) -> CustomMappingKeyValueTuple {
@@ -140,7 +120,6 @@ public func <- <Transform: TransformType>(property: inout Transform.Object?, tra
 public func <- <Transform: TransformType>(property: inout Transform.Object?, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
-    let size = MemoryLayout<Transform.Object?>.size
     let assignmentClosure = { (jsonValue: Any?) in
         if let value = transformer.1?.transformFromJSON(jsonValue) {
             UnsafeMutablePointer<Transform.Object?>(mutating: pointer).pointee = value
@@ -152,7 +131,7 @@ public func <- <Transform: TransformType>(property: inout Transform.Object?, tra
         }
         return nil
     }
-    return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure, propertySize: size))
+    return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
 public func <- <Transform: TransformType>(property: inout Transform.Object!, transformer: Transform) -> CustomMappingKeyValueTuple {
@@ -162,7 +141,6 @@ public func <- <Transform: TransformType>(property: inout Transform.Object!, tra
 public func <- <Transform: TransformType>(property: inout Transform.Object!, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
-    let size = MemoryLayout<Transform.Object!>.size
     let assignmentClosure = { (jsonValue: Any?) in
         if let value = transformer.1?.transformFromJSON(jsonValue) {
             UnsafeMutablePointer<Transform.Object!>(mutating: pointer).pointee = value
@@ -174,7 +152,7 @@ public func <- <Transform: TransformType>(property: inout Transform.Object!, tra
         }
         return nil
     }
-    return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure, propertySize: size))
+    return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
 infix operator <<< : AssignmentPrecedence

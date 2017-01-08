@@ -21,6 +21,166 @@
 //  Created by zhouzhuo on 9/30/16.
 //
 
+extension Metrizable {
+
+    internal static func _serializeToDictionary(propertys: [(String?, Any)], headPointer: UnsafeMutableRawPointer, offsetInfo: [String: Int] , mapper: HelpingMapper) -> [String: Any] {
+
+        var dict = [String: Any]()
+
+        propertys.forEach { (label, value) in
+
+            var key = label ?? ""
+
+            guard let offset = offsetInfo[key] else {
+                return
+            }
+
+            let mutablePointer = headPointer.advanced(by: offset)
+
+            if mapper.propertyExcluded(key: mutablePointer.hashValue) {
+                return
+            }
+
+            if let mappingHandler = mapper.getMappingHandler(key: mutablePointer.hashValue) {
+                // if specific key is set, replace the label
+                if let specifyKey = mappingHandler.mappingName {
+                    key = specifyKey
+                }
+
+                if let transformer = mappingHandler.takeValueClosure {
+                    if let _transformedValue = transformer(value) {
+                        dict[key] = _transformedValue
+                    }
+                    return
+                }
+            }
+
+            if let typedValue = value as? Metrizable {
+                if let result = self._serialize(from: typedValue) {
+                    dict[key] = result
+                }
+            }
+        }
+        return dict
+    }
+
+    internal static func _serialize(from object: Metrizable) -> Any? {
+        let objectType = type(of: object)
+
+        if let enumType = objectType as? HandyJSONEnum.Type {
+            return enumType.takeValueWrapper().rawValue(fromEnum: object)
+        } else if objectType is BasePropertyProtocol.Type {
+            return object
+        }
+
+        let mirror = Mirror(reflecting: object)
+
+        if objectType is ImplicitlyUnwrappedTypeProtocol.Type {
+            if let _value = mirror.children.first?.value {
+                if let _transformable = _value as? Metrizable {
+                    return Self._serialize(from: _transformable)
+                }
+                return _value
+            }
+            return nil
+        }
+
+        guard let displayStyle = mirror.displayStyle else {
+            return self
+        }
+
+        switch displayStyle {
+        case .class, .struct:
+
+            let mapper = HelpingMapper()
+            // do user-specified mapping first
+            if !(object is TransformableProperty) {
+                return nil
+            }
+            var mutableObject = object as! TransformableProperty
+            mutableObject.mapping(mapper: mapper)
+
+            let rawPointer: UnsafeMutableRawPointer
+            if objectType is AnyClass {
+                rawPointer = UnsafeMutableRawPointer(mutableObject.headPointerOfClass())
+            } else {
+                rawPointer = UnsafeMutableRawPointer(mutableObject.headPointerOfStruct())
+            }
+
+            var children = [(label: String?, value: Any)]()
+            let mirrorChildrenCollection = AnyRandomAccessCollection(mirror.children)!
+            children += mirrorChildrenCollection
+
+            var currentMirror = mirror
+            while let superclassChildren = currentMirror.superclassMirror?.children {
+                let randomCollection = AnyRandomAccessCollection(superclassChildren)!
+                children += randomCollection
+                currentMirror = currentMirror.superclassMirror!
+            }
+
+            var offsetInfo = [String: Int]()
+            guard let properties = getProperties(forType: objectType) else {
+                return nil
+            }
+
+            if let pp = getProperties(forInstance: mutableObject) {
+                pp.forEach({ (ppp) in
+                    print(ppp.key, ppp.value)
+                })
+            }
+
+            properties.forEach({ (desc) in
+                offsetInfo[desc.key] = desc.offset
+            })
+
+            return Self._serializeToDictionary(propertys: children, headPointer: rawPointer, offsetInfo: offsetInfo, mapper: mapper) as Any
+        case .enum:
+            return object as Any
+        case .optional:
+            if mirror.children.count != 0 {
+                let (_, some) = mirror.children.first!
+                if let _value = some as? Metrizable {
+                    return Self._serialize(from: _value)
+                } else {
+                    return some
+                }
+            }
+            return nil
+        case .collection, .set:
+            var array = [Any]()
+            mirror.children.enumerated().forEach({ (index, element) in
+                if let _value = element.value as? Metrizable, let transformedValue = Self._serialize(from: _value) {
+                    array.append(transformedValue)
+                }
+            })
+            return array as Any
+        case .dictionary:
+            var dict = [String: Any]()
+            mirror.children.enumerated().forEach({ (index, element) in
+                let _mirror = Mirror(reflecting: element.value)
+                var key: String?
+                var value: Any?
+                _mirror.children.enumerated().forEach({ (_index, _element) in
+                    if _index == 0 {
+                        key = "\(_element.value)"
+                    } else {
+                        if let _value = _element.value as? Metrizable {
+                            value = Self._serialize(from: _value)
+                        }
+                    }
+                })
+                if (key ?? "") != "" && value != nil {
+                    dict[key!] = value!
+                }
+            })
+            return dict as Any
+        default:
+            return object as Any
+        }
+    }
+}
+
+
 public extension HandyJSON {
 
     public func toJSON() -> [String: Any]? {

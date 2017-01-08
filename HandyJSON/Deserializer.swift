@@ -19,6 +19,168 @@
 
 import Foundation
 
+extension Metrizable {
+
+    internal static func _transform(rawPointer: UnsafeMutableRawPointer, property: Property.Description, dict: NSDictionary, mapper: HelpingMapper) {
+        var key = property.key
+        let mutablePointer = rawPointer.advanced(by: property.offset)
+
+        if mapper.propertyExcluded(key: mutablePointer.hashValue) {
+            return
+        }
+
+        if let mappingHandler = mapper.getMappingHandler(key: mutablePointer.hashValue) {
+            // if specific key is set, replace the label
+            if let specifyKey = mappingHandler.mappingName {
+                key = specifyKey
+            }
+
+            if let transformer = mappingHandler.assignmentClosure {
+                // execute the transform closure
+                transformer(dict[key])
+                return
+            }
+        }
+
+        guard let rawValue = dict[key] as? NSObject else {
+            return
+        }
+
+        if let transformableType = property.type as? Metrizable.Type {
+            if let sv = transformableType.valueFrom(object: rawValue) {
+                extensions(of: transformableType).write(sv, to: mutablePointer)
+                return
+            }
+        } else {
+            if let sv = extensions(of: property.type).takeValue(from: rawValue) {
+                extensions(of: property.type).write(sv, to: mutablePointer)
+                return
+            }
+        }
+        print("property: \(property.key) hasn't been written in")
+    }
+
+    internal static func _transform(dict: NSDictionary, toType type: TransformableProperty.Type) -> TransformableProperty? {
+        var instance = type.init()
+
+        guard let properties = getProperties(forType: type) else {
+            return nil
+        }
+
+        let mapper = HelpingMapper()
+        // do user-specified mapping first
+        instance.mapping(mapper: mapper)
+
+        let rawPointer: UnsafeMutableRawPointer
+        if type is AnyClass {
+            rawPointer = UnsafeMutableRawPointer(instance.headPointerOfClass())
+        } else {
+            rawPointer = UnsafeMutableRawPointer(instance.headPointerOfStruct())
+        }
+
+        properties.forEach { (property) in
+            _transform(rawPointer: rawPointer, property: property, dict: dict, mapper: mapper)
+        }
+
+        return instance
+    }
+
+    internal static func valueFrom(object: NSObject) -> Self? {
+        if self is HandyJSONEnum.Type {
+
+            if let initWrapper = (self as? HandyJSONEnum.Type)?.makeInitWrapper() {
+                if let resultValue = initWrapper.convertToEnum(object: object) {
+                    return resultValue as? Self
+                }
+            }
+            return nil
+        } else if self is BasePropertyProtocol.Type {
+
+            // base type can be transformed directly
+            return baseValueFrom(object: object)
+        } else if self is OptionalTypeProtocol.Type {
+
+            // optional type, we parse the wrapped generic type to construct the value, then wrap it to optional
+            return (self as! OptionalTypeProtocol.Type).optionalFromNSObject(object: object) as? Self
+        } else if self is ImplicitlyUnwrappedTypeProtocol.Type {
+
+            // similar to optional
+            return (self as! ImplicitlyUnwrappedTypeProtocol.Type).implicitlyUnwrappedOptionalFromNSObject(object: object) as? Self
+        } else if self is ArrayTypeProtocol.Type {
+
+            // we can't retrieve the generic type wrapped by array here, so we go into array extension to do the casting
+            return (self as! ArrayTypeProtocol.Type).arrayFromNSObject(object: object) as? Self
+        } else if self is SetTypeProtocol.Type {
+
+            // we can't retrieve the generic type wrapped by array here, so we go into array extension to do the casting
+            return (self as! SetTypeProtocol.Type).setFromNSObject(object: object) as? Self
+        } else if self is DictionaryTypeProtocol.Type {
+
+            // similar to array
+            return (self as! DictionaryTypeProtocol.Type).dictionaryFromNSObject(object: object) as? Self
+        } else if self is NSArray.Type {
+
+            if let arr = object as? NSArray {
+                return arr as? Self
+            }
+        } else if self is NSDictionary.Type {
+
+            if let dict = object as? NSDictionary {
+                return dict as? Self
+            }
+        } else if self is TransformableProperty.Type {
+
+            if let dict = object as? NSDictionary {
+                // nested object, transform recursively
+                return _transform(dict: dict, toType: self as! TransformableProperty.Type) as? Self
+            }
+        }
+        return nil
+    }
+
+    // base type supported parsing directly
+    internal static func baseValueFrom(object: NSObject) -> Self? {
+        switch self {
+        case is Int8.Type:
+            return object.toInt8() as? Self
+        case is UInt8.Type:
+            return object.toUInt8() as? Self
+        case is Int16.Type:
+            return object.toInt16() as? Self
+        case is UInt16.Type:
+            return object.toUInt16() as? Self
+        case is Int32.Type:
+            return object.toInt32() as? Self
+        case is UInt32.Type:
+            return object.toUInt32() as? Self
+        case is Int64.Type:
+            return object.toInt64() as? Self
+        case is UInt64.Type:
+            return object.toUInt64() as? Self
+        case is Bool.Type:
+            return object.toBool() as? Self
+        case is Int.Type:
+            return object.toInt() as? Self
+        case is UInt.Type:
+            return object.toUInt() as? Self
+        case is Float.Type:
+            return object.toFloat() as? Self
+        case is Double.Type:
+            return object.toDouble() as? Self
+        case is String.Type:
+            return object.toString() as? Self
+        case is NSString.Type:
+            return object.toNSString() as? Self
+        case is NSNumber.Type:
+            return object.toNSNumber() as? Self
+        default:
+            break
+        }
+        return nil
+    }
+}
+
+
 public class JSONDeserializer<T: HandyJSON> {
 
     /// Converts a NSDictionary to Model if the properties match

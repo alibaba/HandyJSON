@@ -53,7 +53,7 @@ extension Strideable {
 }
 
 extension UnsafePointer {
-    
+
     init<T>(_ pointer: UnsafePointer<T>) {
         self = UnsafeRawPointer(pointer).assumingMemoryBound(to: Pointee.self)
     }

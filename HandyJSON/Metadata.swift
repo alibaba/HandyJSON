@@ -18,6 +18,26 @@
 //  Created by zhouzhuo on 07/01/2017.
 //
 
+// MARK: MetadataType
+protocol MetadataType : PointerType {
+    static var kind: Metadata.Kind? { get }
+}
+
+extension MetadataType {
+
+    var kind: Metadata.Kind {
+        return Metadata.Kind(flag: UnsafePointer<Int>(pointer).pointee)
+    }
+
+    init?(type: Any.Type) {
+        self.init(pointer: unsafeBitCast(type, to: UnsafePointer<Int>.self))
+        if let kind = type(of: self).kind, kind != self.kind {
+            return nil
+        }
+    }
+}
+
+// MARK: Metadata
 struct Metadata : MetadataType {
     var pointer: UnsafePointer<Int>
 
@@ -136,50 +156,5 @@ extension _Metadata {
         var kind: Int
         var nominalTypeDescriptorOffset: Int
         var parent: Metadata?
-    }
-}
-
-// MARK: Metadata + Tuple
-extension Metadata {
-    struct Tuple : MetadataType {
-        static let kind: Kind? = .tuple
-        var pointer: UnsafePointer<Int>
-        var labels: [String?] {
-            guard var pointer = UnsafePointer<CChar>(bitPattern: pointer[2]) else {
-                return []
-            }
-            var labels = [String?]()
-            var string = ""
-            while pointer.pointee != 0 {
-                guard pointer.pointee != 32 else {
-                    labels.append(string.isEmpty ? nil : string)
-                    string = ""
-                    pointer.advance()
-                    continue
-                }
-                string.append(String(UnicodeScalar(UInt8(bitPattern: pointer.pointee))))
-                pointer.advance()
-            }
-            return labels
-        }
-    }
-}
-
-// MARK: MetadataType
-protocol MetadataType : PointerType {
-    static var kind: Metadata.Kind? { get }
-}
-
-extension MetadataType {
-
-    var kind: Metadata.Kind {
-        return Metadata.Kind(flag: UnsafePointer<Int>(pointer).pointee)
-    }
-
-    init?(type: Any.Type) {
-        self.init(pointer: unsafeBitCast(type, to: UnsafePointer<Int>.self))
-        if let kind = type(of: self).kind, kind != self.kind {
-            return nil
-        }
     }
 }

@@ -38,11 +38,11 @@ open class DateTransform: TransformType {
 		if let timeInt = value as? Double {
 			return Date(timeIntervalSince1970: TimeInterval(timeInt))
 		}
-		
+
 		if let timeStr = value as? String {
 			return Date(timeIntervalSince1970: TimeInterval(atof(timeStr)))
 		}
-		
+
 		return nil
 	}
 

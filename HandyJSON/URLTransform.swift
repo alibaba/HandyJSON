@@ -45,11 +45,11 @@ open class URLTransform: TransformType {
 
 	open func transformFromJSON(_ value: Any?) -> URL? {
 		guard let URLString = value as? String else { return nil }
-		
+
 		if !shouldEncodeURLString {
 			return URL(string: URLString)
 		}
-		
+
 		guard let escapedURLString = URLString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
 			return nil
 		}

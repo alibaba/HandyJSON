@@ -26,7 +26,7 @@ struct ReflectionHelper {
     static func mutableStorage<T>(instance: inout T) -> UnsafeMutableRawPointer {
         return UnsafeMutableRawPointer(mutating: storage(instance: &instance))
     }
-    
+
     static func storage<T>(instance: inout T) -> UnsafeRawPointer {
         if type(of: instance) is AnyClass {
             let opaquePointer = Unmanaged.passUnretained(instance as AnyObject).toOpaque()

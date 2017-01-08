@@ -24,15 +24,15 @@
 protocol AnyExtensions {}
 
 extension AnyExtensions {
-    
+
     public static func isValueTypeOrSubtype(_ value: Any) -> Bool {
         return value is Self
     }
-    
+
     public static func value(from storage: UnsafeRawPointer) -> Any {
         return storage.assumingMemoryBound(to: self).pointee
     }
-    
+
     public static func write(_ value: Any, to storage: UnsafeMutableRawPointer) {
         guard let this = value as? Self else {
             return
@@ -40,8 +40,8 @@ extension AnyExtensions {
         storage.assumingMemoryBound(to: self).initialize(to: this)
     }
 
-    public static func tryTakeValue(_ value: Any) -> Self? {
-        return value as? Self
+    public static func takeValue(from anyValue: Any) -> Self? {
+        return anyValue as? Self
     }
 }
 
@@ -76,11 +76,14 @@ func == (lhs: Any.Type, rhs: Any.Type) -> Bool {
 // MARK: AnyExtension + Storage
 extension AnyExtensions {
 
-    mutating func mutableStorage() -> UnsafeMutableRawPointer {
-        return ReflectionHelper.mutableStorage(instance: &self)
-    }
-
     mutating func storage() -> UnsafeRawPointer {
-        return ReflectionHelper.storage(instance: &self)
+        if type(of: self) is AnyClass {
+            let opaquePointer = Unmanaged.passUnretained(self as AnyObject).toOpaque()
+            return UnsafeRawPointer(opaquePointer)
+        } else {
+            return withUnsafePointer(to: &self) { pointer in
+                return UnsafeRawPointer(pointer)
+            }
+        }
     }
 }
