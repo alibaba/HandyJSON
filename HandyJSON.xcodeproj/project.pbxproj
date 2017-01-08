@@ -76,9 +76,6 @@
 		21A192081E223F9000CD7609 /* BasicTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215F13461E217B9C00B0FFEC /* BasicTypes.swift */; };
 		21A192091E223F9000CD7609 /* BasicTypesTestsToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215F13471E217B9C00B0FFEC /* BasicTypesTestsToJSON.swift */; };
 		21A7A59D1D9EBF450015E3F0 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* Serializer.swift */; };
-		21AC1A001DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */; };
-		21AC1A011DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */; };
-		21AC1A021DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */; };
 		21DFCA561E18EB9C00856775 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA521E18EB9C00856775 /* DateTransform.swift */; };
 		21DFCA571E18EB9C00856775 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA521E18EB9C00856775 /* DateTransform.swift */; };
 		21DFCA581E18EB9C00856775 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA521E18EB9C00856775 /* DateTransform.swift */; };
@@ -149,7 +146,6 @@
 		393E0FD71DA2486C00B3BC12 /* ObjectiveCObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */; };
 		393E0FD91DA2486C00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */; };
 		393E0FDA1DA2486C00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
-		393E0FDB1DA2486C00B3BC12 /* SerializeToJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */; };
 		393E0FEA1DA2494F00B3BC12 /* HandyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393E0FE11DA2494F00B3BC12 /* HandyJSON.framework */; };
 		393E0FF81DA2495900B3BC12 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B04671D56D2B50035A8E2 /* Converter.swift */; };
 		393E0FF91DA2495900B3BC12 /* BasicType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C501D3341FC00F53111 /* BasicType.swift */; };
@@ -165,8 +161,6 @@
 		393E10031DA249DC00B3BC12 /* ObjectiveCObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */; };
 		393E10051DA249DC00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */; };
 		393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
-		393E10071DA249DC00B3BC12 /* SerializeToJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */; };
-		39B36C241D8D780200AD2A3F /* SerializeToJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -250,7 +244,6 @@
 		21A191FC1E222E8C00CD7609 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		21A192011E22332000CD7609 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		21A7A59C1D9EBF450015E3F0 /* Serializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serializer.swift; sourceTree = "<group>"; };
-		21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializeToSimpleObjectTest.swift; sourceTree = "<group>"; };
 		21DFCA521E18EB9C00856775 /* DateTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTransform.swift; sourceTree = "<group>"; };
 		21DFCA531E18EB9C00856775 /* DateFormatterTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatterTransform.swift; sourceTree = "<group>"; };
 		21DFCA541E18EB9C00856775 /* ISO8601DateTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISO8601DateTransform.swift; sourceTree = "<group>"; };
@@ -276,7 +269,6 @@
 		393E0FE91DA2494F00B3BC12 /* HandyJSON macOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HandyJSON macOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		393E10081DA249F100B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		393E100A1DA24A0600B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
-		39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializeToJSONTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -427,8 +419,6 @@
 				2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */,
 				21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */,
 				21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */,
-				39B36C231D8D780200AD2A3F /* SerializeToJSONTests.swift */,
-				21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */,
 				214329251DFBDC1400CA386A /* TestUtils.swift */,
 				392628001DA3E8E100B0C28D /* Supporting Files */,
 			);
@@ -855,9 +845,7 @@
 				21F252B41D599DE200B214BB /* InvalidStateHandlingTest.swift in Sources */,
 				2144A50E1D9A7A770090F50E /* CustomMappingTest.swift in Sources */,
 				214329261DFBDC1400CA386A /* TestUtils.swift in Sources */,
-				39B36C241D8D780200AD2A3F /* SerializeToJSONTests.swift in Sources */,
 				21F252B21D59718100B214BB /* AllBaseTypePropertyObjectTest.swift in Sources */,
-				21AC1A001DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */,
 				217B04701D571B9F0035A8E2 /* StructObjectTest.swift in Sources */,
 				2179B6B71D9121D4007B0320 /* ObjectiveCObjectTest.swift in Sources */,
 				21F252AC1D595F3900B214BB /* ClassObjectTest.swift in Sources */,
@@ -943,11 +931,9 @@
 				214329271DFBDC1400CA386A /* TestUtils.swift in Sources */,
 				393E0FD51DA2486C00B3BC12 /* NestObjectTest.swift in Sources */,
 				393E0FD61DA2486C00B3BC12 /* CustomMappingTest.swift in Sources */,
-				21AC1A011DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */,
 				393E0FD71DA2486C00B3BC12 /* ObjectiveCObjectTest.swift in Sources */,
 				393E0FD91DA2486C00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */,
 				393E0FDA1DA2486C00B3BC12 /* InvalidStateHandlingTest.swift in Sources */,
-				393E0FDB1DA2486C00B3BC12 /* SerializeToJSONTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -996,11 +982,9 @@
 				214329281DFBDC1400CA386A /* TestUtils.swift in Sources */,
 				393E10011DA249DC00B3BC12 /* NestObjectTest.swift in Sources */,
 				393E10021DA249DC00B3BC12 /* CustomMappingTest.swift in Sources */,
-				21AC1A021DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */,
 				393E10031DA249DC00B3BC12 /* ObjectiveCObjectTest.swift in Sources */,
 				393E10051DA249DC00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */,
 				393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */,
-				393E10071DA249DC00B3BC12 /* SerializeToJSONTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
