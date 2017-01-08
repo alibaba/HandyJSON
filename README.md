@@ -1,10 +1,10 @@
 # HandyJSON
 
-HandyJSON is a framework written in Swift which to make converting model objects(classes/structs) to and from JSON easy on iOS.
+HandyJSON is a framework written in Swift which to make converting model objects( **pure classes/structs** ) to and from JSON easy on iOS.
 
-Compared with others, the most significant feature of HandyJSON is that it does not require the objects inherit from NSObject(**not using KVC but reflection**), neither implements a 'mapping' function(**use pointer to achieve property assignment**).
+Compared with others, the most significant feature of HandyJSON is that it does not require the objects inherit from NSObject(**not using KVC but reflection**), neither implements a 'mapping' function(**write value to memory to achieve property assignment**).
 
-**Notice that** , HandyJSON is totally depend on the memory layout rules of Swift which we haven’t found formal specification from Apple(And I'm looking forward to someone can help). The good new is that it has never changed in the past. Also We can adjust out strategy if it really change. So, I think “the potential crisis" is more likely oneday Swift make reflection more powerful, such as supporting assignment.
+HandyJSON is totally depend on the memory layout rules infered from Swift runtime code. We are watching it and will follow every bit if it change. 
 
 [![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=master)](https://travis-ci.org/alibaba/HandyJSON)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -19,38 +19,34 @@ Compared with others, the most significant feature of HandyJSON is that it does 
 ### Deserialization
 
 ```swift
-class Animal: HandyJSON {
-    var name: String?
-    var count: Int?
+class BasicTypes: HandyJSON {
+    var int: Int = 2
+    var doubleOptional: Double?
+    var stringImplicitlyUnwrapped: String!
 
     required init() {}
 }
 
-let json = "{\"name\": \"Cat\", \"count\": 5}"
-
-if let cat = JSONDeserializer<Animal>.deserializeFrom(json: json) {
-    print(cat)
+let jsonString = "{\"doubleOptional\":1.1,\"stringImplicitlyUnwrapped\":\"hello\",\"int\":1}"
+if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+    print(object.int)
+    print(object.doubleOptional!)
+    print(object.stringImplicitlyUnwrapped)
 }
 ```
 
 ### Serialization
 
 ```swift
-class Animal {
-    var name: String?
-    var count: Int?
 
-    init(name: String, count: Int) {
-        self.name = name
-        self.count = count
-    }
-}
+let object = BasicTypes()
+object.int = 1
+object.doubleOptional = 1.1
+object.stringImplicitlyUnwrapped = “hello"
 
-let cat = Animal(name: "cat", count: 5)
-
-print(JSONSerializer.serialize(model: cat).toJSON()!)
-print(JSONSerializer.serialize(model: cat).toPrettifyJSON()!)
-print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
+print(object.toJSON()!) // serialize to dictionary
+print(object.toJSONString()!) // serialize to JSON string
+print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON string
 ```
 
 # Content
@@ -69,13 +65,13 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
     - [Designated Path](#designated-path)
     - [Composition Object](#composition-object)
     - [Inheritance Object](#inheritance-object)
-    - [Array In JSON](#array-in-json)
+    - [JSON Array](#json-array)
     - [Custom Mapping](#custom-mapping)
     - [Exclude Property](#exclude-property)
     - [Supported Property Type](#supported-property-type)
 - [Serialization](#serialization)
     - [The Basics](#the-basics)
-    - [Complex Object](#complex-object)
+    - [Mapping And Excluding](#mapping-and-excluding)
 - [To Do](#to-do)
 
 # Features
@@ -102,7 +98,7 @@ print(JSONSerializer.serialize(model: cat).toSimpleDictionary()!)
 
 **To use with Swift 2.x using == 0.4.0**
 
-**To use with Swift 3.x using >= 1.4.0**
+**To use with Swift 3.x using >= 1.5.0**
 
 For Legacy Swift support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
 
@@ -111,7 +107,7 @@ For Legacy Swift support, take a look at the [swift2 branch](https://github.com/
 Add the following line to your `Podfile`:
 
 ```
-pod 'HandyJSON', '~> 1.4.0'
+pod 'HandyJSON', '~> 1.5.0'
 ```
 
 Then, run the following command:
@@ -125,7 +121,7 @@ $ pod install
 You can add a dependency on `HandyJSON` by adding the following line to your `Cartfile`:
 
 ```
-github "alibaba/HandyJSON" ~> 1.4.0
+github "alibaba/HandyJSON" ~> 1.5.0
 ```
 
 ## Manually
@@ -160,18 +156,17 @@ To support deserialization from JSON, a class/struct need to conform to 'HandyJS
 To conform to 'HandyJSON', a class need to implement an empty initializer.
 
 ```swift
-class Animal: HandyJSON {
-    var name: String?
-    var id: String?
-    var num: Int?
+class BasicTypes: HandyJSON {
+    var int: Int = 2
+    var doubleOptional: Double?
+    var stringImplicitlyUnwrapped: String!
 
     required init() {}
 }
 
-let jsonString = "{\"name\":\"cat\",\"id\":\"12345\",\"num\":180}"
-
-if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
-    print(animal)
+let jsonString = "{\"doubleOptional\":1.1,\"stringImplicitlyUnwrapped\":\"hello\",\"int\":1}"
+if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+    // …
 }
 ```
 
@@ -180,16 +175,15 @@ if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
 For struct, since the compiler provide a default empty initializer, we use it for free.
 
 ```swift
-struct Animal: HandyJSON {
-    var name: String?
-    var id: String?
-    var num: Int?
+struct BasicTypes: HandyJSON {
+    var int: Int = 2
+    var doubleOptional: Double?
+    var stringImplicitlyUnwrapped: String!
 }
 
-let jsonString = "{\"name\":\"cat\",\"id\":\"12345\",\"num\":180}"
-
-if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
-    print(animal)
+let jsonString = "{\"doubleOptional\":1.1,\"stringImplicitlyUnwrapped\":\"hello\",\"int\":1}"
+if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+    // …
 }
 ```
 
@@ -197,72 +191,63 @@ But also notice that, if you have a designated initializer to override the defau
 
 ## Support Enum Property
 
-Limited by some type converting problems, supporting `enum` type is a little special here. To be convertable, An `enum` must conform to `HandyJSONEnum` protocol and implement a `makeInitWrapper` function.
+To be convertable, An `enum` must conform to `HandyJSONEnum` protocol. Nothing special need to do now.
 
 ```swift
 enum AnimalType: String, HandyJSONEnum {
     case Cat = "cat"
     case Dog = "dog"
     case Bird = "bird"
-
-    static func makeInitWrapper() -> InitWrapperProtocol? {
-        return InitWrapper<String>(rawInit: AnimalType.init)
-    }
 }
 
-class Animal: HandyJSON {
-    var type: AnimalType?
+struct Animal: HandyJSON {
     var name: String?
-
-    required init() {}
+    var type: AnimalType?
 }
 
 let jsonString = "{\"type\":\"cat\",\"name\":\"Tom\"}"
 if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
-    print(animal)
+    print(animal.type?.rawValue)
 }
 ```
-
-It’s not that troublesome. Just wrap the `init` funcion of a `RawRepresentable` enum and return. You can even do this in an extension.
-
-```swift
-enum AnimalType: String {
-    case Cat = "cat"
-    case Dog = "dog"
-    case Bird = "bird"
-}
-
-extension AnimalType: HandyJSONEnum {
-    static func makeInitWrapper() -> InitWrapperProtocol? {
-        return InitWrapper<String>(rawInit: AnimalType.init)
-    }
-}
-
-...
-```
-
-Now it’s totally non-intrusive.
 
 ## Optional, ImplicitlyUnwrappedOptional, Collections and so on
 
 'HandyJSON' support classes/structs composed of `optional`, `implicitlyUnwrappedOptional`, `array`, `dictionary`, `objective-c base type`, `nested type` etc. properties.
 
 ```swift
-class Cat: HandyJSON {
-    var id: Int64!
-    var name: String!
-    var friend: [String]?
-    var weight: Double?
-    var alive: Bool = true
-    var color: NSString?
+class BasicTypes: HandyJSON {
+    var bool: Bool = true
+    var intOptional: Int?
+    var doubleImplicitlyUnwrapped: Double!
+    var anyObjectOptional: Any?
+
+    var arrayInt: Array<Int> = []
+    var arrayStringOptional: Array<String>?
+    var setInt: Set<Int>?
+    var dictAnyObject: Dictionary<String, Any> = [:]
+
+    var nsNumber = 2
+    var nsString: NSString?
 
     required init() {}
 }
 
-let jsonString = "{\"id\":1234567,\"name\":\"Kitty\",\"friend\":[\"Tom\",\"Jack\",\"Lily\",\"Black\"],\"weight\":15.34,\"alive\":false,\"color\":\"white\"}"
+let object = BasicTypes()
+object.intOptional = 1
+object.doubleImplicitlyUnwrapped = 1.1
+object.anyObjectOptional = "StringValue"
+object.arrayInt = [1, 2]
+object.arrayStringOptional = ["a", "b"]
+object.setInt = [1, 2]
+object.dictAnyObject = ["key1": 1, "key2": "stringValue"]
+object.nsNumber = 2
+object.nsString = "nsStringValue"
 
-if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
-    print(cat)
+let jsonString = object.toJSONString()!
+
+if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+    // ...
 }
 ```
 
@@ -324,7 +309,6 @@ class Animal: HandyJSON {
     required init() {}
 }
 
-
 class Cat: Animal {
     var name: String?
 
@@ -338,7 +322,7 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 }
 ```
 
-## Array In JSON
+## JSON Array
 
 If the first level of a JSON text is an array, we turn it to objects array.
 
@@ -353,9 +337,7 @@ class Cat: HandyJSON {
 let jsonArrayString: String? = "[{\"name\":\"Bob\",\"id\":\"1\"}, {\"name\":\"Lily\",\"id\":\"2\"}, {\"name\":\"Lucy\",\"id\":\"3\"}]"
 if let cats = JSONDeserializer<Cat>.deserializeModelArrayFrom(json: jsonArrayString) {
     cats.forEach({ (cat) in
-        if let _cat = cat {
-            print(_cat.id ?? "", _cat.name ?? "")
-        }
+        // ...
     })
 }
 ```
@@ -363,6 +345,8 @@ if let cats = JSONDeserializer<Cat>.deserializeModelArrayFrom(json: jsonArrayStr
 ## Custom Mapping
 
 `HandyJSON` let you customize the key mapping to JSON fields, or parsing method of any property. All you need to do is implementing an optional `mapping` function, do things in it.
+
+We bring the transformer from [`ObjectMapper`](https://github.com/Hearst-DD/ObjectMapper). If you are familiar with it, it’s almost the same here.
 
 ```swift
 class Cat: HandyJSON {
@@ -374,26 +358,36 @@ class Cat: HandyJSON {
 
     func mapping(mapper: HelpingMapper) {
         // specify 'cat_id' field in json map to 'id' property in object
-        mapper.specify(property: &id, name: "cat_id")
+        mapper <<<
+            self.id <- "cat_id"
 
         // specify 'parent' field in json parse as following to 'parent' property in object
-        mapper.specify(property: &parent, converter: { (rawString) -> (String, String) in
-            let parentNames = rawString.characters.split{$0 == "/"}.map(String.init)
-            return (parentNames[0], parentNames[1])
-        })
+        mapper <<<
+            self.parent <- TransformOf<(String, String), String>(fromJSON: { (rawString) -> (String, String)? in
+                if let parentNames = rawString?.characters.split(separator: "/").map(String.init) {
+                    return (parentNames[0], parentNames[1])
+                }
+                return nil
+            }, toJSON: { (tuple) -> String? in
+                if let _tuple = tuple {
+                    return "\(_tuple.0)/\(_tuple.1)"
+                }
+                return nil
+            })
     }
 }
 
 let jsonString = "{\"cat_id\":12345,\"name\":\"Kitty\",\"parent\":\"Tom/Lily\"}"
 
 if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
-    print(cat)
+    print(cat.id)
+    print(cat.parent)
 }
 ```
 
 ## Exclude Property
 
-If any property of a class/struct could not conform to `HandyJSON` or you just do not want to do the deserialization with it, you should exclude it in the mapping function.
+If any non-basic property of a class/struct could not conform to `HandyJSON`/`HandyJSONEnum` or you just do not want to do the deserialization with it, you should exclude it in the mapping function.
 
 ```swift
 class NotHandyJSONType {
@@ -409,8 +403,8 @@ class Cat: HandyJSON {
     required init() {}
 
     func mapping(mapper: HelpingMapper) {
-        mapper.exclude(property: &notHandyJSONTypeProperty)
-        mapper.exclude(property: &basicTypeButNotWantedProperty)
+        mapper >>> self.notHandyJSONTypeProperty
+        mapper >>> self.basicTypeButNotWantedProperty
     }
 }
 
@@ -443,72 +437,30 @@ if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
 
 ## The Basics
 
-You need to do nothing special to support serialization. Define the class/struct, get the instances, then serialize it to json text, or simple dictionary.
+Now, a class/model which need to serialize to JSON should also conform to `HandyJSON` protocol.
 
 ```swift
-class Animal {
-    var name: String?
-    var height: Int?
+class BasicTypes: HandyJSON {
+    var int: Int = 2
+    var doubleOptional: Double?
+    var stringImplicitlyUnwrapped: String!
 
-    init(name: String, height: Int) {
-        self.name = name
-        self.height = height
-    }
+    required init() {}
 }
 
-let cat = Animal(name: "cat", height: 30)
-if let jsonStr = JSONSerializer.serialize(model: cat).toJSON() {
-    print("simple json string: ", jsonStr)
-}
-if let prettifyJSON = JSONSerializer.serialize(model: cat).toPrettifyJSON() {
-    print("prettify json string: ", prettifyJSON)
-}
-if let dict = JSONSerializer.serialize(model: cat).toSimpleDictionary() {
-    print("dictionary: ", dict)
-}
+let object = BasicTypes()
+object.int = 1
+object.doubleOptional = 1.1
+object.stringImplicitlyUnwrapped = “hello"
+
+print(object.toJSON()!) // serialize to dictionary
+print(object.toJSONString()!) // serialize to JSON string
+print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON string
 ```
 
-## Complex Object
+## Mapping And Excluding
 
-Still need no extra effort.
-
-```swift
-enum Gender {
-    case Male
-    case Female
-}
-
-struct Subject {
-    var id: Int64?
-    var name: String?
-
-    init(id: Int64, name: String) {
-        self.id = id
-        self.name = name
-    }
-}
-
-class Student {
-    var name: String?
-    var gender: Gender?
-    var subjects: [Subject]?
-}
-
-let student = Student()
-student.name = "Jack"
-student.gender = .Female
-student.subjects = [Subject(id: 1, name: "math"), Subject(id: 2, name: "English"), Subject(id: 3, name: "Philosophy")]
-
-if let jsonStr = JSONSerializer.serialize(model: student).toJSON() {
-    print("simple json string: ", jsonStr)
-}
-if let prettifyJSON = JSONSerializer.serialize(model: student).toPrettifyJSON() {
-    print("prettify json string: ", prettifyJSON)
-}
-if let dict = JSONSerializer.serialize(model: student).toSimpleDictionary() {
-    print("dictionary: ", dict)
-}
-```
+It’s all like what we do on deserialization. A property which is excluded, it will not take part in neither deserialization nor serialization. And the mapper items define both the deserializing rules and serializing rules. Refer to the usage above.
 
 # To Do
 
@@ -516,7 +468,7 @@ if let dict = JSONSerializer.serialize(model: student).toSimpleDictionary() {
 
 * Improve error handling
 
-* <del>Support non-object (such as basic type, array, dictionany) type deserializing directly</del> (will not support)
+* Simplify the API naming
 
 # License
 
