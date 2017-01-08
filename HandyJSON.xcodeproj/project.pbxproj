@@ -71,6 +71,10 @@
 		21A192031E22332000CD7609 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A192011E22332000CD7609 /* Configuration.swift */; };
 		21A192041E22332000CD7609 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A192011E22332000CD7609 /* Configuration.swift */; };
 		21A192051E22332000CD7609 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A192011E22332000CD7609 /* Configuration.swift */; };
+		21A192061E223F8900CD7609 /* BasicTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215F13461E217B9C00B0FFEC /* BasicTypes.swift */; };
+		21A192071E223F8900CD7609 /* BasicTypesTestsToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215F13471E217B9C00B0FFEC /* BasicTypesTestsToJSON.swift */; };
+		21A192081E223F9000CD7609 /* BasicTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215F13461E217B9C00B0FFEC /* BasicTypes.swift */; };
+		21A192091E223F9000CD7609 /* BasicTypesTestsToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215F13471E217B9C00B0FFEC /* BasicTypesTestsToJSON.swift */; };
 		21A7A59D1D9EBF450015E3F0 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* Serializer.swift */; };
 		21AC1A001DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */; };
 		21AC1A011DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC19FF1DBCCC0C00F05BF3 /* SerializeToSimpleObjectTest.swift */; };
@@ -932,6 +936,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21A192081E223F9000CD7609 /* BasicTypes.swift in Sources */,
+				21A192091E223F9000CD7609 /* BasicTypesTestsToJSON.swift in Sources */,
 				21A191F51E21E62E00CD7609 /* BasicTypesTestsFromJSON.swift in Sources */,
 				393E0FD31DA2486C00B3BC12 /* StructObjectTest.swift in Sources */,
 				393E0FD41DA2486C00B3BC12 /* ClassObjectTest.swift in Sources */,
@@ -983,6 +989,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21A192061E223F8900CD7609 /* BasicTypes.swift in Sources */,
+				21A192071E223F8900CD7609 /* BasicTypesTestsToJSON.swift in Sources */,
 				21A191F61E21E63100CD7609 /* BasicTypesTestsFromJSON.swift in Sources */,
 				393E0FFF1DA249DC00B3BC12 /* StructObjectTest.swift in Sources */,
 				393E10001DA249DC00B3BC12 /* ClassObjectTest.swift in Sources */,
