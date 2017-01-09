@@ -139,3 +139,10 @@ class TestCollectionOfPrimitives: HandyJSON {
 
     required init() {}
 }
+
+class InheritanceBasicType: BasicTypes {
+
+    var anotherInt: Int = 0
+    var anotherIntOptional: Int?
+    var anotherIntImplicitlyUnwrapped: Int!
+}

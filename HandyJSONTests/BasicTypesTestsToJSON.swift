@@ -483,4 +483,27 @@ class BasicTypesTestsToJSON: XCTestCase {
         XCTAssertTrue((json["dictStringFloat"] as? [String:Float])?.count ?? 0 > 0)
         XCTAssertEqual((json["dictStringString"] as? [String:String])?["string"], "string")
     }
+
+    func testObjectInheritFromBasicTypesToModel() {
+        let object = InheritanceBasicType()
+        let value1 = 1
+        let value2 = 2
+        object.int = value1
+        object.intOptional = value1
+        object.intImplicitlyUnwrapped = value1
+        object.anotherInt = value2
+        object.anotherIntOptional = value2
+        object.anotherIntImplicitlyUnwrapped = value2
+
+        let JSONString = object.toJSONString(prettyPrint: true)
+        let mappedObject = JSONDeserializer<InheritanceBasicType>.deserializeFrom(json: JSONString!)
+
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject?.int, value1)
+        XCTAssertEqual(mappedObject?.intOptional, value1)
+        XCTAssertEqual(mappedObject?.intImplicitlyUnwrapped, value1)
+        XCTAssertEqual(mappedObject?.anotherInt, value2)
+        XCTAssertEqual(mappedObject?.anotherIntOptional, value2)
+        XCTAssertEqual(mappedObject?.anotherIntImplicitlyUnwrapped, value2)
+    }
 }
