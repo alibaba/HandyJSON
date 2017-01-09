@@ -84,19 +84,19 @@ public class HelpingMapper {
     }
 }
 
-infix operator <- : LogicalConjunctionPrecedence
+infix operator <-- : LogicalConjunctionPrecedence
 
-public func <- <T>(property: inout T, name: String) -> CustomMappingKeyValueTuple {
+public func <-- <T>(property: inout T, name: String) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
     return (key, MappingPropertyHandler(mappingName: name, assignmentClosure: nil, takeValueClosure: nil))
 }
 
-public func <- <Transform: TransformType>(property: inout Transform.Object, transformer: Transform) -> CustomMappingKeyValueTuple {
-    return property <- (nil, transformer)
+public func <-- <Transform: TransformType>(property: inout Transform.Object, transformer: Transform) -> CustomMappingKeyValueTuple {
+    return property <-- (nil, transformer)
 }
 
-public func <- <Transform: TransformType>(property: inout Transform.Object, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
+public func <-- <Transform: TransformType>(property: inout Transform.Object, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
     let assignmentClosure = { (jsonValue: Any?) in
@@ -113,11 +113,11 @@ public func <- <Transform: TransformType>(property: inout Transform.Object, tran
     return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
-public func <- <Transform: TransformType>(property: inout Transform.Object?, transformer: Transform) -> CustomMappingKeyValueTuple {
-    return property <- (nil, transformer)
+public func <-- <Transform: TransformType>(property: inout Transform.Object?, transformer: Transform) -> CustomMappingKeyValueTuple {
+    return property <-- (nil, transformer)
 }
 
-public func <- <Transform: TransformType>(property: inout Transform.Object?, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
+public func <-- <Transform: TransformType>(property: inout Transform.Object?, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
     let assignmentClosure = { (jsonValue: Any?) in
@@ -134,11 +134,11 @@ public func <- <Transform: TransformType>(property: inout Transform.Object?, tra
     return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
-public func <- <Transform: TransformType>(property: inout Transform.Object!, transformer: Transform) -> CustomMappingKeyValueTuple {
-    return property <- (nil, transformer)
+public func <-- <Transform: TransformType>(property: inout Transform.Object!, transformer: Transform) -> CustomMappingKeyValueTuple {
+    return property <-- (nil, transformer)
 }
 
-public func <- <Transform: TransformType>(property: inout Transform.Object!, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
+public func <-- <Transform: TransformType>(property: inout Transform.Object!, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
     let assignmentClosure = { (jsonValue: Any?) in

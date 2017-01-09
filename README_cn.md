@@ -308,11 +308,11 @@ class Cat: HandyJSON {
     func mapping(mapper: HelpingMapper) {
         // specify 'cat_id' field in json map to 'id' property in object
         mapper <<<
-            self.id <- "cat_id"
+            self.id <-- "cat_id"
 
         // specify 'parent' field in json parse as following to 'parent' property in object
         mapper <<<
-            self.parent <- TransformOf<(String, String), String>(fromJSON: { (rawString) -> (String, String)? in
+            self.parent <-- TransformOf<(String, String), String>(fromJSON: { (rawString) -> (String, String)? in
                 if let parentNames = rawString?.characters.split(separator: "/").map(String.init) {
                     return (parentNames[0], parentNames[1])
                 }
