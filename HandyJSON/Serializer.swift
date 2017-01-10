@@ -195,6 +195,42 @@ extension PropertiesMappable {
 
 
 public extension HandyJSON {
+    
+    /*********** 添加4个快速转换model方法，本人刚接触swift不久，才疏学浅，不知道这样写有没问题？求大神指导指导 ************/
+    public static func toModel(dict: [String : Any]) -> Self? {
+        
+        guard JSONSerialization.isValidJSONObject(dict) else { return nil }
+        return JSONDeserializer<Self>.deserializeFrom(dict: dict as NSDictionary)
+        
+    }
+    
+    public static func toModel(json: String) -> Self? {
+        
+        guard JSONSerialization.isValidJSONObject(json) else { return nil }
+        return JSONDeserializer<Self>.deserializeFrom(json: json)
+        
+    }
+    
+    public static func toModels(json: String) -> [Self?]? {
+        
+        guard JSONSerialization.isValidJSONObject(json) else { return nil }
+        // 此处不太懂，为什么要返回可选值的数组呢？而不是[Self]?,求大神赐教
+        return JSONDeserializer<Self>.deserializeModelArrayFrom(json: json)
+        
+    }
+    
+    
+    public static func toModels(dicts: [[String: Any]]) -> [Self?]? {
+        
+        guard JSONSerialization.isValidJSONObject(dicts) else { return nil }
+        
+        // 此处不太懂，为什么要返回可选值的数组呢？而不是[Self]?,求大神赐教
+        return dicts.map({ (dict) -> Self? in
+            return toModel(dict: dict)
+        })
+        
+    }
+    /*********** 添加4个快速转换model方法 ************/
 
     public func toJSON() -> [String: Any]? {
 
