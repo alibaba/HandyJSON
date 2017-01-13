@@ -67,9 +67,14 @@ fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInf
     return size + offset
 }
 
-public protocol RawEnumProtocol: PropertiesTransformable {
+public protocol RawEnumProtocol: StandardPropertyType {
     func takeRawValue() -> Any?
-    static func from(rawObject: NSObject) -> Self?
+}
+
+extension RawEnumProtocol{
+  public func _serialize() -> Any? {
+      return takeRawValue()
+  }
 }
 
 public extension RawRepresentable where Self: RawEnumProtocol {
@@ -78,9 +83,9 @@ public extension RawRepresentable where Self: RawEnumProtocol {
         return self.rawValue
     }
 
-    static func from(rawObject: NSObject) -> Self? {
+    static func valueFrom(object: NSObject) -> Self? {
         if let transformableType = RawValue.self as? PropertiesTransformable.Type {
-            if let typedValue = transformableType.valueFrom(object: rawObject) {
+            if let typedValue = transformableType.valueFrom(object: object) {
                 return Self(rawValue: typedValue as! RawValue)
             }
         }
@@ -88,20 +93,22 @@ public extension RawRepresentable where Self: RawEnumProtocol {
     }
 }
 
-protocol BasePropertyProtocol: PropertiesTransformable {
+
+protocol BasePropertyProtocol: StandardPropertyType {
 }
 
-protocol OptionalTypeProtocol: PropertiesTransformable {
-    static func optionalFromNSObject(object: NSObject) -> Any?
-    func getWrappedValue() -> Any?
+extension BasePropertyProtocol{
+  public func _serialize() -> Any? {
+    return self
+  }
 }
 
-extension Optional: OptionalTypeProtocol {
+
+extension Optional: StandardPropertyType {
     public init() {
         self = nil
     }
-
-    static func optionalFromNSObject(object: NSObject) -> Any? {
+    public static func valueFrom(object: NSObject) -> Optional? {
         if let value = (Wrapped.self as? PropertiesTransformable.Type)?.valueFrom(object: object) as? Wrapped {
             return Optional(value)
         } else if let value = object as? Wrapped {
@@ -115,16 +122,21 @@ extension Optional: OptionalTypeProtocol {
             return wrapped as Any
         })
     }
+  
+  public func _serialize() -> Any? {
+    if let value = getWrappedValue(){
+      if let transformable = value as? PropertiesTransformable{
+       return transformable._serialize()
+      }else{
+        return value
+      }
+    }
+    return nil
+  }
 }
 
-protocol ImplicitlyUnwrappedTypeProtocol: PropertiesTransformable {
-    static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any?
-    func getWrappedValue() -> Any?
-}
-
-extension ImplicitlyUnwrappedOptional: ImplicitlyUnwrappedTypeProtocol {
-
-    static func implicitlyUnwrappedOptionalFromNSObject(object: NSObject) -> Any? {
+extension ImplicitlyUnwrappedOptional: StandardPropertyType {
+    public static func valueFrom(object: NSObject) -> ImplicitlyUnwrappedOptional? {
         if let value = (Wrapped.self as? PropertiesTransformable.Type)?.valueFrom(object: object) as? Wrapped {
             return ImplicitlyUnwrappedOptional(value)
         } else if let value = object as? Wrapped {
@@ -139,22 +151,29 @@ extension ImplicitlyUnwrappedOptional: ImplicitlyUnwrappedTypeProtocol {
         }
         return nil
     }
+  
+  public func _serialize() -> Any? {
+    if let value = getWrappedValue(){
+      if let transformable = value as? PropertiesTransformable{
+        return transformable._serialize()
+      }else{
+        return value
+      }
+    }
+    return nil
+  }
 }
 
-protocol ArrayTypeProtocol: PropertiesTransformable {
-    static func arrayFromNSObject(object: NSObject) -> Any?
-    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]?
-}
 
-extension Array: ArrayTypeProtocol {
-
-    static func arrayFromNSObject(object: NSObject) -> Any? {
+extension Collection{
+    static func _valueFrom(object: NSObject) -> [Iterator.Element]?{
         guard let nsArray = object as? NSArray else {
             ClosureExecutor.executeWhenDebug {
                 print("Expect object to be an NSArray but it's not")
             }
             return nil
         }
+        typealias Element =  Iterator.Element
         var result: [Element] = [Element]()
         nsArray.forEach { (each) in
             if let nsObject = each as? NSObject {
@@ -168,86 +187,105 @@ extension Array: ArrayTypeProtocol {
         return result
     }
 
-    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]? {
-        return self.map({ (each) -> Any? in
-            return transform(each)
-        })
-    }
-}
-
-protocol SetTypeProtocol: PropertiesTransformable {
-    static func setFromNSObject(object: NSObject) -> Any?
-    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]?
-}
-
-extension Set: SetTypeProtocol {
-
-    static func setFromNSObject(object: NSObject) -> Any? {
-        guard let nsArray = object as? NSArray else {
-            ClosureExecutor.executeWhenDebug {
-                print("Expect object to be an NSArray but it's not")
-            }
-            return nil
+  
+    func _seq_serialize() -> [Any?]{
+      return self.map{ (each) -> (Any?) in
+        if let tranformable = each as? PropertiesTransformable{
+          return tranformable._serialize()
+        }else{
+          return each
         }
-        var result: Set<Element> = Set<Element>()
-        nsArray.forEach { (each) in
-            if let nsObject = each as? NSObject {
-                if let element = (Element.self as? PropertiesTransformable.Type)?.valueFrom(object: nsObject) as? Element {
-                    result.insert(element)
-                } else if let element = nsObject as? Element {
-                    result.insert(element)
-                }
-            }
-        }
-        return result
-    }
-
-    func customMap(_ transform: ((Any) -> (Any?))) -> [Any?]? {
-        return self.map({ (each) -> Any? in
-            return transform(each)
-        })
+      }
     }
 }
 
-protocol DictionaryTypeProtocol: PropertiesTransformable {
-    static func dictionaryFromNSObject(object: NSObject) -> Any?
-    func customMap(_ transformValue: ((Any) -> Any?)) -> [String: Any?]?
+extension Array: StandardPropertyType{
+  public static func valueFrom(object:NSObject) -> [Element]?{
+    return _valueFrom(object: object)
+  }
+  
+  public func _serialize() -> Any?{
+    return self._seq_serialize()
+  }
 }
 
-extension Dictionary: DictionaryTypeProtocol {
+extension Set: StandardPropertyType{
+  public static func valueFrom(object:NSObject) -> [Element]?{
+    return _valueFrom(object: object)
+  }
+  
+  public func _serialize() -> Any?{
+    return self._seq_serialize()
+  }
+}
 
-    static func dictionaryFromNSObject(object: NSObject) -> Any? {
-        guard let nsDict = object as? NSDictionary else {
-            ClosureExecutor.executeWhenDebug {
-                print("Expect object to be an NSDictionary but it's not")
-            }
-            return nil
-        }
-        var result: [Key: Value] = [Key: Value]()
-        nsDict.forEach { (key, value) in
-            if let sKey = key as? Key, let nsValue = value as? NSObject {
-                if let nValue = (Value.self as? PropertiesTransformable.Type)?.valueFrom(object: nsValue) as? Value {
-                    result[sKey] = nValue
-                } else if let nValue = nsValue as? Value {
-                    result[sKey] = nValue
-                }
-            }
-        }
-        return result
+
+extension Dictionary: StandardPropertyType {
+  public static func valueFrom(object:NSObject) -> Dictionary?{
+    guard let nsDict = object as? NSDictionary else {
+      ClosureExecutor.executeWhenDebug {
+        print("Expect object to be an NSDictionary but it's not")
+      }
+      return nil
     }
-
-    func customMap(_ transformValue: ((Any) -> Any?)) -> [String: Any?]? {
-        var result = [String: Any?]()
-        self.forEach({ (key, value) in
-            if let sKey = key as? String, let _value = transformValue(value) {
-                result[sKey] = _value
+    var result: [Key: Value] = [Key: Value]()
+    for (key,value) in nsDict{
+      if let sKey = key as? Key, let nsValue = value as? NSObject {
+        if let nValue = (Value.self as? PropertiesTransformable.Type)?.valueFrom(object: nsValue) as? Value {
+          result[sKey] = nValue
+        } else if let nValue = nsValue as? Value {
+          result[sKey] = nValue
+        }
+      }
+    }
+    return result
+  }
+  
+  public func _serialize() -> Any? {
+      var result = [String: Any]()
+      for (key, value) in self{
+        if let key = key as? String{
+          if let transformable = value as? PropertiesTransformable{
+            if let transValue = transformable._serialize(){
+              result[key] = transValue
             }
-        })
-        return result
+          }
+        }
+        
+      }
+    
+      return result
     }
 }
 
-public protocol PropertiesTransformable: PropertiesMetrizable {}
+public protocol PropertiesTransformable: PropertiesMetrizable {
+}
+
+public protocol StandardPropertyType:PropertiesTransformable{
+  static func valueFrom(object:NSObject) -> Self?
+  func _serialize() -> Any?
+//  func _deserialize() -> String
+}
+
+extension PropertiesTransformable{
+  public static func valueFrom(object:NSObject) -> Self? {
+    if self is StandardPropertyType.Type{
+      return (self as! StandardPropertyType.Type).valueFrom(object: object) as? Self
+    }else if self is PropertiesMappable.Type{
+      return (self as! PropertiesMappable.Type).valueFrom(object: object) as? Self
+    }
+    return nil
+  }
+  
+  public func _serialize() -> Any?{
+    if let this = self as? StandardPropertyType{
+      return this._serialize()
+    }else{
+      return  self
+    }
+  }
+}
+
 
 public protocol PropertiesMappable: PropertiesTransformable {
     init()
@@ -258,102 +296,18 @@ extension PropertiesMappable {
     public mutating func mapping(mapper: HelpingMapper) {}
 }
 
-extension PropertiesTransformable {
 
-    internal static func valueFrom(object: NSObject) -> Self? {
-        if self is RawEnumProtocol.Type {
-
-            if let rawEnumType = self as? RawEnumProtocol.Type {
-                if let resultValue = rawEnumType.from(rawObject: object) {
-                    return resultValue as? Self
-                }
-            }
-            return nil
-        } else if self is BasePropertyProtocol.Type {
-
-            // base type can be transformed directly
-            return baseValueFrom(object: object)
-        } else if self is OptionalTypeProtocol.Type {
-
-            // optional type, we parse the wrapped generic type to construct the value, then wrap it to optional
-            return (self as! OptionalTypeProtocol.Type).optionalFromNSObject(object: object) as? Self
-        } else if self is ImplicitlyUnwrappedTypeProtocol.Type {
-
-            // similar to optional
-            return (self as! ImplicitlyUnwrappedTypeProtocol.Type).implicitlyUnwrappedOptionalFromNSObject(object: object) as? Self
-        } else if self is ArrayTypeProtocol.Type {
-
-            // we can't retrieve the generic type wrapped by array here, so we go into array extension to do the casting
-            return (self as! ArrayTypeProtocol.Type).arrayFromNSObject(object: object) as? Self
-        } else if self is SetTypeProtocol.Type {
-
-            // we can't retrieve the generic type wrapped by array here, so we go into array extension to do the casting
-            return (self as! SetTypeProtocol.Type).setFromNSObject(object: object) as? Self
-        } else if self is DictionaryTypeProtocol.Type {
-
-            // similar to array
-            return (self as! DictionaryTypeProtocol.Type).dictionaryFromNSObject(object: object) as? Self
-        } else if self is NSArray.Type {
-
-            if let arr = object as? NSArray {
-                return arr as? Self
-            }
-        } else if self is NSDictionary.Type {
-
-            if let dict = object as? NSDictionary {
-                return dict as? Self
-            }
-        } else if let mappableType = self as? PropertiesMappable.Type {
-
-            if let dict = object as? NSDictionary {
-                // nested object, transform recursively
-                return mappableType._transform(dict: dict, toType: mappableType) as? Self
-            }
-        }
-        return nil
-    }
-
-    // base type supported parsing directly
-    internal static func baseValueFrom(object: NSObject) -> Self? {
-        switch self {
-        case is Int8.Type:
-            return object.toInt8() as? Self
-        case is UInt8.Type:
-            return object.toUInt8() as? Self
-        case is Int16.Type:
-            return object.toInt16() as? Self
-        case is UInt16.Type:
-            return object.toUInt16() as? Self
-        case is Int32.Type:
-            return object.toInt32() as? Self
-        case is UInt32.Type:
-            return object.toUInt32() as? Self
-        case is Int64.Type:
-            return object.toInt64() as? Self
-        case is UInt64.Type:
-            return object.toUInt64() as? Self
-        case is Bool.Type:
-            return object.toBool() as? Self
-        case is Int.Type:
-            return object.toInt() as? Self
-        case is UInt.Type:
-            return object.toUInt() as? Self
-        case is Float.Type:
-            return object.toFloat() as? Self
-        case is Double.Type:
-            return object.toDouble() as? Self
-        case is String.Type:
-            return object.toString() as? Self
-        case is NSString.Type:
-            return object.toNSString() as? Self
-        case is NSNumber.Type:
-            return object.toNSNumber() as? Self
-        default:
-            break
+extension PropertiesMappable {
+    public static func valueFrom(object: NSObject) -> Self? {
+        if let dict = object as? NSDictionary {
+            // nested object, transform recursively
+            return self._transform(dict: dict, toType: self) as? Self
         }
         return nil
     }
 }
+
+
 
 // expose HandyJSON protocol
 public protocol HandyJSON: PropertiesMappable {}

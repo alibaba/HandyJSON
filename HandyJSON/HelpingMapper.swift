@@ -60,8 +60,12 @@ public class HelpingMapper {
 
         if let _converter = converter {
             let assignmentClosure = { (jsonValue: Any?) in
-                if let _value = jsonValue, let _valueStr = (_value as? NSObject)?.toString() {
-                    UnsafeMutablePointer<T>(mutating: pointer).pointee = _converter(_valueStr)
+                if let _value = jsonValue{
+                  if let object = _value as? NSObject{
+                    if let str = String.valueFrom(object: object){
+                      UnsafeMutablePointer<T>(mutating: pointer).pointee = _converter(str)
+                    }
+                  }
                 }
             }
             self.mappingHandlers[key] = MappingPropertyHandler(mappingName: name, assignmentClosure: assignmentClosure, takeValueClosure: nil)
