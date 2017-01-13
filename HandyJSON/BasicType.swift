@@ -36,22 +36,127 @@ import Foundation
  Double,
  String,
  */
+protocol IntegerPropertyProtocol: Integer, BasePropertyProtocol{
+  init?(_ text:String, radix: Int)
+  init(_ number: NSNumber)
+}
 
-extension Int: BasePropertyProtocol {}
-extension Int8: BasePropertyProtocol {}
-extension Int16: BasePropertyProtocol {}
-extension Int32: BasePropertyProtocol {}
-extension Int64: BasePropertyProtocol {}
-extension UInt: BasePropertyProtocol {}
-extension UInt8: BasePropertyProtocol {}
-extension UInt16: BasePropertyProtocol {}
-extension UInt32: BasePropertyProtocol {}
-extension UInt64: BasePropertyProtocol {}
-extension Bool: BasePropertyProtocol {}
-extension Float: BasePropertyProtocol {}
-extension Double: BasePropertyProtocol {}
-extension String: BasePropertyProtocol {}
+extension IntegerPropertyProtocol{
+  public static func valueFrom(object:NSObject) -> Self?{
+    if let str = object as? NSString{
+      let text:String = str as String
+      return Self(text, radix: 10)
+    }else if let num = object as? NSNumber{
+        return Self(num)
+    } else{
+      return nil
+    }
+    
+  }
+}
 
-extension NSString: BasePropertyProtocol {}
-extension NSNumber: BasePropertyProtocol {}
+extension Int: IntegerPropertyProtocol{}
+extension Int8: IntegerPropertyProtocol{}
+extension Int16: IntegerPropertyProtocol{}
+extension Int32: IntegerPropertyProtocol{}
+extension Int64: IntegerPropertyProtocol{}
+extension UInt8: IntegerPropertyProtocol{}
+extension UInt16: IntegerPropertyProtocol{}
+extension UInt32: IntegerPropertyProtocol{}
+extension UInt64: IntegerPropertyProtocol{}
+
+extension Bool: BasePropertyProtocol {
+  public static func valueFrom(object:NSObject) -> Bool?{
+    if let str = object as? NSString {
+      let lowerCase = str.lowercased
+      if ["0", "false", "no"].contains(lowerCase) {
+        return false
+      }
+      if ["1", "true", "yes"].contains(lowerCase) {
+        return true
+      }
+    }else if let num = object as? NSNumber{
+      return num.boolValue
+    }
+    return nil
+  }
+}
+
+
+protocol FloatPropertyProtocol:LosslessStringConvertible,BasePropertyProtocol {
+    init(_ number: NSNumber)
+}
+extension FloatPropertyProtocol{
+  public static func valueFrom(object:NSObject) -> Self?{
+    if let str = object as? NSString{
+      let text = str as String
+      return Self(text)
+    }else if let num = object as? NSNumber{
+      return Self(num)
+    }else{
+      return nil
+    }
+  }
+}
+
+extension Float: FloatPropertyProtocol {}
+extension Double: FloatPropertyProtocol {}
+
+extension String: BasePropertyProtocol {
+  public static func valueFrom(object:NSObject) -> String?{
+    if let str = object  as? NSString {
+      return str as String
+    } else if let  num = object as? NSNumber {
+      // Boolean Type Inside
+      if NSStringFromClass(type(of: num)) == "__NSCFBoolean" {
+        if num.boolValue{
+          return "true"
+        } else {
+          return "false"
+        }
+      }
+      return num.stringValue
+    } else if let arr = object as? NSArray{
+      return "\(arr)"
+    }else if let dict = object as? NSDictionary{
+       return "\(dict)"
+    }
+    return nil
+  }
+  
+}
+
+//extension NSString: BasePropertyProtocol {
+//  public static func valueFrom(object: NSObject) -> Self? {
+//    if let str = String.valueFrom(object: object){
+//      let nsstr = str as NSString
+//      return nsstr as? NSString as! Self? as! Self?
+//    }
+//    return nil
+//  }
+//}
+//
+//extension NSNumber: BasePropertyProtocol {
+//  static func valueFrom(object:NSObject) -> Self?{
+//    if let num = object  as? NSNumber {
+//      return num
+//    }else if let str = object as? NSString{
+//      // true/false
+//      let lowerCase = str.lowercased
+//      if lowerCase == "true" {
+//        return NSNumber(booleanLiteral: true)
+//      }
+//      if lowerCase == "false" {
+//        return NSNumber(booleanLiteral: false)
+//      }
+//      
+//      // normal number
+//      let formatter = NumberFormatter()
+//      formatter.numberStyle = .decimal
+//      return formatter.number(from: str as String)
+//    }
+//    return nil
+//  }
+//
+//}
 
