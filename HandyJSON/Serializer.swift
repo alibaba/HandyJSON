@@ -57,7 +57,7 @@ extension PropertiesMappable {
                 }
             }
 
-            if let typedValue = value as? PropertiesTransformable {
+            if let typedValue = value as? _BaseJSONTransformable {
                 if let result = self._serializeAny(object: typedValue) {
                     dict[key] = result
                     continue
@@ -82,12 +82,12 @@ extension PropertiesMappable {
         return dict
     }
 
-    static func _serializeAny(object: PropertiesTransformable) -> Any? {
+    static func _serializeAny(object: _BaseJSONTransformable) -> Any? {
 
         let mirror = Mirror(reflecting: object)
 
         guard let displayStyle = mirror.displayStyle else {
-            return object._serialize()
+            return object.toJSONValue()
         }
 
         // after filtered by protocols above, now we expect the type is pure struct/class
@@ -136,7 +136,7 @@ extension PropertiesMappable {
 
             return _serializeModelObject(propertys: children, headPointer: rawPointer, offsetInfo: offsetInfo, mapper: mapper) as Any
         default:
-            return object._serialize()
+            return object.toJSONValue()
         }
     }
 }

@@ -57,8 +57,8 @@ extension PropertiesMappable {
             return
         }
 
-        if let transformableType = property.type as? PropertiesTransformable.Type {
-            if let sv = transformableType.valueFrom(object: rawValue) {
+        if let transformableType = property.type as? _BaseJSONTransformable.Type {
+            if let sv = transformableType.transform(from: rawValue) {
                 extensions(of: transformableType).write(sv, to: mutablePointer)
                 return
             }
