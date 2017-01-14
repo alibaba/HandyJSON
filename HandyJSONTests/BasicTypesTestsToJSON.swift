@@ -50,7 +50,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.boolImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.bool, value)
@@ -66,7 +66,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.intImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+       let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.int, value)
@@ -82,7 +82,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.doubleImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject =  BasicTypes.deserialize(from: JSONString) // BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.double, value)
@@ -98,7 +98,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.floatImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.float, value)
@@ -114,7 +114,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.stringImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.string, value)
@@ -130,7 +130,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.anyObjectImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.anyObject as? String, value)
@@ -146,7 +146,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.arrayBoolImplicitlyUnwrapped = []
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject!.arrayBool, [])
@@ -162,7 +162,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.arrayBoolImplicitlyUnwrapped = [value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.arrayBool.first, value)
@@ -178,7 +178,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.arrayIntImplicitlyUnwrapped = [value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.arrayInt.first, value)
@@ -194,7 +194,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.arrayDoubleImplicitlyUnwrapped = [value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.arrayDouble.first, value)
@@ -210,7 +210,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.arrayFloatImplicitlyUnwrapped = [value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.arrayFloat.first, value)
@@ -226,7 +226,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.arrayStringImplicitlyUnwrapped = [value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.arrayString.first, value)
@@ -242,7 +242,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.arrayAnyObjectImplicitlyUnwrapped = [value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.arrayAnyObject.first as? String, value)
@@ -259,7 +259,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.dictBoolImplicitlyUnwrapped = [:]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject!.dictBool, [:])
@@ -276,7 +276,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.dictBoolImplicitlyUnwrapped = [key:value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.dictBool[key], value)
@@ -293,7 +293,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.dictIntImplicitlyUnwrapped = [key:value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.dictInt[key], value)
@@ -310,7 +310,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.dictDoubleImplicitlyUnwrapped = [key:value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.dictDouble[key], value)
@@ -327,7 +327,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.dictFloatImplicitlyUnwrapped = [key:value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.dictFloat[key], value)
@@ -344,7 +344,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.dictStringImplicitlyUnwrapped = [key:value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.dictString[key], value)
@@ -361,7 +361,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.dictAnyObjectImplicitlyUnwrapped = [key:value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.dictAnyObject[key] as? String, value)
@@ -377,7 +377,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.enumIntImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.enumInt, value)
@@ -393,7 +393,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.enumDoubleImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.enumDouble, value)
@@ -409,7 +409,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.enumFloatImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.enumFloat, value)
@@ -425,7 +425,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.enumStringImplicitlyUnwrapped = value
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.enumString, value)
@@ -441,7 +441,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.arrayEnumIntImplicitlyUnwrapped = [value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.arrayEnumInt.first, value)
@@ -458,7 +458,7 @@ class BasicTypesTestsToJSON: XCTestCase {
         object.dictEnumIntImplicitlyUnwrapped = [key: value]
 
         let JSONString = object.toJSONString(prettyPrint: true)
-        let mappedObject = JSONDeserializer<BasicTypes>.deserializeFrom(json: JSONString!)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
 
         XCTAssertNotNil(mappedObject)
         XCTAssertEqual(mappedObject?.dictEnumInt[key], value)

@@ -42,9 +42,9 @@ class InvalidStateHandlingTest: XCTestCase {
         }
 
         let jsonString = "{\"name\"\"Bob\",\"id\":\"12345\",\"height\":180}"
-        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)
+        let a = A.deserialize(from: jsonString)
         XCTAssertNil(a)
-        let b = JSONDeserializer<A>.deserializeModelArrayFrom(json: jsonString)
+        let b = A.deserializeModelArray(from: jsonString)
         XCTAssertNil(b)
     }
 
@@ -58,9 +58,9 @@ class InvalidStateHandlingTest: XCTestCase {
         }
 
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        let a = JSONDeserializer<B>.deserializeFrom(json: jsonString, designatedPath: "wrong")
+        let a = B.deserialize(from: jsonString, designatedPath: "wrong")
         XCTAssertNil(a)
-        let b = JSONDeserializer<B>.deserializeFrom(json: jsonString, designatedPath: "name.name")
+        let b = B.deserialize(from: jsonString, designatedPath: "name.name")
         XCTAssertNil(b)
     }
 }

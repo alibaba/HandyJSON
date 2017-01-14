@@ -71,7 +71,7 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
 
         let jsonString = "{\"aInt\":-12345678,\"aInt8\":-8,\"aInt16\":-16,\"aInt32\":-32,\"aInt64\":-64,\"aUInt\":12345678,\"aUInt8\":8,\"aUInt16\":16,\"aUInt32\":32,\"aUInt64\":64,\"aBool\":true,\"aFloat\":12.34,\"aDouble\":12.34,\"aString\":\"hello world!\"}"
 
-        let aStruct = JSONDeserializer<AStruct>.deserializeFrom(json: jsonString)!
+        let aStruct = AStruct.deserialize(from: jsonString)!
         XCTAssert(aStruct.aInt == -12345678)
         XCTAssert(aStruct.aInt8 == -8)
         XCTAssert(aStruct.aInt16 == -16)

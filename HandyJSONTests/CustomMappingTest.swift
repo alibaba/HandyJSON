@@ -60,7 +60,7 @@ class CustomMappingTest: XCTestCase {
         }
 
         let jsonString = "{\"json_name\":\"Bob\",\"id\":\"12345\",\"json_height\":180}"
-        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        let a = A.deserialize(from: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "json_12345")
         XCTAssert(a.height == 180)
@@ -92,7 +92,7 @@ class CustomMappingTest: XCTestCase {
         }
 
         let jsonString = "{\"json_name\":\"Bob\",\"id\":\"12345\",\"json_height\":180}"
-        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        let a = A.deserialize(from: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "json_12345")
         XCTAssert(a.height == 180)
@@ -115,7 +115,7 @@ class CustomMappingTest: XCTestCase {
             }
         }
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        let a = A.deserialize(from: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
@@ -136,7 +136,7 @@ class CustomMappingTest: XCTestCase {
             }
         }
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180, \"notHandyJSONProperty\":\"value\"}"
-        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        let a = A.deserialize(from: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
