@@ -129,7 +129,8 @@ fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInf
 extension _BaseJSONTransformable{
   
   /// 为可转换类提供一个默认实现.
-  ///
+  /// 由于 NSString 和  NSNumber 这些 OC 类是 non-final 的 无法实现 JSONTransformable 协议.
+  /// 在这里特殊处理.
   /// - Parameter object: JSONSerialization  反序列化出来的 NSObject 对象.
   /// - Returns: 转换到对应声明的模型.
   public static func transform(from object:NSObject) -> Self? {

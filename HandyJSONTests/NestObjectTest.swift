@@ -100,7 +100,7 @@ class NestObjectTest: XCTestCase {
          }
         **/
         let jsonString = "{\"id\":\"77544\",\"name\":\"Tom Li\",\"age\":18,\"height\":180,\"gender\":\"Male\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subject\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
-        let student = JSONDeserializer<Student>.deserializeFrom(json: jsonString)!
+        let student = Student.deserialize(from: jsonString)!
         XCTAssert(student.id == "77544")
         XCTAssert(student.name == "Tom Li")
         XCTAssert(student.age == 18)

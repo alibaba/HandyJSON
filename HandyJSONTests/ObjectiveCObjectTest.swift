@@ -42,7 +42,7 @@ class ObjectiveCObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        let a = A.deserialize(from: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
@@ -58,7 +58,7 @@ class ObjectiveCObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        let b = JSONDeserializer<B>.deserializeFrom(json: jsonString)!
+        let b = B.deserialize(from: jsonString)!
         XCTAssert(b.id == 123456)
         XCTAssert(b.arr1?.count == 6)
         XCTAssert(b.arr2?.count == 5)
