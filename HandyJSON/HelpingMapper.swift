@@ -62,7 +62,7 @@ public class HelpingMapper {
             let assignmentClosure = { (jsonValue: Any?) in
                 if let _value = jsonValue{
                   if let object = _value as? NSObject{
-                    if let str = String.valueFrom(object: object){
+                    if let str = String.transform(from: object){
                       UnsafeMutablePointer<T>(mutating: pointer).pointee = _converter(str)
                     }
                   }
