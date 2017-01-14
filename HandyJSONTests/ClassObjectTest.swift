@@ -42,7 +42,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        let a = A.deserialize(from: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
@@ -58,7 +58,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        let b = JSONDeserializer<B>.deserializeFrom(json: jsonString)!
+        let b = B.deserialize(from: jsonString)!
         XCTAssert(b.id == 123456)
         XCTAssert(b.arr1?.count == 6)
         XCTAssert(b.arr2?.count == 5)
@@ -76,7 +76,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        let c = JSONDeserializer<C>.deserializeFrom(json: jsonString)!
+        let c = C.deserialize(from: jsonString)!
         XCTAssert(c.id == 123456)
         XCTAssert(c.arr1.count == 6)
         XCTAssert(c.arr2?.count == 5)
@@ -104,7 +104,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        let d = JSONDeserializer<D>.deserializeFrom(json: jsonString)!
+        let d = D.deserialize(from: jsonString)!
         XCTAssert(d.id == 123456)
         XCTAssert(d.arr1?.count == 6)
         XCTAssert(d.arr2.count == 5)
@@ -122,7 +122,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"dummy1\":23334,\"arr1\":[1,2,3,4,5,6],\"dummy2\":\"string\",\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        let e = JSONDeserializer<E>.deserializeFrom(json: jsonString)!
+        let e = E.deserialize(from: jsonString)!
         XCTAssert(e.id == 123456)
         XCTAssert(e.arr1.count == 6)
         XCTAssert(e.arr2?.count == 5)
@@ -140,14 +140,14 @@ class ClassObjectTest: XCTestCase {
         }
 
         var jsonString: String? = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        let a = A.deserialize(from: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
 
         jsonString = nil
 
-        if let _ = JSONDeserializer<A>.deserializeFrom(json: jsonString) {
+        if let _ = A.deserialize(from: jsonString) {
             XCTAssert(false)
         } else {
             XCTAssert(true)
@@ -164,7 +164,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonArrayString: String? = "[{\"name\":\"Bob\",\"id\":\"1\",\"height\":180}, {\"name\":\"Lily\",\"id\":\"2\",\"height\":150}, {\"name\":\"Lucy\",\"id\":\"3\",\"height\":160}]"
-        let arr = JSONDeserializer<A>.deserializeModelArrayFrom(json: jsonArrayString)!
+        let arr = A.deserializeModelArray(from: jsonArrayString)!
         XCTAssert(arr[0]?.name == "Bob")
         XCTAssert(arr[0]?.id == "1")
         XCTAssert(arr[0]?.height == 180)
@@ -186,7 +186,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonArrayString: String? = "{\"result\":{\"data\":[{\"name\":\"Bob\",\"id\":\"1\",\"height\":180},{\"name\":\"Lily\",\"id\":\"2\",\"height\":150},{\"name\":\"Lucy\",\"id\":\"3\",\"height\":160}]}}"
-        let arr = JSONDeserializer<A>.deserializeModelArrayFrom(json: jsonArrayString, designatedPath: "result.data")!
+        let arr = A.deserializeModelArray(from: jsonArrayString, designatedPath: "result.data")!
         XCTAssert(arr[0]?.name == "Bob")
         XCTAssert(arr[0]?.id == "1")
         XCTAssert(arr[0]?.height == 180)
@@ -236,7 +236,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"aBool\":false,\"aFloat\":1.23,\"aDouble\":1.23,\"aNSNumber\":1.23,\"aInt\":-1,\"aInt8\":-1,\"aInt16\":-1,\"aInt32\":-1,\"aInt64\":-1,\"aUInt\":1,\"aUInt8\":1,\"aUInt16\":1,\"aUInt32\":1,\"aUInt64\":1,\"bBool\":\"false\",\"bFloat\":\"1.23\",\"bDouble\":\"1.23\",\"bNSNumber\":\"1.23\",\"bInt\":\"-1\",\"bInt8\":\"-1\",\"bInt16\":\"-1\",\"bInt32\":\"-1\",\"bInt64\":\"-1\",\"bUInt\":\"1\",\"bUInt8\":\"1\",\"bUInt16\":\"1\",\"bUInt32\":\"1\",\"bUInt64\":\"1\"}"
-        let model = JSONDeserializer<F>.deserializeFrom(json: jsonString)!
+        let model = F.deserialize(from: jsonString)!
         XCTAssertTrue(model.aBool == false)
         XCTAssertTrue(model.aFloat == 1.23)
         XCTAssertTrue(model.aDouble == 1.23)
@@ -305,7 +305,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"aBool\":false,\"aFloat\":1.23,\"aDouble\":1.23,\"aNSNumber\":1.23,\"aInt\":-1,\"aInt8\":-1,\"aInt16\":-1,\"aInt32\":-1,\"aInt64\":-1,\"aUInt\":1,\"aUInt8\":1,\"aUInt16\":1,\"aUInt32\":1,\"aUInt64\":1,\"bBool\":false,\"bFloat\":1.23,\"bDouble\":1.23,\"bNSNumber\":1.23,\"bInt\":-1,\"bInt8\":-1,\"bInt16\":-1,\"bInt32\":-1,\"bInt64\":-1,\"bUInt\":1,\"bUInt8\":1,\"bUInt16\":1,\"bUInt32\":1,\"bUInt64\":1}"
-        let model = JSONDeserializer<G>.deserializeFrom(json: jsonString)!
+        let model = G.deserialize(from: jsonString)!
         XCTAssertTrue(model.aBool == "false")
         XCTAssertTrue(model.aFloat == "1.23")
         XCTAssertTrue(model.aDouble == "1.23")
@@ -358,7 +358,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"aBool\":null,\"aFloat\":null,\"aDouble\":null,\"aNSNumber\":null,\"aInt\":null,\"aInt8\":null,\"aInt16\":null,\"aInt32\":null,\"aInt64\":null,\"aUInt\":null,\"aUInt8\":null,\"aUInt16\":null,\"aUInt32\":null,\"aUInt64\":null}"
-        let model = JSONDeserializer<H>.deserializeFrom(json: jsonString)!
+        let model = H.deserialize(from: jsonString)!
         XCTAssertNil(model.aBool)
         XCTAssertNil(model.aFloat)
         XCTAssertNil(model.aDouble)

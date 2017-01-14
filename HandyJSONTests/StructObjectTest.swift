@@ -40,7 +40,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
-        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        let a = A.deserialize(from: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
@@ -54,7 +54,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        let b = JSONDeserializer<B>.deserializeFrom(json: jsonString)!
+        let b = B.deserialize(from: jsonString)!
         XCTAssert(b.id == 123456)
         XCTAssert(b.arr1?.count == 6)
         XCTAssert(b.arr2?.count == 5)
@@ -70,7 +70,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        let c = JSONDeserializer<C>.deserializeFrom(json: jsonString)!
+        let c = C.deserialize(from: jsonString)!
         XCTAssert(c.id == 123456)
         XCTAssert(c.arr1.count == 6)
         XCTAssert(c.arr2?.count == 5)
@@ -94,7 +94,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        let d = JSONDeserializer<D>.deserializeFrom(json: jsonString)!
+        let d = D.deserialize(from: jsonString)!
         XCTAssert(d.id == 123456)
         XCTAssert(d.arr1?.count == 6)
         XCTAssert(d.arr2.count == 5)
@@ -110,7 +110,7 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"id\":123456,\"dummy1\":23334,\"arr1\":[1,2,3,4,5,6],\"dummy2\":\"string\",\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        let e = JSONDeserializer<E>.deserializeFrom(json: jsonString)!
+        let e = E.deserialize(from: jsonString)!
         XCTAssert(e.id == 123456)
         XCTAssert(e.arr1.count == 6)
         XCTAssert(e.arr2?.count == 5)
@@ -126,21 +126,21 @@ class StructObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"data\":{\"result\":{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}},\"code\":200}"
-        var f = JSONDeserializer<F>.deserializeFrom(json: jsonString, designatedPath: "data.result")!
+        var f = F.deserialize(from: jsonString, designatedPath: "data.result")!
         XCTAssert(f.id == 123456)
         XCTAssert(f.arr1.count == 6)
         XCTAssert(f.arr2?.count == 5)
         XCTAssert((f.arr1.last ?? 0) == 6)
         XCTAssert((f.arr2?.last ?? "") == "e")
 
-        f = JSONDeserializer<F>.deserializeFrom(json: jsonString, designatedPath: "data.result.")!
+        f = F.deserialize(from: jsonString, designatedPath: "data.result.")!
         XCTAssert(f.id == 123456)
         XCTAssert(f.arr1.count == 6)
         XCTAssert(f.arr2?.count == 5)
         XCTAssert((f.arr1.last ?? 0) == 6)
         XCTAssert((f.arr2?.last ?? "") == "e")
 
-        f = JSONDeserializer<F>.deserializeFrom(json: jsonString, designatedPath: ".data.result.")!
+        f =  F.deserialize(from: jsonString, designatedPath: ".data.result.")!
         XCTAssert(f.id == 123456)
         XCTAssert(f.arr1.count == 6)
         XCTAssert(f.arr2?.count == 5)
@@ -148,14 +148,14 @@ class StructObjectTest: XCTestCase {
         XCTAssert((f.arr2?.last ?? "") == "e")
 
         let targetJsonString = "{\"id\":123456,\"arr1\":[1,2,3,4,5,6],\"arr2\":[\"a\",\"b\",\"c\",\"d\",\"e\"]}"
-        f = JSONDeserializer<F>.deserializeFrom(json: targetJsonString, designatedPath: "")!
+        f =  F.deserialize(from: targetJsonString, designatedPath: "")!
         XCTAssert(f.id == 123456)
         XCTAssert(f.arr1.count == 6)
         XCTAssert(f.arr2?.count == 5)
         XCTAssert((f.arr1.last ?? 0) == 6)
         XCTAssert((f.arr2?.last ?? "") == "e")
 
-        f = JSONDeserializer<F>.deserializeFrom(json: targetJsonString, designatedPath: ".")!
+        f = F.deserialize(from: targetJsonString, designatedPath: ".")!
         XCTAssert(f.id == 123456)
         XCTAssert(f.arr1.count == 6)
         XCTAssert(f.arr2?.count == 5)
