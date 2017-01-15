@@ -223,26 +223,14 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
     func testEnumTypeOfCommonRawType() {
         enum AEnum: Int, HandyJSONEnum {
             case A = 1, B = 2, C = 3
-
-            static func makeInitWrapper() -> InitWrapperProtocol? {
-                return InitWrapper<Int>(rawInit: AEnum.init)
-            }
         }
 
         enum BEnum: String, HandyJSONEnum {
             case A = "a", B = "b", C = "c"
-
-            static func makeInitWrapper() -> InitWrapperProtocol? {
-                return InitWrapper<String>(rawInit: BEnum.init)
-            }
         }
 
         enum CEnum: Double, HandyJSONEnum {
             case A = 1.1, B = 2.2, C = 3.3
-
-            static func makeInitWrapper() -> InitWrapperProtocol? {
-                return InitWrapper<Double>(rawInit: CEnum.init)
-            }
         }
 
         struct TestEnum: HandyJSON {

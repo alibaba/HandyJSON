@@ -10,8 +10,8 @@ import Foundation
 import XCTest
 
 func stringCompareHelper(_ actual: String?, _ expected: String?) {
-    print(actual ?? "")
-    print(expected ?? "")
+    // print(actual ?? "")
+    // print(expected ?? "")
     XCTAssertTrue(expected == actual, "expected value:\(expected) not equal to actual:\(actual)")
 }
 
@@ -88,7 +88,7 @@ fileprivate func compareJSONObject(_ left: NSObject?, _ right: NSObject?) -> Boo
 func jsonStringCompareHelper(_ actual: String?, _ expected: String?) {
     let left = toJSONObject(actual)
     let right = toJSONObject(expected)
-    print("\(left)")
-    print("\(right)")
+    // print("\(left)")
+    // print("\(right)")
     XCTAssertTrue(compareJSONObject(left, right))
 }
