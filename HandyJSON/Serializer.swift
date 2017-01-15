@@ -22,33 +22,33 @@
 //
 
 extension PropertiesMappable {
-
+    
     static func _serializeModelObject(propertys: [(String?, Any)], headPointer: UnsafeMutableRawPointer, offsetInfo: [String: Int] , mapper: HelpingMapper) -> [String: Any] {
-
+        
         var dict = [String: Any]()
         for (label, value) in propertys{
-
+            
             var key = label ?? ""
-
+            
             guard let offset = offsetInfo[key] else {
                 ClosureExecutor.executeWhenError {
                     print("Can not find offset info for property: \(key)")
                 }
                 continue
             }
-
+            
             let mutablePointer = headPointer.advanced(by: offset)
-
+            
             if mapper.propertyExcluded(key: mutablePointer.hashValue) {
                 continue
             }
-
+            
             if let mappingHandler = mapper.getMappingHandler(key: mutablePointer.hashValue) {
                 // if specific key is set, replace the label
                 if let specifyKey = mappingHandler.mappingName {
                     key = specifyKey
                 }
-
+                
                 if let transformer = mappingHandler.takeValueClosure {
                     if let _transformedValue = transformer(value) {
                         dict[key] = _transformedValue
@@ -56,40 +56,30 @@ extension PropertiesMappable {
                     continue
                 }
             }
-
+            
             if let typedValue = value as? _BaseJSONTransformable {
                 if let result = self._serializeAny(object: typedValue) {
                     dict[key] = result
                     continue
                 }
             }
-
+            
             ClosureExecutor.executeWhenDebug {
                 print("The value for key: \(key) is not transformable type")
             }
-
-//            // if the value is not nil, insert to the resut dict directly
-//            if let optional = value as? Optional {
-//                if let _value = optional.getWrappedValue() {
-//                    dict[key] = _value
-//                }
-//            } else if let implicit = value as? ImplicitlyUnwrappedTypeProtocol {
-//                if let _value = implicit.getWrappedValue() {
-//                    dict[key] = _value
-//                }
-//            }
+            
         }
         return dict
     }
-
+    
     static func _serializeAny(object: _BaseJSONTransformable) -> Any? {
-
+        
         let mirror = Mirror(reflecting: object)
-
+        
         guard let displayStyle = mirror.displayStyle else {
             return object.toJSONValue()
         }
-
+        
         // after filtered by protocols above, now we expect the type is pure struct/class
         switch displayStyle {
         case .class, .struct:
@@ -103,25 +93,25 @@ extension PropertiesMappable {
             }
             var mutableObject = object as! PropertiesMappable
             mutableObject.mapping(mapper: mapper)
-
+            
             let rawPointer: UnsafeMutableRawPointer
             if type(of: object) is AnyClass {
                 rawPointer = UnsafeMutableRawPointer(mutableObject.headPointerOfClass())
             } else {
                 rawPointer = UnsafeMutableRawPointer(mutableObject.headPointerOfStruct())
             }
-
+            
             var children = [(label: String?, value: Any)]()
             let mirrorChildrenCollection = AnyRandomAccessCollection(mirror.children)!
             children += mirrorChildrenCollection
-
+            
             var currentMirror = mirror
             while let superclassChildren = currentMirror.superclassMirror?.children {
                 let randomCollection = AnyRandomAccessCollection(superclassChildren)!
                 children += randomCollection
                 currentMirror = currentMirror.superclassMirror!
             }
-
+            
             var offsetInfo = [String: Int]()
             guard let properties = getProperties(forType: type(of: object)) else {
                 ClosureExecutor.executeWhenError {
@@ -129,11 +119,11 @@ extension PropertiesMappable {
                 }
                 return nil
             }
-
+            
             properties.forEach({ (desc) in
                 offsetInfo[desc.key] = desc.offset
             })
-
+            
             return _serializeModelObject(propertys: children, headPointer: rawPointer, offsetInfo: offsetInfo, mapper: mapper) as Any
         default:
             return object.toJSONValue()
@@ -142,19 +132,18 @@ extension PropertiesMappable {
 }
 
 
-public typealias JSONObject = [String:Any]
 
 public extension HandyJSON {
-
-    public func toJSON() -> JSONObject? {
-        if let dict = Self._serializeAny(object: self) as? JSONObject {
+    
+    public func toJSON() -> [String:Any]? {
+        if let dict = Self._serializeAny(object: self) as? [String:Any] {
             return dict
         }
         return nil
     }
-
+    
     public func toJSONString(prettyPrint: Bool = false) -> String? {
-
+        
         if let anyObject = self.toJSON() {
             if JSONSerialization.isValidJSONObject(anyObject) {
                 do {
@@ -181,13 +170,13 @@ public extension HandyJSON {
 }
 
 public extension Collection where Iterator.Element: HandyJSON {
-
-    public func toJSON() -> [JSONObject?] {
+    
+    public func toJSON() -> [[String:Any]?] {
         return self.map{ $0.toJSON() }
     }
-
+    
     public func toJSONString(prettyPrint: Bool = false) -> String? {
-
+        
         let anyArray = self.toJSON()
         if JSONSerialization.isValidJSONObject(anyArray) {
             do {
@@ -211,7 +200,3 @@ public extension Collection where Iterator.Element: HandyJSON {
         return nil
     }
 }
-
-
-
-//////////// the below APIs is deprecated ///////////////

@@ -45,7 +45,7 @@ import Foundation
 typealias Byte = Int8
 
 
-// MARK: 基本协议 声明 
+// MARK: 基本协议 声明
 
 /// 提供默认的反射能力
 public protocol PropertiesMetrizable {}
@@ -54,58 +54,58 @@ public protocol _BaseJSONTransformable: PropertiesMetrizable{ }
 
 
 public protocol PropertiesMappable: _BaseJSONTransformable{
-  init()
-  mutating func mapping(mapper: HelpingMapper)
+    init()
+    mutating func mapping(mapper: HelpingMapper)
 }
 
 /// 用于自定义 Model 类型.
 extension PropertiesMappable {
-  /// 表示可以自定义一些转换如自定义Model 字段名与 JSON 中 Key 的对应关系. 甚至可以自定义整个字段的序列化过程.
-  public mutating func mapping(mapper: HelpingMapper) {}
+    /// 表示可以自定义一些转换如自定义Model 字段名与 JSON 中 Key 的对应关系. 甚至可以自定义整个字段的序列化过程.
+    public mutating func mapping(mapper: HelpingMapper) {}
 }
 
 
 /// 用于 Foundation 中的标准的数据类型,及自定义的数据类型. 用户自定义字段类型可实现此协议以此来实现序列化能力.
 /// 本库为Foundation & Swift 的主要基本类型实现了 `JSONTransformable` 协议.
 public protocol JSONTransformable:_BaseJSONTransformable{
-  /// 将 `JSONSerialization` 反序列化生成的 `NSObject` 转换到对应 Model 对象.
-  static func transform(from object:NSObject) -> Self?
-  
-  /// 返回可供 `JSONSerialization` 序列化的对象
-  ///
-  func toJSONValue() -> Any?
+    /// 将 `JSONSerialization` 反序列化生成的 `NSObject` 转换到对应 Model 对象.
+    static func transform(from object:NSObject) -> Self?
+    
+    /// 返回可供 `JSONSerialization` 序列化的对象
+    ///
+    func toJSONValue() -> Any?
 }
 
 
 
 extension PropertiesMetrizable {
-
+    
     // locate the head of a struct type object in memory
     mutating func headPointerOfStruct() -> UnsafeMutablePointer<Byte> {
-
+        
         return withUnsafeMutablePointer(to: &self) {
             return UnsafeMutableRawPointer($0).bindMemory(to: Byte.self, capacity: MemoryLayout<Self>.stride)
         }
     }
-
+    
     // locating the head of a class type object in memory
     mutating func headPointerOfClass() -> UnsafeMutablePointer<Byte> {
-
+        
         let opaquePointer = Unmanaged.passUnretained(self as AnyObject).toOpaque()
         let mutableTypedPointer = opaquePointer.bindMemory(to: Byte.self, capacity: MemoryLayout<Self>.stride)
         return UnsafeMutablePointer<Byte>(mutableTypedPointer)
     }
-
+    
     // memory size occupy by self object
     static func size() -> Int {
         return MemoryLayout<Self>.size
     }
-
+    
     // align
     static func align() -> Int {
         return MemoryLayout<Self>.alignment
     }
-
+    
     // Returns the offset to the next integer that is greater than
     // or equal to Value and is a multiple of Align. Align must be
     // non-zero.
@@ -127,65 +127,69 @@ fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInf
 /// _BaseJSONTransformable
 /// 的 默认实现. 通过类型转换的动态调用, 为协议提供其名字对应的类型转换能力
 extension _BaseJSONTransformable{
-  
-  /// 为可转换类提供一个默认实现.
-  ///
-  /// - Parameter object: JSONSerialization  反序列化出来的 NSObject 对象.
-  /// - Returns: 转换到对应声明的模型.
-  public static func transform(from object:NSObject) -> Self? {
-    if self is NSString.Type{
-        return NSString._transform(from: object) as? Self
-    }else if self is NSNumber.Type{
-        return NSNumber._transform(from: object) as? Self
-    }else if self is JSONTransformable.Type{
-      return (self as! JSONTransformable.Type).transform(from: object) as? Self
-    }else if self is PropertiesMappable.Type{
-      return (self as! PropertiesMappable.Type).transform(from: object) as? Self
+    
+    /// 为可转换类提供一个默认实现.
+    ///
+    /// - Parameter object: JSONSerialization  反序列化出来的 NSObject 对象.
+    /// - Returns: 转换到对应声明的模型.
+    public static func transform(from object:NSObject) -> Self? {
+        if self is NSString.Type{
+            return NSString._transform(from: object) as? Self
+        }else if self is NSNumber.Type{
+            return NSNumber._transform(from: object) as? Self
+        }else if self is JSONTransformable.Type{
+            return (self as! JSONTransformable.Type).transform(from: object) as? Self
+        }else if self is PropertiesMappable.Type{
+            return (self as! PropertiesMappable.Type).transform(from: object) as? Self
+        }
+        return nil
     }
-    return nil
-  }
-  
-  public func toJSONValue() -> Any?{
-    if let this = self as? JSONTransformable{
-      return this.toJSONValue()
-    }else{
-      return  self
+    
+    internal func toJSONValue() -> Any?{
+        if let this = self as? JSONTransformable{
+            return this.toJSONValue()
+        }else if self is NSString.Type{
+            return self
+        }else if self is NSNumber.Type{
+            return self
+        }else{
+            fatalError("Should not call this on HandyJSON model")
+        }
     }
-  }
 }
 
 // MARK: Foundation & Swift 基本数据类型实现 JSONTransformable
 
-/// 简单的 JSON 值类型, 可直接用作 `JSONSerialization` 序列化.
+/// 简单的 JSON 值类型 不包含 Array 和 Dictionary, 可直接用作 `JSONSerialization` 序列化.
 protocol PlainJSONValue: JSONTransformable {
 }
 
 extension PlainJSONValue{
-  public func toJSONValue() -> Any? {
-    return self
-  }
+    public func toJSONValue() -> Any? {
+        return self
+    }
 }
 
 
 // MARK: 基本类型 - 整型
 
 protocol IntegerPropertyProtocol: Integer, PlainJSONValue{
-  init?(_ text:String, radix: Int)
-  init(_ number: NSNumber)
+    init?(_ text:String, radix: Int)
+    init(_ number: NSNumber)
 }
 
 extension IntegerPropertyProtocol{
-  public static func transform(from object:NSObject) -> Self?{
-    if let str = object as? NSString{
-      let text:String = str as String
-      return Self(text, radix: 10)
-    }else if let num = object as? NSNumber{
-      return Self(num)
-    } else{
-      return nil
+    public static func transform(from object:NSObject) -> Self?{
+        if let str = object as? NSString{
+            let text:String = str as String
+            return Self(text, radix: 10)
+        }else if let num = object as? NSNumber{
+            return Self(num)
+        } else{
+            return nil
+        }
+        
     }
-    
-  }
 }
 
 extension Int: IntegerPropertyProtocol{}
@@ -202,37 +206,37 @@ extension UInt64: IntegerPropertyProtocol{}
 // MARK: 基本类型 - 浮点型
 
 extension Bool: PlainJSONValue {
-  public static func transform(from object:NSObject) -> Bool?{
-    if let str = object as? NSString {
-      let lowerCase = str.lowercased
-      if ["0", "false"].contains(lowerCase) {
-        return false
-      }
-      if ["1", "true"].contains(lowerCase) {
-        return true
-      }
-    }else if let num = object as? NSNumber{
-      return num.boolValue
+    public static func transform(from object:NSObject) -> Bool?{
+        if let str = object as? NSString {
+            let lowerCase = str.lowercased
+            if ["0", "false"].contains(lowerCase) {
+                return false
+            }
+            if ["1", "true"].contains(lowerCase) {
+                return true
+            }
+        }else if let num = object as? NSNumber{
+            return num.boolValue
+        }
+        return nil
     }
-    return nil
-  }
 }
 
 
 protocol FloatPropertyProtocol:_BaseJSONTransformable,PlainJSONValue, LosslessStringConvertible {
-  init(_ number: NSNumber)
+    init(_ number: NSNumber)
 }
 extension FloatPropertyProtocol{
-  public static func transform(from object:NSObject) -> Self?{
-    if let str = object as? NSString{
-      let text = str as String
-      return Self(text)
-    }else if let num = object as? NSNumber{
-      return Self(num)
-    }else{
-      return nil
+    public static func transform(from object:NSObject) -> Self?{
+        if let str = object as? NSString{
+            let text = str as String
+            return Self(text)
+        }else if let num = object as? NSNumber{
+            return Self(num)
+        }else{
+            return nil
+        }
     }
-  }
 }
 
 extension Float: FloatPropertyProtocol {}
@@ -240,54 +244,57 @@ extension Double: FloatPropertyProtocol {}
 
 // MARK:  基本类型 -  String & NSString
 extension String: PlainJSONValue {
-  public static func transform(from object:NSObject) -> String?{
-    if let str = object  as? NSString {
-      return str as String
-    } else if let  num = object as? NSNumber {
-      // Boolean Type Inside
-      if NSStringFromClass(type(of: num)) == "__NSCFBoolean" {
-        if num.boolValue{
-          return "true"
-        } else {
-          return "false"
+    public static func transform(from object:NSObject) -> String?{
+        if let str = object  as? NSString {
+            return str as String
+        } else if let  num = object as? NSNumber {
+            // Boolean Type Inside
+            if NSStringFromClass(type(of: num)) == "__NSCFBoolean" {
+                if num.boolValue{
+                    return "true"
+                } else {
+                    return "false"
+                }
+            }
+            return num.stringValue
+        } else if let arr = object as? NSArray{
+            return "\(arr)"
+        }else if let dict = object as? NSDictionary{
+            return "\(dict)"
         }
-      }
-      return num.stringValue
-    } else if let arr = object as? NSArray{
-      return "\(arr)"
-    }else if let dict = object as? NSDictionary{
-      return "\(dict)"
+        return nil
     }
-    return nil
-  }
-  
+    
 }
 
 extension NSString: _BaseJSONTransformable{
-  static func _transform(from object:NSObject) -> NSString?{
-    return String.transform(from: object) as? NSString
-  }
+    static func _transform(from object:NSObject) -> NSString?{
+        if let str = String.transform(from: object){
+            return str as NSString
+        }
+        return nil
+    }
 }
 
 extension NSNumber: _BaseJSONTransformable{
-  static func _transform(from object:NSObject) -> NSNumber?{
-    if let num = object as? NSNumber{
-      return num
-    }else if let str = object as? NSString{
-      let lowercase = str.lowercased
-      if lowercase == "true"{
-        return NSNumber(booleanLiteral: true)
-      }else if lowercase == "false"{
-        return NSNumber(booleanLiteral: false)
-      }else{
-        // normal number
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter.number(from: str as String)
-      }
+    static func _transform(from object:NSObject) -> NSNumber?{
+        if let num = object as? NSNumber{
+            return num
+        }else if let str = object as? NSString{
+            let lowercase = str.lowercased
+            if lowercase == "true"{
+                return NSNumber(booleanLiteral: true)
+            }else if lowercase == "false"{
+                return NSNumber(booleanLiteral: false)
+            }else{
+                // normal number
+                let formatter = NumberFormatter()
+                formatter.numberStyle = .decimal
+                return formatter.number(from: str as String)
+            }
+        }
+        return nil
     }
-    return nil
-  }
 }
 
 
@@ -297,17 +304,17 @@ public protocol RawEnumProtocol: JSONTransformable {
 }
 
 extension RawEnumProtocol{
-  public func toJSONValue() -> Any? {
-      return takeRawValue()
-  }
+    public func toJSONValue() -> Any? {
+        return takeRawValue()
+    }
 }
 
 public extension RawRepresentable where Self: RawEnumProtocol {
-
+    
     func takeRawValue() -> Any? {
         return self.rawValue
     }
-
+    
     static func transform(from object: NSObject) -> Self? {
         if let transformableType = RawValue.self as? _BaseJSONTransformable.Type {
             if let typedValue = transformableType.transform(from: object) {
@@ -326,30 +333,30 @@ extension Optional: JSONTransformable {
         self = nil
     }
     public static func transform(from object: NSObject) -> Optional? {
-      if let value = (Wrapped.self as? _BaseJSONTransformable.Type)?.transform(from:object) as? Wrapped {
+        if let value = (Wrapped.self as? _BaseJSONTransformable.Type)?.transform(from:object) as? Wrapped {
             return Optional(value)
         } else if let value = object as? Wrapped {
             return Optional(value)
         }
         return nil
     }
-
+    
     func getWrappedValue() -> Any? {
         return self.map({ (wrapped) -> Any in
             return wrapped as Any
         })
     }
-  
+    
     public func toJSONValue() -> Any? {
-      if let value = getWrappedValue(){
-        if let transformable = value as? _BaseJSONTransformable{
-         return transformable.toJSONValue()
-        }else{
-          return value
+        if let value = getWrappedValue(){
+            if let transformable = value as? _BaseJSONTransformable{
+                return transformable.toJSONValue()
+            }else{
+                return value
+            }
         }
-      }
-      return nil
-  }
+        return nil
+    }
 }
 
 extension ImplicitlyUnwrappedOptional: JSONTransformable {
@@ -361,24 +368,24 @@ extension ImplicitlyUnwrappedOptional: JSONTransformable {
         }
         return nil
     }
-
+    
     func getWrappedValue() -> Any? {
         if case let .some(x) = self {
             return x
         }
         return nil
     }
-  
-  public func toJSONValue() -> Any? {
-    if let value = getWrappedValue(){
-      if let transformable = value as? _BaseJSONTransformable{
-        return transformable.toJSONValue()
-      }else{
-        return value
-      }
+    
+    public func toJSONValue() -> Any? {
+        if let value = getWrappedValue(){
+            if let transformable = value as? _BaseJSONTransformable{
+                return transformable.toJSONValue()
+            }else{
+                return value
+            }
+        }
+        return nil
     }
-    return nil
-  }
 }
 
 
@@ -406,77 +413,77 @@ extension Collection{
         }
         return result
     }
-
-  
+    
+    
     func _toJSONValue() -> Any?{
-      return self.map{ (each) -> (Any?) in
-        if let tranformable = each as? _BaseJSONTransformable{
-          return tranformable.toJSONValue()
-        }else{
-          return each
+        return self.map{ (each) -> (Any?) in
+            if let tranformable = each as? _BaseJSONTransformable{
+                return tranformable.toJSONValue()
+            }else{
+                return each
+            }
         }
-      }
     }
 }
 
 extension Array: JSONTransformable{
-  public static func transform(from object: NSObject) -> [Element]?{
-    return self._transform(from: object)
-  }
-  
-  public func toJSONValue() -> Any? {
-    return self._toJSONValue()
-  }
-  
+    public static func transform(from object: NSObject) -> [Element]?{
+        return self._transform(from: object)
+    }
+    
+    public func toJSONValue() -> Any? {
+        return self._toJSONValue()
+    }
+    
 }
 
 extension Set: JSONTransformable{
-  public static func transform(from object: NSObject) -> [Element]?{
-    return self._transform(from: object)
-  }
-  
-  public func toJSONValue() -> Any? {
-    return self._toJSONValue()
-  }
+    public static func transform(from object: NSObject) -> [Element]?{
+        return self._transform(from: object)
+    }
+    
+    public func toJSONValue() -> Any? {
+        return self._toJSONValue()
+    }
 }
 
 // MARK: Dictionary Support
 
 extension Dictionary: JSONTransformable {
-  public static func transform(from object:NSObject) -> Dictionary?{
-    guard let nsDict = object as? NSDictionary else {
-      ClosureExecutor.executeWhenDebug {
-        print("Expect object to be an NSDictionary but it's not")
-      }
-      return nil
-    }
-    var result: [Key: Value] = [Key: Value]()
-    for (key,value) in nsDict{
-      if let sKey = key as? Key, let nsValue = value as? NSObject {
-        if let nValue = (Value.self as? _BaseJSONTransformable.Type)?.transform(from: nsValue) as? Value {
-          result[sKey] = nValue
-        } else if let nValue = nsValue as? Value {
-          result[sKey] = nValue
-        }
-      }
-    }
-    return result
-  }
-  
-  public func toJSONValue() -> Any? {
-      var result = [String: Any]()
-      for (key, value) in self{
-        if let key = key as? String{
-          if let transformable = value as? _BaseJSONTransformable{
-            if let transValue = transformable.toJSONValue(){
-              result[key] = transValue
+    public static func transform(from object:NSObject) -> Dictionary?{
+        guard let nsDict = object as? NSDictionary else {
+            ClosureExecutor.executeWhenDebug {
+                print("Expect object to be an NSDictionary but it's not")
             }
-          }
+            return nil
+        }
+        var result: [Key: Value] = [Key: Value]()
+        for (key,value) in nsDict{
+            if let sKey = key as? Key, let nsValue = value as? NSObject {
+                if let nValue = (Value.self as? _BaseJSONTransformable.Type)?.transform(from: nsValue) as? Value {
+                    result[sKey] = nValue
+                } else if let nValue = nsValue as? Value {
+                    result[sKey] = nValue
+                }
+            }
+        }
+        return result
+    }
+    
+    public func toJSONValue() -> Any? {
+        var result = [String: Any]()
+        for (key, value) in self{
+            if let key = key as? String{
+                if let transformable = value as? _BaseJSONTransformable{
+                    if let transValue = transformable.toJSONValue(){
+                        result[key] = transValue
+                    }
+                }
+            }
+            
         }
         
-      }
-    
-      return result
+        return result
     }
 }
 

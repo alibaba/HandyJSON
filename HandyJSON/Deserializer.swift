@@ -20,43 +20,43 @@
 import Foundation
 
 extension PropertiesMappable {
-
+    
     static func _transform(rawPointer: UnsafeMutableRawPointer, property: Property.Description, dict: NSDictionary, mapper: HelpingMapper) {
         var key = property.key
-
+        
         if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
             key = key.lowercased()
         }
-
+        
         let mutablePointer = rawPointer.advanced(by: property.offset)
-
+        
         if mapper.propertyExcluded(key: mutablePointer.hashValue) {
             ClosureExecutor.executeWhenDebug {
                 print("Exclude property: \(key)")
             }
             return
         }
-
+        
         if let mappingHandler = mapper.getMappingHandler(key: mutablePointer.hashValue) {
             // if specific key is set, replace the label
             if let specifyKey = mappingHandler.mappingName {
                 key = specifyKey
             }
-
+            
             if let transformer = mappingHandler.assignmentClosure {
                 // execute the transform closure
                 transformer(dict[key])
                 return
             }
         }
-
+        
         guard let rawValue = dict[key] as? NSObject else {
             ClosureExecutor.executeWhenDebug {
                 print("Can not find a value from dictionary for property: \(key)")
             }
             return
         }
-
+        
         if let transformableType = property.type as? _BaseJSONTransformable.Type {
             if let sv = transformableType.transform(from: rawValue) {
                 extensions(of: transformableType).write(sv, to: mutablePointer)
@@ -72,28 +72,28 @@ extension PropertiesMappable {
             print("Property: \(property.key) hasn't been written in")
         }
     }
-
+    
     static func _transform(dict: NSDictionary, toType: PropertiesMappable.Type) -> PropertiesMappable? {
         var instance = toType.init()
-
+        
         guard let properties = getProperties(forType: toType) else {
             ClosureExecutor.executeWhenError {
                 print("Failed when try to get properties from type: \(type(of: toType))")
             }
             return nil
         }
-
+        
         let mapper = HelpingMapper()
         // do user-specified mapping first
         instance.mapping(mapper: mapper)
-
+        
         let rawPointer: UnsafeMutableRawPointer
         if toType is AnyClass {
             rawPointer = UnsafeMutableRawPointer(instance.headPointerOfClass())
         } else {
             rawPointer = UnsafeMutableRawPointer(instance.headPointerOfStruct())
         }
-
+        
         var _dict = dict
         if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
             let newDict = NSMutableDictionary()
@@ -106,18 +106,18 @@ extension PropertiesMappable {
             })
             _dict = newDict
         }
-
+        
         properties.forEach { (property) in
             _transform(rawPointer: rawPointer, property: property, dict: _dict, mapper: mapper)
         }
-
+        
         return instance
     }
 }
 
 
 public class JSONDeserializer<T: HandyJSON> {
-
+    
     /// Converts a NSDictionary to Model if the properties match
     public static func deserializeFrom(dict: NSDictionary?) -> T? {
         guard let _dict = dict else {
@@ -125,7 +125,7 @@ public class JSONDeserializer<T: HandyJSON> {
         }
         return T._transform(dict: _dict, toType: T.self) as? T
     }
-
+    
     /// Finds the internal NSDictionary in `dict` as the `designatedPath` specified, and converts it to a Model
     /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer
     public static func deserializeFrom(dict: NSDictionary?, designatedPath: String?) -> T? {
@@ -134,13 +134,13 @@ public class JSONDeserializer<T: HandyJSON> {
         }
         return nil
     }
-
+    
     /// Converts a JSON string to Model if the properties match
     /// return `nil` if the string is not in valid JSON format
     public static func deserializeFrom(json: String?) -> T? {
         return self.deserializeFrom(json: json, designatedPath: nil)
     }
-
+    
     /// Finds the internal JSON field in `json` as the `designatedPath` specified, and converts it to a Model
     /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer
     public static func deserializeFrom(json: String?, designatedPath: String?) -> T? {
@@ -159,13 +159,13 @@ public class JSONDeserializer<T: HandyJSON> {
         }
         return nil
     }
-
+    
     /// if `json` is representing a array, such as `[{...}, {...}, {...}]`,
     /// this method converts it to a Models array
     public static func deserializeModelArrayFrom(json: String?) -> [T?]? {
         return self.deserializeModelArrayFrom(json: json, designatedPath: nil)
     }
-
+    
     /// if the JSON field finded by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
     /// this method converts it to a Models array
     public static func deserializeModelArrayFrom(json: String?, designatedPath: String?) -> [T?]? {
@@ -186,7 +186,7 @@ public class JSONDeserializer<T: HandyJSON> {
         }
         return nil
     }
-
+    
     static func getObject(inside jsonObject: NSObject?, by designatedPath: String?) -> NSObject? {
         var nodeValue: NSObject? = jsonObject
         var abort = false

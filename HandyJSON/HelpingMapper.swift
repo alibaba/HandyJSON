@@ -25,7 +25,7 @@ public class MappingPropertyHandler {
     var mappingName: String?
     var assignmentClosure: ((Any?) -> ())?
     var takeValueClosure: ((Any?) -> (Any?))?
-
+    
     public init(mappingName: String?, assignmentClosure: ((Any?) -> ())?, takeValueClosure: ((Any?) -> (Any?))?) {
         self.mappingName = mappingName
         self.assignmentClosure = assignmentClosure
@@ -34,38 +34,38 @@ public class MappingPropertyHandler {
 }
 
 public class HelpingMapper {
-
+    
     private var mappingHandlers = [Int: MappingPropertyHandler]()
     private var excludeProperties = [Int]()
-
+    
     internal func getMappingHandler(key: Int) -> MappingPropertyHandler? {
         return self.mappingHandlers[key]
     }
-
+    
     internal func propertyExcluded(key: Int) -> Bool {
         return self.excludeProperties.contains(key)
     }
-
+    
     public func specify<T>(property: inout T, name: String) {
         self.specify(property: &property, name: name, converter: nil)
     }
-
+    
     public func specify<T>(property: inout T, converter: @escaping (String) -> T) {
         self.specify(property: &property, name: nil, converter: converter)
     }
-
+    
     public func specify<T>(property: inout T, name: String?, converter: ((String) -> T)?) {
         let pointer = withUnsafePointer(to: &property, { return $0 })
         let key = pointer.hashValue
-
+        
         if let _converter = converter {
             let assignmentClosure = { (jsonValue: Any?) in
                 if let _value = jsonValue{
-                  if let object = _value as? NSObject{
-                    if let str = String.transform(from: object){
-                      UnsafeMutablePointer<T>(mutating: pointer).pointee = _converter(str)
+                    if let object = _value as? NSObject{
+                        if let str = String.transform(from: object){
+                            UnsafeMutablePointer<T>(mutating: pointer).pointee = _converter(str)
+                        }
                     }
-                  }
                 }
             }
             self.mappingHandlers[key] = MappingPropertyHandler(mappingName: name, assignmentClosure: assignmentClosure, takeValueClosure: nil)
@@ -73,15 +73,15 @@ public class HelpingMapper {
             self.mappingHandlers[key] = MappingPropertyHandler(mappingName: name, assignmentClosure: nil, takeValueClosure: nil)
         }
     }
-
+    
     public func exclude<T>(property: inout T) {
         self._exclude(property: &property)
     }
-
+    
     fileprivate func addCustomMapping(key: Int, mappingInfo: MappingPropertyHandler) {
         self.mappingHandlers[key] = mappingInfo
     }
-
+    
     fileprivate func _exclude<T>(property: inout T) {
         let pointer = withUnsafePointer(to: &property, { return $0 })
         self.excludeProperties.append(pointer.hashValue)
