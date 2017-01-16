@@ -152,10 +152,18 @@ extension _BaseJSONTransformable{
             return self
         }else if self is NSNumber.Type{
             return self
+        }else if let this =  self as? PropertiesMappable{
+            // 一些包装类型还是调用到此方法来序列化.
+            return _Mapper._serializeAny(object: this)
         }else{
             fatalError("Should not call this on HandyJSON model")
         }
     }
+}
+
+// 按目前的结构需要一个结构才调用 协议中声明的静态方法.
+fileprivate struct _Mapper: PropertiesMappable{
+    
 }
 
 // MARK: Foundation & Swift 基本数据类型实现 JSONTransformable
