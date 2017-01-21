@@ -121,4 +121,28 @@ class NestObjectTest: XCTestCase {
         XCTAssert(student.subject?.last?.lessonPeriod == 64)
         XCTAssert(student.seat == "4-3-23")
     }
+    
+    func testIssue76(){
+//        https://github.com/alibaba/HandyJSON/issues/76
+        struct A :HandyJSON{
+            var p = Array<P>()
+        }
+        struct P:HandyJSON{
+            var name = "dddd"
+        }
+        
+        let a = A(p:[P(), P()])
+        
+        let jsonstr = a.toJSONString()
+        XCTAssert(jsonstr?.countOf(char: "d") == 8)
+        XCTAssert(jsonstr == "{\"p\":[{\"name\":\"dddd\"},{\"name\":\"dddd\"}]}")
+        
+    }
+    
+}
+
+extension String{
+    func countOf(char:Character) -> Int{
+        return characters.filter{ $0 == char }.count
+    }
 }
