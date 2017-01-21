@@ -117,81 +117,81 @@ extension PropertiesMappable {
 
 
 extension HandyJSON{
-  /// Finds the internal NSDictionary in `dict` as the `designatedPath` specified, and converts it to a Model
-  /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer
-  public static func deserialize(from dict:NSDictionary?, designatedPath: String? = nil) -> Self?{
-    var targetDict = dict
-    if targetDict == nil {
-      return nil
-    }
-    if let path = designatedPath{
-      targetDict = getObject(inside: targetDict, by: path) as? NSDictionary
-    }
-    if let dict = targetDict{
-      return Self._transform(dict:dict, toType:self) as? Self
-    }else{
-      return nil
-    }
-  }
-  
-  /// Finds the internal JSON field in `json` as the `designatedPath` specified, and converts it to a Model
-  /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer
-  public static func deserialize(from json: String?, designatedPath: String? = nil) -> Self? {
-    guard let _json = json else {
-      return nil
-    }
-    do {
-      let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
-      if let jsonDict = jsonObject as? NSDictionary {
-        return self.deserialize(from: jsonDict, designatedPath: designatedPath)
-      }
-    } catch let error {
-      ClosureExecutor.executeWhenError {
-        print(error)
-      }
-    }
-    return nil
-  }
-  
-  /// if the JSON field finded by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
-  /// this method converts it to a Models array
-  public static func deserializeModelArray(from json: String?, designatedPath: String? = nil) -> [Self?]? {
-    guard let _json = json else {
-      return nil
-    }
-    do {
-      let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
-      if let jsonArray = self.getObject(inside: jsonObject as? NSObject, by: designatedPath) as? NSArray {
-        return jsonArray.map({ (jsonDict) -> Self? in
-          return self.deserialize(from: jsonDict as? NSDictionary)
-        })
-      }
-    } catch let error {
-      ClosureExecutor.executeWhenError {
-        print(error)
-      }
-    }
-    return nil
-  }
- 
-  static func getObject(inside jsonObject: NSObject?, by designatedPath: String?) -> NSObject? {
-    var nodeValue: NSObject? = jsonObject
-    var abort = false
-    if let paths = designatedPath?.components(separatedBy: "."), paths.count > 0 {
-      paths.forEach({ (seg) in
-        if seg.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) == "" || abort {
-          return
+    /// Finds the internal NSDictionary in `dict` as the `designatedPath` specified, and converts it to a Model
+    /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer
+    public static func deserialize(from dict:NSDictionary?, designatedPath: String? = nil) -> Self?{
+        var targetDict = dict
+        if targetDict == nil {
+            return nil
         }
-        if let next = (nodeValue as? NSDictionary)?.object(forKey: seg) as? NSObject {
-          nodeValue = next
-        } else {
-          abort = true
+        if let path = designatedPath{
+            targetDict = getObject(inside: targetDict, by: path) as? NSDictionary
         }
-      })
+        if let dict = targetDict{
+            return Self._transform(dict:dict, toType:self) as? Self
+        }else{
+            return nil
+        }
     }
-    return abort ? nil : nodeValue
-  }
-  
+    
+    /// Finds the internal JSON field in `json` as the `designatedPath` specified, and converts it to a Model
+    /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer
+    public static func deserialize(from json: String?, designatedPath: String? = nil) -> Self? {
+        guard let _json = json else {
+            return nil
+        }
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
+            if let jsonDict = jsonObject as? NSDictionary {
+                return self.deserialize(from: jsonDict, designatedPath: designatedPath)
+            }
+        } catch let error {
+            ClosureExecutor.executeWhenError {
+                print(error)
+            }
+        }
+        return nil
+    }
+    
+    /// if the JSON field finded by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
+    /// this method converts it to a Models array
+    public static func deserializeModelArray(from json: String?, designatedPath: String? = nil) -> [Self?]? {
+        guard let _json = json else {
+            return nil
+        }
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
+            if let jsonArray = self.getObject(inside: jsonObject as? NSObject, by: designatedPath) as? NSArray {
+                return jsonArray.map({ (jsonDict) -> Self? in
+                    return self.deserialize(from: jsonDict as? NSDictionary)
+                })
+            }
+        } catch let error {
+            ClosureExecutor.executeWhenError {
+                print(error)
+            }
+        }
+        return nil
+    }
+    
+    static func getObject(inside jsonObject: NSObject?, by designatedPath: String?) -> NSObject? {
+        var nodeValue: NSObject? = jsonObject
+        var abort = false
+        if let paths = designatedPath?.components(separatedBy: "."), paths.count > 0 {
+            paths.forEach({ (seg) in
+                if seg.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) == "" || abort {
+                    return
+                }
+                if let next = (nodeValue as? NSDictionary)?.object(forKey: seg) as? NSObject {
+                    nodeValue = next
+                } else {
+                    abort = true
+                }
+            })
+        }
+        return abort ? nil : nodeValue
+    }
+    
 }
 
 
