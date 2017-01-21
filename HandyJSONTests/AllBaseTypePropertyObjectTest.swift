@@ -129,7 +129,7 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
 
         let jsonString = "{\"aInt\":-12345678,\"aInt8\":-8,\"aInt16\":-16,\"aInt32\":-32,\"aInt64\":-64,\"aUInt\":12345678,\"aUInt8\":8,\"aUInt16\":16,\"aUInt32\":32,\"aUInt64\":64,\"aBool\":true,\"aFloat\":12.34,\"aDouble\":12.34,\"aString\":\"hello world!\"}"
 
-        let aClass = JSONDeserializer<AClass>.deserializeFrom(json: jsonString)!
+        let aClass = AClass.deserialize(from: jsonString)!
         XCTAssert(aClass.aInt == -12345678)
         XCTAssert(aClass.aInt8 == -8)
         XCTAssert(aClass.aInt16 == -16)
@@ -187,7 +187,7 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
 
         let jsonString = "{\"aInt\":-12345678,\"aInt8\":-8,\"aInt16\":-16,\"aInt32\":-32,\"aInt64\":-64,\"aUInt\":12345678,\"aUInt8\":8,\"aUInt16\":16,\"aUInt32\":32,\"aUInt64\":64,\"aBool\":true,\"aFloat\":12.34,\"aDouble\":12.34,\"aString\":\"hello world!\"}"
 
-        let aClass = JSONDeserializer<AClassImplicitlyUnwrapped>.deserializeFrom(json: jsonString)!
+        let aClass = AClassImplicitlyUnwrapped.deserialize(from: jsonString)!
         XCTAssert(aClass.aInt == -12345678)
         XCTAssert(aClass.aInt8 == -8)
         XCTAssert(aClass.aInt16 == -16)
@@ -252,7 +252,7 @@ class AllBaseTypePropertyObjectTest: XCTestCase {
         }
 
         let jsonString = "{\"aEnum1\":1,\"bEnum1\":2,\"cEnum1\":3,\"aEnum2\":\"a\",\"bEnum2\":\"b\",\"cEnum2\":\"c\",\"aEnum3\":1.1,\"bEnum3\":2.2,\"cEnum3\":3.3,\"aEnumArr\":[1,2,3],\"bEnumArr\":[\"a\",\"b\",\"c\"],\"cEnumArr\":[1.1,2.2,3.3]}"
-        let model = JSONDeserializer<TestEnum>.deserializeFrom(json: jsonString)!
+        let model = TestEnum.deserialize(from: jsonString)!
 
         XCTAssert(model.aEnum1 == .A)
         XCTAssert(model.bEnum2 == .B)
