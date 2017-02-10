@@ -21,6 +21,8 @@
 //  Created by zhouzhuo on 9/30/16.
 //
 
+import Foundation
+
 extension PropertiesMappable {
     
     static func _serializeModelObject(propertys: [(String?, Any)], headPointer: UnsafeMutableRawPointer, offsetInfo: [String: Int] , mapper: HelpingMapper) -> [String: Any] {
