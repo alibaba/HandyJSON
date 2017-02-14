@@ -44,7 +44,7 @@ class InvalidStateHandlingTest: XCTestCase {
         let jsonString = "{\"name\"\"Bob\",\"id\":\"12345\",\"height\":180}"
         let a = A.deserialize(from: jsonString)
         XCTAssertNil(a)
-        let b = A.deserializeModelArray(from: jsonString)
+        let b = [A].deserialize(from: jsonString)
         XCTAssertNil(b)
     }
 

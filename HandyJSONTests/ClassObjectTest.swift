@@ -164,7 +164,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonArrayString: String? = "[{\"name\":\"Bob\",\"id\":\"1\",\"height\":180}, {\"name\":\"Lily\",\"id\":\"2\",\"height\":150}, {\"name\":\"Lucy\",\"id\":\"3\",\"height\":160}]"
-        let arr = A.deserializeModelArray(from: jsonArrayString)!
+        let arr = [A].deserialize(from: jsonArrayString)!
         XCTAssert(arr[0]?.name == "Bob")
         XCTAssert(arr[0]?.id == "1")
         XCTAssert(arr[0]?.height == 180)
@@ -186,7 +186,7 @@ class ClassObjectTest: XCTestCase {
         }
 
         let jsonArrayString: String? = "{\"result\":{\"data\":[{\"name\":\"Bob\",\"id\":\"1\",\"height\":180},{\"name\":\"Lily\",\"id\":\"2\",\"height\":150},{\"name\":\"Lucy\",\"id\":\"3\",\"height\":160}]}}"
-        let arr = A.deserializeModelArray(from: jsonArrayString, designatedPath: "result.data")!
+        let arr = [A].deserialize(from: jsonArrayString, designatedPath: "result.data")!
         XCTAssert(arr[0]?.name == "Bob")
         XCTAssert(arr[0]?.id == "1")
         XCTAssert(arr[0]?.height == 180)
