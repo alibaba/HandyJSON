@@ -37,7 +37,7 @@ fileprivate func getSubObject(inside jsonObject: NSObject?, by designatedPath: S
     return abort ? nil : nodeValue
 }
 
-extension PropertiesMappable {
+extension _PropertiesMappable {
 
     static func _transform(rawPointer: UnsafeMutableRawPointer, property: Property.Description, dict: NSDictionary, mapper: HelpingMapper) {
         var key = property.key
@@ -75,7 +75,7 @@ extension PropertiesMappable {
             return
         }
 
-        if let transformableType = property.type as? _BaseJSONTransformable.Type {
+        if let transformableType = property.type as? _JSONTransformable.Type {
             if let sv = transformableType.transform(from: rawValue) {
                 extensions(of: transformableType).write(sv, to: mutablePointer)
                 return
@@ -91,7 +91,7 @@ extension PropertiesMappable {
         }
     }
 
-    static func _transform(dict: NSDictionary, toType: PropertiesMappable.Type) -> PropertiesMappable? {
+    static func _transform(dict: NSDictionary, toType: _PropertiesMappable.Type) -> _PropertiesMappable? {
         var instance = toType.init()
 
         guard let properties = getProperties(forType: toType) else {

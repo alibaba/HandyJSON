@@ -21,12 +21,12 @@
 //  Created by zhouzhuo on 9/30/16.
 //
 
-extension PropertiesMappable {
+extension _PropertiesMappable {
 
-    static func _serializeModelObject(propertys: [(String?, Any)], headPointer: UnsafeMutableRawPointer, offsetInfo: [String: Int] , mapper: HelpingMapper) -> [String: Any] {
+    static func _serializeModelObject(propertys: [(String?, Any)], headPointer: UnsafeMutableRawPointer, offsetInfo: [String: Int], mapper: HelpingMapper) -> [String: Any] {
 
         var dict = [String: Any]()
-        for (label, value) in propertys{
+        for (label, value) in propertys {
 
             var key = label ?? ""
 
@@ -57,7 +57,7 @@ extension PropertiesMappable {
                 }
             }
 
-            if let typedValue = value as? _BaseJSONTransformable {
+            if let typedValue = value as? _JSONTransformable {
                 if let result = self._serializeAny(object: typedValue) {
                     dict[key] = result
                     continue
@@ -72,7 +72,7 @@ extension PropertiesMappable {
         return dict
     }
 
-    static func _serializeAny(object: _BaseJSONTransformable) -> Any? {
+    static func _serializeAny(object: _JSONTransformable) -> Any? {
 
         let mirror = Mirror(reflecting: object)
 
@@ -85,13 +85,13 @@ extension PropertiesMappable {
         case .class, .struct:
             let mapper = HelpingMapper()
             // do user-specified mapping first
-            if !(object is PropertiesMappable) {
+            if !(object is _PropertiesMappable) {
                 ClosureExecutor.executeWhenDebug {
                     print("This model of type: \(type(of: object)) is not mappable but is class/struct type")
                 }
                 return object
             }
-            var mutableObject = object as! PropertiesMappable
+            var mutableObject = object as! _PropertiesMappable
             mutableObject.mapping(mapper: mapper)
 
             let rawPointer: UnsafeMutableRawPointer
