@@ -69,7 +69,7 @@ class CustomJSONTransformableType: XCTestCase {
         }
         let githubSite = URL(string: "https://github.com")
         let jsonString = "{\"url\":\"\(githubSite!.absoluteString)\"}"
-        let a = JSONDeserializer<A>.deserializeFrom(json: jsonString)!
+        let a = A.deserialize(from: jsonString)!
         XCTAssert(a.url == githubSite)
     }
 }
