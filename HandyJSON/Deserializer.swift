@@ -196,9 +196,6 @@ extension Array where Element: HandyJSON {
     }
 }
 
-//////////// the below APIs is deprecated ///////////////
-
-@available(*, deprecated, message: "This class will be removed in the future, see the replacement serialization methods at: https: //github.com/alibaba/handyjson")
 public class JSONDeserializer<T: HandyJSON> {
 
     /// Converts a NSDictionary to Model if the properties match
