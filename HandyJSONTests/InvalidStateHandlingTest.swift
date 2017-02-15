@@ -21,12 +21,12 @@ import XCTest
 import HandyJSON
 
 class InvalidStateHandlingTest: XCTestCase {
-    
+
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
@@ -44,7 +44,7 @@ class InvalidStateHandlingTest: XCTestCase {
         let jsonString = "{\"name\"\"Bob\",\"id\":\"12345\",\"height\":180}"
         let a = A.deserialize(from: jsonString)
         XCTAssertNil(a)
-        let b = A.deserializeModelArray(from: jsonString)
+        let b = [A].deserialize(from: jsonString)
         XCTAssertNil(b)
     }
 

@@ -407,10 +407,10 @@
 		217B046E1D571B9F0035A8E2 /* HandyJSONTests */ = {
 			isa = PBXGroup;
 			children = (
-				3EB67AC81E2B16F700D2B482 /* CustomJSONTransformableTypeTest.swift */,
 				215F13461E217B9C00B0FFEC /* BasicTypes.swift */,
 				215F13471E217B9C00B0FFEC /* BasicTypesTestsToJSON.swift */,
 				21A191F31E21E62500CD7609 /* BasicTypesTestsFromJSON.swift */,
+				3EB67AC81E2B16F700D2B482 /* CustomJSONTransformableTypeTest.swift */,
 				217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */,
 				21F252AB1D595F3900B214BB /* ClassObjectTest.swift */,
 				21F252A91D58BE9100B214BB /* NestObjectTest.swift */,
