@@ -183,7 +183,7 @@ extension GenericObjectTransformer {
 
         switch objectType {
         case is String.Type, is NSString.Type:
-            let json = "\"" + String(describing: object)  + "\""
+            let json = "\"" + String(describing: object) + "\""
             return json
         case is PlainJSONValue.Type:
             let json = String(describing: object)

@@ -24,7 +24,7 @@
 /// `string`, `number`, `object`, `array`, `true`, `false`, `null`
 ///
 /// 由于是基于 `JSONSerialization` 所以这里的序列化能力不再是 JSON 字符串到 Model 或 Model 到 JSON 字符串.
-/// 1) 将 `JSONSerialization` 反序列化的 Array 或  Dictionary 解析到 Model 对应的具体类型的字段.
+/// 1) 将 `JSONSerialization` 反序列化的 Array 或 Dictionary 解析到 Model 对应的具体类型的字段.
 /// 2) 将 Model 中的字段解析成可被 `JSONSerialization` 支持的几种基本的数据类型.
 /// 基本数据类型即, Number, String, Bool, nil 及只包含两本种数据结构的 Array 和 Dictionary
 /// 本模块中, `_JSONTransformable` 表示实现者拥有序列化能力.
@@ -49,29 +49,11 @@ typealias Byte = Int8
 /// 提供默认的反射能力
 public protocol _PropertiesMetrizable {}
 
-public protocol _JSONTransformable: _PropertiesMetrizable {}
-
-public protocol _PropertiesMappable: _JSONTransformable {
-    init()
-    mutating func mapping(mapper: HelpingMapper)
-}
-
-/// 用于自定义 Model 类型.
-extension _PropertiesMappable {
-
-    /// 表示可以自定义一些转换如自定义Model 字段名与 JSON 中 Key 的对应关系. 甚至可以自定义整个字段的序列化过程.
-    public mutating func mapping(mapper: HelpingMapper) {}
-}
-
-/// 用于 Foundation 中的标准的数据类型, 及自定义的数据类型. 用户自定义字段类型可实现此协议以此来实现序列化能力.
-/// 本库为Foundation & Swift 的主要基本类型实现了 `_BasicTypeTransformable` 协议.
-public protocol _BasicTypeTransformable: _JSONTransformable {
-
-    /// 将 `JSONSerialization` 反序列化生成的 `NSObject` 转换到对应 Model 对象.
-    static func transform(from object: NSObject) -> Self?
-
-    /// 返回可供 `JSONSerialization` 序列化的对象
-    func toJSONValue() -> Any?
+fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInfo: (Int, Int)) -> Int {
+    let m = currentOffset % layoutInfo.1
+    let offset = (m == 0 ? 0 : (layoutInfo.1 - m))
+    let size = layoutInfo.0
+    return size + offset
 }
 
 extension _PropertiesMetrizable {
@@ -111,11 +93,40 @@ extension _PropertiesMetrizable {
     }
 }
 
-fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInfo: (Int, Int)) -> Int {
-    let m = currentOffset % layoutInfo.1
-    let offset =  (m == 0 ? 0 : (layoutInfo.1 - m))
-    let size = layoutInfo.0
-    return size + offset
+public protocol _JSONTransformable: _PropertiesMetrizable {}
+
+public protocol _PropertiesMappable: _JSONTransformable {
+    init()
+    mutating func mapping(mapper: HelpingMapper)
+}
+
+/// 用于自定义 Model 类型.
+extension _PropertiesMappable {
+
+    /// 表示可以自定义一些转换如自定义Model 字段名与 JSON 中 Key 的对应关系. 甚至可以自定义整个字段的序列化过程.
+    public mutating func mapping(mapper: HelpingMapper) {}
+}
+
+extension _PropertiesMappable {
+
+    public static func transform(from object: NSObject) -> Self? {
+        if let dict = object as? NSDictionary {
+            // nested object, transform recursively
+            return self._transform(dict: dict, toType: self) as? Self
+        }
+        return nil
+    }
+}
+
+/// 用于 Foundation 中的标准的数据类型, 及自定义的数据类型. 用户自定义字段类型可实现此协议以此来实现序列化能力.
+/// 本库为Foundation & Swift 的主要基本类型实现了 `_BasicTypeTransformable` 协议.
+public protocol _BasicTypeTransformable: _JSONTransformable {
+
+    /// 将 `JSONSerialization` 反序列化生成的 `NSObject` 转换到对应 Model 对象.
+    static func transform(from object: NSObject) -> Self?
+
+    /// 返回可供 `JSONSerialization` 序列化的对象
+    func toJSONValue() -> Any?
 }
 
 /// _JSONTransformable 的默认实现. 通过类型转换的动态调用, 为协议提供其名字对应的类型转换能力
@@ -130,32 +141,26 @@ extension _JSONTransformable {
             return NSString._transform(from: object) as? Self
         } else if self is NSNumber.Type {
             return NSNumber._transform(from: object) as? Self
-        } else if self is _BasicTypeTransformable.Type {
-            return (self as! _BasicTypeTransformable.Type).transform(from: object) as? Self
-        } else if self is _PropertiesMappable.Type {
-            return (self as! _PropertiesMappable.Type).transform(from: object) as? Self
+        } else if let type = self as? _BasicTypeTransformable.Type {
+            return type.transform(from: object) as? Self
+        } else if let type = self as? _PropertiesMappable.Type {
+            return type.transform(from: object) as? Self
         }
         return nil
     }
 
     internal func toJSONValue() -> Any? {
-        if let this = self as? _BasicTypeTransformable {
-            return this.toJSONValue()
-        } else if self is NSString.Type {
+        if self is NSNumber.Type || self is NSString.Type {
             return self
-        } else if self is NSNumber.Type {
-            return self
-        } else if let this = self as? _PropertiesMappable {
-            // 一些包装类型还是调用到此方法来序列化.
-            return _Mapper._serializeAny(object: this)
+        } else if let _self = self as? _BasicTypeTransformable {
+            return _self.toJSONValue()
+        } else if let type = type(of: self) as? _PropertiesMappable.Type, let _self = self as? _PropertiesMappable {
+            return type._serializeAny(object: _self)
         } else {
             fatalError("Should not call this on HandyJSON model")
         }
     }
 }
-
-// 按目前的结构需要一个结构才调用 协议中声明的静态方法.
-fileprivate struct _Mapper: _PropertiesMappable {}
 
 // MARK: Foundation & Swift 基本数据类型实现 _BasicTypeTransformable
 
@@ -170,7 +175,6 @@ extension PlainJSONValue {
 }
 
 // MARK: 基本类型 - 整型
-
 protocol IntegerPropertyProtocol: Integer, PlainJSONValue {
     init?(_ text: String, radix: Int)
     init(_ number: NSNumber)
@@ -184,9 +188,8 @@ extension IntegerPropertyProtocol {
             return Self(text, radix: 10)
         } else if let num = object as? NSNumber {
             return Self(num)
-        } else {
-            return nil
         }
+        return nil
     }
 }
 
@@ -233,22 +236,21 @@ extension FloatPropertyProtocol {
             return Self(text)
         } else if let num = object as? NSNumber {
             return Self(num)
-        } else {
-            return nil
         }
+        return nil
     }
 }
 
 extension Float: FloatPropertyProtocol {}
 extension Double: FloatPropertyProtocol {}
 
-// MARK:  基本类型 -  String & NSString
+// MARK: 基本类型 - String & NSString
 extension String: PlainJSONValue {
 
     public static func transform(from object: NSObject) -> String? {
-        if let str = object  as? NSString {
+        if let str = object as? NSString {
             return str as String
-        } else if let  num = object as? NSNumber {
+        } else if let num = object as? NSNumber {
             // Boolean Type Inside
             if NSStringFromClass(type(of: num)) == "__NSCFBoolean" {
                 if num.boolValue {
@@ -271,7 +273,7 @@ extension NSString: _JSONTransformable {
 
     static func _transform(from object: NSObject) -> NSString? {
         if let str = String.transform(from: object) {
-            return str as NSString
+            return NSString(string: str)
         }
         return nil
     }
@@ -305,6 +307,7 @@ public protocol _RawEnumProtocol: _BasicTypeTransformable {
 }
 
 extension _RawEnumProtocol {
+
     public func toJSONValue() -> Any? {
         return takeRawValue()
     }
@@ -329,10 +332,6 @@ public extension RawRepresentable where Self: _RawEnumProtocol {
 // MARK: Optional Support
 
 extension Optional: _BasicTypeTransformable {
-
-    public init() {
-        self = nil
-    }
 
     public static func transform(from object: NSObject) -> Optional? {
         if let value = (Wrapped.self as? _JSONTransformable.Type)?.transform(from: object) as? Wrapped {
@@ -402,7 +401,7 @@ extension Collection {
             }
             return nil
         }
-        typealias Element =  Iterator.Element
+        typealias Element = Iterator.Element
         var result: [Element] = [Element]()
         nsArray.forEach { (each) in
             if let nsObject = each as? NSObject {
@@ -483,20 +482,8 @@ extension Dictionary: _BasicTypeTransformable {
                     }
                 }
             }
-
         }
         return result
-    }
-}
-
-extension _PropertiesMappable {
-
-    public static func transform(from object: NSObject) -> Self? {
-        if let dict = object as? NSDictionary {
-            // nested object, transform recursively
-            return self._transform(dict: dict, toType: self) as? Self
-        }
-        return nil
     }
 }
 
