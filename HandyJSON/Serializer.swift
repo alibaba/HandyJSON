@@ -21,9 +21,11 @@
 //  Created by zhouzhuo on 9/30/16.
 //
 
+import Foundation
+
 extension _PropertiesMappable {
 
-    static func _serializeModelObject(propertys: [(String?, Any)], headPointer: UnsafeMutableRawPointer, offsetInfo: [String: Int], mapper: HelpingMapper) -> [String: Any] {
+    static func _serializeModelObject(propertys: [(String?, Any)], headPointer: UnsafeMutableRawPointer, offsetInfo: [String: Int] , mapper: HelpingMapper) -> [String: Any] {
 
         var dict = [String: Any]()
         for (label, value) in propertys {
