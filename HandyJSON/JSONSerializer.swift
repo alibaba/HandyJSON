@@ -39,13 +39,28 @@ public class JSONSerializer {
         }
     }
 
+    //json字符转义处理
+    static func escapedString(object: Any) -> String {
+        var string =  String(object)
+        string = string
+            .stringByReplacingOccurrencesOfString("\"", withString: "\\\"", options: .CaseInsensitiveSearch)
+            .stringByReplacingOccurrencesOfString("/", withString: "\\/", options: .CaseInsensitiveSearch)
+            .stringByReplacingOccurrencesOfString("\n", withString: "\\n", options: .CaseInsensitiveSearch)
+            .stringByReplacingOccurrencesOfString("\u{8}", withString: "\\b", options: .CaseInsensitiveSearch)
+            .stringByReplacingOccurrencesOfString("\u{12}", withString: "\\f", options: .CaseInsensitiveSearch)
+            .stringByReplacingOccurrencesOfString("\r", withString: "\\r", options: .CaseInsensitiveSearch)
+            .stringByReplacingOccurrencesOfString("\t", withString: "\\t", options: .CaseInsensitiveSearch)
+        return string
+    }
+
+    
     static func _serializeToJSON(object: Any) -> String {
 
         if (object.dynamicType is String.Type || object.dynamicType is NSString.Type ) {
-            let json = "\"" + String(object)  + "\""
+            let json = "\"" + escapedString(object)  + "\""
             return json
         } else if (object.dynamicType is BasePropertyProtocol.Type) {
-            let json = String(object) ?? "null"
+            let json = escapedString(object) ?? "null"
             return json
         }
 
@@ -72,7 +87,7 @@ public class JSONSerializer {
 
             return "{" + json + "}"
         } else if mirror.displayStyle == .Enum {
-            return  "\"" + String(object) + "\""
+            return  "\"" + escapedString(object) + "\""
         } else if  mirror.displayStyle == .Optional {
             if mirror.children.count != 0 {
                 let (_, some) = mirror.children.first!
@@ -108,7 +123,7 @@ public class JSONSerializer {
             json += "}"
             return json
         } else {
-            return String(object) != "nil" ? "\"\(object)\"" : "null"
+            return escapedString(object) != "nil" ? "\"\(object)\"" : "null"
         }
     }
 }
