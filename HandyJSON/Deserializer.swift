@@ -133,7 +133,7 @@ extension _PropertiesMappable {
     }
 }
 
-extension HandyJSON {
+public extension HandyJSON {
 
     /// Finds the internal NSDictionary in `dict` as the `designatedPath` specified, and converts it to a Model
     /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer
@@ -148,7 +148,7 @@ extension HandyJSON {
     }
 }
 
-extension Array where Element: HandyJSON {
+public extension Array where Element: HandyJSON {
 
     /// if the JSON field finded by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
     /// this method converts it to a Models array
