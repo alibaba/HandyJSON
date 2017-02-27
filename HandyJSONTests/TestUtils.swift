@@ -12,7 +12,7 @@ import XCTest
 func stringCompareHelper(_ actual: String?, _ expected: String?) {
     // print(actual ?? "")
     // print(expected ?? "")
-    XCTAssertTrue(expected == actual, "expected value:\(expected) not equal to actual:\(actual)")
+    XCTAssertTrue(expected == actual, "expected value:\(expected ?? "nil") not equal to actual:\(actual ?? "nil")")
 }
 
 fileprivate func toJSONObject(_ string: String?) -> NSObject? {

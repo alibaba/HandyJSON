@@ -372,10 +372,7 @@ extension ImplicitlyUnwrappedOptional: _BasicTypeTransformable {
     }
 
     func getWrappedValue() -> Any? {
-        if case let .some(x) = self {
-            return x
-        }
-        return nil
+        return self == nil ? nil : self!
     }
 
     public func toJSONValue() -> Any? {

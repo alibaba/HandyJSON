@@ -161,7 +161,7 @@ public extension HandyJSON {
                 }
             } else {
                 ClosureExecutor.executeWhenDebug {
-                    print("\(self.toJSON()) is not a valid JSON Object")
+                    print("\(anyObject)) is not a valid JSON Object")
                 }
             }
         }
