@@ -90,6 +90,15 @@ class ViewController: UIViewController {
         print([student].toJSON())
         print([student].toJSONString()!)
         print([student].toJSONString(prettyPrint: true)!)
+        
+        let data = student.toData()
+        let studentB = Student.deserialize(from: data!)
+        let dic = student.toJSON()!
+        let studentC = Student.deserialize(from: dic)
+        
+        print("sss");
+        
+        
     }
 
     func deserialization() {
