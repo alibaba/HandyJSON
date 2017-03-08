@@ -167,7 +167,7 @@ class BasicTypes: HandyJSON {
 }
 
 let jsonString = "{\"doubleOptional\":1.1,\"stringImplicitlyUnwrapped\":\"hello\",\"int\":1}"
-if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+if let object = BasicTypes.deserialize(from: jsonString) {
     // …
 }
 ```

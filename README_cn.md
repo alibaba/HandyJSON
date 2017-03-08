@@ -26,7 +26,7 @@ class BasicTypes: HandyJSON {
 }
 
 let jsonString = "{\"doubleOptional\":1.1,\"stringImplicitlyUnwrapped\":\"hello\",\"int\":1}"
-if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+if let object = BasicTypes.deserialize(from: jsonString) {
     print(object.int)
     print(object.doubleOptional!)
     print(object.stringImplicitlyUnwrapped)
@@ -114,7 +114,7 @@ class BasicTypes: HandyJSON {
 }
 
 let jsonString = "{\"doubleOptional\":1.1,\"stringImplicitlyUnwrapped\":\"hello\",\"int\":1}"
-if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+if let object = BasicTypes.deserialize(from: jsonString) {
     // …
 }
 ```
@@ -131,7 +131,7 @@ struct BasicTypes: HandyJSON {
 }
 
 let jsonString = "{\"doubleOptional\":1.1,\"stringImplicitlyUnwrapped\":\"hello\",\"int\":1}"
-if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+if let object = BasicTypes.deserialize(from: jsonString) {
     // …
 }
 ```
@@ -155,7 +155,7 @@ struct Animal: HandyJSON {
 }
 
 let jsonString = "{\"type\":\"cat\",\"name\":\"Tom\"}"
-if let animal = JSONDeserializer<Animal>.deserializeFrom(json: jsonString) {
+if let animal = Animal.deserialize(from: jsonString) {
     print(animal.type?.rawValue)
 }
 ```
@@ -195,7 +195,7 @@ object.nsString = "nsStringValue"
 
 let jsonString = object.toJSONString()!
 
-if let object = JSONDeserializer<BasicTypes>.deserializeFrom(json: jsonString) {
+if let object = BasicTypes.deserialize(from: jsonString) {
     // ...
 }
 ```
@@ -214,7 +214,7 @@ class Cat: HandyJSON {
 
 let jsonString = "{\"code\":200,\"msg\":\"success\",\"data\":{\"cat\":{\"id\":12345,\"name\":\"Kitty\"}}}"
 
-if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString, designatedPath: "data.cat") {
+if let cat = Cat.deserialize(from: jsonString, designatedPath: "data.cat") {
     print(cat.name)
 }
 ```
@@ -243,7 +243,7 @@ class Composition: HandyJSON {
 
 let jsonString = "{\"num\":12345,\"comp1\":{\"aInt\":1,\"aString\":\"aaaaa\"},\"comp2\":{\"aInt\":2,\"aString\":\"bbbbb\"}}"
 
-if let composition = JSONDeserializer<Composition>.deserializeFrom(json: jsonString) {
+if let composition = Composition.deserialize(from: jsonString) {
     print(composition)
 }
 ```
@@ -268,7 +268,7 @@ class Cat: Animal {
 
 let jsonString = "{\"id\":12345,\"color\":\"black\",\"name\":\"cat\"}"
 
-if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
+if let cat = Cat.deserialize(from: jsonString) {
     print(cat)
 }
 ```
@@ -286,7 +286,7 @@ class Cat: HandyJSON {
 }
 
 let jsonArrayString: String? = "[{\"name\":\"Bob\",\"id\":\"1\"}, {\"name\":\"Lily\",\"id\":\"2\"}, {\"name\":\"Lucy\",\"id\":\"3\"}]"
-if let cats = JSONDeserializer<Cat>.deserializeModelArrayFrom(json: jsonArrayString) {
+if let cats = [Cat].deserialize(from: jsonArrayString) {
     cats.forEach({ (cat) in
         // ...
     })
@@ -328,7 +328,7 @@ class Cat: HandyJSON {
 
 let jsonString = "{\"cat_id\":12345,\"name\":\"Kitty\",\"parent\":\"Tom/Lily\"}"
 
-if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
+if let cat = Cat.deserialize(from: jsonString) {
     print(cat.id)
     print(cat.parent)
 }
@@ -359,7 +359,7 @@ class Cat: HandyJSON {
 
 let jsonString = "{\"name\":\"cat\",\"id\":\"12345\"}"
 
-if let cat = JSONDeserializer<Cat>.deserializeFrom(json: jsonString) {
+if let cat = Cat.deserialize(from: jsonString) {
     print(cat)
 }
 ```
