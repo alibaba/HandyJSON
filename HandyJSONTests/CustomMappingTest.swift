@@ -45,21 +45,36 @@ class CustomMappingTest: XCTestCase {
 
             mutating func mapping(mapper: HelpingMapper) {
                 // specify json field name
-                mapper.specify(property: &name, name: "json_name")
+                mapper <<<
+                    self.name <-- "json_name"
 
                 // specify converting method
-                mapper.specify(property: &id, converter: { rawValue -> String in
-                    return "json_" + rawValue
-                })
+                mapper <<<
+                    self.id <-- TransformOf<String, String>(fromJSON: { (rawValue) -> String? in
+                        if let str = rawValue {
+                            return "json_" + str
+                        }
+                        return nil
+                    }, toJSON: { (id) -> String? in
+                        return id
+                    })
 
-                // specify both
-                mapper.specify(property: &height, name: "json_height", converter: { rawValue -> Int in
-                    return Int(rawValue) ?? 0
-                })
+                mapper <<<
+                    self.height <-- ("json_height", TransformOf<Int, String>(fromJSON: { (rawValue) -> Int? in
+                        if let _str = rawValue {
+                            return Int(_str) ?? 0
+                        }
+                        return nil
+                    }, toJSON: { (height) -> String? in
+                        if let _height = height {
+                            return "\(_height)"
+                        }
+                        return nil
+                    }))
             }
         }
 
-        let jsonString = "{\"json_name\":\"Bob\",\"id\":\"12345\",\"json_height\":180}"
+        let jsonString = "{\"json_name\":\"Bob\",\"id\":\"12345\",\"json_height\":\"180\"}"
         let a = A.deserialize(from: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "json_12345")
@@ -111,12 +126,13 @@ class CustomMappingTest: XCTestCase {
             required init() {}
 
             func mapping(mapper: HelpingMapper) {
-                mapper.exclude(property: &notHandyJSONProperty)
+                mapper >>> self.notHandyJSONProperty
+                mapper >>> self.name
             }
         }
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180}"
         let a = A.deserialize(from: jsonString)!
-        XCTAssert(a.name == "Bob")
+        XCTAssert(a.name == nil)
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
     }
@@ -132,12 +148,13 @@ class CustomMappingTest: XCTestCase {
             var notHandyJSONProperty: NotHandyJSON?
 
             mutating func mapping(mapper: HelpingMapper) {
-                mapper.exclude(property: &notHandyJSONProperty)
+                mapper >>> self.notHandyJSONProperty
+                mapper >>> name
             }
         }
         let jsonString = "{\"name\":\"Bob\",\"id\":\"12345\",\"height\":180, \"notHandyJSONProperty\":\"value\"}"
         let a = A.deserialize(from: jsonString)!
-        XCTAssert(a.name == "Bob")
+        XCTAssert(a.name == nil)
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
     }

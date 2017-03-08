@@ -122,8 +122,8 @@ class NestObjectTest: XCTestCase {
         XCTAssert(student.seat == "4-3-23")
     }
 
-    func testIssue76(){
-//        https://github.com/alibaba/HandyJSON/issues/76
+    func testForIssue76(){
+        // https://github.com/alibaba/HandyJSON/issues/76
         struct A :HandyJSON{
             var p = Array<P>()
         }
@@ -142,7 +142,7 @@ class NestObjectTest: XCTestCase {
 }
 
 extension String{
-    func countOf(char:Character) -> Int{
+    func countOf(char: Character) -> Int{
         return characters.filter{ $0 == char }.count
     }
 }
