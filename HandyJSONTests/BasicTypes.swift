@@ -81,6 +81,22 @@ class BasicTypes: HandyJSON {
     var dictAnyObjectOptional: Dictionary<String, Any>?
     var dictAnyObjectImplicitlyUnwrapped: Dictionary<String, Any>!
 
+    var nsString: NSString = ""
+    var nsStringOptional: NSString?
+    var nsStringImplicitlyUnwrapped: NSString!
+
+    var arrayNSString: Array<NSString> = []
+    var arrayNSStringOptional: Array<NSString>?
+    var arrayNSStringImplicitlyUnwrapped: Array<NSString>!
+
+    var nsNumber: NSNumber = 1
+    var nsNumberOptional: NSNumber?
+    var nsNumberImplicitlyUnwrapped: NSNumber!
+
+    var arrayNSNumber: Array<NSNumber> = []
+    var arrayNSNumberOptional: Array<NSNumber>?
+    var arrayNSNumberImplicitlyUnwrapped: Array<NSNumber>!
+
     enum EnumInt: Int, HandyJSONEnum {
         case Default
         case Another

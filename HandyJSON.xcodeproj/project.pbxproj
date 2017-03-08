@@ -120,7 +120,6 @@
 		21DFCA8D1E18EBA600856775 /* HexColorTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */; };
 		21F252AA1D58BE9100B214BB /* NestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestObjectTest.swift */; };
 		21F252AC1D595F3900B214BB /* ClassObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252AB1D595F3900B214BB /* ClassObjectTest.swift */; };
-		21F252B21D59718100B214BB /* AllBaseTypePropertyObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */; };
 		21F252B41D599DE200B214BB /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
 		393E0FA71DA165E300B3BC12 /* HelpingMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B21D911DB4007B0320 /* HelpingMapper.swift */; };
 		393E0FA81DA165E300B3BC12 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C511D3341FC00F53111 /* Protocol.swift */; };
@@ -138,7 +137,6 @@
 		393E0FD51DA2486C00B3BC12 /* NestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestObjectTest.swift */; };
 		393E0FD61DA2486C00B3BC12 /* CustomMappingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */; };
 		393E0FD71DA2486C00B3BC12 /* ObjectiveCObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */; };
-		393E0FD91DA2486C00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */; };
 		393E0FDA1DA2486C00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
 		393E0FEA1DA2494F00B3BC12 /* HandyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393E0FE11DA2494F00B3BC12 /* HandyJSON.framework */; };
 		393E0FFA1DA2495900B3BC12 /* HelpingMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B21D911DB4007B0320 /* HelpingMapper.swift */; };
@@ -151,7 +149,6 @@
 		393E10011DA249DC00B3BC12 /* NestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestObjectTest.swift */; };
 		393E10021DA249DC00B3BC12 /* CustomMappingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */; };
 		393E10031DA249DC00B3BC12 /* ObjectiveCObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */; };
-		393E10051DA249DC00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */; };
 		393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
 		3EB67AC41E2B0FAD00D2B482 /* Serializer+Legacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB67AC31E2B0FAD00D2B482 /* Serializer+Legacy.swift */; };
 		3EB67AC51E2B0FAD00D2B482 /* Serializer+Legacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB67AC31E2B0FAD00D2B482 /* Serializer+Legacy.swift */; };
@@ -254,7 +251,6 @@
 		21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexColorTransform.swift; sourceTree = "<group>"; };
 		21F252A91D58BE9100B214BB /* NestObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NestObjectTest.swift; sourceTree = "<group>"; };
 		21F252AB1D595F3900B214BB /* ClassObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassObjectTest.swift; sourceTree = "<group>"; };
-		21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllBaseTypePropertyObjectTest.swift; sourceTree = "<group>"; };
 		21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvalidStateHandlingTest.swift; sourceTree = "<group>"; };
 		393E0F9B1DA1650E00B3BC12 /* HandyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HandyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		393E0FA31DA165CE00B3BC12 /* Info-watchOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-watchOS.plist"; sourceTree = "<group>"; };
@@ -416,7 +412,6 @@
 				21F252A91D58BE9100B214BB /* NestObjectTest.swift */,
 				2144A50D1D9A7A770090F50E /* CustomMappingTest.swift */,
 				2179B6B61D9121D4007B0320 /* ObjectiveCObjectTest.swift */,
-				21F252B11D59718100B214BB /* AllBaseTypePropertyObjectTest.swift */,
 				21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */,
 				214329251DFBDC1400CA386A /* TestUtils.swift */,
 				392628001DA3E8E100B0C28D /* Supporting Files */,
@@ -843,7 +838,6 @@
 				21F252B41D599DE200B214BB /* InvalidStateHandlingTest.swift in Sources */,
 				2144A50E1D9A7A770090F50E /* CustomMappingTest.swift in Sources */,
 				214329261DFBDC1400CA386A /* TestUtils.swift in Sources */,
-				21F252B21D59718100B214BB /* AllBaseTypePropertyObjectTest.swift in Sources */,
 				217B04701D571B9F0035A8E2 /* StructObjectTest.swift in Sources */,
 				2179B6B71D9121D4007B0320 /* ObjectiveCObjectTest.swift in Sources */,
 				21F252AC1D595F3900B214BB /* ClassObjectTest.swift in Sources */,
@@ -929,7 +923,6 @@
 				393E0FD51DA2486C00B3BC12 /* NestObjectTest.swift in Sources */,
 				393E0FD61DA2486C00B3BC12 /* CustomMappingTest.swift in Sources */,
 				393E0FD71DA2486C00B3BC12 /* ObjectiveCObjectTest.swift in Sources */,
-				393E0FD91DA2486C00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */,
 				393E0FDA1DA2486C00B3BC12 /* InvalidStateHandlingTest.swift in Sources */,
 				3EB67ACE1E2B21EB00D2B482 /* CustomJSONTransformableTypeTest.swift in Sources */,
 			);
@@ -980,7 +973,6 @@
 				393E10011DA249DC00B3BC12 /* NestObjectTest.swift in Sources */,
 				393E10021DA249DC00B3BC12 /* CustomMappingTest.swift in Sources */,
 				393E10031DA249DC00B3BC12 /* ObjectiveCObjectTest.swift in Sources */,
-				393E10051DA249DC00B3BC12 /* AllBaseTypePropertyObjectTest.swift in Sources */,
 				393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */,
 				3EB67ACD1E2B21EB00D2B482 /* CustomJSONTransformableTypeTest.swift in Sources */,
 			);

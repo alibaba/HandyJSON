@@ -466,6 +466,70 @@ class BasicTypesTestsToJSON: XCTestCase {
         XCTAssertEqual(mappedObject?.dictEnumIntImplicitlyUnwrapped[key], value)
     }
 
+    func testMappingNSNumberToJSON(){
+        let value: NSNumber = 11
+        let object = BasicTypes()
+        object.nsNumber = value
+        object.nsNumberOptional = value
+        object.nsNumberImplicitlyUnwrapped = value
+
+        let JSONString = object.toJSONString(prettyPrint: true)
+       let mappedObject = BasicTypes.deserialize(from: JSONString!)
+
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject?.nsNumber, value)
+        XCTAssertEqual(mappedObject?.nsNumberOptional, value)
+        XCTAssertEqual(mappedObject?.nsNumberImplicitlyUnwrapped, value)
+    }
+
+    func testMappingNSStringToJSON(){
+        let value: NSString = "11"
+        let object = BasicTypes()
+        object.nsString = value
+        object.nsStringOptional = value
+        object.nsStringImplicitlyUnwrapped = value
+
+        let JSONString = object.toJSONString(prettyPrint: true)
+       let mappedObject = BasicTypes.deserialize(from: JSONString!)
+
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject?.nsString, value)
+        XCTAssertEqual(mappedObject?.nsStringOptional, value)
+        XCTAssertEqual(mappedObject?.nsStringImplicitlyUnwrapped, value)
+    }
+
+    func testMappingNSStringArrayToJSON(){
+        let value: NSString = "Stringgggg"
+        let object = BasicTypes()
+        object.arrayNSString = [value]
+        object.arrayNSStringOptional = [value]
+        object.arrayNSStringImplicitlyUnwrapped = [value]
+
+        let JSONString = object.toJSONString(prettyPrint: true)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
+
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject?.arrayNSString.first, value)
+        XCTAssertEqual(mappedObject?.arrayNSStringOptional?.first, value)
+        XCTAssertEqual(mappedObject?.arrayNSStringImplicitlyUnwrapped.first, value)
+    }
+
+    func testMappingNSNumberArrayToJSON(){
+        let value: NSNumber = 1.234
+        let object = BasicTypes()
+        object.arrayNSNumber = [value]
+        object.arrayNSNumberOptional = [value]
+        object.arrayNSNumberImplicitlyUnwrapped = [value]
+
+        let JSONString = object.toJSONString(prettyPrint: true)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
+
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject?.arrayNSNumber.first, value)
+        XCTAssertEqual(mappedObject?.arrayNSNumberOptional?.first, value)
+        XCTAssertEqual(mappedObject?.arrayNSNumberImplicitlyUnwrapped.first, value)
+    }
+
     func testObjectToModelDictionnaryOfPrimitives() {
         let object = TestCollectionOfPrimitives()
         object.dictStringString = ["string": "string"]

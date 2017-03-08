@@ -150,7 +150,7 @@ extension _JSONTransformable {
     }
 
     internal func toJSONValue() -> Any? {
-        if self is NSNumber.Type || self is NSString.Type {
+        if self is NSNumber || self is NSString {
             return self
         } else if let _self = self as? _BasicTypeTransformable {
             return _self.toJSONValue()
