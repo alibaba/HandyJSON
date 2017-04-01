@@ -111,9 +111,9 @@ extension Metadata {
                 return nil
             }
 
-            // TODO: @xyc may be there is a way to support nsobject, at least shrink the influence sphere
-            // and the handyjson/handyjsonenum protocol should not appear here
-            if superclass is NSObject.Type && !(superclass is HandyJSON.Type) && !(superclass is HandyJSONEnum.Type) {
+            // If the superclass doesn't conform to handyjson/handyjsonenum protocol,
+            // we should ignore the properties inside
+            if !(superclass is HandyJSON.Type) && !(superclass is HandyJSONEnum.Type) {
                 return nil
             }
             return Metadata.Class(type: superclass)
@@ -131,7 +131,6 @@ extension Metadata {
             }
             return nil
         }
-
     }
 }
 

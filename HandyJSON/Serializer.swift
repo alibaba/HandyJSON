@@ -33,7 +33,7 @@ extension _PropertiesMappable {
             var key = label ?? ""
 
             guard let offset = offsetInfo[key] else {
-                ClosureExecutor.executeWhenError {
+                ClosureExecutor.executeWhenDebug {
                     print("Can not find offset info for property: \(key)")
                 }
                 continue
