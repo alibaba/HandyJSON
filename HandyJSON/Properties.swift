@@ -60,6 +60,9 @@ func getProperties(forType type: Any.Type) -> [Property.Description]? {
         return fetchProperties(nominalType: nominalType)
     } else if let nominalType = Metadata.Class(type: type) {
         return nominalType.properties()
+    } else if let nominalType = Metadata.ObjcClassWrapper(type: type),
+        let targetType = nominalType.targetType {
+        return getProperties(forType: targetType)
     } else {
         return nil
     }
@@ -70,14 +73,17 @@ func fetchProperties<T : NominalType>(nominalType: T) -> [Property.Description]?
 }
 
 private func propertiesForNominalType<T : NominalType>(_ type: T) -> [Property.Description]? {
-    guard type.nominalTypeDescriptor.numberOfFields != 0 else {
+    guard let nominalTypeDescriptor = type.nominalTypeDescriptor else {
+        return nil
+    }
+    guard nominalTypeDescriptor.numberOfFields != 0 else {
         return []
     }
     guard let fieldTypes = type.fieldTypes, let fieldOffsets = type.fieldOffsets else {
         return nil
     }
-    let fieldNames = type.nominalTypeDescriptor.fieldNames
-    return (0..<type.nominalTypeDescriptor.numberOfFields).map { i in
+    let fieldNames = nominalTypeDescriptor.fieldNames
+    return (0..<nominalTypeDescriptor.numberOfFields).map { i in
         return Property.Description(key: fieldNames[i], type: fieldTypes[i], offset: fieldOffsets[i])
     }
 }
