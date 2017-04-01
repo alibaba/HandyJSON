@@ -102,6 +102,13 @@ extension Metadata {
         static let kind: Kind? = .class
         var pointer: UnsafePointer<_Metadata._Class>
 
+        var isSwiftClass: Bool {
+            get {
+                let lowbit = self.pointer.pointee.rodataptr & 1
+                return lowbit == 1
+            }
+        }
+
         var nominalTypeDescriptorOffsetLocation: Int {
             return is64BitPlatform ? 8 : 11
         }
@@ -111,27 +118,36 @@ extension Metadata {
                 return nil
             }
 
-            // TODO: @xyc may be there is a way to support nsobject, at least shrink the influence sphere
-            // and the handyjson/handyjsonenum protocol should not appear here
-            if superclass is NSObject.Type && !(superclass is HandyJSON.Type) && !(superclass is HandyJSONEnum.Type) {
+            // If the superclass doesn't conform to handyjson/handyjsonenum protocol,
+            // we should ignore the properties inside
+            if !(superclass is HandyJSON.Type) && !(superclass is HandyJSONEnum.Type) {
                 return nil
             }
             return Metadata.Class(type: superclass)
         }
 
         func properties() -> [Property.Description]? {
-            if let properties = fetchProperties(nominalType: self) {
-                guard let superclass = superclass,
-                    String(describing: unsafeBitCast(superclass.pointer, to: Any.Type.self)) != "SwiftObject" else {
-                    return properties
-                }
-                if let superclassProperties = superclass.properties() {
-                    return superclassProperties + properties
-                }
+            // ignore class in objc-runtime
+            if !isSwiftClass {
+                return nil
             }
-            return nil
-        }
 
+            var result: [Property.Description] = []
+
+            // ignore dynamically created class such as which is obtained from `objc_allocateClassPair`
+            if let _ = self.nominalTypeDescriptor,
+                let properties = fetchProperties(nominalType: self) {
+                result = properties
+            }
+
+            if let superclass = superclass,
+                String(describing: unsafeBitCast(superclass.pointer, to: Any.Type.self)) != "SwiftObject",  // ignore the root swift object
+                let superclassProperties = superclass.properties() {
+
+                return superclassProperties + result
+            }
+            return result
+        }
     }
 }
 
@@ -139,6 +155,9 @@ extension _Metadata {
     struct _Class {
         var kind: Int
         var superclass: Any.Type?
+        var reserveword1: Int
+        var reserveword2: Int
+        var rodataptr: UInt
     }
 }
 
@@ -158,5 +177,29 @@ extension _Metadata {
         var kind: Int
         var nominalTypeDescriptorOffset: Int
         var parent: Metadata?
+    }
+}
+
+// MARK: Metadata + ObjcClassWrapper
+extension Metadata {
+    struct ObjcClassWrapper: NominalType {
+        static let kind: Kind? = .objCClassWrapper
+        var pointer: UnsafePointer<_Metadata._ObjcClassWrapper>
+        var nominalTypeDescriptorOffsetLocation: Int {
+            return is64BitPlatform ? 8 : 11
+        }
+
+        var targetType: Any.Type? {
+            get {
+                return pointer.pointee.targetType
+            }
+        }
+    }
+}
+
+extension _Metadata {
+    struct _ObjcClassWrapper {
+        var kind: Int
+        var targetType: Any.Type?
     }
 }
