@@ -134,9 +134,7 @@ extension Metadata {
 
             var result: [Property.Description] = []
 
-            // ignore dynamically created class such as which is obtained from `objc_allocateClassPair`
-            if let _ = self.nominalTypeDescriptor,
-                let properties = fetchProperties(nominalType: self) {
+            if let properties = fetchProperties(nominalType: self) {
                 result = properties
             }
 
