@@ -21,23 +21,23 @@
 //  Created by zhouzhuo on 08/01/2017.
 //
 
-struct ClosureExecutor {
+struct InternalLogger {
 
-    static func executeWhenError(closure: () -> ()) {
+    static func logError(_ items: Any..., separator: String = " ", terminator: String = "\n") {
         if HandyJSONConfiguration.debugMode.rawValue <= DebugMode.error.rawValue {
-            closure()
+            print(items, separator: separator, terminator: terminator)
         }
     }
 
-    static func executeWhenDebug(closure: () -> ()) {
+    static func logDebug(_ items: Any..., separator: String = " ", terminator: String = "\n") {
         if HandyJSONConfiguration.debugMode.rawValue <= DebugMode.debug.rawValue {
-            closure()
+            print(items, separator: separator, terminator: terminator)
         }
     }
 
-    static func executeWhenVerbose(closure: () -> ()) {
+    static func logVerbose(_ items: Any..., separator: String = " ", terminator: String = "\n") {
         if HandyJSONConfiguration.debugMode.rawValue <= DebugMode.verbose.rawValue {
-            closure()
+            print(items, separator: separator, terminator: terminator)
         }
     }
 }
