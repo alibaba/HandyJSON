@@ -141,6 +141,8 @@ extension _JSONTransformable {
             return NSString._transform(from: object) as? Self
         } else if self is NSNumber.Type {
             return NSNumber._transform(from: object) as? Self
+        } else if self is NSArray.Type || self is NSDictionary.Type {
+            return object as? Self
         } else if let type = self as? _BasicTypeTransformable.Type {
             return type.transform(from: object) as? Self
         } else if let type = self as? _PropertiesMappable.Type {
@@ -149,9 +151,13 @@ extension _JSONTransformable {
         return nil
     }
 
-    internal func toJSONValue() -> Any? {
+    public func toJSONValue() -> Any? {
         if self is NSNumber || self is NSString {
             return self
+        } else if type(of: self) is NSArray.Type {
+            return (self as? Array<Any>)?.toJSONValue()
+        } else if type(of: self) is NSDictionary.Type {
+            return (self as? Dictionary<String, Any>)?.toJSONValue()
         } else if let _self = self as? _BasicTypeTransformable {
             return _self.toJSONValue()
         } else if let type = type(of: self) as? _PropertiesMappable.Type, let _self = self as? _PropertiesMappable {
@@ -260,12 +266,8 @@ extension String: PlainJSONValue {
                 }
             }
             return num.stringValue
-        } else if let arr = object as? NSArray {
-            return "\(arr)"
-        } else if let dict = object as? NSDictionary {
-            return "\(dict)"
         }
-        return nil
+        return "\(object)"
     }
 }
 
@@ -300,6 +302,9 @@ extension NSNumber: _JSONTransformable {
         return nil
     }
 }
+
+extension NSArray: _JSONTransformable {}
+extension NSDictionary: _JSONTransformable {}
 
 /// MARK: RawEnum Support
 public protocol _RawEnumProtocol: _BasicTypeTransformable {

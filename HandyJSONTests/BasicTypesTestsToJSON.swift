@@ -530,6 +530,49 @@ class BasicTypesTestsToJSON: XCTestCase {
         XCTAssertEqual(mappedObject?.arrayNSNumberImplicitlyUnwrapped.first, value)
     }
 
+    func testMappingNSArrayToJSON() {
+        let nsArray = NSMutableArray()
+        nsArray.add(1)
+        nsArray.add("one")
+        nsArray.add([1, 2, 3])
+
+        let object = BasicTypes()
+        object.nsArray = nsArray
+        object.nsArrayOptional = nsArray
+        object.nsArrayImplicitlyUnwrapped = nsArray
+
+        let JSONString = object.toJSONString(prettyPrint: false)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject!.nsArray.count, 3)
+        XCTAssertEqual(mappedObject!.nsArrayOptional?.count ?? 0, 3)
+        XCTAssertEqual(mappedObject!.nsArrayImplicitlyUnwrapped.count, 3)
+        XCTAssertEqual(mappedObject!.nsArrayImplicitlyUnwrapped.object(at: 1) as! String, "one")
+        XCTAssertEqual((mappedObject!.nsArrayImplicitlyUnwrapped.object(at: 2) as! NSArray).count, 3)
+    }
+
+    func testMappingNSDictionaryToJSON() {
+        let nsDict = NSMutableDictionary()
+        nsDict.setObject(1, forKey: "name1" as NSString)
+        nsDict.setObject("one", forKey: "name2" as NSString)
+        nsDict.setObject([1, 2, 3], forKey: "name3" as NSString)
+        nsDict.setObject(["key": "value"], forKey: "name4" as NSString)
+
+        let object = BasicTypes()
+        object.nsDictionary = nsDict
+        object.nsDictionaryOptional = nsDict
+        object.nsDictionaryImplicitlyUnwrapped = nsDict
+        let JSONString = object.toJSONString(prettyPrint: false)
+        let mappedObject = BasicTypes.deserialize(from: JSONString!)
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject!.nsDictionary.count, 4)
+        XCTAssertEqual(mappedObject!.nsDictionaryOptional?.count ?? 0, 4)
+        XCTAssertEqual(mappedObject!.nsDictionaryImplicitlyUnwrapped.count, 4)
+        XCTAssertEqual(mappedObject!.nsDictionaryImplicitlyUnwrapped.object(forKey: "name2") as! String, "one")
+        XCTAssertEqual((mappedObject!.nsDictionaryImplicitlyUnwrapped.object(forKey: "name3") as! NSArray).count, 3)
+        XCTAssertEqual((mappedObject!.nsDictionaryImplicitlyUnwrapped.object(forKey: "name4") as! [String: String])["key"], "value")
+    }
+
     func testObjectToModelDictionnaryOfPrimitives() {
         let object = TestCollectionOfPrimitives()
         object.dictStringString = ["string": "string"]
