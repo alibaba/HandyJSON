@@ -49,13 +49,6 @@ typealias Byte = Int8
 /// 提供默认的反射能力
 public protocol _PropertiesMetrizable {}
 
-fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInfo: (Int, Int)) -> Int {
-    let m = currentOffset % layoutInfo.1
-    let offset = (m == 0 ? 0 : (layoutInfo.1 - m))
-    let size = layoutInfo.0
-    return size + offset
-}
-
 extension _PropertiesMetrizable {
 
     // locate the head of a struct type object in memory
