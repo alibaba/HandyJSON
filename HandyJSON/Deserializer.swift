@@ -53,20 +53,30 @@ extension _PropertiesMappable {
             return
         }
 
+        var maybeValue: Any? = nil
+
         if let mappingHandler = mapper.getMappingHandler(key: mutablePointer.hashValue) {
-            // if specific key is set, replace the label
-            if let specifyKey = mappingHandler.mappingName {
-                key = specifyKey
+            if let mappingNames = mappingHandler.mappingNames, mappingNames.count > 0 {
+                for mappingName in mappingNames {
+                    if let _value = dict[mappingName] {
+                        maybeValue = _value
+                        break
+                    }
+                }
+            } else {
+                maybeValue = dict[key]
             }
 
             if let transformer = mappingHandler.assignmentClosure {
                 // execute the transform closure
-                transformer(dict[key])
+                transformer(maybeValue)
                 return
             }
+        } else {
+            maybeValue = dict[key]
         }
 
-        guard let rawValue = dict[key] as? NSObject else {
+        guard let rawValue = maybeValue as? NSObject else {
             InternalLogger.logDebug("Can not find a value from dictionary for property: \(key)")
             return
         }

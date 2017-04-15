@@ -45,8 +45,9 @@ extension _PropertiesMappable {
 
             if let mappingHandler = mapper.getMappingHandler(key: mutablePointer.hashValue) {
                 // if specific key is set, replace the label
-                if let specifyKey = mappingHandler.mappingName {
-                    key = specifyKey
+                if let mappingNames = mappingHandler.mappingNames, mappingNames.count > 0 {
+                    // take the first if more than one
+                    key = mappingNames[0]
                 }
 
                 if let transformer = mappingHandler.takeValueClosure {
