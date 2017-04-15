@@ -33,9 +33,7 @@ extension _PropertiesMappable {
             var key = label ?? ""
 
             guard let offset = offsetInfo[key] else {
-                ClosureExecutor.executeWhenDebug {
-                    print("Can not find offset info for property: \(key)")
-                }
+                InternalLogger.logDebug("Can not find offset info for property: \(key)")
                 continue
             }
 
@@ -47,8 +45,9 @@ extension _PropertiesMappable {
 
             if let mappingHandler = mapper.getMappingHandler(key: mutablePointer.hashValue) {
                 // if specific key is set, replace the label
-                if let specifyKey = mappingHandler.mappingName {
-                    key = specifyKey
+                if let mappingNames = mappingHandler.mappingNames, mappingNames.count > 0 {
+                    // take the first if more than one
+                    key = mappingNames[0]
                 }
 
                 if let transformer = mappingHandler.takeValueClosure {
@@ -66,10 +65,7 @@ extension _PropertiesMappable {
                 }
             }
 
-            ClosureExecutor.executeWhenDebug {
-                print("The value for key: \(key) is not transformable type")
-            }
-
+            InternalLogger.logDebug("The value for key: \(key) is not transformable type")
         }
         return dict
     }
@@ -88,9 +84,7 @@ extension _PropertiesMappable {
             let mapper = HelpingMapper()
             // do user-specified mapping first
             if !(object is _PropertiesMappable) {
-                ClosureExecutor.executeWhenDebug {
-                    print("This model of type: \(type(of: object)) is not mappable but is class/struct type")
-                }
+                InternalLogger.logDebug("This model of type: \(type(of: object)) is not mappable but is class/struct type")
                 return object
             }
             var mutableObject = object as! _PropertiesMappable
@@ -116,9 +110,7 @@ extension _PropertiesMappable {
 
             var offsetInfo = [String: Int]()
             guard let properties = getProperties(forType: type(of: object)) else {
-                ClosureExecutor.executeWhenError {
-                    print("Can not get properties info for type: \(type(of: object))")
-                }
+                InternalLogger.logError("Can not get properties info for type: \(type(of: object))")
                 return nil
             }
 
@@ -155,14 +147,10 @@ public extension HandyJSON {
                     }
                     return String(data: jsonData, encoding: .utf8)
                 } catch let error {
-                    ClosureExecutor.executeWhenError {
-                        print(error)
-                    }
+                    InternalLogger.logError(error)
                 }
             } else {
-                ClosureExecutor.executeWhenDebug {
-                    print("\(anyObject)) is not a valid JSON Object")
-                }
+                InternalLogger.logDebug("\(anyObject)) is not a valid JSON Object")
             }
         }
         return nil
@@ -188,14 +176,10 @@ public extension Collection where Iterator.Element: HandyJSON {
                 }
                 return String(data: jsonData, encoding: .utf8)
             } catch let error {
-                ClosureExecutor.executeWhenError {
-                    print(error)
-                }
+                InternalLogger.logError(error)
             }
         } else {
-            ClosureExecutor.executeWhenDebug {
-                print("\(self.toJSON()) is not a valid JSON Object")
-            }
+            InternalLogger.logDebug("\(self.toJSON()) is not a valid JSON Object")
         }
         return nil
     }

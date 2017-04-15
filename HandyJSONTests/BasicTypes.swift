@@ -97,6 +97,14 @@ class BasicTypes: HandyJSON {
     var arrayNSNumberOptional: Array<NSNumber>?
     var arrayNSNumberImplicitlyUnwrapped: Array<NSNumber>!
 
+    var nsArray: NSArray = []
+    var nsArrayOptional: NSArray?
+    var nsArrayImplicitlyUnwrapped: NSArray!
+
+    var nsDictionary: NSDictionary = [:]
+    var nsDictionaryOptional: NSDictionary?
+    var nsDictionaryImplicitlyUnwrapped: NSDictionary!
+
     enum EnumInt: Int, HandyJSONEnum {
         case Default
         case Another

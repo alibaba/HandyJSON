@@ -22,12 +22,12 @@ import Foundation
 public typealias CustomMappingKeyValueTuple = (Int, MappingPropertyHandler)
 
 public class MappingPropertyHandler {
-    var mappingName: String?
+    var mappingNames: [String]?
     var assignmentClosure: ((Any?) -> ())?
     var takeValueClosure: ((Any?) -> (Any?))?
     
-    public init(mappingName: String?, assignmentClosure: ((Any?) -> ())?, takeValueClosure: ((Any?) -> (Any?))?) {
-        self.mappingName = mappingName
+    public init(mappingNames: [String]?, assignmentClosure: ((Any?) -> ())?, takeValueClosure: ((Any?) -> (Any?))?) {
+        self.mappingNames = mappingNames
         self.assignmentClosure = assignmentClosure
         self.takeValueClosure = takeValueClosure
     }
@@ -57,6 +57,7 @@ public class HelpingMapper {
     public func specify<T>(property: inout T, name: String?, converter: ((String) -> T)?) {
         let pointer = withUnsafePointer(to: &property, { return $0 })
         let key = pointer.hashValue
+        let names = (name == nil ? nil : [name!])
         
         if let _converter = converter {
             let assignmentClosure = { (jsonValue: Any?) in
@@ -68,9 +69,9 @@ public class HelpingMapper {
                     }
                 }
             }
-            self.mappingHandlers[key] = MappingPropertyHandler(mappingName: name, assignmentClosure: assignmentClosure, takeValueClosure: nil)
+            self.mappingHandlers[key] = MappingPropertyHandler(mappingNames: names, assignmentClosure: assignmentClosure, takeValueClosure: nil)
         } else {
-            self.mappingHandlers[key] = MappingPropertyHandler(mappingName: name, assignmentClosure: nil, takeValueClosure: nil)
+            self.mappingHandlers[key] = MappingPropertyHandler(mappingNames: names, assignmentClosure: nil, takeValueClosure: nil)
         }
     }
     
@@ -91,16 +92,26 @@ public class HelpingMapper {
 infix operator <-- : LogicalConjunctionPrecedence
 
 public func <-- <T>(property: inout T, name: String) -> CustomMappingKeyValueTuple {
-    let pointer = withUnsafePointer(to: &property, { return $0 })
-    let key = pointer.hashValue
-    return (key, MappingPropertyHandler(mappingName: name, assignmentClosure: nil, takeValueClosure: nil))
+    return property <-- [name]
 }
 
+public func <-- <T>(property: inout T, names: [String]) -> CustomMappingKeyValueTuple {
+    let pointer = withUnsafePointer(to: &property, { return $0 })
+    let key = pointer.hashValue
+    return (key, MappingPropertyHandler(mappingNames: names, assignmentClosure: nil, takeValueClosure: nil))
+}
+
+// MARK: non-optional properties
 public func <-- <Transform: TransformType>(property: inout Transform.Object, transformer: Transform) -> CustomMappingKeyValueTuple {
     return property <-- (nil, transformer)
 }
 
 public func <-- <Transform: TransformType>(property: inout Transform.Object, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
+    let names = (transformer.0 == nil ? [] : [transformer.0!])
+    return property <-- (names, transformer.1)
+}
+
+public func <-- <Transform: TransformType>(property: inout Transform.Object, transformer: ([String], Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
     let assignmentClosure = { (jsonValue: Any?) in
@@ -114,14 +125,20 @@ public func <-- <Transform: TransformType>(property: inout Transform.Object, tra
         }
         return nil
     }
-    return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
+    return (key, MappingPropertyHandler(mappingNames: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
+// MARK: optional properties
 public func <-- <Transform: TransformType>(property: inout Transform.Object?, transformer: Transform) -> CustomMappingKeyValueTuple {
     return property <-- (nil, transformer)
 }
 
 public func <-- <Transform: TransformType>(property: inout Transform.Object?, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
+    let names = (transformer.0 == nil ? [] : [transformer.0!])
+    return property <-- (names, transformer.1)
+}
+
+public func <-- <Transform: TransformType>(property: inout Transform.Object?, transformer: ([String], Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
     let assignmentClosure = { (jsonValue: Any?) in
@@ -135,14 +152,20 @@ public func <-- <Transform: TransformType>(property: inout Transform.Object?, tr
         }
         return nil
     }
-    return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
+    return (key, MappingPropertyHandler(mappingNames: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
+// MARK: implicitly unwrap optional properties
 public func <-- <Transform: TransformType>(property: inout Transform.Object!, transformer: Transform) -> CustomMappingKeyValueTuple {
     return property <-- (nil, transformer)
 }
 
 public func <-- <Transform: TransformType>(property: inout Transform.Object!, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
+    let names = (transformer.0 == nil ? [] : [transformer.0!])
+    return property <-- (names, transformer.1)
+}
+
+public func <-- <Transform: TransformType>(property: inout Transform.Object!, transformer: ([String], Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
     let assignmentClosure = { (jsonValue: Any?) in
@@ -156,7 +179,7 @@ public func <-- <Transform: TransformType>(property: inout Transform.Object!, tr
         }
         return nil
     }
-    return (key, MappingPropertyHandler(mappingName: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
+    return (key, MappingPropertyHandler(mappingNames: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
 infix operator <<< : AssignmentPrecedence

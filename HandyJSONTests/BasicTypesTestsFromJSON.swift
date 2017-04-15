@@ -385,6 +385,18 @@ class BasicTypesTestsFromJSON: XCTestCase {
         XCTAssertEqual(mappedObject?.dictEnumIntImplicitlyUnwrapped[key], value)
     }
 
+    func testMappingNSDictionaryFromJSON() {
+        let JSONString = "{\"nsDictionaryOptional\":{\"name4\":{\"key\":\"value\"},\"name2\":\"one\",\"name1\":1,\"name3\":[1,2,3]},\"nsDictionary\":{\"name4\":{\"key\":\"value\"},\"name2\":\"one\",\"name1\":1,\"name3\":[1,2,3]},\"nsDictionaryImplicitlyUnwrapped\":{\"name4\":{\"key\":\"value\"},\"name2\":\"one\",\"name1\":1,\"name3\":[1,2,3]}}"
+        let mappedObject = BasicTypes.deserialize(from: JSONString)
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject!.nsDictionary.count, 4)
+        XCTAssertEqual(mappedObject!.nsDictionaryOptional?.count ?? 0, 4)
+        XCTAssertEqual(mappedObject!.nsDictionaryImplicitlyUnwrapped.count, 4)
+        XCTAssertEqual(mappedObject!.nsDictionaryImplicitlyUnwrapped.object(forKey: "name2") as! String, "one")
+        XCTAssertEqual((mappedObject!.nsDictionaryImplicitlyUnwrapped.object(forKey: "name3") as! NSArray).count, 3)
+        XCTAssertEqual((mappedObject!.nsDictionaryImplicitlyUnwrapped.object(forKey: "name4") as! [String: String])["key"], "value")
+    }
+
     func testMappingEnumIntDictionaryFromJSONShouldNotCrashWithNonDefinedvalue() {
         let key = "key"
         let value = Int.min

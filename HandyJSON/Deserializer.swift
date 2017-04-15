@@ -49,29 +49,35 @@ extension _PropertiesMappable {
         let mutablePointer = rawPointer.advanced(by: property.offset)
 
         if mapper.propertyExcluded(key: mutablePointer.hashValue) {
-            ClosureExecutor.executeWhenDebug {
-                print("Exclude property: \(key)")
-            }
+            InternalLogger.logDebug("Exclude property: \(key)")
             return
         }
 
+        var maybeValue: Any? = nil
+
         if let mappingHandler = mapper.getMappingHandler(key: mutablePointer.hashValue) {
-            // if specific key is set, replace the label
-            if let specifyKey = mappingHandler.mappingName {
-                key = specifyKey
+            if let mappingNames = mappingHandler.mappingNames, mappingNames.count > 0 {
+                for mappingName in mappingNames {
+                    if let _value = dict[mappingName] {
+                        maybeValue = _value
+                        break
+                    }
+                }
+            } else {
+                maybeValue = dict[key]
             }
 
             if let transformer = mappingHandler.assignmentClosure {
                 // execute the transform closure
-                transformer(dict[key])
+                transformer(maybeValue)
                 return
             }
+        } else {
+            maybeValue = dict[key]
         }
 
-        guard let rawValue = dict[key] as? NSObject else {
-            ClosureExecutor.executeWhenDebug {
-                print("Can not find a value from dictionary for property: \(key)")
-            }
+        guard let rawValue = maybeValue as? NSObject else {
+            InternalLogger.logDebug("Can not find a value from dictionary for property: \(key)")
             return
         }
 
@@ -86,18 +92,14 @@ extension _PropertiesMappable {
                 return
             }
         }
-        ClosureExecutor.executeWhenDebug {
-            print("Property: \(property.key) hasn't been written in")
-        }
+        InternalLogger.logDebug("Property: \(property.key) hasn't been written in")
     }
 
     static func _transform(dict: NSDictionary, toType: _PropertiesMappable.Type) -> _PropertiesMappable? {
         var instance = toType.init()
 
         guard let properties = getProperties(forType: toType) else {
-            ClosureExecutor.executeWhenError {
-                print("Failed when try to get properties from type: \(type(of: toType))")
-            }
+            InternalLogger.logDebug("Failed when try to get properties from type: \(type(of: toType))")
             return nil
         }
 
@@ -184,9 +186,7 @@ public class JSONDeserializer<T: HandyJSON> {
                 return self.deserializeFrom(dict: jsonDict, designatedPath: designatedPath)
             }
         } catch let error {
-            ClosureExecutor.executeWhenError {
-                print(error)
-            }
+            InternalLogger.logError(error)
         }
         return nil
     }
@@ -205,9 +205,7 @@ public class JSONDeserializer<T: HandyJSON> {
                 })
             }
         } catch let error {
-            ClosureExecutor.executeWhenError {
-                print(error)
-            }
+            InternalLogger.logError(error)
         }
         return nil
     }

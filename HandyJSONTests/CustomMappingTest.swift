@@ -81,6 +81,59 @@ class CustomMappingTest: XCTestCase {
         XCTAssert(a.height == 180)
     }
 
+    func testMultipleNamesMapToOneProperty() {
+
+        class A: HandyJSON {
+            var var1: String?
+            var var2: String?
+            var var3: String?
+
+            required init() {}
+
+            func mapping(mapper: HelpingMapper) {
+                mapper <<<
+                    self.var1 <-- ["var1_v1", "var1_v2", "var1_v3"]
+
+                mapper <<<
+                    self.var2 <-- (["var2_v1", "var2_v2", "var2_v3"], TransformOf<String, String>(fromJSON: { (rawStr) -> String? in
+                        return rawStr
+                    }, toJSON: { (srcStr) -> String? in
+                        return srcStr
+                    }))
+
+                mapper <<<
+                    self.var3 <-- ["var3_v1"]
+
+            }
+        }
+
+        var jsonString = "{\"var1_v1\":\"var1_value\",\"var2_v1\":\"var2_value\",\"var3_v1\":\"var3_value\"}"
+        var a = A.deserialize(from: jsonString)!
+        XCTAssert(a.var1 == "var1_value")
+        XCTAssert(a.var2 == "var2_value")
+        XCTAssert(a.var3 == "var3_value")
+        let toJson = a.toJSON()!
+        XCTAssert(toJson["var1_v1"] as? String == "var1_value")
+        XCTAssert(toJson["var1_v2"] as? String == nil)
+        XCTAssert(toJson["var1_v3"] as? String == nil)
+        XCTAssert(toJson["var2_v1"] as? String == "var2_value")
+        XCTAssert(toJson["var2_v2"] as? String == nil)
+        XCTAssert(toJson["var2_v3"] as? String == nil)
+        XCTAssert(toJson["var3_v1"] as? String == "var3_value")
+
+        jsonString = "{\"var1_v2\":\"var1_value\",\"var2_v2\":\"var2_value\",\"var3_v2\":\"var3_value\"}"
+        a = A.deserialize(from: jsonString)!
+        XCTAssert(a.var1 == "var1_value")
+        XCTAssert(a.var2 == "var2_value")
+        XCTAssert(a.var3 == nil)
+
+        jsonString = "{\"var1\":\"var1_value\",\"var2\":\"var2_value\",\"var3\":\"var3_value\"}"
+        a = A.deserialize(from: jsonString)!
+        XCTAssert(a.var1 == nil)
+        XCTAssert(a.var2 == nil)
+        XCTAssert(a.var3 == nil)
+    }
+
     func testClassMapping() {
 
         class A: HandyJSON {
@@ -92,21 +145,37 @@ class CustomMappingTest: XCTestCase {
 
             func mapping(mapper: HelpingMapper) {
                 // specify json field name
-                mapper.specify(property: &name, name: "json_name")
+                mapper <<<
+                        self.name <-- "json_name"
 
                 // specify converting method
-                mapper.specify(property: &id, converter: { rawValue -> String in
-                    return "json_" + rawValue
-                })
+                mapper <<<
+                        self.id <-- TransformOf<String, String>(fromJSON: { (rawStr) -> String? in
+                            if let _str = rawStr {
+                                return "json_" + _str
+                            }
+                            return nil
+                        }, toJSON: { (srcStr) -> String? in
+                            return srcStr
+                        })
 
                 // specify both
-                mapper.specify(property: &height, name: "json_height", converter: { rawValue -> Int? in
-                    return Int(rawValue)
-                })
+                mapper <<<
+                    self.height <-- ("json_height", TransformOf<Int, Int>(fromJSON: { (rawInt) -> Int? in
+                        if let _int = rawInt {
+                            return _int / 100
+                        }
+                        return nil
+                    }, toJSON: { (srcInt) -> Int? in
+                        if let _int = srcInt {
+                            return _int * 100
+                        }
+                        return nil
+                    }))
             }
         }
 
-        let jsonString = "{\"json_name\":\"Bob\",\"id\":\"12345\",\"json_height\":180}"
+        let jsonString = "{\"json_name\":\"Bob\",\"id\":\"12345\",\"json_height\":18000}"
         let a = A.deserialize(from: jsonString)!
         XCTAssert(a.name == "Bob")
         XCTAssert(a.id == "json_12345")

@@ -15,4 +15,5 @@ xcuserdata
 DerivedData
 *.xcuserstate
 *.xcworkspace
-Pods
+Pods/
+Products/

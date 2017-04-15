@@ -49,13 +49,6 @@ typealias Byte = Int8
 /// 提供默认的反射能力
 public protocol _PropertiesMetrizable {}
 
-fileprivate func calculateMemoryDistanceShouldMove(currentOffset: Int, layoutInfo: (Int, Int)) -> Int {
-    let m = currentOffset % layoutInfo.1
-    let offset = (m == 0 ? 0 : (layoutInfo.1 - m))
-    let size = layoutInfo.0
-    return size + offset
-}
-
 extension _PropertiesMetrizable {
 
     // locate the head of a struct type object in memory
@@ -137,21 +130,29 @@ extension _JSONTransformable {
     /// - Parameter object: JSONSerialization 反序列化出来的 NSObject 对象.
     /// - Returns: 转换到对应声明的模型.
     public static func transform(from object: NSObject) -> Self? {
-        if self is NSString.Type {
+        switch self {
+        case is NSString.Type:
             return NSString._transform(from: object) as? Self
-        } else if self is NSNumber.Type {
+        case is NSNumber.Type:
             return NSNumber._transform(from: object) as? Self
-        } else if let type = self as? _BasicTypeTransformable.Type {
+        case is NSArray.Type, is NSDictionary.Type:
+            return object as? Self
+        case let type as _BasicTypeTransformable.Type:
             return type.transform(from: object) as? Self
-        } else if let type = self as? _PropertiesMappable.Type {
+        case let type as _PropertiesMappable.Type:
             return type.transform(from: object) as? Self
+        default:
+            return nil
         }
-        return nil
     }
 
-    internal func toJSONValue() -> Any? {
+    public func toJSONValue() -> Any? {
         if self is NSNumber || self is NSString {
             return self
+        } else if type(of: self) is NSArray.Type {
+            return (self as? Array<Any>)?.toJSONValue()
+        } else if type(of: self) is NSDictionary.Type {
+            return (self as? Dictionary<String, Any>)?.toJSONValue()
         } else if let _self = self as? _BasicTypeTransformable {
             return _self.toJSONValue()
         } else if let type = type(of: self) as? _PropertiesMappable.Type, let _self = self as? _PropertiesMappable {
@@ -183,13 +184,14 @@ protocol IntegerPropertyProtocol: Integer, PlainJSONValue {
 extension IntegerPropertyProtocol {
 
     public static func transform(from object: NSObject) -> Self? {
-        if let str = object as? NSString {
-            let text: String = str as String
-            return Self(text, radix: 10)
-        } else if let num = object as? NSNumber {
+        switch object {
+        case let str as String:
+            return Self(str, radix: 10)
+        case let num as NSNumber:
             return Self(num)
+        default:
+            return nil
         }
-        return nil
     }
 }
 
@@ -209,7 +211,8 @@ extension UInt64: IntegerPropertyProtocol {}
 extension Bool: PlainJSONValue {
 
     public static func transform(from object: NSObject) -> Bool? {
-        if let str = object as? NSString {
+        switch object {
+        case let str as NSString:
             let lowerCase = str.lowercased
             if ["0", "false"].contains(lowerCase) {
                 return false
@@ -217,10 +220,12 @@ extension Bool: PlainJSONValue {
             if ["1", "true"].contains(lowerCase) {
                 return true
             }
-        } else if let num = object as? NSNumber {
+            return nil
+        case let num as NSNumber:
             return num.boolValue
+        default:
+            return nil
         }
-        return nil
     }
 }
 
@@ -231,13 +236,14 @@ protocol FloatPropertyProtocol: _JSONTransformable, PlainJSONValue, LosslessStri
 extension FloatPropertyProtocol {
 
     public static func transform(from object: NSObject) -> Self? {
-        if let str = object as? NSString {
-            let text = str as String
-            return Self(text)
-        } else if let num = object as? NSNumber {
+        switch object {
+        case let str as String:
+            return Self(str)
+        case let num as NSNumber:
             return Self(num)
+        default:
+            return nil
         }
-        return nil
     }
 }
 
@@ -248,9 +254,10 @@ extension Double: FloatPropertyProtocol {}
 extension String: PlainJSONValue {
 
     public static func transform(from object: NSObject) -> String? {
-        if let str = object as? NSString {
-            return str as String
-        } else if let num = object as? NSNumber {
+        switch object {
+        case let str as String:
+            return str
+        case let num as NSNumber:
             // Boolean Type Inside
             if NSStringFromClass(type(of: num)) == "__NSCFBoolean" {
                 if num.boolValue {
@@ -260,12 +267,9 @@ extension String: PlainJSONValue {
                 }
             }
             return num.stringValue
-        } else if let arr = object as? NSArray {
-            return "\(arr)"
-        } else if let dict = object as? NSDictionary {
-            return "\(dict)"
+        default:
+            return "\(object)"
         }
-        return nil
     }
 }
 
@@ -282,9 +286,10 @@ extension NSString: _JSONTransformable {
 extension NSNumber: _JSONTransformable {
 
     static func _transform(from object: NSObject) -> NSNumber? {
-        if let num = object as? NSNumber {
+        switch object {
+        case let num as NSNumber:
             return num
-        } else if let str = object as? NSString {
+        case let str as NSString:
             let lowercase = str.lowercased
             if lowercase == "true" {
                 return NSNumber(booleanLiteral: true)
@@ -296,10 +301,14 @@ extension NSNumber: _JSONTransformable {
                 formatter.numberStyle = .decimal
                 return formatter.number(from: str as String)
             }
+        default:
+            return nil
         }
-        return nil
     }
 }
+
+extension NSArray: _JSONTransformable {}
+extension NSDictionary: _JSONTransformable {}
 
 /// MARK: RawEnum Support
 public protocol _RawEnumProtocol: _BasicTypeTransformable {
@@ -393,9 +402,7 @@ extension Collection {
 
     static func _transform(from object: NSObject) -> [Iterator.Element]? {
         guard let nsArray = object as? NSArray else {
-            ClosureExecutor.executeWhenDebug {
-                print("Expect object to be an NSArray but it's not")
-            }
+            InternalLogger.logDebug("Expect object to be an NSArray but it's not")
             return nil
         }
         typealias Element = Iterator.Element
@@ -451,9 +458,7 @@ extension Dictionary: _BasicTypeTransformable {
 
     public static func transform(from object: NSObject) -> Dictionary? {
         guard let nsDict = object as? NSDictionary else {
-            ClosureExecutor.executeWhenDebug {
-                print("Expect object to be an NSDictionary but it's not")
-            }
+            InternalLogger.logDebug("Expect object to be an NSDictionary but it's not")
             return nil
         }
         var result: [Key: Value] = [Key: Value]()
