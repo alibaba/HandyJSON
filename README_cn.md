@@ -409,14 +409,6 @@ print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON strin
 
 和反序列化一样，只要定义`mapping`和`exclude`就可以了。被排除的属性，序列化和反序列化都不再影响到它。而在`mapping`中定义的`Transformer`，同时定义了序列化和反序列的规则，所以只要为属性指明一个`Transformer`关系就可以了。
 
-# 待办
-
-* 完善测试
-
-* 完善异常处理
-
-* 简化API风格
-
 # License
 
 HandyJSON is released under the Apache License, Version 2.0. See LICENSE for details.
