@@ -151,9 +151,6 @@
 		3EB67AC51E2B0FAD00D2B482 /* Serializer+Legacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB67AC31E2B0FAD00D2B482 /* Serializer+Legacy.swift */; };
 		3EB67AC61E2B0FAD00D2B482 /* Serializer+Legacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB67AC31E2B0FAD00D2B482 /* Serializer+Legacy.swift */; };
 		3EB67AC71E2B0FAD00D2B482 /* Serializer+Legacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB67AC31E2B0FAD00D2B482 /* Serializer+Legacy.swift */; };
-		3EB67ACD1E2B21EB00D2B482 /* CustomJSONTransformableTypeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB67AC81E2B16F700D2B482 /* CustomJSONTransformableTypeTest.swift */; };
-		3EB67ACE1E2B21EB00D2B482 /* CustomJSONTransformableTypeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB67AC81E2B16F700D2B482 /* CustomJSONTransformableTypeTest.swift */; };
-		3EB67ACF1E2B21ED00D2B482 /* CustomJSONTransformableTypeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB67AC81E2B16F700D2B482 /* CustomJSONTransformableTypeTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -259,7 +256,6 @@
 		393E10081DA249F100B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		393E100A1DA24A0600B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		3EB67AC31E2B0FAD00D2B482 /* Serializer+Legacy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Serializer+Legacy.swift"; sourceTree = "<group>"; };
-		3EB67AC81E2B16F700D2B482 /* CustomJSONTransformableTypeTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomJSONTransformableTypeTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -402,7 +398,6 @@
 				215F13461E217B9C00B0FFEC /* BasicTypes.swift */,
 				215F13471E217B9C00B0FFEC /* BasicTypesTestsToJSON.swift */,
 				21A191F31E21E62500CD7609 /* BasicTypesTestsFromJSON.swift */,
-				3EB67AC81E2B16F700D2B482 /* CustomJSONTransformableTypeTest.swift */,
 				217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */,
 				21F252AB1D595F3900B214BB /* ClassObjectTest.swift */,
 				21F252A91D58BE9100B214BB /* NestObjectTest.swift */,
@@ -836,7 +831,6 @@
 				217B04701D571B9F0035A8E2 /* StructObjectTest.swift in Sources */,
 				21F252AC1D595F3900B214BB /* ClassObjectTest.swift in Sources */,
 				21F252AA1D58BE9100B214BB /* NestObjectTest.swift in Sources */,
-				3EB67ACF1E2B21ED00D2B482 /* CustomJSONTransformableTypeTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -917,7 +911,6 @@
 				393E0FD51DA2486C00B3BC12 /* NestObjectTest.swift in Sources */,
 				393E0FD61DA2486C00B3BC12 /* CustomMappingTest.swift in Sources */,
 				393E0FDA1DA2486C00B3BC12 /* InvalidStateHandlingTest.swift in Sources */,
-				3EB67ACE1E2B21EB00D2B482 /* CustomJSONTransformableTypeTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -966,7 +959,6 @@
 				393E10011DA249DC00B3BC12 /* NestObjectTest.swift in Sources */,
 				393E10021DA249DC00B3BC12 /* CustomMappingTest.swift in Sources */,
 				393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */,
-				3EB67ACD1E2B21EB00D2B482 /* CustomJSONTransformableTypeTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
