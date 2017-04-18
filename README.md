@@ -100,7 +100,7 @@ An overview of types supported can be found at file: [BasicTypes.swift](./HandyJ
 
 **To use with Swift 2.x using == 0.4.0**
 
-**To use with Swift 3.x using >= 1.7.0**
+**To use with Swift 3.x using >= 1.7.1**
 
 For Legacy Swift support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
 
@@ -109,7 +109,7 @@ For Legacy Swift support, take a look at the [swift2 branch](https://github.com/
 Add the following line to your `Podfile`:
 
 ```
-pod 'HandyJSON', '~> 1.7.0'
+pod 'HandyJSON', '~> 1.7.1'
 ```
 
 Then, run the following command:
@@ -123,7 +123,7 @@ $ pod install
 You can add a dependency on `HandyJSON` by adding the following line to your `Cartfile`:
 
 ```
-github "alibaba/HandyJSON" ~> 1.7.0
+github "alibaba/HandyJSON" ~> 1.7.1
 ```
 
 ## Manually
