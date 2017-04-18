@@ -48,6 +48,7 @@ extension _PropertiesMappable {
 
         let mutablePointer = rawPointer.advanced(by: property.offset)
 
+        InternalLogger.logVerbose(key, "address at: ", mutablePointer.hashValue)
         if mapper.propertyExcluded(key: mutablePointer.hashValue) {
             InternalLogger.logDebug("Exclude property: \(key)")
             return
@@ -114,6 +115,8 @@ extension _PropertiesMappable {
             rawPointer = UnsafeMutableRawPointer(instance.headPointerOfStruct())
         }
 
+        InternalLogger.logVerbose("instance start at: ", rawPointer.hashValue)
+
         var _dict = dict
         if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
             let newDict = NSMutableDictionary()
@@ -129,6 +132,7 @@ extension _PropertiesMappable {
 
         properties.forEach { (property) in
             _transform(rawPointer: rawPointer, property: property, dict: _dict, mapper: mapper)
+            InternalLogger.logVerbose("field: ", property.key, "  offset: ", property.offset)
         }
 
         return instance
