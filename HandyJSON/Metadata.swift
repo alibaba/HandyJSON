@@ -18,6 +18,24 @@
 //  Created by zhouzhuo on 07/01/2017.
 //
 
+struct _class_rw_t {
+    var flags: Int32
+    var version: Int32
+    var ro: UInt
+    // other fields we don't care
+
+    func class_ro_t() -> UnsafePointer<_class_ro_t>? {
+        return UnsafePointer<_class_ro_t>(bitPattern: self.ro)
+    }
+}
+
+struct _class_ro_t {
+    var flags: Int32
+    var instanceStart: Int32
+    var instanceSize: Int32
+    // other fields we don't care
+}
+
 // MARK: MetadataType
 protocol MetadataType : PointerType {
     static var kind: Metadata.Kind? { get }
@@ -104,7 +122,7 @@ extension Metadata {
 
         var isSwiftClass: Bool {
             get {
-                let lowbit = self.pointer.pointee.rodataptr & 1
+                let lowbit = self.pointer.pointee.databits & 1
                 return lowbit == 1
             }
         }
@@ -123,15 +141,17 @@ extension Metadata {
             if !(superclass is HandyJSON.Type) && !(superclass is HandyJSONEnum.Type) {
                 return nil
             }
-            return Metadata.Class(type: superclass)
-        }
 
-        func properties() -> [Property.Description]? {
-            // ignore class in objc-runtime
-            if !isSwiftClass {
+            // ignore objc-runtime layer
+            guard let metaclass = Metadata.Class(type: superclass), metaclass.isSwiftClass else {
                 return nil
             }
 
+            return metaclass
+        }
+
+        func _propertiesAndStartPoint() -> ([Property.Description], Int32?)? {
+            let instanceStart = pointer.pointee.class_rw_t()?.pointee.class_ro_t()?.pointee.instanceStart
             var result: [Property.Description] = []
 
             if let properties = fetchProperties(nominalType: self) {
@@ -140,11 +160,26 @@ extension Metadata {
 
             if let superclass = superclass,
                 String(describing: unsafeBitCast(superclass.pointer, to: Any.Type.self)) != "SwiftObject",  // ignore the root swift object
-                let superclassProperties = superclass.properties() {
+                let superclassProperties = superclass._propertiesAndStartPoint() {
 
-                return superclassProperties + result
+                return (superclassProperties.0 + result, superclassProperties.1)
             }
-            return result
+            return (result, instanceStart)
+        }
+
+        func properties() -> [Property.Description]? {
+            let propsAndStp = _propertiesAndStartPoint()
+            if let firstInstanceStart = propsAndStp?.1,
+                let firstProperty = propsAndStp?.0.first {
+
+                return propsAndStp?.0.map({ (property) -> Property.Description in
+                    return Property.Description(key: property.key,
+                                                type: property.type,
+                                                offset: property.offset - firstProperty.offset + Int(firstInstanceStart))
+                })
+            } else {
+                return propsAndStp?.0
+            }
         }
     }
 }
@@ -155,7 +190,18 @@ extension _Metadata {
         var superclass: Any.Type?
         var reserveword1: Int
         var reserveword2: Int
-        var rodataptr: UInt
+        var databits: UInt
+        // other fields we don't care
+
+        func class_rw_t() -> UnsafePointer<_class_rw_t>? {
+            if MemoryLayout<Int>.size == MemoryLayout<Int64>.size {
+                let fast_data_mask: UInt64 = 0x00007ffffffffff8
+                let databits_t: UInt64 = UInt64(self.databits)
+                return UnsafePointer<_class_rw_t>(bitPattern: UInt(databits_t & fast_data_mask))
+            } else {
+                return UnsafePointer<_class_rw_t>(bitPattern: self.databits & 0xfffffffc)
+            }
+        }
     }
 }
 
