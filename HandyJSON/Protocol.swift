@@ -478,10 +478,21 @@ extension Dictionary: _BasicTypeTransformable {
         var result = [String: Any]()
         for (key, value) in self {
             if let key = key as? String {
-                if let transformable = value as? _JSONTransformable {
+                switch value {
+                case let dictionary as Dictionary:
+                    if let transValue = dictionary.toJSONValue() {
+                        result[key] = transValue
+                    }
+                case let array as Array<Dictionary>:
+                    if let transValue = array.toJSONValue() {
+                        result[key] = transValue
+                    }
+                case let transformable as _JSONTransformable:
                     if let transValue = transformable.toJSONValue() {
                         result[key] = transValue
                     }
+                default:
+                    break
                 }
             }
         }
