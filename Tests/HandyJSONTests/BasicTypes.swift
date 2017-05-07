@@ -21,6 +21,7 @@
 //  Created by zhouzhuo on 05/01/2017.
 //
 
+import Foundation
 import HandyJSON
 
 class BasicTypes: HandyJSON {
