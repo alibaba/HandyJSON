@@ -267,6 +267,8 @@ extension String: PlainJSONValue {
                 }
             }
             return num.stringValue
+        case _ as NSNull:
+            return nil
         default:
             return "\(object)"
         }
