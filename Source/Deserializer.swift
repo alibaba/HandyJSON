@@ -161,6 +161,11 @@ public extension Array where Element: HandyJSON {
     public static func deserialize(from json: String?, designatedPath: String? = nil) -> [Element?]? {
         return JSONDeserializer<Element>.deserializeModelArrayFrom(json: json, designatedPath: designatedPath)
     }
+
+    /// deserialize model array from NSArray
+    public static func deserialize(from array: NSArray?) -> [Element?]? {
+        return JSONDeserializer<Element>.deserializeModelArrayFrom(array: array)
+    }
 }
 
 public class JSONDeserializer<T: HandyJSON> {
@@ -195,7 +200,7 @@ public class JSONDeserializer<T: HandyJSON> {
         return nil
     }
 
-    /// if the JSON field finded by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
+    /// if the JSON field found by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
     /// this method converts it to a Models array
     public static func deserializeModelArrayFrom(json: String?, designatedPath: String? = nil) -> [T?]? {
         guard let _json = json else {
@@ -204,13 +209,24 @@ public class JSONDeserializer<T: HandyJSON> {
         do {
             let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
             if let jsonArray = getSubObject(inside: jsonObject as? NSObject, by: designatedPath) as? NSArray {
-                return jsonArray.map({ (jsonDict) -> T? in
-                    return self.deserializeFrom(dict: jsonDict as? NSDictionary)
+                return jsonArray.map({ (item) -> T? in
+                    return self.deserializeFrom(dict: item as? NSDictionary)
                 })
             }
         } catch let error {
             InternalLogger.logError(error)
         }
         return nil
+    }
+
+    /// if the object found by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
+    /// this method converts it to a Models array
+    public static func deserializeModelArrayFrom(array: NSArray?) -> [T?]? {
+        guard let _arr = array else {
+            return nil
+        }
+        return _arr.map({ (item) -> T? in
+            return self.deserializeFrom(dict: item as? NSDictionary)
+        })
     }
 }

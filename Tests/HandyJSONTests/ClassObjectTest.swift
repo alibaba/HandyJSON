@@ -154,6 +154,31 @@ class ClassObjectTest: XCTestCase {
         }
     }
 
+    func testNSArrayDeserialization() {
+        class A: HandyJSON {
+            var name: String?
+            var id: String?
+            var height: Int?
+
+            required init() {}
+        }
+
+        let jsonArrayString = "[{\"name\":\"Bob\",\"id\":\"1\",\"height\":180}, {\"name\":\"Lily\",\"id\":\"2\",\"height\":150}, {\"name\":\"Lucy\",\"id\":\"3\",\"height\":160}]"
+
+        let jsonObject = try! JSONSerialization.jsonObject(with: jsonArrayString.data(using: String.Encoding.utf8)!, options: .allowFragments)
+        let nsArray = jsonObject as! NSArray
+        let arr = [A].deserialize(from: nsArray)!
+        XCTAssert(arr[0]?.name == "Bob")
+        XCTAssert(arr[0]?.id == "1")
+        XCTAssert(arr[0]?.height == 180)
+        XCTAssert(arr[1]?.name == "Lily")
+        XCTAssert(arr[1]?.id == "2")
+        XCTAssert(arr[1]?.height == 150)
+        XCTAssert(arr[2]?.name == "Lucy")
+        XCTAssert(arr[2]?.id == "3")
+        XCTAssert(arr[2]?.height == 160)
+    }
+
     func testArrayJSONDeserialization() {
         class A: HandyJSON {
             var name: String?
