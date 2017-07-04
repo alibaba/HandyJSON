@@ -12,6 +12,12 @@ HandyJSON目前依赖于从Swift Runtime源码中推断的内存规则，任何�
 [![Cocoapods Platform](https://img.shields.io/cocoapods/p/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
 [![Codecov branch](https://img.shields.io/codecov/c/github/alibaba/HandyJSON/master.svg?style=flat)](https://codecov.io/gh/alibaba/HandyJSON/branch/master)
 
+## 交流群
+
+群号: 581331250
+
+![交流群](qq_group.png)
+
 ## 简单示例
 
 ### 反序列化

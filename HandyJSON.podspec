@@ -3,11 +3,11 @@ Pod::Spec.new do |s|
     s.author = {'xuyecan' => 'xuyecan@gmail.com'}
     s.license = 'Apache License 2.0'
     s.requires_arc = true
-    s.version = '1.7.1'
+    s.version = '1.7.2'
     s.homepage = "https://github.com/alibaba/handyjson"
     s.name = "HandyJSON"
 
-    s.source_files = 'HandyJSON/**/*.{swift,h,m}'
+    s.source_files = 'Source/**/*.{swift,h,m}'
     s.source = { :git => 'https://github.com/alibaba/HandyJSON.git', :tag => s.version.to_s }
 
     s.summary = 'A Json Serialization & Deserialization Library for Swift'
