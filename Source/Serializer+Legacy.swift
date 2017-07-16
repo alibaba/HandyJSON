@@ -105,7 +105,7 @@ class GenericObjectTransformer: ModelTransformerProtocol, ArrayTransformerProtoc
 extension GenericObjectTransformer {
 
     static func transformToSimpleObject(object: Any) -> Any? {
-        if (type(of: object) is PlainJSONValue.Type) {
+        if (type(of: object) is _BuiltInBasicType.Type) {
             return object
         }
 
@@ -185,7 +185,7 @@ extension GenericObjectTransformer {
         case is String.Type, is NSString.Type:
             let json = "\"" + String(describing: object) + "\""
             return json
-        case is PlainJSONValue.Type:
+        case is _BuiltInBasicType.Type:
             let json = String(describing: object)
             return json
         case is Array<Any>.Type:
