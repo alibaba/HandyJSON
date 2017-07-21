@@ -34,17 +34,17 @@
 		21356CDA1F1A82220094A4F5 /* Measuable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0A81F1A375F00707730 /* Measuable.swift */; };
 		21356CDB1F1A82220094A4F5 /* Transformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0AA1F1A3AF600707730 /* Transformable.swift */; };
 		21356CDC1F1A82230094A4F5 /* BuiltInBridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0AE1F1A3F1400707730 /* BuiltInBridgeType.swift */; };
-		21356CDD1F1A82230094A4F5 /* ExtendCustomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B21F1A7DE700707730 /* ExtendCustomType.swift */; };
+		21356CDD1F1A82230094A4F5 /* ExtendCustomModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B21F1A7DE700707730 /* ExtendCustomModelType.swift */; };
 		21356CDE1F1A82230094A4F5 /* Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B01F1A7B4700707730 /* Export.swift */; };
 		21356CE21F1A82440094A4F5 /* Measuable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0A81F1A375F00707730 /* Measuable.swift */; };
 		21356CE31F1A82440094A4F5 /* Transformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0AA1F1A3AF600707730 /* Transformable.swift */; };
 		21356CE41F1A82440094A4F5 /* BuiltInBridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0AE1F1A3F1400707730 /* BuiltInBridgeType.swift */; };
-		21356CE51F1A82440094A4F5 /* ExtendCustomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B21F1A7DE700707730 /* ExtendCustomType.swift */; };
+		21356CE51F1A82440094A4F5 /* ExtendCustomModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B21F1A7DE700707730 /* ExtendCustomModelType.swift */; };
 		21356CE61F1A82440094A4F5 /* Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B01F1A7B4700707730 /* Export.swift */; };
 		21356CE81F1A824B0094A4F5 /* Measuable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0A81F1A375F00707730 /* Measuable.swift */; };
 		21356CE91F1A824B0094A4F5 /* Transformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0AA1F1A3AF600707730 /* Transformable.swift */; };
 		21356CEA1F1A824B0094A4F5 /* BuiltInBridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0AE1F1A3F1400707730 /* BuiltInBridgeType.swift */; };
-		21356CEB1F1A824B0094A4F5 /* ExtendCustomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B21F1A7DE700707730 /* ExtendCustomType.swift */; };
+		21356CEB1F1A824B0094A4F5 /* ExtendCustomModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B21F1A7DE700707730 /* ExtendCustomModelType.swift */; };
 		21356CEC1F1A824B0094A4F5 /* Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B01F1A7B4700707730 /* Export.swift */; };
 		21356CEE1F1A841C0094A4F5 /* EnumType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21356CED1F1A841C0094A4F5 /* EnumType.swift */; };
 		21356CEF1F1A841C0094A4F5 /* EnumType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21356CED1F1A841C0094A4F5 /* EnumType.swift */; };
@@ -58,7 +58,7 @@
 		2145B0AB1F1A3AF600707730 /* Transformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0AA1F1A3AF600707730 /* Transformable.swift */; };
 		2145B0AF1F1A3F1400707730 /* BuiltInBridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0AE1F1A3F1400707730 /* BuiltInBridgeType.swift */; };
 		2145B0B11F1A7B4700707730 /* Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B01F1A7B4700707730 /* Export.swift */; };
-		2145B0B31F1A7DE700707730 /* ExtendCustomType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B21F1A7DE700707730 /* ExtendCustomType.swift */; };
+		2145B0B31F1A7DE700707730 /* ExtendCustomModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0B21F1A7DE700707730 /* ExtendCustomModelType.swift */; };
 		21520C481D3341B200F53111 /* HandyJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 21520C471D3341B200F53111 /* HandyJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21520C551D3341FC00F53111 /* BuiltInBasicType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C511D3341FC00F53111 /* BuiltInBasicType.swift */; };
 		21520C561D3341FC00F53111 /* Deserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C521D3341FC00F53111 /* Deserializer.swift */; };
@@ -243,7 +243,7 @@
 		2145B0AA1F1A3AF600707730 /* Transformable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transformable.swift; sourceTree = "<group>"; };
 		2145B0AE1F1A3F1400707730 /* BuiltInBridgeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuiltInBridgeType.swift; sourceTree = "<group>"; };
 		2145B0B01F1A7B4700707730 /* Export.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Export.swift; sourceTree = "<group>"; };
-		2145B0B21F1A7DE700707730 /* ExtendCustomType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtendCustomType.swift; sourceTree = "<group>"; };
+		2145B0B21F1A7DE700707730 /* ExtendCustomModelType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtendCustomModelType.swift; sourceTree = "<group>"; };
 		21520C441D3341B200F53111 /* HandyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HandyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21520C471D3341B200F53111 /* HandyJSON.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandyJSON.h; sourceTree = "<group>"; };
 		21520C491D3341B200F53111 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
@@ -407,7 +407,7 @@
 				21520C511D3341FC00F53111 /* BuiltInBasicType.swift */,
 				2145B0AE1F1A3F1400707730 /* BuiltInBridgeType.swift */,
 				21356CED1F1A841C0094A4F5 /* EnumType.swift */,
-				2145B0B21F1A7DE700707730 /* ExtendCustomType.swift */,
+				2145B0B21F1A7DE700707730 /* ExtendCustomModelType.swift */,
 				2145B0B01F1A7B4700707730 /* Export.swift */,
 				21520C521D3341FC00F53111 /* Deserializer.swift */,
 				21A7A59C1D9EBF450015E3F0 /* Serializer.swift */,
@@ -829,7 +829,7 @@
 			files = (
 				210A76441E210FBB000C3DDD /* AnyExtensions.swift in Sources */,
 				21DFCA6E1E18EBA600856775 /* TransformOf.swift in Sources */,
-				2145B0B31F1A7DE700707730 /* ExtendCustomType.swift in Sources */,
+				2145B0B31F1A7DE700707730 /* ExtendCustomModelType.swift in Sources */,
 				210A76741E210FBB000C3DDD /* NominalType.swift in Sources */,
 				2145B0A91F1A375F00707730 /* Measuable.swift in Sources */,
 				21DFCA621E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */,
@@ -893,7 +893,7 @@
 				21356CDA1F1A82220094A4F5 /* Measuable.swift in Sources */,
 				21356CDB1F1A82220094A4F5 /* Transformable.swift in Sources */,
 				21356CDC1F1A82230094A4F5 /* BuiltInBridgeType.swift in Sources */,
-				21356CDD1F1A82230094A4F5 /* ExtendCustomType.swift in Sources */,
+				21356CDD1F1A82230094A4F5 /* ExtendCustomModelType.swift in Sources */,
 				21356CDE1F1A82230094A4F5 /* Export.swift in Sources */,
 				210A76451E210FBB000C3DDD /* AnyExtensions.swift in Sources */,
 				21DFCA6F1E18EBA600856775 /* TransformOf.swift in Sources */,
@@ -931,7 +931,7 @@
 				21356CE21F1A82440094A4F5 /* Measuable.swift in Sources */,
 				21356CE31F1A82440094A4F5 /* Transformable.swift in Sources */,
 				21356CE41F1A82440094A4F5 /* BuiltInBridgeType.swift in Sources */,
-				21356CE51F1A82440094A4F5 /* ExtendCustomType.swift in Sources */,
+				21356CE51F1A82440094A4F5 /* ExtendCustomModelType.swift in Sources */,
 				21356CE61F1A82440094A4F5 /* Export.swift in Sources */,
 				210A76461E210FBB000C3DDD /* AnyExtensions.swift in Sources */,
 				21DFCA701E18EBA600856775 /* TransformOf.swift in Sources */,
@@ -985,7 +985,7 @@
 				21356CE81F1A824B0094A4F5 /* Measuable.swift in Sources */,
 				21356CE91F1A824B0094A4F5 /* Transformable.swift in Sources */,
 				21356CEA1F1A824B0094A4F5 /* BuiltInBridgeType.swift in Sources */,
-				21356CEB1F1A824B0094A4F5 /* ExtendCustomType.swift in Sources */,
+				21356CEB1F1A824B0094A4F5 /* ExtendCustomModelType.swift in Sources */,
 				21356CEC1F1A824B0094A4F5 /* Export.swift in Sources */,
 				210A76471E210FBB000C3DDD /* AnyExtensions.swift in Sources */,
 				21DFCA711E18EBA600856775 /* TransformOf.swift in Sources */,

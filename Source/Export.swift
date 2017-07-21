@@ -10,6 +10,6 @@ import Foundation
 
 public protocol HandyJSONCustomTransformable: _BuiltInBasicType {}
 
-public protocol HandyJSON: _ExtendCustomType {}
+public protocol HandyJSON: _ExtendCustomModelType {}
 
 public protocol HandyJSONEnum: _RawEnumProtocol {}

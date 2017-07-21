@@ -20,7 +20,7 @@ extension _Transformable {
             return type._transform(from: object) as? Self
         case let type as _RawEnumProtocol.Type:
             return type._transform(from: object) as? Self
-        case let type as _ExtendCustomType.Type:
+        case let type as _ExtendCustomModelType.Type:
             return type._transform(from: object) as? Self
         default:
             return nil
@@ -35,7 +35,7 @@ extension _Transformable {
             return rawValue._plainValue()
         case let rawValue as _RawEnumProtocol:
             return rawValue._plainValue()
-        case let rawValue as _ExtendCustomType:
+        case let rawValue as _ExtendCustomModelType:
             return rawValue._plainValue()
         default:
             return nil

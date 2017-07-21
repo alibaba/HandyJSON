@@ -8,17 +8,17 @@
 
 import Foundation
 
-public protocol _ExtendCustomType: _Transformable {
+public protocol _ExtendCustomModelType: _Transformable {
     init()
     mutating func mapping(mapper: HelpingMapper)
 }
 
-extension _ExtendCustomType {
+extension _ExtendCustomModelType {
 
     public mutating func mapping(mapper: HelpingMapper) {}
 }
 
-extension _ExtendCustomType {
+extension _ExtendCustomModelType {
 
     static func _transform(from object: NSObject) -> Self? {
         if let dict = object as? NSDictionary {
@@ -28,7 +28,7 @@ extension _ExtendCustomType {
         return nil
     }
 
-    static func _transform(dict: NSDictionary, toType: _ExtendCustomType.Type) -> _ExtendCustomType? {
+    static func _transform(dict: NSDictionary, toType: _ExtendCustomModelType.Type) -> _ExtendCustomModelType? {
         var instance = toType.init()
 
         guard let properties = getProperties(forType: toType) else {
@@ -128,7 +128,7 @@ extension _ExtendCustomType {
     }
 }
 
-extension _ExtendCustomType {
+extension _ExtendCustomModelType {
 
     func _plainValue() -> Any? {
         return Self._serializeAny(object: self)
@@ -147,11 +147,11 @@ extension _ExtendCustomType {
         case .class, .struct:
             let mapper = HelpingMapper()
             // do user-specified mapping first
-            if !(object is _ExtendCustomType) {
+            if !(object is _ExtendCustomModelType) {
                 InternalLogger.logDebug("This model of type: \(type(of: object)) is not mappable but is class/struct type")
                 return object
             }
-            var mutableObject = object as! _ExtendCustomType
+            var mutableObject = object as! _ExtendCustomModelType
             mutableObject.mapping(mapper: mapper)
 
             let rawPointer: UnsafeMutableRawPointer
