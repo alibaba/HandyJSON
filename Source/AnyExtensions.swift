@@ -37,7 +37,7 @@ extension AnyExtensions {
         guard let this = value as? Self else {
             return
         }
-        storage.assumingMemoryBound(to: self).initialize(to: this)
+        storage.assumingMemoryBound(to: self).pointee = this
     }
 
     public static func takeValue(from anyValue: Any) -> Self? {
