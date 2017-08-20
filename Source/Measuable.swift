@@ -30,6 +30,44 @@ extension _Measurable {
         return UnsafeMutablePointer<Byte>(mutableTypedPointer)
     }
 
+    // locating the head of an object
+    mutating func headPointer() -> UnsafeMutablePointer<Byte> {
+        if Self.self is AnyClass {
+            return self.headPointerOfClass()
+        } else {
+            return self.headPointerOfStruct()
+        }
+    }
+
+    func isNSObjectType() -> Bool {
+        return (type(of: self) as? NSObject.Type) != nil
+    }
+
+    func getBridgedPropertyList() -> [String] {
+        if let anyClass = type(of: self) as? AnyClass {
+            return _getBridgedPropertyList(anyClass: anyClass)
+        }
+        return []
+    }
+
+    func _getBridgedPropertyList(anyClass: AnyClass) -> [String] {
+        if !(anyClass is HandyJSON.Type) {
+            return []
+        }
+        var propertyList = [String]()
+        if let superClass = class_getSuperclass(anyClass), superClass != NSObject.self {
+            propertyList.append(contentsOf: _getBridgedPropertyList(anyClass: superClass))
+        }
+        let count = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
+        if let props = class_copyPropertyList(anyClass, count) {
+            for i in 0 ..< count.pointee {
+                let name = String(cString: property_getName(props.advanced(by: Int(i)).pointee))
+                propertyList.append(name)
+            }
+        }
+        return propertyList
+    }
+
     // memory size occupy by self object
     static func size() -> Int {
         return MemoryLayout<Self>.size
@@ -48,3 +86,4 @@ extension _Measurable {
         return m == 0 ? 0 : (align - m)
     }
 }
+
