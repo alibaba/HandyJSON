@@ -43,26 +43,26 @@ extension _Measurable {
         return (type(of: self) as? NSObject.Type) != nil
     }
 
-    func getBridgedPropertyList() -> [String] {
+    func getBridgedPropertyList() -> Set<String> {
         if let anyClass = type(of: self) as? AnyClass {
             return _getBridgedPropertyList(anyClass: anyClass)
         }
         return []
     }
 
-    func _getBridgedPropertyList(anyClass: AnyClass) -> [String] {
+    func _getBridgedPropertyList(anyClass: AnyClass) -> Set<String> {
         if !(anyClass is HandyJSON.Type) {
             return []
         }
-        var propertyList = [String]()
+        var propertyList = Set<String>()
         if let superClass = class_getSuperclass(anyClass), superClass != NSObject.self {
-            propertyList.append(contentsOf: _getBridgedPropertyList(anyClass: superClass))
+            propertyList = propertyList.union(_getBridgedPropertyList(anyClass: superClass))
         }
         let count = UnsafeMutablePointer<UInt32>.allocate(capacity: 1)
         if let props = class_copyPropertyList(anyClass, count) {
             for i in 0 ..< count.pointee {
                 let name = String(cString: property_getName(props.advanced(by: Int(i)).pointee))
-                propertyList.append(name)
+                propertyList.insert(name)
             }
         }
         return propertyList
