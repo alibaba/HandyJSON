@@ -19,8 +19,7 @@
 
 import Foundation
 
-
-public protocol _BuiltInBasicType: _Transformable {
+protocol _BuiltInBasicType: _Transformable {
 
     static func _transform(from object: NSObject) -> Self?
     func _plainValue() -> Any?
@@ -35,7 +34,7 @@ protocol IntegerPropertyProtocol: Integer, _BuiltInBasicType {
 
 extension IntegerPropertyProtocol {
 
-    public static func _transform(from object: NSObject) -> Self? {
+    static func _transform(from object: NSObject) -> Self? {
         switch object {
         case let str as String:
             return Self(str, radix: 10)
@@ -46,7 +45,7 @@ extension IntegerPropertyProtocol {
         }
     }
     
-    public func _plainValue() -> Any? {
+    func _plainValue() -> Any? {
         return self
     }
 }
@@ -64,7 +63,7 @@ extension UInt64: IntegerPropertyProtocol {}
 
 extension Bool: _BuiltInBasicType {
 
-    public static func _transform(from object: NSObject) -> Bool? {
+    static func _transform(from object: NSObject) -> Bool? {
         switch object {
         case let str as NSString:
             let lowerCase = str.lowercased
@@ -82,7 +81,7 @@ extension Bool: _BuiltInBasicType {
         }
     }
 
-    public func _plainValue() -> Any? {
+    func _plainValue() -> Any? {
         return self
     }
 }
@@ -95,7 +94,7 @@ protocol FloatPropertyProtocol: _BuiltInBasicType, LosslessStringConvertible {
 
 extension FloatPropertyProtocol {
 
-    public static func _transform(from object: NSObject) -> Self? {
+    static func _transform(from object: NSObject) -> Self? {
         switch object {
         case let str as String:
             return Self(str)
@@ -106,7 +105,7 @@ extension FloatPropertyProtocol {
         }
     }
 
-    public func _plainValue() -> Any? {
+    func _plainValue() -> Any? {
         return self
     }
 }
@@ -116,7 +115,7 @@ extension Double: FloatPropertyProtocol {}
 
 extension String: _BuiltInBasicType {
 
-    public static func _transform(from object: NSObject) -> String? {
+    static func _transform(from object: NSObject) -> String? {
         switch object {
         case let str as String:
             return str
@@ -137,7 +136,7 @@ extension String: _BuiltInBasicType {
         }
     }
 
-    public func _plainValue() -> Any? {
+    func _plainValue() -> Any? {
         return self
     }
 }
@@ -146,7 +145,7 @@ extension String: _BuiltInBasicType {
 
 extension Optional: _BuiltInBasicType {
 
-    public static func _transform(from object: NSObject) -> Optional? {
+    static func _transform(from object: NSObject) -> Optional? {
         if let value = (Wrapped.self as? _Transformable.Type)?.transform(from: object) as? Wrapped {
             return Optional(value)
         } else if let value = object as? Wrapped {
@@ -155,14 +154,14 @@ extension Optional: _BuiltInBasicType {
         return nil
     }
 
-    func getWrappedValue() -> Any? {
+    func _getWrappedValue() -> Any? {
         return self.map( { (wrapped) -> Any in
             return wrapped as Any
         })
     }
 
-    public func _plainValue() -> Any? {
-        if let value = getWrappedValue() {
+    func _plainValue() -> Any? {
+        if let value = _getWrappedValue() {
             if let transformable = value as? _Transformable {
                 return transformable.plainValue()
             } else {
@@ -175,7 +174,7 @@ extension Optional: _BuiltInBasicType {
 
 extension ImplicitlyUnwrappedOptional: _BuiltInBasicType {
 
-    public static func _transform(from object: NSObject) -> ImplicitlyUnwrappedOptional? {
+    static func _transform(from object: NSObject) -> ImplicitlyUnwrappedOptional? {
         if let value = (Wrapped.self as? _Transformable.Type)?.transform(from: object) as? Wrapped {
             return ImplicitlyUnwrappedOptional(value)
         } else if let value = object as? Wrapped {
@@ -184,12 +183,12 @@ extension ImplicitlyUnwrappedOptional: _BuiltInBasicType {
         return nil
     }
 
-    func getWrappedValue() -> Any? {
+    func _getWrappedValue() -> Any? {
         return self == nil ? nil : self!
     }
 
-    public func _plainValue() -> Any? {
-        if let value = getWrappedValue() {
+    func _plainValue() -> Any? {
+        if let value = _getWrappedValue() {
             if let transformable = value as? _Transformable {
                 return transformable.plainValue()
             } else {
@@ -236,25 +235,25 @@ extension Collection {
 
 extension Array: _BuiltInBasicType {
 
-    public static func _transform(from object: NSObject) -> [Element]? {
+    static func _transform(from object: NSObject) -> [Element]? {
         return self._collectionTransform(from: object)
     }
 
-    public func _plainValue() -> Any? {
+    func _plainValue() -> Any? {
         return self._collectionPlainValue()
     }
 }
 
 extension Set: _BuiltInBasicType {
 
-    public static func _transform(from object: NSObject) -> Set<Element>? {
+    static func _transform(from object: NSObject) -> Set<Element>? {
         if let arr = self._collectionTransform(from: object) {
             return Set(arr)
         }
         return nil
     }
 
-    public func _plainValue() -> Any? {
+    func _plainValue() -> Any? {
         return self._collectionPlainValue()
     }
 }
@@ -263,7 +262,7 @@ extension Set: _BuiltInBasicType {
 
 extension Dictionary: _BuiltInBasicType {
 
-    public static func _transform(from object: NSObject) -> Dictionary? {
+    static func _transform(from object: NSObject) -> Dictionary? {
         guard let nsDict = object as? NSDictionary else {
             InternalLogger.logDebug("Expect object to be an NSDictionary but it's not")
             return nil
@@ -281,7 +280,7 @@ extension Dictionary: _BuiltInBasicType {
         return result
     }
 
-    public func _plainValue() -> Any? {
+    func _plainValue() -> Any? {
         var result = [String: Any]()
         for (key, value) in self {
             if let key = key as? String {

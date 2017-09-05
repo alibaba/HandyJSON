@@ -14,7 +14,7 @@ public protocol _RawEnumProtocol: _Transformable {
     func _plainValue() -> Any?
 }
 
-public extension RawRepresentable where Self: _RawEnumProtocol {
+extension RawRepresentable where Self: _RawEnumProtocol {
 
     public static func _transform(from object: NSObject) -> Self? {
         if let transformableType = RawValue.self as? _Transformable.Type {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol HandyJSONCustomTransformable: _BuiltInBasicType {}
+public protocol HandyJSONCustomTransformable: _ExtendCustomBasicType {}
 
 public protocol HandyJSON: _ExtendCustomModelType {}
 

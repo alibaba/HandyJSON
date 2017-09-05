@@ -24,6 +24,29 @@
 import XCTest
 import HandyJSON
 
+enum PureEnum {
+    case type1, type2
+}
+
+struct ContainPureEnumType: HandyJSON {
+    var aStr: String?
+    var aEnum: PureEnum?
+}
+
+extension PureEnum: HandyJSONCustomTransformable {
+
+    static func _transform(from object: NSObject) -> PureEnum? {
+        if let strValue = object as? String {
+            return strValue == "type1" ? PureEnum.type1 : PureEnum.type2
+        }
+        return nil
+    }
+
+    func _plainValue() -> Any? {
+        return "\(self)"
+    }
+}
+
 class CustomMappingTest: XCTestCase {
 
     override func setUp() {
@@ -226,5 +249,11 @@ class CustomMappingTest: XCTestCase {
         XCTAssert(a.name == nil)
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
+    }
+
+    func testCustomTransformableType() {
+        let jsonString = "{\"aStr\":\"Bob\",\"aEnum\":\"type2\"}"
+        let object = ContainPureEnumType.deserialize(from: jsonString)!
+        XCTAssertEqual(PureEnum.type2, object.aEnum!)
     }
 }

@@ -79,6 +79,10 @@
 		215F13481E217B9C00B0FFEC /* BasicTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215F13461E217B9C00B0FFEC /* BasicTypes.swift */; };
 		215F13491E217B9C00B0FFEC /* BasicTypesTestsToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215F13471E217B9C00B0FFEC /* BasicTypesTestsToJSON.swift */; };
 		216652021F49CA5B003B7F9A /* PropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216652011F49CA5B003B7F9A /* PropertyInfo.swift */; };
+		217801E81F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217801E71F5E60C900EDEB38 /* ExtendCustomBasicType.swift */; };
+		217801E91F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217801E71F5E60C900EDEB38 /* ExtendCustomBasicType.swift */; };
+		217801EA1F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217801E71F5E60C900EDEB38 /* ExtendCustomBasicType.swift */; };
+		217801EB1F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217801E71F5E60C900EDEB38 /* ExtendCustomBasicType.swift */; };
 		2179B6B31D911DB4007B0320 /* HelpingMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B21D911DB4007B0320 /* HelpingMapper.swift */; };
 		217B04701D571B9F0035A8E2 /* StructObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */; };
 		217B04721D571B9F0035A8E2 /* HandyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21520C441D3341B200F53111 /* HandyJSON.framework */; };
@@ -262,6 +266,7 @@
 		215F13461E217B9C00B0FFEC /* BasicTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTypes.swift; sourceTree = "<group>"; };
 		215F13471E217B9C00B0FFEC /* BasicTypesTestsToJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTypesTestsToJSON.swift; sourceTree = "<group>"; };
 		216652011F49CA5B003B7F9A /* PropertyInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyInfo.swift; sourceTree = "<group>"; };
+		217801E71F5E60C900EDEB38 /* ExtendCustomBasicType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtendCustomBasicType.swift; sourceTree = "<group>"; };
 		2179B6B21D911DB4007B0320 /* HelpingMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpingMapper.swift; sourceTree = "<group>"; };
 		217B046D1D571B9F0035A8E2 /* HandyJSON iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HandyJSON iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		217B046F1D571B9F0035A8E2 /* StructObjectTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructObjectTest.swift; sourceTree = "<group>"; };
@@ -410,6 +415,7 @@
 				2145B0AE1F1A3F1400707730 /* BuiltInBridgeType.swift */,
 				21356CED1F1A841C0094A4F5 /* EnumType.swift */,
 				2145B0B21F1A7DE700707730 /* ExtendCustomModelType.swift */,
+				217801E71F5E60C900EDEB38 /* ExtendCustomBasicType.swift */,
 				216652011F49CA5B003B7F9A /* PropertyInfo.swift */,
 				2145B0B01F1A7B4700707730 /* Export.swift */,
 				21520C521D3341FC00F53111 /* Deserializer.swift */,
@@ -833,6 +839,7 @@
 				210A76441E210FBB000C3DDD /* AnyExtensions.swift in Sources */,
 				21DFCA6E1E18EBA600856775 /* TransformOf.swift in Sources */,
 				2145B0B31F1A7DE700707730 /* ExtendCustomModelType.swift in Sources */,
+				217801E81F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */,
 				210A76741E210FBB000C3DDD /* NominalType.swift in Sources */,
 				2145B0A91F1A375F00707730 /* Measuable.swift in Sources */,
 				21DFCA621E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */,
@@ -923,6 +930,7 @@
 				21A191FE1E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76811E210FBB000C3DDD /* Properties.swift in Sources */,
 				393E0FA91DA165E300B3BC12 /* Deserializer.swift in Sources */,
+				217801E91F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */,
 				393E0FAA1DA165E300B3BC12 /* Serializer.swift in Sources */,
 				21DFCA771E18EBA600856775 /* URLTransform.swift in Sources */,
 			);
@@ -961,6 +969,7 @@
 				21A191FF1E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76821E210FBB000C3DDD /* Properties.swift in Sources */,
 				393E0FD01DA2484F00B3BC12 /* Deserializer.swift in Sources */,
+				217801EA1F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */,
 				393E0FD11DA2484F00B3BC12 /* Serializer.swift in Sources */,
 				21DFCA781E18EBA600856775 /* URLTransform.swift in Sources */,
 			);
@@ -1015,6 +1024,7 @@
 				21A192001E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76831E210FBB000C3DDD /* Properties.swift in Sources */,
 				393E0FFC1DA2495900B3BC12 /* Deserializer.swift in Sources */,
+				217801EB1F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */,
 				393E0FFD1DA2495900B3BC12 /* Serializer.swift in Sources */,
 				21DFCA791E18EBA600856775 /* URLTransform.swift in Sources */,
 			);
