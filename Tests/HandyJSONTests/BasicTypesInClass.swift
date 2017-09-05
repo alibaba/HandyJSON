@@ -15,7 +15,7 @@
  */
 
 //
-//  BasicTypes.swift
+//  BasicTypesInClass.swift
 //  HandyJSON
 //
 //  Created by zhouzhuo on 05/01/2017.
@@ -24,7 +24,7 @@
 import Foundation
 import HandyJSON
 
-class BasicTypes: HandyJSON {
+class BasicTypesInClass: HandyJSON {
     var bool: Bool = true
     var boolOptional: Bool?
     var boolImplicitlyUnwrapped: Bool!
@@ -165,7 +165,7 @@ class TestCollectionOfPrimitives: HandyJSON {
     required init() {}
 }
 
-class InheritanceBasicType: BasicTypes {
+class InheritanceBasicType: BasicTypesInClass {
 
     var anotherInt: Int = 0
     var anotherIntOptional: Int?
