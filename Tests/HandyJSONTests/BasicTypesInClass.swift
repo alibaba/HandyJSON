@@ -31,10 +31,10 @@ class BasicTypesInClass: HandyJSON {
     var int: Int = 0
     var intOptional: Int?
     var intImplicitlyUnwrapped: Int!
-    var double: Double = 1.1
+    var double: Double = 0
     var doubleOptional: Double?
     var doubleImplicitlyUnwrapped: Double!
-    var float: Float = 1.11
+    var float: Float = 0
     var floatOptional: Float?
     var floatImplicitlyUnwrapped: Float!
     var string: String = ""
@@ -90,7 +90,7 @@ class BasicTypesInClass: HandyJSON {
     var arrayNSStringOptional: Array<NSString>?
     var arrayNSStringImplicitlyUnwrapped: Array<NSString>!
 
-    var nsNumber: NSNumber = 1
+    var nsNumber: NSNumber = 0
     var nsNumberOptional: NSNumber?
     var nsNumberImplicitlyUnwrapped: NSNumber!
 

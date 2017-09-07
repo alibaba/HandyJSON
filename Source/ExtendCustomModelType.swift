@@ -18,39 +18,35 @@ extension _ExtendCustomModelType {
     public mutating func mapping(mapper: HelpingMapper) {}
 }
 
-fileprivate func convertKeyIfNeeded(dict: NSDictionary) -> NSDictionary {
+fileprivate func convertKeyIfNeeded(dict: [String: Any]) -> [String: Any] {
     if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
-        let newDict = NSMutableDictionary()
-        dict.allKeys.forEach({ (key) in
-            if let sKey = key as? String {
-                newDict[sKey.lowercased()] = dict[key]
-            } else {
-                newDict[key] = dict[key]
-            }
+        var newDict = [String: Any]()
+        dict.forEach({ (key, value) in
+            newDict[key.lowercased()] = value
         })
         return newDict
     }
     return dict
 }
 
-fileprivate func getRawValueFrom(dict: NSDictionary, property: PropertyInfo, mapper: HelpingMapper) -> NSObject? {
+fileprivate func getRawValueFrom(dict: [String: Any], property: PropertyInfo, mapper: HelpingMapper) -> Any? {
     if let mappingHandler = mapper.getMappingHandler(key: property.address.hashValue) {
         if let mappingNames = mappingHandler.mappingNames, mappingNames.count > 0 {
             for mappingName in mappingNames {
                 if let _value = dict[mappingName] {
-                    return _value as? NSObject
+                    return _value
                 }
             }
             return nil
         }
     }
     if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
-        return dict[property.key.lowercased()] as? NSObject
+        return dict[property.key.lowercased()]
     }
-    return dict[property.key] as? NSObject
+    return dict[property.key]
 }
 
-fileprivate func convertValue(rawValue: NSObject, property: PropertyInfo, mapper: HelpingMapper) -> Any? {
+fileprivate func convertValue(rawValue: Any, property: PropertyInfo, mapper: HelpingMapper) -> Any? {
     if let mappingHandler = mapper.getMappingHandler(key: property.address.hashValue), let transformer = mappingHandler.assignmentClosure {
         return transformer(rawValue)
     }
@@ -104,15 +100,15 @@ fileprivate func merge(children: [(String, Any)], propertyInfos: [PropertyInfo])
 
 extension _ExtendCustomModelType {
 
-    static func _transform(from object: NSObject) -> Self? {
-        if let dict = object as? NSDictionary {
+    static func _transform(from object: Any) -> Self? {
+        if let dict = object as? [String: Any] {
             // nested object, transform recursively
             return self._transform(dict: dict, toType: self) as? Self
         }
         return nil
     }
 
-    static func _transform(dict: NSDictionary, toType: _ExtendCustomModelType.Type) -> _ExtendCustomModelType? {
+    static func _transform(dict: [String: Any], toType: _ExtendCustomModelType.Type) -> _ExtendCustomModelType? {
         var instance = toType.init()
 
         guard let properties = getProperties(forType: toType) else {

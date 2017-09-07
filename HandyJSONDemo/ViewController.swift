@@ -77,7 +77,6 @@ class ViewController: UIViewController {
     }
 
     func serialization() {
-
         let student = Student()
         student.name = "Jack"
         student.gender = .Female

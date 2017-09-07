@@ -10,13 +10,13 @@ import Foundation
 
 public protocol _RawEnumProtocol: _Transformable {
 
-    static func _transform(from object: NSObject) -> Self?
+    static func _transform(from object: Any) -> Self?
     func _plainValue() -> Any?
 }
 
 extension RawRepresentable where Self: _RawEnumProtocol {
 
-    public static func _transform(from object: NSObject) -> Self? {
+    public static func _transform(from object: Any) -> Self? {
         if let transformableType = RawValue.self as? _Transformable.Type {
             if let typedValue = transformableType.transform(from: object) {
                 return Self(rawValue: typedValue as! RawValue)

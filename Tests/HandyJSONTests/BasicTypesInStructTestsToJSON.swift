@@ -39,7 +39,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingBoolToJSON(){
         let value: Bool = true
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.bool = value
         object.boolOptional = value
         object.boolImplicitlyUnwrapped = value
@@ -55,7 +55,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingIntToJSON(){
         let value: Int = 11
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.int = value
         object.intOptional = value
         object.intImplicitlyUnwrapped = value
@@ -71,7 +71,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingDoubleToJSON(){
         let value: Double = 11
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.double = value
         object.doubleOptional = value
         object.doubleImplicitlyUnwrapped = value
@@ -87,7 +87,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingFloatToJSON(){
         let value: Float = 11
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.float = value
         object.floatOptional = value
         object.floatImplicitlyUnwrapped = value
@@ -103,7 +103,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingStringToJSON(){
         let value: String = "STRINGNGNGG"
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.string = value
         object.stringOptional = value
         object.stringImplicitlyUnwrapped = value
@@ -119,7 +119,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingAnyObjectToJSON(){
         let value: String = "STRINGNGNGG"
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.anyObject = value
         object.anyObjectOptional = value
         object.anyObjectImplicitlyUnwrapped = value
@@ -135,7 +135,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     // MARK: Test mapping Arrays to JSON and back (with basic types in them Bool, Int, Double, Float, String)
     func testMappingEmptyArrayToJSON(){
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.arrayBool = []
         object.arrayBoolOptional = []
         object.arrayBoolImplicitlyUnwrapped = []
@@ -151,7 +151,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingBoolArrayToJSON(){
         let value: Bool = true
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.arrayBool = [value]
         object.arrayBoolOptional = [value]
         object.arrayBoolImplicitlyUnwrapped = [value]
@@ -167,7 +167,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingIntArrayToJSON(){
         let value: Int = 1
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.arrayInt = [value]
         object.arrayIntOptional = [value]
         object.arrayIntImplicitlyUnwrapped = [value]
@@ -183,7 +183,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingDoubleArrayToJSON(){
         let value: Double = 1.0
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.arrayDouble = [value]
         object.arrayDoubleOptional = [value]
         object.arrayDoubleImplicitlyUnwrapped = [value]
@@ -199,7 +199,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingFloatArrayToJSON(){
         let value: Float = 1.001
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.arrayFloat = [value]
         object.arrayFloatOptional = [value]
         object.arrayFloatImplicitlyUnwrapped = [value]
@@ -215,7 +215,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingStringArrayToJSON(){
         let value: String = "Stringgggg"
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.arrayString = [value]
         object.arrayStringOptional = [value]
         object.arrayStringImplicitlyUnwrapped = [value]
@@ -231,7 +231,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingAnyObjectArrayToJSON(){
         let value: String = "Stringgggg"
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.arrayAnyObject = [value]
         object.arrayAnyObjectOptional = [value]
         object.arrayAnyObjectImplicitlyUnwrapped = [value]
@@ -248,7 +248,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
     // MARK: Test mapping Dictionaries to JSON and back (with basic types in them Bool, Int, Double, Float, String)
 
     func testMappingEmptyDictionaryToJSON(){
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.dictBool = [:]
         object.dictBoolOptional = [:]
         object.dictBoolImplicitlyUnwrapped = [:]
@@ -265,7 +265,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
     func testMappingBoolDictionaryToJSON(){
         let key = "key"
         let value: Bool = true
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.dictBool = [key:value]
         object.dictBoolOptional = [key:value]
         object.dictBoolImplicitlyUnwrapped = [key:value]
@@ -282,7 +282,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
     func testMappingIntDictionaryToJSON(){
         let key = "key"
         let value: Int = 11
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.dictInt = [key:value]
         object.dictIntOptional = [key:value]
         object.dictIntImplicitlyUnwrapped = [key:value]
@@ -299,7 +299,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
     func testMappingDoubleDictionaryToJSON(){
         let key = "key"
         let value: Double = 11
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.dictDouble = [key:value]
         object.dictDoubleOptional = [key:value]
         object.dictDoubleImplicitlyUnwrapped = [key:value]
@@ -316,7 +316,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
     func testMappingFloatDictionaryToJSON(){
         let key = "key"
         let value: Float = 11
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.dictFloat = [key:value]
         object.dictFloatOptional = [key:value]
         object.dictFloatImplicitlyUnwrapped = [key:value]
@@ -333,7 +333,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
     func testMappingStringDictionaryToJSON(){
         let key = "key"
         let value = "value"
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.dictString = [key:value]
         object.dictStringOptional = [key:value]
         object.dictStringImplicitlyUnwrapped = [key:value]
@@ -350,7 +350,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
     func testMappingAnyObjectDictionaryToJSON(){
         let key = "key"
         let value = "value"
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.dictAnyObject = [key:value]
         object.dictAnyObjectOptional = [key:value]
         object.dictAnyObjectImplicitlyUnwrapped = [key:value]
@@ -366,7 +366,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingIntEnumToJSON(){
         let value = BasicTypesInStruct.EnumInt.Another
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.enumInt = value
         object.enumIntOptional = value
         object.enumIntImplicitlyUnwrapped = value
@@ -382,7 +382,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingDoubleEnumToJSON(){
         let value = BasicTypesInStruct.EnumDouble.Another
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.enumDouble = value
         object.enumDoubleOptional = value
         object.enumDoubleImplicitlyUnwrapped = value
@@ -398,7 +398,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingFloatEnumToJSON(){
         let value = BasicTypesInStruct.EnumFloat.Another
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.enumFloat = value
         object.enumFloatOptional = value
         object.enumFloatImplicitlyUnwrapped = value
@@ -414,7 +414,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingStringEnumToJSON(){
         let value = BasicTypesInStruct.EnumString.Another
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.enumString = value
         object.enumStringOptional = value
         object.enumStringImplicitlyUnwrapped = value
@@ -430,7 +430,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingEnumIntArrayToJSON(){
         let value = BasicTypesInStruct.EnumInt.Another
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.arrayEnumInt = [value]
         object.arrayEnumIntOptional = [value]
         object.arrayEnumIntImplicitlyUnwrapped = [value]
@@ -447,7 +447,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
     func testMappingEnumIntDictionaryToJSON(){
         let key = "key"
         let value = BasicTypesInStruct.EnumInt.Another
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.dictEnumInt = [key: value]
         object.dictEnumIntOptional = [key: value]
         object.dictEnumIntImplicitlyUnwrapped = [key: value]
@@ -463,7 +463,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingNSNumberToJSON(){
         let value: NSNumber = 11
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.nsNumber = value
         object.nsNumberOptional = value
         object.nsNumberImplicitlyUnwrapped = value
@@ -479,7 +479,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingNSStringToJSON(){
         let value: NSString = "11"
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.nsString = value
         object.nsStringOptional = value
         object.nsStringImplicitlyUnwrapped = value
@@ -495,7 +495,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingNSStringArrayToJSON(){
         let value: NSString = "Stringgggg"
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.arrayNSString = [value]
         object.arrayNSStringOptional = [value]
         object.arrayNSStringImplicitlyUnwrapped = [value]
@@ -511,7 +511,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
 
     func testMappingNSNumberArrayToJSON(){
         let value: NSNumber = 1.234
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.arrayNSNumber = [value]
         object.arrayNSNumberOptional = [value]
         object.arrayNSNumberImplicitlyUnwrapped = [value]
@@ -531,7 +531,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
         nsArray.add("one")
         nsArray.add([1, 2, 3])
 
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.nsArray = nsArray
         object.nsArrayOptional = nsArray
         object.nsArrayImplicitlyUnwrapped = nsArray
@@ -553,7 +553,7 @@ class BasicTypesInStructTestsToJSON: XCTestCase {
         nsDict.setObject([1, 2, 3], forKey: "name3" as NSString)
         nsDict.setObject(["key": "value"], forKey: "name4" as NSString)
 
-        let object = BasicTypesInStruct()
+        var object = BasicTypesInStruct()
         object.nsDictionary = nsDict
         object.nsDictionaryOptional = nsDict
         object.nsDictionaryImplicitlyUnwrapped = nsDict

@@ -10,13 +10,13 @@ import Foundation
 
 protocol _BuiltInBridgeType: _Transformable {
 
-    static func _transform(from object: NSObject) -> _BuiltInBridgeType?
+    static func _transform(from object: Any) -> _BuiltInBridgeType?
     func _plainValue() -> Any?
 }
 
 extension NSString: _BuiltInBridgeType {
 
-    static func _transform(from object: NSObject) -> _BuiltInBridgeType? {
+    static func _transform(from object: Any) -> _BuiltInBridgeType? {
         if let str = String.transform(from: object) {
             return NSString(string: str)
         }
@@ -30,7 +30,7 @@ extension NSString: _BuiltInBridgeType {
 
 extension NSNumber: _BuiltInBridgeType {
 
-    static func _transform(from object: NSObject) -> _BuiltInBridgeType? {
+    static func _transform(from object: Any) -> _BuiltInBridgeType? {
         switch object {
         case let num as NSNumber:
             return num
@@ -58,7 +58,7 @@ extension NSNumber: _BuiltInBridgeType {
 
 extension NSArray: _BuiltInBridgeType {
     
-    static func _transform(from object: NSObject) -> _BuiltInBridgeType? {
+    static func _transform(from object: Any) -> _BuiltInBridgeType? {
         return object as? NSArray
     }
 
@@ -69,7 +69,7 @@ extension NSArray: _BuiltInBridgeType {
 
 extension NSDictionary: _BuiltInBridgeType {
     
-    static func _transform(from object: NSObject) -> _BuiltInBridgeType? {
+    static func _transform(from object: Any) -> _BuiltInBridgeType? {
         return object as? NSDictionary
     }
 

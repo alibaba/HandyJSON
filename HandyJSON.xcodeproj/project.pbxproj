@@ -114,6 +114,12 @@
 		21A192081E223F9000CD7609 /* BasicTypesInClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215F13461E217B9C00B0FFEC /* BasicTypesInClass.swift */; };
 		21A192091E223F9000CD7609 /* BasicTypesInClassTestsToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215F13471E217B9C00B0FFEC /* BasicTypesInClassTestsToJSON.swift */; };
 		21A7A59D1D9EBF450015E3F0 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* Serializer.swift */; };
+		21D7AD3B1F61018C008FC7A4 /* PropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216652011F49CA5B003B7F9A /* PropertyInfo.swift */; };
+		21D7AD3C1F610192008FC7A4 /* PropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216652011F49CA5B003B7F9A /* PropertyInfo.swift */; };
+		21D7AD3D1F610197008FC7A4 /* PropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216652011F49CA5B003B7F9A /* PropertyInfo.swift */; };
+		21D7AD3F1F61021A008FC7A4 /* NestTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7AD3E1F61021A008FC7A4 /* NestTypes.swift */; };
+		21D7AD401F61021A008FC7A4 /* NestTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7AD3E1F61021A008FC7A4 /* NestTypes.swift */; };
+		21D7AD411F61021A008FC7A4 /* NestTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7AD3E1F61021A008FC7A4 /* NestTypes.swift */; };
 		21DFCA561E18EB9C00856775 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA521E18EB9C00856775 /* DateTransform.swift */; };
 		21DFCA571E18EB9C00856775 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA521E18EB9C00856775 /* DateTransform.swift */; };
 		21DFCA581E18EB9C00856775 /* DateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA521E18EB9C00856775 /* DateTransform.swift */; };
@@ -158,7 +164,7 @@
 		21DFCA8B1E18EBA600856775 /* HexColorTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */; };
 		21DFCA8C1E18EBA600856775 /* HexColorTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */; };
 		21DFCA8D1E18EBA600856775 /* HexColorTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */; };
-		21F252AA1D58BE9100B214BB /* NestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestObjectTest.swift */; };
+		21F252AA1D58BE9100B214BB /* NestTypesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestTypesTest.swift */; };
 		21F252B41D599DE200B214BB /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
 		393E0FA71DA165E300B3BC12 /* HelpingMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2179B6B21D911DB4007B0320 /* HelpingMapper.swift */; };
 		393E0FA81DA165E300B3BC12 /* BuiltInBasicType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21520C511D3341FC00F53111 /* BuiltInBasicType.swift */; };
@@ -172,7 +178,7 @@
 		393E0FD11DA2484F00B3BC12 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* Serializer.swift */; };
 		393E0FD21DA2485800B3BC12 /* HandyJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 21520C471D3341B200F53111 /* HandyJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		393E0FD31DA2486C00B3BC12 /* OtherFeaturesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B046F1D571B9F0035A8E2 /* OtherFeaturesTest.swift */; };
-		393E0FD51DA2486C00B3BC12 /* NestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestObjectTest.swift */; };
+		393E0FD51DA2486C00B3BC12 /* NestTypesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestTypesTest.swift */; };
 		393E0FD61DA2486C00B3BC12 /* CustomTransformTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144A50D1D9A7A770090F50E /* CustomTransformTest.swift */; };
 		393E0FDA1DA2486C00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
 		393E0FEA1DA2494F00B3BC12 /* HandyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 393E0FE11DA2494F00B3BC12 /* HandyJSON.framework */; };
@@ -182,7 +188,7 @@
 		393E0FFD1DA2495900B3BC12 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7A59C1D9EBF450015E3F0 /* Serializer.swift */; };
 		393E0FFE1DA249D000B3BC12 /* HandyJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 21520C471D3341B200F53111 /* HandyJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		393E0FFF1DA249DC00B3BC12 /* OtherFeaturesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217B046F1D571B9F0035A8E2 /* OtherFeaturesTest.swift */; };
-		393E10011DA249DC00B3BC12 /* NestObjectTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestObjectTest.swift */; };
+		393E10011DA249DC00B3BC12 /* NestTypesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestTypesTest.swift */; };
 		393E10021DA249DC00B3BC12 /* CustomTransformTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144A50D1D9A7A770090F50E /* CustomTransformTest.swift */; };
 		393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
 /* End PBXBuildFile section */
@@ -284,6 +290,7 @@
 		21A191FC1E222E8C00CD7609 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		21A192011E22332000CD7609 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		21A7A59C1D9EBF450015E3F0 /* Serializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serializer.swift; sourceTree = "<group>"; };
+		21D7AD3E1F61021A008FC7A4 /* NestTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NestTypes.swift; sourceTree = "<group>"; };
 		21DFCA521E18EB9C00856775 /* DateTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTransform.swift; sourceTree = "<group>"; };
 		21DFCA531E18EB9C00856775 /* DateFormatterTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatterTransform.swift; sourceTree = "<group>"; };
 		21DFCA541E18EB9C00856775 /* ISO8601DateTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISO8601DateTransform.swift; sourceTree = "<group>"; };
@@ -295,7 +302,7 @@
 		21DFCA6A1E18EBA600856775 /* NSDecimalNumberTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDecimalNumberTransform.swift; sourceTree = "<group>"; };
 		21DFCA6C1E18EBA600856775 /* DataTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataTransform.swift; sourceTree = "<group>"; };
 		21DFCA6D1E18EBA600856775 /* HexColorTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexColorTransform.swift; sourceTree = "<group>"; };
-		21F252A91D58BE9100B214BB /* NestObjectTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NestObjectTest.swift; sourceTree = "<group>"; };
+		21F252A91D58BE9100B214BB /* NestTypesTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NestTypesTest.swift; sourceTree = "<group>"; };
 		21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvalidStateHandlingTest.swift; sourceTree = "<group>"; };
 		393E0F9B1DA1650E00B3BC12 /* HandyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HandyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		393E0FA31DA165CE00B3BC12 /* Info-watchOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-watchOS.plist"; sourceTree = "<group>"; };
@@ -460,7 +467,8 @@
 				217801EC1F5E794800EDEB38 /* BasicTypesInStruct.swift */,
 				217801F01F5E7ACB00EDEB38 /* BasicTypesInStructTestsToJSON.swift */,
 				217801F41F5E7CFD00EDEB38 /* BasicTypesInStructTestsFromJSON.swift */,
-				21F252A91D58BE9100B214BB /* NestObjectTest.swift */,
+				21D7AD3E1F61021A008FC7A4 /* NestTypes.swift */,
+				21F252A91D58BE9100B214BB /* NestTypesTest.swift */,
 				217B046F1D571B9F0035A8E2 /* OtherFeaturesTest.swift */,
 				217801F81F5E80A200EDEB38 /* CustomTransfromTypes.swift */,
 				2144A50D1D9A7A770090F50E /* CustomTransformTest.swift */,
@@ -904,7 +912,8 @@
 				217B04701D571B9F0035A8E2 /* OtherFeaturesTest.swift in Sources */,
 				217801ED1F5E794800EDEB38 /* BasicTypesInStruct.swift in Sources */,
 				217801F11F5E7ACB00EDEB38 /* BasicTypesInStructTestsToJSON.swift in Sources */,
-				21F252AA1D58BE9100B214BB /* NestObjectTest.swift in Sources */,
+				21F252AA1D58BE9100B214BB /* NestTypesTest.swift in Sources */,
+				21D7AD3F1F61021A008FC7A4 /* NestTypes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -912,6 +921,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21D7AD3D1F610197008FC7A4 /* PropertyInfo.swift in Sources */,
 				21356CDA1F1A82220094A4F5 /* Measuable.swift in Sources */,
 				21356CDB1F1A82220094A4F5 /* Transformable.swift in Sources */,
 				21356CDC1F1A82230094A4F5 /* BuiltInBridgeType.swift in Sources */,
@@ -950,6 +960,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21D7AD3C1F610192008FC7A4 /* PropertyInfo.swift in Sources */,
 				21356CE21F1A82440094A4F5 /* Measuable.swift in Sources */,
 				21356CE31F1A82440094A4F5 /* Transformable.swift in Sources */,
 				21356CE41F1A82440094A4F5 /* BuiltInBridgeType.swift in Sources */,
@@ -995,11 +1006,12 @@
 				21A191F51E21E62E00CD7609 /* BasicTypesInClassTestsFromJSON.swift in Sources */,
 				393E0FD31DA2486C00B3BC12 /* OtherFeaturesTest.swift in Sources */,
 				214329271DFBDC1400CA386A /* TestUtils.swift in Sources */,
-				393E0FD51DA2486C00B3BC12 /* NestObjectTest.swift in Sources */,
+				393E0FD51DA2486C00B3BC12 /* NestTypesTest.swift in Sources */,
 				217801EE1F5E794800EDEB38 /* BasicTypesInStruct.swift in Sources */,
 				393E0FD61DA2486C00B3BC12 /* CustomTransformTest.swift in Sources */,
 				217801F21F5E7ACB00EDEB38 /* BasicTypesInStructTestsToJSON.swift in Sources */,
 				393E0FDA1DA2486C00B3BC12 /* InvalidStateHandlingTest.swift in Sources */,
+				21D7AD401F61021A008FC7A4 /* NestTypes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1007,6 +1019,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21D7AD3B1F61018C008FC7A4 /* PropertyInfo.swift in Sources */,
 				21356CE81F1A824B0094A4F5 /* Measuable.swift in Sources */,
 				21356CE91F1A824B0094A4F5 /* Transformable.swift in Sources */,
 				21356CEA1F1A824B0094A4F5 /* BuiltInBridgeType.swift in Sources */,
@@ -1052,11 +1065,12 @@
 				21A191F61E21E63100CD7609 /* BasicTypesInClassTestsFromJSON.swift in Sources */,
 				393E0FFF1DA249DC00B3BC12 /* OtherFeaturesTest.swift in Sources */,
 				214329281DFBDC1400CA386A /* TestUtils.swift in Sources */,
-				393E10011DA249DC00B3BC12 /* NestObjectTest.swift in Sources */,
+				393E10011DA249DC00B3BC12 /* NestTypesTest.swift in Sources */,
 				217801EF1F5E794800EDEB38 /* BasicTypesInStruct.swift in Sources */,
 				393E10021DA249DC00B3BC12 /* CustomTransformTest.swift in Sources */,
 				217801F31F5E7ACB00EDEB38 /* BasicTypesInStructTestsToJSON.swift in Sources */,
 				393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */,
+				21D7AD411F61021A008FC7A4 /* NestTypes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

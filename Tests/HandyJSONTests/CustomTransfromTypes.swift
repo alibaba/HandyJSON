@@ -30,7 +30,7 @@ enum PureEnum {
 
 extension PureEnum: HandyJSONCustomTransformable {
 
-    static func _transform(from object: NSObject) -> PureEnum? {
+    static func _transform(from object: Any) -> PureEnum? {
         if let strValue = object as? String {
             return strValue == "type1" ? PureEnum.type1 : PureEnum.type2
         }

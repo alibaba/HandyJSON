@@ -12,7 +12,10 @@ public protocol _Transformable: _Measurable {}
 
 extension _Transformable {
 
-    static func transform(from object: NSObject) -> Self? {
+    static func transform(from object: Any) -> Self? {
+        if let typedObject = object as? Self {
+            return typedObject
+        }
         switch self {
         case let type as _ExtendCustomBasicType.Type:
             return type._transform(from: object) as? Self

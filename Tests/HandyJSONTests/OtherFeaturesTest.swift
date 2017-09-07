@@ -322,4 +322,19 @@ class StructObjectTest: XCTestCase {
         XCTAssertNil(model.aUInt32)
         XCTAssertNil(model.aUInt64)
     }
+
+    func testForIssue76(){
+        // https://github.com/alibaba/HandyJSON/issues/76
+        struct A :HandyJSON{
+            var p = Array<P>()
+        }
+        struct P:HandyJSON{
+            var name = "dddd"
+        }
+
+        let a = A(p:[P(), P()])
+
+        let jsonstr = a.toJSONString()
+        XCTAssert(jsonstr == "{\"p\":[{\"name\":\"dddd\"},{\"name\":\"dddd\"}]}")
+    }
 }
