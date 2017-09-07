@@ -102,4 +102,69 @@ class CustomMappingTest: XCTestCase {
         let object = EnumTestType.deserialize(from: jsonString)!
         XCTAssertEqual(PureEnum.type2, object.aEnum!)
     }
+
+    func testSpecifyPropertyPathMapping() {
+        let basicClassModel = BasicTypesInClass()
+        basicClassModel.int = 11
+        basicClassModel.stringOptional = "stringOptional"
+        basicClassModel.arrayIntImplicitlyUnwrapped = [1, 2, 3, 4, 5]
+
+        var basicStructModel = BasicTypesInStruct()
+        basicStructModel.enumInt = BasicTypesInStruct.EnumInt.Another
+        basicStructModel.nsArrayOptional = ["one", "two", "three"]
+        basicStructModel.dictBoolImplicitlyUnwrapped = ["true": true, "false": false]
+
+        let lowerModel = LowerLayerModel()
+        lowerModel.enumMember = StringEnum.Another
+        lowerModel.enumMemberOptional = StringEnum.Another
+        lowerModel.enumMemberImplicitlyUnwrapped = StringEnum.Another
+        lowerModel.classMember = basicClassModel
+        lowerModel.classMemberOptional = basicClassModel
+        lowerModel.classMemberImplicitlyUnwrapped = basicClassModel
+        lowerModel.structMember = basicStructModel
+        lowerModel.structMemberOptional = basicStructModel
+        lowerModel.structMemberImplicitlyUnwrapped = basicStructModel
+
+        let topmostModel = TopMostLayerModel()
+        topmostModel.classMember = basicClassModel
+        topmostModel.classMemberOptional = basicClassModel
+        topmostModel.classMemberImplicitlyUnwrapped = basicClassModel
+        topmostModel.structMember = basicStructModel
+        topmostModel.structMemberOptional = basicStructModel
+        topmostModel.structMemberImplicitlyUnwrapped = basicStructModel
+        topmostModel.lowerLayerModel = lowerModel
+        topmostModel.lowerLayerModelOptional = lowerModel
+        topmostModel.lowerLayerModelImplicitlyUnwrapped = lowerModel
+
+        let dict = topmostModel.toJSON()!
+        let mappedObject1 = FlatLayerModel.deserialize(from: dict)!
+
+        XCTAssertEqual(mappedObject1.enumMember, StringEnum.Another)
+        XCTAssertEqual(mappedObject1.enumMemberOptional, StringEnum.Another)
+        XCTAssertEqual(mappedObject1.enumMemberImplicitlyUnwrapped, StringEnum.Another)
+        XCTAssertEqual(mappedObject1.int, 11)
+        XCTAssertEqual(mappedObject1.stringOptional, "stringOptional")
+        XCTAssertEqual(mappedObject1.dictBoolImplicitlyUnwrapped["false"], false)
+
+        let jsonString = topmostModel.toJSONString()!
+        let mappedObject2 = FlatLayerModel.deserialize(from: jsonString)!
+
+        XCTAssertEqual(mappedObject2.enumMember, StringEnum.Another)
+        XCTAssertEqual(mappedObject2.enumMemberOptional, StringEnum.Another)
+        XCTAssertEqual(mappedObject2.enumMemberImplicitlyUnwrapped, StringEnum.Another)
+        XCTAssertEqual(mappedObject2.int, 11)
+        XCTAssertEqual(mappedObject2.stringOptional, "stringOptional")
+        XCTAssertEqual(mappedObject2.dictBoolImplicitlyUnwrapped["false"], false)
+    }
+
+    func testMappingDeepPathPropModelFromJSON() {
+        let jsonString = "{\"first layer\":{\"second.layer\":{\"thirdlayer\":{\"enumMemberOptional\":\"Another\"}}}}"
+        let mappedObject = DeepPathPropModel.deserialize(from: jsonString)!
+
+        XCTAssertEqual(StringEnum.Another, mappedObject.enumMemberOptional)
+
+        let serializeJSON = mappedObject.toJSON()!
+
+        XCTAssertEqual(StringEnum.Another.rawValue, serializeJSON["serializeKey"] as! String)
+    }
 }

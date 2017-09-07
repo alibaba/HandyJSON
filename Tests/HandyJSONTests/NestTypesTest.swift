@@ -63,6 +63,9 @@ class NestTypesTest: XCTestCase {
         basicStructModel.dictBoolImplicitlyUnwrapped = ["true": true, "false": false]
 
         let lowerModel = LowerLayerModel()
+        lowerModel.enumMember = StringEnum.Another
+        lowerModel.enumMemberOptional = StringEnum.Another
+        lowerModel.enumMemberImplicitlyUnwrapped = StringEnum.Another
         lowerModel.classMember = basicClassModel
         lowerModel.classMemberOptional = basicClassModel
         lowerModel.classMemberImplicitlyUnwrapped = basicClassModel
@@ -92,6 +95,10 @@ class NestTypesTest: XCTestCase {
         XCTAssertEqual(topmostModel.structMemberOptional?.nsArrayOptional?.count, mappedObject.structMemberOptional?.nsArrayOptional?.count)
         XCTAssertEqual(topmostModel.structMemberImplicitlyUnwrapped.dictBoolImplicitlyUnwrapped["false"],
                        mappedObject.structMemberImplicitlyUnwrapped.dictBoolImplicitlyUnwrapped["false"])
+
+        XCTAssertEqual(topmostModel.lowerLayerModel.enumMember, mappedObject.lowerLayerModel.enumMember)
+        XCTAssertEqual(topmostModel.lowerLayerModel.enumMemberOptional, mappedObject.lowerLayerModel.enumMemberOptional)
+        XCTAssertEqual(topmostModel.lowerLayerModel.enumMemberImplicitlyUnwrapped, mappedObject.lowerLayerModel.enumMemberImplicitlyUnwrapped)
 
         XCTAssertEqual(topmostModel.lowerLayerModel.classMember.stringOptional, mappedObject.lowerLayerModel.classMember.stringOptional)
         XCTAssertEqual(topmostModel.lowerLayerModel.structMemberOptional?.nsArrayOptional?.count,
@@ -133,6 +140,9 @@ class NestTypesTest: XCTestCase {
         basicStructModel.dictBoolImplicitlyUnwrapped = ["true": true, "false": false]
 
         let lowerModel = LowerLayerModel()
+        lowerModel.enumMember = StringEnum.Another
+        lowerModel.enumMemberOptional = StringEnum.Another
+        lowerModel.enumMemberImplicitlyUnwrapped = StringEnum.Another
         lowerModel.classMember = basicClassModel
         lowerModel.classMemberOptional = basicClassModel
         lowerModel.classMemberImplicitlyUnwrapped = basicClassModel
@@ -160,6 +170,9 @@ class NestTypesTest: XCTestCase {
         basicDict["dictBoolImplicitlyUnwrapped"] = ["true": true, "false": false]
 
         var lowerDict = [String: Any]()
+        lowerDict["enumMember"] = StringEnum.Another
+        lowerDict["enumMemberOptional"] = StringEnum.Another
+        lowerDict["enumMemberImplicitlyUnwrapped"] = StringEnum.Another
         lowerDict["classMember"] = basicClassModel
         lowerDict["classMemberOptional"] = basicClassModel
         lowerDict["dictBoolImplicitlyUnwrapped"] = basicClassModel
@@ -189,6 +202,10 @@ class NestTypesTest: XCTestCase {
         XCTAssertEqual(topmostModel.structMemberImplicitlyUnwrapped.dictBoolImplicitlyUnwrapped["false"],
                        mappedObject.structMemberImplicitlyUnwrapped.dictBoolImplicitlyUnwrapped["false"])
 
+        XCTAssertEqual(topmostModel.lowerLayerModel.enumMember, mappedObject.lowerLayerModel.enumMember)
+        XCTAssertEqual(topmostModel.lowerLayerModel.enumMemberOptional, mappedObject.lowerLayerModel.enumMemberOptional)
+        XCTAssertEqual(topmostModel.lowerLayerModel.enumMemberImplicitlyUnwrapped, mappedObject.lowerLayerModel.enumMemberImplicitlyUnwrapped)
+
         XCTAssertEqual(topmostModel.lowerLayerModel.classMember.stringOptional, mappedObject.lowerLayerModel.classMember.stringOptional)
         XCTAssertEqual(topmostModel.lowerLayerModel.structMemberOptional?.nsArrayOptional?.count,
                        mappedObject.lowerLayerModel.structMemberOptional?.nsArrayOptional?.count)
@@ -210,6 +227,9 @@ class NestTypesTest: XCTestCase {
         basicStructModel.dictBoolImplicitlyUnwrapped = ["true": true, "false": false]
 
         let lowerModel = LowerLayerModel()
+        lowerModel.enumMember = StringEnum.Another
+        lowerModel.enumMemberOptional = StringEnum.Another
+        lowerModel.enumMemberImplicitlyUnwrapped = StringEnum.Another
         lowerModel.classMember = basicClassModel
         lowerModel.classMemberOptional = basicClassModel
         lowerModel.classMemberImplicitlyUnwrapped = basicClassModel
@@ -239,6 +259,10 @@ class NestTypesTest: XCTestCase {
         XCTAssertEqual(topmostModel.structMemberOptional?.nsArrayOptional?.count, mappedObject.structMemberOptional?.nsArrayOptional?.count)
         XCTAssertEqual(topmostModel.structMemberImplicitlyUnwrapped.dictBoolImplicitlyUnwrapped["false"],
                        mappedObject.structMemberImplicitlyUnwrapped.dictBoolImplicitlyUnwrapped["false"])
+
+        XCTAssertEqual(topmostModel.lowerLayerModel.enumMember, mappedObject.lowerLayerModel.enumMember)
+        XCTAssertEqual(topmostModel.lowerLayerModel.enumMemberOptional, mappedObject.lowerLayerModel.enumMemberOptional)
+        XCTAssertEqual(topmostModel.lowerLayerModel.enumMemberImplicitlyUnwrapped, mappedObject.lowerLayerModel.enumMemberImplicitlyUnwrapped)
 
         XCTAssertEqual(topmostModel.lowerLayerModel.classMember.stringOptional, mappedObject.lowerLayerModel.classMember.stringOptional)
         XCTAssertEqual(topmostModel.lowerLayerModel.structMemberOptional?.nsArrayOptional?.count,

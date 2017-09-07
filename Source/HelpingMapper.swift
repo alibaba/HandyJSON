@@ -21,13 +21,61 @@ import Foundation
 
 public typealias CustomMappingKeyValueTuple = (Int, MappingPropertyHandler)
 
+struct MappingPath {
+    var segments: [String]
+
+    static func buildFrom(rawPath: String) -> MappingPath {
+        let regex = try! NSRegularExpression(pattern: "(?<![\\\\])\\.")
+        let nsString = rawPath as NSString
+        let results = regex.matches(in: rawPath, range: NSRange(location: 0, length: nsString.length))
+        var splitPoints = results.map { $0.range.location }
+
+        var curPos = 0
+        var pathArr = [String]()
+        splitPoints.append(nsString.length)
+        splitPoints.forEach({ (point) in
+            let start = rawPath.index(rawPath.startIndex, offsetBy: curPos)
+            let end = rawPath.index(rawPath.startIndex, offsetBy: point)
+            let subPath = rawPath.substring(with: start ..< end).replacingOccurrences(of: "\\.", with: ".")
+            if !subPath.isEmpty {
+                pathArr.append(subPath)
+            }
+            curPos = point + 1
+        })
+        return MappingPath(segments: pathArr)
+    }
+}
+
+extension Dictionary where Key == String, Value: Any {
+
+    func findValueBy(path: MappingPath) -> Any? {
+        var currentDict: [String: Any]? = self
+        var lastValue: Any?
+        path.segments.forEach { (segment) in
+            lastValue = currentDict?[segment]
+            currentDict = currentDict?[segment] as? [String: Any]
+        }
+        return lastValue
+    }
+}
+
 public class MappingPropertyHandler {
-    var mappingNames: [String]?
+    var mappingPaths: [MappingPath]?
     var assignmentClosure: ((Any?) -> (Any?))?
     var takeValueClosure: ((Any?) -> (Any?))?
     
-    public init(mappingNames: [String]?, assignmentClosure: ((Any?) -> (Any?))?, takeValueClosure: ((Any?) -> (Any?))?) {
-        self.mappingNames = mappingNames
+    public init(rawPaths: [String]?, assignmentClosure: ((Any?) -> (Any?))?, takeValueClosure: ((Any?) -> (Any?))?) {
+        let mappingPaths = rawPaths?.map({ (rawPath) -> MappingPath in
+            if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
+                return MappingPath.buildFrom(rawPath: rawPath.lowercased())
+            }
+            return MappingPath.buildFrom(rawPath: rawPath)
+        }).filter({ (mappingPath) -> Bool in
+            return mappingPath.segments.count > 0
+        })
+        if let count = mappingPaths?.count, count > 0 {
+            self.mappingPaths = mappingPaths
+        }
         self.assignmentClosure = assignmentClosure
         self.takeValueClosure = takeValueClosure
     }
@@ -70,9 +118,9 @@ public class HelpingMapper {
                 }
                 return nil
             }
-            self.mappingHandlers[key] = MappingPropertyHandler(mappingNames: names, assignmentClosure: assignmentClosure, takeValueClosure: nil)
+            self.mappingHandlers[key] = MappingPropertyHandler(rawPaths: names, assignmentClosure: assignmentClosure, takeValueClosure: nil)
         } else {
-            self.mappingHandlers[key] = MappingPropertyHandler(mappingNames: names, assignmentClosure: nil, takeValueClosure: nil)
+            self.mappingHandlers[key] = MappingPropertyHandler(rawPaths: names, assignmentClosure: nil, takeValueClosure: nil)
         }
     }
     
@@ -99,7 +147,7 @@ public func <-- <T>(property: inout T, name: String) -> CustomMappingKeyValueTup
 public func <-- <T>(property: inout T, names: [String]) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
     let key = pointer.hashValue
-    return (key, MappingPropertyHandler(mappingNames: names, assignmentClosure: nil, takeValueClosure: nil))
+    return (key, MappingPropertyHandler(rawPaths: names, assignmentClosure: nil, takeValueClosure: nil))
 }
 
 // MARK: non-optional properties
@@ -124,7 +172,7 @@ public func <-- <Transform: TransformType>(property: inout Transform.Object, tra
         }
         return nil
     }
-    return (key, MappingPropertyHandler(mappingNames: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
+    return (key, MappingPropertyHandler(rawPaths: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
 // MARK: optional properties
@@ -149,7 +197,7 @@ public func <-- <Transform: TransformType>(property: inout Transform.Object?, tr
         }
         return nil
     }
-    return (key, MappingPropertyHandler(mappingNames: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
+    return (key, MappingPropertyHandler(rawPaths: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
 // MARK: implicitly unwrap optional properties
@@ -174,7 +222,7 @@ public func <-- <Transform: TransformType>(property: inout Transform.Object!, tr
         }
         return nil
     }
-    return (key, MappingPropertyHandler(mappingNames: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
+    return (key, MappingPropertyHandler(rawPaths: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
 }
 
 infix operator <<< : AssignmentPrecedence

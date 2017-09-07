@@ -31,9 +31,9 @@ fileprivate func convertKeyIfNeeded(dict: [String: Any]) -> [String: Any] {
 
 fileprivate func getRawValueFrom(dict: [String: Any], property: PropertyInfo, mapper: HelpingMapper) -> Any? {
     if let mappingHandler = mapper.getMappingHandler(key: property.address.hashValue) {
-        if let mappingNames = mappingHandler.mappingNames, mappingNames.count > 0 {
-            for mappingName in mappingNames {
-                if let _value = dict[mappingName] {
+        if let mappingPaths = mappingHandler.mappingPaths, mappingPaths.count > 0 {
+            for mappingPath in mappingPaths {
+                if let _value = dict.findValueBy(path: mappingPath) {
                     return _value
                 }
             }
@@ -223,9 +223,9 @@ extension _ExtendCustomModelType {
 
                 if let mappingHandler = mapper.getMappingHandler(key: info.address.hashValue) {
                     // if specific key is set, replace the label
-                    if let mappingNames = mappingHandler.mappingNames, mappingNames.count > 0 {
-                        // take the first if more than one
-                        realKey = mappingNames[0]
+                    if let mappingPaths = mappingHandler.mappingPaths, mappingPaths.count > 0 {
+                        // take the first path, last segment if more than one
+                        realKey = mappingPaths[0].segments.last!
                     }
 
                     if let transformer = mappingHandler.takeValueClosure {

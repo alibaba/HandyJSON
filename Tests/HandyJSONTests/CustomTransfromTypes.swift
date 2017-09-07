@@ -174,3 +174,46 @@ struct ExcludedMappingTestStruct: HandyJSON {
         mapper >>> name
     }
 }
+
+class FlatLayerModel: HandyJSON {
+    var enumMember: StringEnum = StringEnum.Default
+    var enumMemberOptional: StringEnum?
+    var enumMemberImplicitlyUnwrapped: StringEnum!
+    var int: Int = 0
+    var stringOptional: String?
+    var dictBoolImplicitlyUnwrapped: [String: Bool]!
+
+    func mapping(mapper: HelpingMapper) {
+        mapper <<<
+            enumMember <-- "lowerLayerModel.enumMember"
+
+        mapper <<<
+            enumMemberOptional <-- "lowerLayerModelOptional.enumMemberOptional"
+
+        mapper <<<
+            enumMemberImplicitlyUnwrapped <-- "lowerLayerModelImplicitlyUnwrapped.enumMemberImplicitlyUnwrapped"
+
+        mapper <<<
+            int <-- "classMember.int"
+
+        mapper <<<
+            stringOptional <-- "lowerLayerModelOptional.classMemberOptional.stringOptional"
+
+        mapper <<<
+            dictBoolImplicitlyUnwrapped <-- "lowerLayerModelImplicitlyUnwrapped.structMemberImplicitlyUnwrapped.dictBoolImplicitlyUnwrapped"
+    }
+
+    required init() {}
+}
+
+
+class DeepPathPropModel: HandyJSON {
+    var enumMemberOptional: StringEnum?
+
+    func mapping(mapper: HelpingMapper) {
+        mapper <<<
+            enumMemberOptional <-- ["serializeKey", "first layer.second\\.layer.thirdlayer.enumMemberOptional"]
+    }
+
+    required init() {}
+}
