@@ -418,4 +418,27 @@ class BasicTypesInStructTestsFromJSON: XCTestCase {
         XCTAssertTrue(testSet.dictStringDouble.count > 0)
         XCTAssertTrue(testSet.dictStringFloat.count > 0)
     }
+
+    func testUpdateExistModel() {
+        var basicObject = BasicTypesInStruct()
+        basicObject.int = 3
+        basicObject.intOptional = nil
+
+        var object = BasicTypesInClass()
+        object.int = 2
+        object.intOptional = 2
+
+        let jsonString = basicObject.toJSONString()!
+        JSONDeserializer.update(object: &object, from: jsonString)
+
+        XCTAssertEqual(3, object.int)
+        XCTAssertEqual(2, object.intOptional)
+
+        basicObject.int = 4
+        let jsonDict = basicObject.toJSON()!
+        JSONDeserializer.update(object: &object, from: jsonDict)
+
+        XCTAssertEqual(4, object.int)
+        XCTAssertEqual(2, object.intOptional)
+    }
 }

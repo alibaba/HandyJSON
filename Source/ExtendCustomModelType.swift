@@ -103,17 +103,21 @@ extension _ExtendCustomModelType {
     static func _transform(from object: Any) -> Self? {
         if let dict = object as? [String: Any] {
             // nested object, transform recursively
-            return self._transform(dict: dict, toType: self) as? Self
+            return self._transform(dict: dict) as? Self
         }
         return nil
     }
 
-    static func _transform(dict: [String: Any], toType: _ExtendCustomModelType.Type) -> _ExtendCustomModelType? {
-        var instance = toType.init()
+    static func _transform(dict: [String: Any]) -> _ExtendCustomModelType? {
+        var instance = Self.init()
+        _transform(dict: dict, to: &instance)
+        return instance
+    }
 
-        guard let properties = getProperties(forType: toType) else {
-            InternalLogger.logDebug("Failed when try to get properties from type: \(type(of: toType))")
-            return nil
+    static func _transform(dict: [String: Any], to instance: inout Self) {
+        guard let properties = getProperties(forType: Self.self) else {
+            InternalLogger.logDebug("Failed when try to get properties from type: \(type(of: Self.self))")
+            return
         }
 
         // do user-specified mapping first
@@ -151,7 +155,6 @@ extension _ExtendCustomModelType {
             }
             InternalLogger.logDebug("Property: \(property.key) hasn't been written in")
         }
-        return instance
     }
 }
 
