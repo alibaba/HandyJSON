@@ -29,7 +29,7 @@ enum StringEnum: String, HandyJSONEnum {
     case Another = "Another"
 }
 
-class LowerLayerModel: HandyJSON {
+class LowerLayerModel: NSObject, HandyJSON {
     var enumMember: StringEnum = StringEnum.Default
     var enumMemberOptional: StringEnum?
     var enumMemberImplicitlyUnwrapped: StringEnum!
@@ -40,7 +40,7 @@ class LowerLayerModel: HandyJSON {
     var classMemberOptional: BasicTypesInClass?
     var classMemberImplicitlyUnwrapped: BasicTypesInClass!
 
-    required init() {}
+    required override init() {}
 }
 
 class TopMostLayerModel: HandyJSON {

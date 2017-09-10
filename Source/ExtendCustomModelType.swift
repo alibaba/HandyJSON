@@ -21,7 +21,8 @@ extension _ExtendCustomModelType {
 fileprivate func convertKeyIfNeeded(dict: [String: Any]) -> [String: Any] {
     if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
         var newDict = [String: Any]()
-        dict.forEach({ (key, value) in
+        dict.forEach({ (kvPair) in
+            let (key, value) = kvPair
             newDict[key.lowercased()] = value
         })
         return newDict
@@ -98,6 +99,13 @@ fileprivate func merge(children: [(String, Any)], propertyInfos: [PropertyInfo])
     return result
 }
 
+// this's a workaround before https://bugs.swift.org/browse/SR-5223 fixed
+extension NSObject {
+    static func createInstance() -> NSObject {
+        return self.init()
+    }
+}
+
 extension _ExtendCustomModelType {
 
     static func _transform(from object: Any) -> Self? {
@@ -109,7 +117,13 @@ extension _ExtendCustomModelType {
     }
 
     static func _transform(dict: [String: Any]) -> _ExtendCustomModelType? {
-        var instance = Self.init()
+
+        var instance: Self
+        if let _nsType = Self.self as? NSObject.Type {
+            instance = _nsType.createInstance() as! Self
+        } else {
+            instance = Self.init()
+        }
         _transform(dict: dict, to: &instance)
         return instance
     }

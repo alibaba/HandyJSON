@@ -56,11 +56,11 @@ private func nextProperty(description: Property.Description, storage: UnsafeRawP
 
 /// Retrieve property descriptions for `type`
 func getProperties(forType type: Any.Type) -> [Property.Description]? {
-    if let nominalType = Metadata.Struct(type: type) {
+    if let nominalType = Metadata.Struct(anyType: type) {
         return fetchProperties(nominalType: nominalType)
-    } else if let nominalType = Metadata.Class(type: type) {
+    } else if let nominalType = Metadata.Class(anyType: type) {
         return nominalType.properties()
-    } else if let nominalType = Metadata.ObjcClassWrapper(type: type),
+    } else if let nominalType = Metadata.ObjcClassWrapper(anyType: type),
         let targetType = nominalType.targetType {
         return getProperties(forType: targetType)
     } else {

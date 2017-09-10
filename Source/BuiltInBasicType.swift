@@ -27,7 +27,7 @@ protocol _BuiltInBasicType: _Transformable {
 
 // Suppport integer type
 
-protocol IntegerPropertyProtocol: Integer, _BuiltInBasicType {
+protocol IntegerPropertyProtocol: FixedWidthInteger, _BuiltInBasicType {
     init?(_ text: String, radix: Int)
     init(_ number: NSNumber)
 }
