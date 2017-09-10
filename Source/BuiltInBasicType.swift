@@ -211,25 +211,26 @@ extension Collection {
         typealias Element = Iterator.Element
         var result: [Element] = [Element]()
         arr.forEach { (each) in
-            if let nsObject = each as? NSObject {
-                if let element = (Element.self as? _Transformable.Type)?.transform(from: nsObject) as? Element {
-                    result.append(element)
-                } else if let element = nsObject as? Element {
-                    result.append(element)
-                }
+            if let element = (Element.self as? _Transformable.Type)?.transform(from: each) as? Element {
+                result.append(element)
+            } else if let element = each as? Element {
+                result.append(element)
             }
         }
         return result
     }
 
     func _collectionPlainValue() -> Any? {
-        return self.map { (each) -> (Any?) in
-            if let tranformable = each as? _Transformable {
-                return tranformable.plainValue()
+        typealias Element = Iterator.Element
+        var result: [Any] = [Any]()
+        self.forEach { (each) in
+            if let transformable = each as? _Transformable, let transValue = transformable.plainValue() {
+                result.append(transValue)
             } else {
-                return each
+                InternalLogger.logError("value: \(each) isn't transformable type!")
             }
         }
+        return result
     }
 }
 
