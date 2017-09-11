@@ -2,7 +2,35 @@
 
 ## [Unreleased](https://github.com/alibaba/HandyJSON/tree/HEAD)
 
-[Full Changelog](https://github.com/alibaba/HandyJSON/compare/1.7.2...HEAD)
+[Full Changelog](https://github.com/alibaba/HandyJSON/compare/1.8.0...HEAD)
+
+**Fixed bugs:**
+
+- 请教下大神，我序列化的时候怎么排除某些字段 [\#98](https://github.com/alibaba/HandyJSON/issues/98)
+
+**Closed issues:**
+
+- 自定义赋值规则时,mapping函数异常调用 [\#175](https://github.com/alibaba/HandyJSON/issues/175)
+- didSet不听话 [\#174](https://github.com/alibaba/HandyJSON/issues/174)
+- 关于 HandyJSON 性能的疑问 [\#173](https://github.com/alibaba/HandyJSON/issues/173)
+- FloatPropertyProtocol继承\_JSONTransformable是不是多余了？ [\#172](https://github.com/alibaba/HandyJSON/issues/172)
+- Deserialize Array Bug [\#171](https://github.com/alibaba/HandyJSON/issues/171)
+- 一旦给属性添加 didSet 后, 自定义就失效了 [\#170](https://github.com/alibaba/HandyJSON/issues/170)
+- Model update [\#168](https://github.com/alibaba/HandyJSON/issues/168)
+- 内存泄漏 [\#167](https://github.com/alibaba/HandyJSON/issues/167)
+- 手动导入遇到问题 [\#166](https://github.com/alibaba/HandyJSON/issues/166)
+- 对于 "\>\>\>" 这个操作符是我用法不对吗？ [\#165](https://github.com/alibaba/HandyJSON/issues/165)
+- 存在内存泄漏 [\#164](https://github.com/alibaba/HandyJSON/issues/164)
+- JSON null should map to nil instead of "\<null\>" as Optional\<String\> [\#163](https://github.com/alibaba/HandyJSON/issues/163)
+- 解析枚举 [\#162](https://github.com/alibaba/HandyJSON/issues/162)
+- 使用pod根本找到不到HandyJSON [\#161](https://github.com/alibaba/HandyJSON/issues/161)
+- Model对象可以直接转成OC的对象吗？有什么好的方法？ [\#156](https://github.com/alibaba/HandyJSON/issues/156)
+- 路径映射 [\#155](https://github.com/alibaba/HandyJSON/issues/155)
+- RealmSwift Object 实现 HandyJSON协议，从数据库取出数据来，toJSONString，toJSON = nil [\#138](https://github.com/alibaba/HandyJSON/issues/138)
+- didSet在赋值时不会调用，怎么使用didSet的功能 [\#123](https://github.com/alibaba/HandyJSON/issues/123)
+
+## [1.8.0](https://github.com/alibaba/HandyJSON/tree/1.8.0) (2017-09-11)
+[Full Changelog](https://github.com/alibaba/HandyJSON/compare/1.7.2...1.8.0)
 
 **Closed issues:**
 
