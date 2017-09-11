@@ -565,6 +565,8 @@ It’s all like what we do on deserialization. A property which is excluded, it 
 
 A: For some reason, you should define an empty mapping function in the super class(the root class if more than one layer), and override it in the subclass.
 
+It's the same with `didFinishMapping` function.
+
 ## Q: Why my didSet/willSet is not working?
 
 A: Since `HandyJSON` assign properties by writing value to memory directly, it doesn't trigger any observing function. You need to call the `didSet/willSet` logic explicitly after/before the deserialization.
@@ -587,6 +589,23 @@ class BasicTypes: NSObject, HandyJSON {
 ```
 
 In this situation, `NSObject` and `dynamic` are both needed.
+
+And in versions after `1.8.0`, `HandyJSON` offer a `didFinishMapping` function to allow you to fill some observing logic.
+
+```
+class BasicTypes: HandyJSON {
+    var int: Int?
+
+    required init() {}
+
+    func didFinishMapping() {
+        print("you can fill some observing logic here")
+    }
+}
+
+```
+
+It may help.
 
 ## Q: How to support Enum property?
 
