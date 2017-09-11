@@ -303,6 +303,20 @@ if let cats = [Cat].deserialize(from: jsonArrayString) {
 }
 ```
 
+## 从字典映射对象
+
+`HandyJSON`支持从swift字典映射到对象。
+
+```swift
+var dict = [String: Any]()
+dict["doubleOptional"] = 1.1
+dict["stringImplicitlyUnwrapped"] = "hello"
+dict["int"] = 1
+if let object = BasicTypes.deserialize(from: dict) {
+    // ...
+}
+```
+
 ## 自定义解析规则
 
 HandyJSON支持自定义映射关系，或者自定义解析过程。你需要实现一个可选的`mapping`函数，在里边实现`String`值(HandyJSON会把对应的JSON字段转换为String)转换为你需要的字段类型。
@@ -613,4 +627,5 @@ class BasicTypes: HandyJSON {
 # License
 
 HandyJSON is released under the Apache License, Version 2.0. See LICENSE for details.
+
 
