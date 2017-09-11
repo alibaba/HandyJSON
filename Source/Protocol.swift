@@ -91,6 +91,7 @@ public protocol _JSONTransformable: _PropertiesMetrizable {}
 public protocol _PropertiesMappable: _JSONTransformable {
     init()
     mutating func mapping(mapper: HelpingMapper)
+    mutating func afterMap()
 }
 
 /// 用于自定义 Model 类型.
@@ -98,6 +99,7 @@ extension _PropertiesMappable {
 
     /// 表示可以自定义一些转换如自定义Model 字段名与 JSON 中 Key 的对应关系. 甚至可以自定义整个字段的序列化过程.
     public mutating func mapping(mapper: HelpingMapper) {}
+    public mutating func afterMap() {}
 }
 
 extension _PropertiesMappable {

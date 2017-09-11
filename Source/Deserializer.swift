@@ -134,7 +134,7 @@ extension _PropertiesMappable {
             _transform(rawPointer: rawPointer, property: property, dict: _dict, mapper: mapper)
             InternalLogger.logVerbose("field: ", property.key, "  offset: ", property.offset)
         }
-
+        instance.afterMap()
         return instance
     }
 }

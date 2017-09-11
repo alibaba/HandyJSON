@@ -227,4 +227,35 @@ class CustomMappingTest: XCTestCase {
         XCTAssert(a.id == "12345")
         XCTAssert(a.height == 180)
     }
+    
+    func testAfterMappingForClass() {
+        class A: HandyJSON {
+            var name: String?
+            var upperName: String?
+            required init() {}
+            
+            func afterMap() {
+                upperName = name?.uppercased()
+            }
+        }
+        
+        let jsonString = "{\"name\":\"HandyJson\"}"
+        let a = A.deserialize(from: jsonString)!
+        XCTAssertEqual(a.upperName, "HANDYJSON")
+    }
+    
+    func testAfterMappingForStruct() {
+        struct A: HandyJSON {
+            var name: String?
+            var upperName: String?
+            
+            mutating func afterMap() {
+                upperName = name?.uppercased()
+            }
+        }
+        
+        let jsonString = "{\"name\":\"HandyJson\"}"
+        let a = A.deserialize(from: jsonString)!
+        XCTAssertEqual(a.upperName, "HANDYJSON")
+    }
 }
