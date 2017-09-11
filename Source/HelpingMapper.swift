@@ -46,14 +46,14 @@ struct MappingPath {
     }
 }
 
-extension Dictionary where Key == String, Value: Any {
+extension Dictionary where Value: Any {
 
     func findValueBy(path: MappingPath) -> Any? {
-        var currentDict: [String: Any]? = self
+        var currentDict: [Key: Any]? = self
         var lastValue: Any?
         path.segments.forEach { (segment) in
-            lastValue = currentDict?[segment]
-            currentDict = currentDict?[segment] as? [String: Any]
+            lastValue = currentDict?[segment as! Key]
+            currentDict = currentDict?[segment as! Key] as? [Key: Any]
         }
         return lastValue
     }
