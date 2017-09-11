@@ -337,4 +337,35 @@ class StructObjectTest: XCTestCase {
         let jsonstr = a.toJSONString()
         XCTAssert(jsonstr == "{\"p\":[{\"name\":\"dddd\"},{\"name\":\"dddd\"}]}")
     }
+
+    func testDidFinishMappingForClass() {
+        class A: HandyJSON {
+            var name: String?
+            var upperName: String?
+            required init() {}
+
+            func didFinishMapping() {
+                upperName = name?.uppercased()
+            }
+        }
+
+        let jsonString = "{\"name\":\"HandyJson\"}"
+        let a = A.deserialize(from: jsonString)!
+        XCTAssertEqual(a.upperName, "HANDYJSON")
+    }
+
+    func testDidFinishMappingForStruct() {
+        struct A: HandyJSON {
+            var name: String?
+            var upperName: String?
+
+            mutating func didFinishMapping() {
+                upperName = name?.uppercased()
+            }
+        }
+
+        let jsonString = "{\"name\":\"HandyJson\"}"
+        let a = A.deserialize(from: jsonString)!
+        XCTAssertEqual(a.upperName, "HANDYJSON")
+    }
 }

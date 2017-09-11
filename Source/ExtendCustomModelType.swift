@@ -11,11 +11,13 @@ import Foundation
 public protocol _ExtendCustomModelType: _Transformable {
     init()
     mutating func mapping(mapper: HelpingMapper)
+    mutating func didFinishMapping()
 }
 
 extension _ExtendCustomModelType {
 
     public mutating func mapping(mapper: HelpingMapper) {}
+    public mutating func didFinishMapping() {}
 }
 
 fileprivate func convertKeyIfNeeded(dict: [String: Any]) -> [String: Any] {
@@ -111,6 +113,7 @@ extension _ExtendCustomModelType {
     static func _transform(dict: [String: Any]) -> _ExtendCustomModelType? {
         var instance = Self.init()
         _transform(dict: dict, to: &instance)
+        instance.didFinishMapping()
         return instance
     }
 
