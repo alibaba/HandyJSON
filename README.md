@@ -577,7 +577,7 @@ It's the same with `didFinishMapping` function.
 
 A: Since `HandyJSON` assign properties by writing value to memory directly, it doesn't trigger any observing function. You need to call the `didSet/willSet` logic explicitly after/before the deserialization.
 
-But after version `1.8.0`, `HandyJSON` handle dynamic properties by the `KVC` mechanism which will trigger the `KVO`. That means, if you do really need the `didSet/willSet`, you can define your model like follow:
+But since version `1.8.0`, `HandyJSON` handle dynamic properties by the `KVC` mechanism which will trigger the `KVO`. That means, if you do really need the `didSet/willSet`, you can define your model like follow:
 
 ```swift
 class BasicTypes: NSObject, HandyJSON {
@@ -596,7 +596,7 @@ class BasicTypes: NSObject, HandyJSON {
 
 In this situation, `NSObject` and `dynamic` are both needed.
 
-And in versions after `1.8.0`, `HandyJSON` offer a `didFinishMapping` function to allow you to fill some observing logic.
+And in versions since `1.8.0`, `HandyJSON` offer a `didFinishMapping` function to allow you to fill some observing logic.
 
 ```swift
 class BasicTypes: HandyJSON {
