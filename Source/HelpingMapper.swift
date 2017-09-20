@@ -36,7 +36,7 @@ struct MappingPath {
         splitPoints.forEach({ (point) in
             let start = rawPath.index(rawPath.startIndex, offsetBy: curPos)
             let end = rawPath.index(rawPath.startIndex, offsetBy: point)
-            let subPath = rawPath.substring(with: start ..< end).replacingOccurrences(of: "\\.", with: ".")
+            let subPath = String(rawPath[start ..< end]).replacingOccurrences(of: "\\.", with: ".")
             if !subPath.isEmpty {
                 pathArr.append(subPath)
             }
