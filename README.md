@@ -94,15 +94,15 @@ An overview of types supported can be found at file: [BasicTypes.swift](./HandyJ
 
 * iOS 8.0+/OSX 10.9+/watchOS 2.0+/tvOS 9.0+
 
-* Swift 2.3+ / Swift 3.0+
+* Swift 3.0+ / Swift 4.0+
 
 # Installation
 
-**To use with Swift 2.x using == 0.4.0**
-
 **To use with Swift 3.x using >= 1.7.2**
 
-For Legacy Swift support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
+**To use with Swift 4.0 using == 4.0.0-beta**
+
+For Legacy Swift2 support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
 
 ## Cocoapods
 
@@ -467,3 +467,4 @@ It’s all like what we do on deserialization. A property which is excluded, it 
 # License
 
 HandyJSON is released under the Apache License, Version 2.0. See LICENSE for details.
+
