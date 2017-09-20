@@ -61,17 +61,21 @@ print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON strin
     - [基本类型](#基本类型)
     - [支持struct](#支持struct)
     - [支持enum](#支持enum)
-    - [可选、隐式解包可选、集合等](#可选隐式解包可选集合等)
+    - [Optional/ImplicitlyUnwrappedOptional/Collections等](#optionalimplicitlyunwrappedoptionalcollections等)
     - [指定解析路径](#指定解析路径)
     - [组合对象](#组合对象)
-    - [继承自父类的子类](#继承自父类的子类)
-    - [JSON中的数组](#json中的数组)
+    - [继承](#继承)
+    - [JSON数组](#json数组)
+    - [从字典映射对象](#从字典映射对象)
     - [自定义解析规则](#自定义解析规则)
+    - [Date/Data/URL/Decimal/Color](#datedataurldecimalcolor)
     - [排除指定属性](#排除指定属性)
+    - [更新现有对象](#更新现有对象)
     - [支持的属性类型](#支持的属性类型)
 - [序列化](#序列化-1)
     - [基本类型](#基本类型-1)
     - [自定义映射和排除型](#自定义映射和排除)
+- [常见问题](#常见问题)
 - [待办](#待办)
 
 # 特性
@@ -94,13 +98,11 @@ print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON strin
 
 * iOS 8.0+/OSX 10.9+/watchOS 2.0+/tvOS 9.0+
 
-* Swift 2.3+ / Swift 3.0+
+* Swift 3.0+ / Swift 4.0+
 
 # 安装
 
-HandyJSON只在Swift3.x版本上(master分支)开发新特性，在Swift2.x中使用，参见: [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x)
-
-具体操作指引参考 [英文版README](./README.md) 的 `Installation` 章节。
+参考 [英文版README](./README.md) 的 `Installation` 章节。
 
 # 反序列化
 
@@ -166,7 +168,7 @@ if let animal = Animal.deserialize(from: jsonString) {
 }
 ```
 
-## 可选、隐式解包可选、集合等
+## Optional/ImplicitlyUnwrappedOptional/Collections等
 
 HandyJSON支持这些非基础类型，包括嵌套结构。
 
@@ -254,7 +256,7 @@ if let composition = Composition.deserialize(from: jsonString) {
 }
 ```
 
-## 继承自父类的子类
+## 继承
 
 如果子类要支持反序列化，那么要求父类也服从`HandyJSON`协议。
 
@@ -299,9 +301,25 @@ if let cats = [Cat].deserialize(from: jsonArrayString) {
 }
 ```
 
+## 从字典映射对象
+
+`HandyJSON`支持从swift字典映射到对象。
+
+```swift
+var dict = [String: Any]()
+dict["doubleOptional"] = 1.1
+dict["stringImplicitlyUnwrapped"] = "hello"
+dict["int"] = 1
+if let object = BasicTypes.deserialize(from: dict) {
+    // ...
+}
+```
+
 ## 自定义解析规则
 
-HandyJSON支持自定义映射关系，或者自定义解析过程。你需要实现一个可选的`mapping`函数，在里边实现`NSString`值(HandyJSON会把对应的JSON字段转换为NSString)转换为你需要的字段类型。
+HandyJSON支持自定义映射关系，或者自定义解析过程。你需要实现一个可选的`mapping`函数，在里边实现`String`值(HandyJSON会把对应的JSON字段转换为String)转换为你需要的字段类型。
+
+也可以通过`xx.xx.xxx`的形式指定一个属性的解析路径。`.`为分隔符，如果路径的某个key包含了`.`本身，需要用`\`转义。
 
 ```swift
 class Cat: HandyJSON {
@@ -329,15 +347,68 @@ class Cat: HandyJSON {
                 }
                 return nil
             })
+
+        // specify 'friend.name' path field in json map to 'friendName' property
+        mapper <<<
+            self.friendName <-- "friend.name"
     }
 }
 
-let jsonString = "{\"cat_id\":12345,\"name\":\"Kitty\",\"parent\":\"Tom/Lily\"}"
+let jsonString = "{\"cat_id\":12345,\"name\":\"Kitty\",\"parent\":\"Tom/Lily\",\"friend\":{\"id\":54321,\"name\":\"Lily\"}}"
 
 if let cat = Cat.deserialize(from: jsonString) {
     print(cat.id)
     print(cat.parent)
+    print(cat.friendName)
 }
+```
+
+## Date/Data/URL/Decimal/Color
+
+`HandyJSON`预先准备了一些常见类型的`Transformer`可以使用。
+
+```swift
+class ExtendType: HandyJSON {
+    var date: Date?
+    var decimal: NSDecimalNumber?
+    var url: URL?
+    var data: Data?
+    var color: UIColor?
+
+    func mapping(mapper: HelpingMapper) {
+        mapper <<<
+            date <-- CustomDateFormatTransform(formatString: "yyyy-MM-dd")
+
+        mapper <<<
+            decimal <-- NSDecimalNumberTransform()
+
+        mapper <<<
+            url <-- URLTransform(shouldEncodeURLString: false)
+
+        mapper <<<
+            data <-- DataTransform()
+
+        mapper <<<
+            color <-- HexColorTransform()
+    }
+
+    public required init() {}
+}
+
+let object = ExtendType()
+object.date = Date()
+object.decimal = NSDecimalNumber(string: "1.23423414371298437124391243")
+object.url = URL(string: "https://www.aliyun.com")
+object.data = Data(base64Encoded: "aGVsbG8sIHdvcmxkIQ==")
+object.color = UIColor.blue
+
+print(object.toJSONString()!)
+// it prints:
+// {"date":"2017-09-11","decimal":"1.23423414371298437124391243","url":"https:\/\/www.aliyun.com","data":"aGVsbG8sIHdvcmxkIQ==","color":"0000FF"}
+
+let mappedObject = ExtendType.deserialize(from: object.toJSONString()!)!
+print(mappedObject.date)
+...
 ```
 
 ## 排除指定属性
@@ -368,6 +439,31 @@ let jsonString = "{\"name\":\"cat\",\"id\":\"12345\"}"
 if let cat = Cat.deserialize(from: jsonString) {
     print(cat)
 }
+```
+
+## 更新现有对象
+
+`HandyJSON`允许根据json更新现有对象。
+
+```swift
+class BasicTypes: HandyJSON {
+    var int: Int = 2
+    var doubleOptional: Double?
+    var stringImplicitlyUnwrapped: String!
+
+    required init() {}
+}
+
+// 现有对象
+var object = BasicTypes()
+object.int = 1
+object.doubleOptional = 1.1
+
+// 用JSON更新
+let jsonString = "{\"doubleOptional\":2.2}"
+JSONDeserializer.update(object: &object, from: jsonString)
+print(object.int)
+print(object.doubleOptional)
 ```
 
 ## 支持的属性类型
@@ -415,6 +511,119 @@ print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON strin
 
 和反序列化一样，只要定义`mapping`和`exclude`就可以了。被排除的属性，序列化和反序列化都不再影响到它。而在`mapping`中定义的`Transformer`，同时定义了序列化和反序列的规则，所以只要为属性指明一个`Transformer`关系就可以了。
 
+# 常见问题
+
+## 问：为什么`mapping`函数在继承的子类里不好使？
+
+答：因为Swift类型相关的原因，如果需要在子类里使用`mapping`函数，那么必须在父类(如果有多层父类，必须在最顶层的父类)里定义一个空的`mapping`函数，然后在子类去`override`它。一样情况的还有`didFinishMapping`函数。
+
+## 问：为什么`didSet/willSet`不好使？
+
+答：`HandyJSON`是直接在内存中完成赋值的，绕过了一些观察函数，导致`didSet/willSet`不生效。你需要手动地在序列化前后调用你自己需要处理的逻辑。
+
+但在`1.8.0`版本之后，`HandyJSON`对dynamic类型的属性使用`KVC`机制处理，会触发`KVO`机制。所以如果你真的需要 `willSet/didSet`，可以将类型声明为dynamic。
+
+```swift
+class BasicTypes: NSObject, HandyJSON {
+    dynamic var int: Int = 0 {
+        didSet {
+            print("oldValue: ", oldValue)
+        }
+        willSet {
+            print("newValue: ", newValue)
+        }
+    }
+
+    public override required init() {}
+}
+```
+
+这种情况要求类继承自`NSObject`, 且属性声明为`dynamic`。
+
+并且，在`1.8.0`版本之后，`HandyJSON`提供了`didFinishMapping`函数作为观察逻辑的切入点。
+
+```swift
+class BasicTypes: HandyJSON {
+    var int: Int?
+
+    required init() {}
+
+    func didFinishMapping() {
+        print("you can fill some observing logic here")
+    }
+}
+```
+
+## 问：怎么支持枚举类型？
+
+答：如果你定义的枚举类型实现了`RawRepresentable`协议，那么可以参考: [支持枚举类型](#支持enum)，或者使用`EnumTransform`:
+
+```swift
+enum EnumType: String {
+    case type1, type2
+}
+
+class BasicTypes: HandyJSON {
+    var type: EnumType?
+
+    func mapping(mapper: HelpingMapper) {
+        mapper <<<
+            type <-- EnumTransform()
+    }
+
+    required init() {}
+}
+
+let object = BasicTypes()
+object.type = EnumType.type2
+print(object.toJSONString()!)
+let mappedObject = BasicTypes.deserialize(from: object.toJSONString()!)!
+print(mappedObject.type)
+```
+
+如果是非`RawRepresentable`的枚举，那么就需要实现定制的转换器了:
+
+```swift
+enum EnumType {
+    case type1, type2
+}
+
+class BasicTypes: HandyJSON {
+    var type: EnumType?
+
+    func mapping(mapper: HelpingMapper) {
+        mapper <<<
+            type <-- TransformOf<EnumType, String>(fromJSON: { (rawString) -> EnumType? in
+                if let _str = rawString {
+                    switch (_str) {
+                    case "type1":
+                        return EnumType.type1
+                    case "type2":
+                        return EnumType.type2
+                    default:
+                        return nil
+                    }
+                }
+                return nil
+            }, toJSON: { (enumType) -> String? in
+                if let _type = enumType {
+                    switch (_type) {
+                    case EnumType.type1:
+                        return "type1"
+                    case EnumType.type2:
+                        return "type2"
+                    }
+                }
+                return nil
+            })
+    }
+
+    required init() {}
+}
+```
+
 # License
 
 HandyJSON is released under the Apache License, Version 2.0. See LICENSE for details.
+
+

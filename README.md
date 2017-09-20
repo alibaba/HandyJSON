@@ -4,7 +4,7 @@ HandyJSON is a framework written in Swift which to make converting model objects
 
 Compared with others, the most significant feature of HandyJSON is that it does not require the objects inherit from NSObject(**not using KVC but reflection**), neither implements a 'mapping' function(**writing value to memory directly to achieve property assignment**).
 
-HandyJSON is totally depend on the memory layout rules infered from Swift runtime code. We are watching it and will follow every bit if it change.
+HandyJSON is totally depend on the memory layout rules infered from Swift runtime code. We are watching it and will follow every bit if it changes.
 
 [![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=master)](https://travis-ci.org/alibaba/HandyJSON)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -13,6 +13,12 @@ HandyJSON is totally depend on the memory layout rules infered from Swift runtim
 [![Codecov branch](https://img.shields.io/codecov/c/github/alibaba/HandyJSON/master.svg?style=flat)](https://codecov.io/gh/alibaba/HandyJSON/branch/master)
 
 ## [中文文档](./README_cn.md)
+
+## 交流群
+
+群号: 581331250
+
+![交流群](qq_group.png)
 
 ## Sample Code
 
@@ -61,14 +67,14 @@ print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON strin
     - [The Basics](#the-basics)
     - [Support Struct](#support-struct)
     - [Support Enum Property](#support-enum-property)
-    - [Optional/ImplicitlyUnwrappedOptional/Collections/...](#optional-implicitlyunwrappedoptional-collections-...)
+    - [Optional/ImplicitlyUnwrappedOptional/Collections/...](#optionalimplicitlyunwrappedoptionalcollections)
     - [Designated Path](#designated-path)
     - [Composition Object](#composition-object)
     - [Inheritance Object](#inheritance-object)
     - [JSON Array](#json-array)
     - [Mapping From Dictionary](#mapping-from-dictionary)
     - [Custom Mapping](#custom-mapping)
-    - [Date/Data/URL/Decimal/Color](#date-data-url-decimal-color)
+    - [Date/Data/URL/Decimal/Color](#datedataurldecimalcolor)
     - [Exclude Property](#exclude-property)
     - [Update Existing Model](#update-existing-model)
     - [Supported Property Type](#supported-property-type)
@@ -104,9 +110,9 @@ An overview of types supported can be found at file: [BasicTypes.swift](./HandyJ
 
 **To use with Swift 3.x using >= 1.8.0**
 
-**To use with Swift 4.0 using == 4.0.0-beta**
+**To use with Swift 4.0 using == 4.0.0-beta.1**
 
-For Legacy Swift2 support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
+For Legacy Swift2.x support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
 
 ## Cocoapods
 
@@ -352,7 +358,7 @@ if let cats = [Cat].deserialize(from: jsonArrayString) {
 
 `HandyJSON` support mapping swift dictionary to model.
 
-```
+```swift
 var dict = [String: Any]()
 dict["doubleOptional"] = 1.1
 dict["stringImplicitlyUnwrapped"] = "hello"
@@ -415,7 +421,7 @@ if let cat = Cat.deserialize(from: jsonString) {
 
 `HandyJSON` prepare some useful transformer for some none-basic type.
 
-```
+```swift
 class ExtendType: HandyJSON {
     var date: Date?
     var decimal: NSDecimalNumber?
@@ -493,7 +499,7 @@ if let cat = Cat.deserialize(from: jsonString) {
 
 `HandyJSON` support updating an existing model with given json string or dictionary.
 
-```
+```swift
 class BasicTypes: HandyJSON {
     var int: Int = 2
     var doubleOptional: Double?
@@ -571,9 +577,9 @@ It's the same with `didFinishMapping` function.
 
 A: Since `HandyJSON` assign properties by writing value to memory directly, it doesn't trigger any observing function. You need to call the `didSet/willSet` logic explicitly after/before the deserialization.
 
-But after version `1.8.0`, `HandyJSON` handle dynamic properties by the `KVC` mechanism which will trigger the `KVO`. That means, if you do really need the `didSet/willSet`, you can define your model like follow:
+But since version `1.8.0`, `HandyJSON` handle dynamic properties by the `KVC` mechanism which will trigger the `KVO`. That means, if you do really need the `didSet/willSet`, you can define your model like follow:
 
-```
+```swift
 class BasicTypes: NSObject, HandyJSON {
     dynamic var int: Int = 0 {
         didSet {
@@ -590,9 +596,9 @@ class BasicTypes: NSObject, HandyJSON {
 
 In this situation, `NSObject` and `dynamic` are both needed.
 
-And in versions after `1.8.0`, `HandyJSON` offer a `didFinishMapping` function to allow you to fill some observing logic.
+And in versions since `1.8.0`, `HandyJSON` offer a `didFinishMapping` function to allow you to fill some observing logic.
 
-```
+```swift
 class BasicTypes: HandyJSON {
     var int: Int?
 
@@ -611,7 +617,7 @@ It may help.
 
 It your enum conform to `RawRepresentable` protocol, please look into [Support Enum Property](#support-enum-property). Or use the `EnumTransform`:
 
-```
+```swift
 enum EnumType: String {
     case type1, type2
 }
@@ -636,7 +642,7 @@ print(mappedObject.type)
 
 Otherwise, you should implement your custom mapping function.
 
-```
+```swift
 enum EnumType {
     case type1, type2
 }
@@ -680,4 +686,3 @@ class BasicTypes: HandyJSON {
 # License
 
 HandyJSON is released under the Apache License, Version 2.0. See LICENSE for details.
-
