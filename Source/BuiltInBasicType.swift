@@ -128,7 +128,7 @@ extension String: _BuiltInBasicType {
                     return "false"
                 }
             }
-            return num.stringValue
+            return String(format:"%g", num.doubleValue)
         case _ as NSNull:
             return nil
         default:
