@@ -31,7 +31,11 @@ extension NominalType {
             // swift class created dynamically in objc-runtime didn't have valid nominalTypeDescriptor
             return nil
         }
+        #if swift(>=4.1)
+        return NominalTypeDescriptor(pointer: relativePointer(base: base, offset: base.pointee - base.hashValue))
+        #else
         return NominalTypeDescriptor(pointer: relativePointer(base: base, offset: base.pointee))
+        #endif
     }
 
     var fieldTypes: [Any.Type]? {
