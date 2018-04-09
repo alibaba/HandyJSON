@@ -31,7 +31,7 @@ extension NominalType {
             // swift class created dynamically in objc-runtime didn't have valid nominalTypeDescriptor
             return nil
         }
-        #if swift(>=4.1)
+        #if swift(>=4.1) || (swift(>=3.3) && !swift(>=4.0))
         return NominalTypeDescriptor(pointer: relativePointer(base: base, offset: base.pointee - base.hashValue))
         #else
         return NominalTypeDescriptor(pointer: relativePointer(base: base, offset: base.pointee))
