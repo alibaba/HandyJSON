@@ -64,7 +64,9 @@ extension _Measurable {
                 let name = String(cString: property_getName(props.advanced(by: Int(i)).pointee))
                 propertyList.insert(name)
             }
+            free(props)
         }
+        count.deallocate()
         return propertyList
     }
 
