@@ -64,7 +64,13 @@ extension _Measurable {
                 let name = String(cString: property_getName(props.advanced(by: Int(i)).pointee))
                 propertyList.insert(name)
             }
+            free(props)
         }
+        #if swift(>=4.1)
+        count.deallocate()
+        #else
+        count.deallocate(capacity: 1)
+        #endif
         return propertyList
     }
 
