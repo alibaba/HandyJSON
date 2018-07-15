@@ -180,33 +180,6 @@ extension Optional: _BuiltInBasicType {
     }
 }
 
-extension ImplicitlyUnwrappedOptional: _BuiltInBasicType {
-
-    static func _transform(from object: Any) -> ImplicitlyUnwrappedOptional? {
-        if let value = (Wrapped.self as? _Transformable.Type)?.transform(from: object) as? Wrapped {
-            return ImplicitlyUnwrappedOptional(value)
-        } else if let value = object as? Wrapped {
-            return ImplicitlyUnwrappedOptional(value)
-        }
-        return nil
-    }
-
-    func _getWrappedValue() -> Any? {
-        return self == nil ? nil : self!
-    }
-
-    func _plainValue() -> Any? {
-        if let value = _getWrappedValue() {
-            if let transformable = value as? _Transformable {
-                return transformable.plainValue()
-            } else {
-                return value
-            }
-        }
-        return nil
-    }
-}
-
 // MARK: Collection Support : Array & Set
 
 extension Collection {

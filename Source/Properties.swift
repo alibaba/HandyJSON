@@ -33,6 +33,18 @@ struct Property {
             return extensions(of: type).write(value, to: storage.advanced(by: offset))
         }
     }
+
+    struct Context {
+        public var name: String?
+        public var type: Any.Type?
+        public func isSuccess() -> Bool {
+            if name == nil || type == nil {
+                return false
+            } else {
+                return true
+            }
+        }
+    }
 }
 
 /// Retrieve properties for `instance`
@@ -56,34 +68,53 @@ private func nextProperty(description: Property.Description, storage: UnsafeRawP
 
 /// Retrieve property descriptions for `type`
 func getProperties(forType type: Any.Type) -> [Property.Description]? {
-    if let nominalType = Metadata.Struct(anyType: type) {
-        return fetchProperties(nominalType: nominalType)
-    } else if let nominalType = Metadata.Class(anyType: type) {
-        return nominalType.properties()
-    } else if let nominalType = Metadata.ObjcClassWrapper(anyType: type),
-        let targetType = nominalType.targetType {
+    if let contextDescriptorType = Metadata.Struct(anyType: type) {
+        if let fieldOffsets = getFieldOffsets(contextDescriptorType: contextDescriptorType) {
+            return getPropertyDescriptions(from: fieldOffsets, instanceType: type)
+        } else {
+            return nil
+        }
+    } else if let contextDescriptorType = Metadata.Class(anyType: type) {
+        if let fieldOffsets = contextDescriptorType.fieldOffsets() {
+            return getPropertyDescriptions(from: fieldOffsets, instanceType: type)
+        } else {
+            return nil
+        }
+    } else if let contextDescriptorType = Metadata.ObjcClassWrapper(anyType: type),
+        let targetType = contextDescriptorType.targetType {
         return getProperties(forType: targetType)
     } else {
         return nil
     }
 }
 
-func fetchProperties<T : NominalType>(nominalType: T) -> [Property.Description]? {
-    return propertiesForNominalType(nominalType)
+func getPropertyDescriptions(from fieldOffsets: [Int], instanceType type: Any.Type) -> [Property.Description]? {
+    var propertyDescriptions = [Property.Description]()
+    for i in 0..<fieldOffsets.count {
+        var propertyContext = Property.Context()
+        _getFieldAt(type, i, { name, type, ctx in
+            let fieldName = String(cString: name)
+            let type = unsafeBitCast(type, to: Any.Type.self)
+            ctx.assumingMemoryBound(to: Property.Context.self).pointee.name = fieldName
+            ctx.assumingMemoryBound(to: Property.Context.self).pointee.type = type
+        }, &propertyContext)
+        guard propertyContext.isSuccess() else {
+            return nil
+        }
+        let propertyDescription = Property.Description(key: propertyContext.name!, type: propertyContext.type!, offset: fieldOffsets[i])
+        propertyDescriptions.append(propertyDescription)
+    }
+    return propertyDescriptions
 }
 
-private func propertiesForNominalType<T : NominalType>(_ type: T) -> [Property.Description]? {
-    guard let nominalTypeDescriptor = type.nominalTypeDescriptor else {
-        return nil
-    }
-    guard nominalTypeDescriptor.numberOfFields != 0 else {
+func getFieldOffsets<T: ContextDescriptorType>(contextDescriptorType type: T) -> [Int]? {
+    guard type.numberOfFields != 0 else {
         return []
     }
-    guard let fieldTypes = type.fieldTypes, let fieldOffsets = type.fieldOffsets else {
+    guard let fieldOffsets = type.fieldOffsets else {
         return nil
     }
-    let fieldNames = nominalTypeDescriptor.fieldNames
-    return (0..<nominalTypeDescriptor.numberOfFields).map { i in
-        return Property.Description(key: fieldNames[i], type: fieldTypes[i], offset: fieldOffsets[i])
+    return (0..<type.numberOfFields).map { i in
+        return fieldOffsets[i]
     }
 }
