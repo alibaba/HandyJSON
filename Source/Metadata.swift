@@ -115,7 +115,7 @@ extension Metadata {
 
 // MARK: Metadata + Class
 extension Metadata {
-    struct Class : NominalType {
+    struct Class : ContextDescriptorType {
 
         static let kind: Kind? = .class
         var pointer: UnsafePointer<_Metadata._Class>
@@ -127,7 +127,7 @@ extension Metadata {
             }
         }
 
-        var nominalTypeDescriptorOffsetLocation: Int {
+        var contextDescriptorOffsetLocation: Int {
             return is64BitPlatform ? 8 : 11
         }
 
@@ -150,32 +150,30 @@ extension Metadata {
             return metaclass
         }
 
-        func _propertiesAndStartPoint() -> ([Property.Description], Int32?)? {
+        func _fieldOffsetsAndStartPoint() -> ([Int], Int32?)? {
             let instanceStart = pointer.pointee.class_rw_t()?.pointee.class_ro_t()?.pointee.instanceStart
-            var result: [Property.Description] = []
+            var result: [Int] = []
 
-            if let properties = fetchProperties(nominalType: self) {
+            if let properties = getFieldOffsets(contextDescriptorType: self) {
                 result = properties
             }
 
             if let superclass = superclass,
                 String(describing: unsafeBitCast(superclass.pointer, to: Any.Type.self)) != "SwiftObject",  // ignore the root swift object
-                let superclassProperties = superclass._propertiesAndStartPoint() {
+                let superclassProperties = superclass._fieldOffsetsAndStartPoint() {
 
                 return (superclassProperties.0 + result, superclassProperties.1)
             }
             return (result, instanceStart)
         }
 
-        func properties() -> [Property.Description]? {
-            let propsAndStp = _propertiesAndStartPoint()
+        func fieldOffsets() -> [Int]? {
+            let propsAndStp = _fieldOffsetsAndStartPoint()
             if let firstInstanceStart = propsAndStp?.1,
                 let firstProperty = propsAndStp?.0.first {
 
-                return propsAndStp?.0.map({ (property) -> Property.Description in
-                    return Property.Description(key: property.key,
-                                                type: property.type,
-                                                offset: property.offset - firstProperty.offset + Int(firstInstanceStart))
+                return propsAndStp?.0.map({ (fieldOffset) -> Int in
+                    return fieldOffset - firstProperty + Int(firstInstanceStart)
                 })
             } else {
                 return propsAndStp?.0
@@ -207,10 +205,10 @@ extension _Metadata {
 
 // MARK: Metadata + Struct
 extension Metadata {
-    struct Struct : NominalType {
+    struct Struct : ContextDescriptorType {
         static let kind: Kind? = .struct
         var pointer: UnsafePointer<_Metadata._Struct>
-        var nominalTypeDescriptorOffsetLocation: Int {
+        var contextDescriptorOffsetLocation: Int {
             return 1
         }
     }
@@ -219,17 +217,17 @@ extension Metadata {
 extension _Metadata {
     struct _Struct {
         var kind: Int
-        var nominalTypeDescriptorOffset: Int
+        var contextDescriptorOffset: Int
         var parent: Metadata?
     }
 }
 
 // MARK: Metadata + ObjcClassWrapper
 extension Metadata {
-    struct ObjcClassWrapper: NominalType {
+    struct ObjcClassWrapper: ContextDescriptorType {
         static let kind: Kind? = .objCClassWrapper
         var pointer: UnsafePointer<_Metadata._ObjcClassWrapper>
-        var nominalTypeDescriptorOffsetLocation: Int {
+        var contextDescriptorOffsetLocation: Int {
             return is64BitPlatform ? 8 : 11
         }
 
