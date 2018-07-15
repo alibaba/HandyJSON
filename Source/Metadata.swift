@@ -150,31 +150,46 @@ extension Metadata {
             return metaclass
         }
 
-        func _fieldOffsetsAndStartPoint() -> ([Int], Int32?)? {
+        func _propertyDescriptionsAndStartPoint() -> ([Property.Description], Int32?)? {
             let instanceStart = pointer.pointee.class_rw_t()?.pointee.class_ro_t()?.pointee.instanceStart
-            var result: [Int] = []
-
-            if let properties = getFieldOffsets(contextDescriptorType: self) {
-                result = properties
+            var result: [Property.Description] = []
+            let selfType = unsafeBitCast(self.pointer, to: Any.Type.self)
+            if let offsets = self.fieldOffsets {
+                class NameAndType {
+                    var name: String?
+                    var type: Any.Type?
+                }
+                for i in 0..<self.numberOfFields {
+                    var nameAndType = NameAndType()
+                    _getFieldAt(selfType, i, { (name, type, nameAndTypePtr) in
+                        let name = String(cString: name)
+                        let type = unsafeBitCast(type, to: Any.Type.self)
+                        nameAndTypePtr.assumingMemoryBound(to: NameAndType.self).pointee.name = name
+                        nameAndTypePtr.assumingMemoryBound(to: NameAndType.self).pointee.type = type
+                    }, &nameAndType)
+                    if let name = nameAndType.name, let type = nameAndType.type {
+                        result.append(Property.Description(key: name, type: type, offset: offsets[i]))
+                    }
+                }
             }
 
             if let superclass = superclass,
                 String(describing: unsafeBitCast(superclass.pointer, to: Any.Type.self)) != "SwiftObject",  // ignore the root swift object
-                let superclassProperties = superclass._fieldOffsetsAndStartPoint() {
+                let superclassProperties = superclass._propertyDescriptionsAndStartPoint() {
 
                 return (superclassProperties.0 + result, superclassProperties.1)
             }
             return (result, instanceStart)
         }
 
-        func fieldOffsets() -> [Int]? {
-            let propsAndStp = _fieldOffsetsAndStartPoint()
+        func propertyDescriptions() -> [Property.Description]? {
+            let propsAndStp = _propertyDescriptionsAndStartPoint()
             if let firstInstanceStart = propsAndStp?.1,
-                let firstProperty = propsAndStp?.0.first {
-
-                return propsAndStp?.0.map({ (fieldOffset) -> Int in
-                    return fieldOffset - firstProperty + Int(firstInstanceStart)
-                })
+                let firstProperty = propsAndStp?.0.first?.offset {
+                    return propsAndStp?.0.map({ (propertyDesc) -> Property.Description in
+                        let offset = propertyDesc.offset - firstProperty + Int(firstInstanceStart)
+                        return Property.Description(key: propertyDesc.key, type: propertyDesc.type, offset: offset)
+                    })
             } else {
                 return propsAndStp?.0
             }
@@ -210,6 +225,32 @@ extension Metadata {
         var pointer: UnsafePointer<_Metadata._Struct>
         var contextDescriptorOffsetLocation: Int {
             return 1
+        }
+
+        func propertyDescriptions() -> [Property.Description]? {
+            guard let fieldOffsets = self.fieldOffsets else {
+                return []
+            }
+            var result: [Property.Description] = []
+            let selfType = unsafeBitCast(self.pointer, to: Any.Type.self)
+            class NameAndType {
+                var name: String?
+                var type: Any.Type?
+            }
+            for i in 0..<self.numberOfFields {
+                var nameAndType = NameAndType()
+                _getFieldAt(selfType, i, { (name, type, nameAndTypePtr) in
+                    let name = String(cString: name)
+                    let type = unsafeBitCast(type, to: Any.Type.self)
+                    let nameAndType = nameAndTypePtr.assumingMemoryBound(to: NameAndType.self).pointee
+                    nameAndType.name = name
+                    nameAndType.type = type
+                }, &nameAndType)
+                if let name = nameAndType.name, let type = nameAndType.type {
+                    result.append(Property.Description(key: name, type: type, offset: fieldOffsets[i]))
+                }
+            }
+            return result
         }
     }
 }

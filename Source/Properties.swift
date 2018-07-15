@@ -33,18 +33,6 @@ struct Property {
             return extensions(of: type).write(value, to: storage.advanced(by: offset))
         }
     }
-
-    struct Context {
-        public var name: String?
-        public var type: Any.Type?
-        public func isSuccess() -> Bool {
-            if name == nil || type == nil {
-                return false
-            } else {
-                return true
-            }
-        }
-    }
 }
 
 /// Retrieve properties for `instance`
@@ -68,53 +56,13 @@ private func nextProperty(description: Property.Description, storage: UnsafeRawP
 
 /// Retrieve property descriptions for `type`
 func getProperties(forType type: Any.Type) -> [Property.Description]? {
-    if let contextDescriptorType = Metadata.Struct(anyType: type) {
-        if let fieldOffsets = getFieldOffsets(contextDescriptorType: contextDescriptorType) {
-            return getPropertyDescriptions(from: fieldOffsets, instanceType: type)
-        } else {
-            return nil
-        }
-    } else if let contextDescriptorType = Metadata.Class(anyType: type) {
-        if let fieldOffsets = contextDescriptorType.fieldOffsets() {
-            return getPropertyDescriptions(from: fieldOffsets, instanceType: type)
-        } else {
-            return nil
-        }
-    } else if let contextDescriptorType = Metadata.ObjcClassWrapper(anyType: type),
-        let targetType = contextDescriptorType.targetType {
+    if let structDescriptor = Metadata.Struct(anyType: type) {
+        return structDescriptor.propertyDescriptions()
+    } else if let classDescriptor = Metadata.Class(anyType: type) {
+        return classDescriptor.propertyDescriptions()
+    } else if let objcClassDescriptor = Metadata.ObjcClassWrapper(anyType: type),
+        let targetType = objcClassDescriptor.targetType {
         return getProperties(forType: targetType)
-    } else {
-        return nil
     }
-}
-
-func getPropertyDescriptions(from fieldOffsets: [Int], instanceType type: Any.Type) -> [Property.Description]? {
-    var propertyDescriptions = [Property.Description]()
-    for i in 0..<fieldOffsets.count {
-        var propertyContext = Property.Context()
-        _getFieldAt(type, i, { name, type, ctx in
-            let fieldName = String(cString: name)
-            let type = unsafeBitCast(type, to: Any.Type.self)
-            ctx.assumingMemoryBound(to: Property.Context.self).pointee.name = fieldName
-            ctx.assumingMemoryBound(to: Property.Context.self).pointee.type = type
-        }, &propertyContext)
-        guard propertyContext.isSuccess() else {
-            return nil
-        }
-        let propertyDescription = Property.Description(key: propertyContext.name!, type: propertyContext.type!, offset: fieldOffsets[i])
-        propertyDescriptions.append(propertyDescription)
-    }
-    return propertyDescriptions
-}
-
-func getFieldOffsets<T: ContextDescriptorType>(contextDescriptorType type: T) -> [Int]? {
-    guard type.numberOfFields != 0 else {
-        return []
-    }
-    guard let fieldOffsets = type.fieldOffsets else {
-        return nil
-    }
-    return (0..<type.numberOfFields).map { i in
-        return fieldOffsets[i]
-    }
+    return nil
 }
