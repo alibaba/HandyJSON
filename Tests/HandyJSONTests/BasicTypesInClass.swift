@@ -171,3 +171,15 @@ class InheritanceBasicType: BasicTypesInClass {
     var anotherIntOptional: Int?
     var anotherIntImplicitlyUnwrapped: Int!
 }
+
+class EmptyOCClass: NSObject, HandyJSON {
+    override required init() {
+    }
+}
+
+class InheritEmptyOCClass: EmptyOCClass {
+    var int64: Int64 = 0
+    var int: Int?
+    var int32: Int32!
+    var double: Double = 123.45
+}
