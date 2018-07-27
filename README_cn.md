@@ -1,5 +1,7 @@
 # HandyJSON
 
+**使用 Xcode 10 请切换到 dev_for_swift_4.2 分支，目前只支持 Xcode 10 beta 4，之前的 beta 版本需要下载最新的 toolchain 来完成支持。**
+
 HandyJSON是一个用于Swift语言中的JSON序列化/反序列化库。
 
 与其他流行的Swift JSON库相比，HandyJSON的特点是，它支持纯swift类，使用也简单。它反序列化时(把JSON转换为Model)不要求Model从`NSObject`继承(因为它不是基于`KVC`机制)，也不要求你为Model定义一个`Mapping`函数。只要你定义好Model类，声明它服从`HandyJSON`协议，HandyJSON就能自行以各个属性的属性名为Key，从JSON串中解析值。
