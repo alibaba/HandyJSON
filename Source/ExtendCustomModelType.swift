@@ -10,12 +10,14 @@ import Foundation
 
 public protocol _ExtendCustomModelType: _Transformable {
     init()
+    mutating func willStartMapping()
     mutating func mapping(mapper: HelpingMapper)
     mutating func didFinishMapping()
 }
 
 extension _ExtendCustomModelType {
 
+    public mutating func willStartMapping() {}
     public mutating func mapping(mapper: HelpingMapper) {}
     public mutating func didFinishMapping() {}
 }
@@ -126,6 +128,7 @@ extension _ExtendCustomModelType {
         } else {
             instance = Self.init()
         }
+        instance.willStartMapping()
         _transform(dict: dict, to: &instance)
         instance.didFinishMapping()
         return instance
