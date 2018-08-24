@@ -613,4 +613,21 @@ class BasicTypesInClassTestsToJSON: XCTestCase {
         XCTAssertEqual(mappedObject?.anotherIntOptional, value2)
         XCTAssertEqual(mappedObject?.anotherIntImplicitlyUnwrapped, value2)
     }
+
+    func testObjectInheritFromEmptyOCClassToModel() {
+        let object = InheritEmptyOCClass()
+        object.int = 11
+        object.int32 = 22
+        object.int64 = 33
+        object.double = 44.55
+
+        let JSONString = object.toJSONString(prettyPrint: true)
+        let mappedObject = JSONDeserializer<InheritEmptyOCClass>.deserializeFrom(json: JSONString!)
+
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject?.int, 11)
+        XCTAssertEqual(mappedObject?.int32, 22)
+        XCTAssertEqual(mappedObject?.int64, 33)
+        XCTAssertEqual(mappedObject?.double, 44.55)
+    }
 }

@@ -175,7 +175,8 @@ extension Metadata {
 
             if let superclass = superclass,
                 String(describing: unsafeBitCast(superclass.pointer, to: Any.Type.self)) != "SwiftObject",  // ignore the root swift object
-                let superclassProperties = superclass._propertyDescriptionsAndStartPoint() {
+                let superclassProperties = superclass._propertyDescriptionsAndStartPoint(),
+                superclassProperties.0.count > 0 {
 
                 return (superclassProperties.0 + result, superclassProperties.1)
             }
