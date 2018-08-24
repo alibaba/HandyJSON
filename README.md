@@ -1,7 +1,7 @@
 # HandyJSON
 
 **For Xcode 10 (Swift 4.2), switch to branch dev_for_swift_4.2.**
-**Notice that only Xcode 10 beta 4 is workable, otherwise you have to download the newest Swift toolchain to run the project.**
+**Notice that only Xcode 10 beta 4 or higher version is workable, otherwise you have to download the newest Swift toolchain to run the project.**
 
 HandyJSON is a framework written in Swift which to make converting model objects( **pure classes/structs** ) to and from JSON easy on iOS.
 
