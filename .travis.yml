@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode9
+osx_image: xcode10
 
 env:
   global:
@@ -7,7 +7,7 @@ env:
     - OSX_FRAMEWORK_SCHEME="HandyJSON Mac"
     - TVOS_FRAMEWORK_SCHEME="HandyJSON tvOS"
     - WATCHOS_FRAMEWORK_SCHEME="HandyJSON watchOS"
-    - IOS_SDK=iphonesimulator11.0
+    - IOS_SDK=iphonesimulator12.0
     - OSX_SDK=macosx10.12
 
 before_install:
@@ -17,6 +17,8 @@ script:
   - set -o pipefail
   - xcodebuild -version
   - xcodebuild -showsdks
+
+  - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "OS=12.0,name=iPhone XS Max" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
 
   - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "OS=11.0,name=iPhone 8" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
 
