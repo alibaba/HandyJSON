@@ -56,34 +56,13 @@ private func nextProperty(description: Property.Description, storage: UnsafeRawP
 
 /// Retrieve property descriptions for `type`
 func getProperties(forType type: Any.Type) -> [Property.Description]? {
-    if let nominalType = Metadata.Struct(anyType: type) {
-        return fetchProperties(nominalType: nominalType)
-    } else if let nominalType = Metadata.Class(anyType: type) {
-        return nominalType.properties()
-    } else if let nominalType = Metadata.ObjcClassWrapper(anyType: type),
-        let targetType = nominalType.targetType {
+    if let structDescriptor = Metadata.Struct(anyType: type) {
+        return structDescriptor.propertyDescriptions()
+    } else if let classDescriptor = Metadata.Class(anyType: type) {
+        return classDescriptor.propertyDescriptions()
+    } else if let objcClassDescriptor = Metadata.ObjcClassWrapper(anyType: type),
+        let targetType = objcClassDescriptor.targetType {
         return getProperties(forType: targetType)
-    } else {
-        return nil
     }
-}
-
-func fetchProperties<T : NominalType>(nominalType: T) -> [Property.Description]? {
-    return propertiesForNominalType(nominalType)
-}
-
-private func propertiesForNominalType<T : NominalType>(_ type: T) -> [Property.Description]? {
-    guard let nominalTypeDescriptor = type.nominalTypeDescriptor else {
-        return nil
-    }
-    guard nominalTypeDescriptor.numberOfFields != 0 else {
-        return []
-    }
-    guard let fieldTypes = type.fieldTypes, let fieldOffsets = type.fieldOffsets else {
-        return nil
-    }
-    let fieldNames = nominalTypeDescriptor.fieldNames
-    return (0..<nominalTypeDescriptor.numberOfFields).map { i in
-        return Property.Description(key: fieldNames[i], type: fieldTypes[i], offset: fieldOffsets[i])
-    }
+    return nil
 }

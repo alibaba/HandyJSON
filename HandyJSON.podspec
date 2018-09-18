@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
     s.author = {'xuyecan' => 'xuyecan@gmail.com'}
     s.license = 'Apache License 2.0'
     s.requires_arc = true
-    s.version = '4.1.3'
+    s.version = '4.2.0'
     s.homepage = "https://github.com/alibaba/handyjson"
     s.name = "HandyJSON"
 
@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
     s.watchos.deployment_target = '2.0'
     s.tvos.deployment_target = '9.0'
 
-    s.pod_target_xcconfig = { 'SWIFT_SUPPRESS_WARNINGS' => 'YES' }
+    s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.2' }
 end

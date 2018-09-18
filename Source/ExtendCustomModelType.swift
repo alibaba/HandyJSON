@@ -33,7 +33,8 @@ fileprivate func convertKeyIfNeeded(dict: [String: Any]) -> [String: Any] {
 }
 
 fileprivate func getRawValueFrom(dict: [String: Any], property: PropertyInfo, mapper: HelpingMapper) -> Any? {
-    if let mappingHandler = mapper.getMappingHandler(key: property.address.hashValue) {
+    let address = Int(bitPattern: property.address)
+    if let mappingHandler = mapper.getMappingHandler(key: address) {
         if let mappingPaths = mappingHandler.mappingPaths, mappingPaths.count > 0 {
             for mappingPath in mappingPaths {
                 if let _value = dict.findValueBy(path: mappingPath) {
@@ -50,7 +51,7 @@ fileprivate func getRawValueFrom(dict: [String: Any], property: PropertyInfo, ma
 }
 
 fileprivate func convertValue(rawValue: Any, property: PropertyInfo, mapper: HelpingMapper) -> Any? {
-    if let mappingHandler = mapper.getMappingHandler(key: property.address.hashValue), let transformer = mappingHandler.assignmentClosure {
+    if let mappingHandler = mapper.getMappingHandler(key: Int(bitPattern: property.address)), let transformer = mappingHandler.assignmentClosure {
         return transformer(rawValue)
     }
     if let transformableType = property.type as? _Transformable.Type {
@@ -143,7 +144,7 @@ extension _ExtendCustomModelType {
 
         // get head addr
         let rawPointer = instance.headPointer()
-        InternalLogger.logVerbose("instance start at: ", rawPointer.hashValue)
+        InternalLogger.logVerbose("instance start at: ", Int(bitPattern: rawPointer))
 
         // process dictionary
         let _dict = convertKeyIfNeeded(dict: dict)
@@ -151,14 +152,14 @@ extension _ExtendCustomModelType {
         let instanceIsNsObject = instance.isNSObjectType()
         let bridgedPropertyList = instance.getBridgedPropertyList()
 
-        properties.forEach { (property) in
+        for property in properties {
             let isBridgedProperty = instanceIsNsObject && bridgedPropertyList.contains(property.key)
 
             let propAddr = rawPointer.advanced(by: property.offset)
-            InternalLogger.logVerbose(property.key, "address at: ", propAddr.hashValue)
-            if mapper.propertyExcluded(key: propAddr.hashValue) {
+            InternalLogger.logVerbose(property.key, "address at: ", Int(bitPattern: propAddr))
+            if mapper.propertyExcluded(key: Int(bitPattern: propAddr)) {
                 InternalLogger.logDebug("Exclude property: \(property.key)")
-                return
+                continue
             }
 
             let propertyDetail = PropertyInfo(key: property.key, type: property.type, address: propAddr, bridged: isBridgedProperty)
@@ -167,7 +168,7 @@ extension _ExtendCustomModelType {
             if let rawValue = getRawValueFrom(dict: _dict, property: propertyDetail, mapper: mapper) {
                 if let convertedValue = convertValue(rawValue: rawValue, property: propertyDetail, mapper: mapper) {
                     assignProperty(convertedValue: convertedValue, instance: instance, property: propertyDetail)
-                    return
+                    continue
                 }
             }
             InternalLogger.logDebug("Property: \(property.key) hasn't been written in")
@@ -237,11 +238,11 @@ extension _ExtendCustomModelType {
                     realValue = _value
                 }
 
-                if mapper.propertyExcluded(key: info.address.hashValue) {
+                if mapper.propertyExcluded(key: Int(bitPattern: info.address)) {
                     continue
                 }
 
-                if let mappingHandler = mapper.getMappingHandler(key: info.address.hashValue) {
+                if let mappingHandler = mapper.getMappingHandler(key: Int(bitPattern: info.address)) {
                     // if specific key is set, replace the label
                     if let mappingPaths = mappingHandler.mappingPaths, mappingPaths.count > 0 {
                         // take the first path, last segment if more than one

@@ -104,7 +104,7 @@ public class HelpingMapper {
     
     public func specify<T>(property: inout T, name: String?, converter: ((String) -> T)?) {
         let pointer = withUnsafePointer(to: &property, { return $0 })
-        let key = pointer.hashValue
+        let key = Int(bitPattern: pointer)
         let names = (name == nil ? nil : [name!])
         
         if let _converter = converter {
@@ -134,7 +134,7 @@ public class HelpingMapper {
     
     fileprivate func _exclude<T>(property: inout T) {
         let pointer = withUnsafePointer(to: &property, { return $0 })
-        self.excludeProperties.append(pointer.hashValue)
+        self.excludeProperties.append(Int(bitPattern: pointer))
     }
 }
 
@@ -146,7 +146,7 @@ public func <-- <T>(property: inout T, name: String) -> CustomMappingKeyValueTup
 
 public func <-- <T>(property: inout T, names: [String]) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
-    let key = pointer.hashValue
+    let key = Int(bitPattern: pointer)
     return (key, MappingPropertyHandler(rawPaths: names, assignmentClosure: nil, takeValueClosure: nil))
 }
 
@@ -162,7 +162,7 @@ public func <-- <Transform: TransformType>(property: inout Transform.Object, tra
 
 public func <-- <Transform: TransformType>(property: inout Transform.Object, transformer: ([String], Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
-    let key = pointer.hashValue
+    let key = Int(bitPattern: pointer)
     let assignmentClosure = { (jsonValue: Any?) -> Transform.Object? in
         return transformer.1?.transformFromJSON(jsonValue)
     }
@@ -187,33 +187,8 @@ public func <-- <Transform: TransformType>(property: inout Transform.Object?, tr
 
 public func <-- <Transform: TransformType>(property: inout Transform.Object?, transformer: ([String], Transform?)) -> CustomMappingKeyValueTuple {
     let pointer = withUnsafePointer(to: &property, { return $0 })
-    let key = pointer.hashValue
+    let key = Int(bitPattern: pointer)
     let assignmentClosure = { (jsonValue: Any?) -> Any? in
-        return transformer.1?.transformFromJSON(jsonValue)
-    }
-    let takeValueClosure = { (objectValue: Any?) -> Any? in
-        if let _value = objectValue as? Transform.Object {
-            return transformer.1?.transformToJSON(_value) as Any
-        }
-        return nil
-    }
-    return (key, MappingPropertyHandler(rawPaths: transformer.0, assignmentClosure: assignmentClosure, takeValueClosure: takeValueClosure))
-}
-
-// MARK: implicitly unwrap optional properties
-public func <-- <Transform: TransformType>(property: inout Transform.Object!, transformer: Transform) -> CustomMappingKeyValueTuple {
-    return property <-- (nil, transformer)
-}
-
-public func <-- <Transform: TransformType>(property: inout Transform.Object!, transformer: (String?, Transform?)) -> CustomMappingKeyValueTuple {
-    let names = (transformer.0 == nil ? [] : [transformer.0!])
-    return property <-- (names, transformer.1)
-}
-
-public func <-- <Transform: TransformType>(property: inout Transform.Object!, transformer: ([String], Transform?)) -> CustomMappingKeyValueTuple {
-    let pointer = withUnsafePointer(to: &property, { return $0 })
-    let key = pointer.hashValue
-    let assignmentClosure = { (jsonValue: Any?) in
         return transformer.1?.transformFromJSON(jsonValue)
     }
     let takeValueClosure = { (objectValue: Any?) -> Any? in

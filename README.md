@@ -1,8 +1,5 @@
 # HandyJSON
 
-**For Xcode 10 (Swift 4.2), switch to branch dev_for_swift_4.2.**
-**Notice that only Xcode 10 beta 4 or higher version is workable, otherwise you have to download the newest Swift toolchain to run the project.**
-
 HandyJSON is a framework written in Swift which to make converting model objects( **pure classes/structs** ) to and from JSON easy on iOS.
 
 Compared with others, the most significant feature of HandyJSON is that it does not require the objects inherit from NSObject(**not using KVC but reflection**), neither implements a 'mapping' function(**writing value to memory directly to achieve property assignment**).
@@ -111,9 +108,11 @@ An overview of types supported can be found at file: [BasicTypes.swift](./HandyJ
 
 # Installation
 
-**To use with Swift 3.x using >= 1.8.0**
+**To use with Swift 4.2 ( Xcode 10 ), version == 4.2.0**
 
-**To use with Swift 4.0 using == 4.1.1**
+**To use with Swift 4.0, version >= 4.1.1**
+
+**To use with Swift 3.x, version >= 1.8.0**
 
 For Legacy Swift2.x support, take a look at the [swift2 branch](https://github.com/alibaba/HandyJSON/tree/master_for_swift_2x).
 
@@ -122,7 +121,7 @@ For Legacy Swift2.x support, take a look at the [swift2 branch](https://github.c
 Add the following line to your `Podfile`:
 
 ```
-pod 'HandyJSON', '~> 4.1.1'
+pod 'HandyJSON', '~> 4.2.0'
 ```
 
 Then, run the following command:
