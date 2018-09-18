@@ -135,7 +135,7 @@ $ pod install
 You can add a dependency on `HandyJSON` by adding the following line to your `Cartfile`:
 
 ```
-github "alibaba/HandyJSON" ~> 4.1.1
+github "alibaba/HandyJSON" ~> 4.2.0
 ```
 
 ## Manually
