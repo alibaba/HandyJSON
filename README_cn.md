@@ -6,7 +6,7 @@ HandyJSON是一个用于Swift语言中的JSON序列化/反序列化库。
 
 HandyJSON目前依赖于从Swift Runtime源码中推断的内存规则，任何变动我们将随时跟进。
 
-[![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=master)](https://travis-ci.org/alibaba/HandyJSON)
+[![Build Status](https://travis-ci.org/alibaba/HandyJSON.svg?branch=develop)](https://travis-ci.org/alibaba/HandyJSON)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Cocoapods Version](https://img.shields.io/cocoapods/v/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
 [![Cocoapods Platform](https://img.shields.io/cocoapods/p/HandyJSON.svg?style=flat)](http://cocoadocs.org/docsets/HandyJSON)
