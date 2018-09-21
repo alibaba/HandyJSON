@@ -85,6 +85,7 @@ public class HelpingMapper {
     
     private var mappingHandlers = [Int: MappingPropertyHandler]()
     private var excludeProperties = [Int]()
+    private var nullPresentProperties = [Int]()
     
     internal func getMappingHandler(key: Int) -> MappingPropertyHandler? {
         return self.mappingHandlers[key]
@@ -92,6 +93,10 @@ public class HelpingMapper {
     
     internal func propertyExcluded(key: Int) -> Bool {
         return self.excludeProperties.contains(key)
+    }
+    
+    internal func propertyPresentNullValue(key: Int) -> Bool {
+        return self.nullPresentProperties.contains(key)
     }
     
     public func specify<T>(property: inout T, name: String) {
@@ -126,6 +131,14 @@ public class HelpingMapper {
     
     public func exclude<T>(property: inout T) {
         self._exclude(property: &property)
+    }
+    
+    public func nullPresent<T>(property: inout T) {
+        let pointer = withUnsafePointer(to: &property, { return $0 })
+        let iPointer = Int(bitPattern: pointer)
+        if !self.excludeProperties.contains(iPointer) && !nullPresentProperties.contains(iPointer) {
+            nullPresentProperties.append(iPointer)
+        }
     }
     
     fileprivate func addCustomMapping(key: Int, mappingInfo: MappingPropertyHandler) {

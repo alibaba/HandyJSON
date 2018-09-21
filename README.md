@@ -683,7 +683,19 @@ class BasicTypes: HandyJSON {
 }
 ```
 
+## Q: How to present a `null` value of `nil` property when serialize to JSON?
 
+In `mapping(mapper: HelpingMapper)`, use `mapper.nullPresent` to apply null present for property
+
+```swift
+class Animal: HandyJSON {
+    var name: String?
+    var owner: String?
+    func mapping(mapper: HelpingMapper) {
+        mapper.nullPresent(self.owner)
+    }
+}
+```
 
 # License
 

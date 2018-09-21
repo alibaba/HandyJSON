@@ -404,4 +404,19 @@ class StructObjectTest: XCTestCase {
         let a = A.deserialize(from: jsonString)!
         XCTAssertEqual(a.upperName, "HANDYJSON")
     }
+    
+    func testNullPresentValue() {
+        class A: HandyJSON {
+            var name: String?
+            required init() {}
+            
+            func mapping(mapper: HelpingMapper) {
+                mapper.nullPresent(property: &self.name)
+            }
+        }
+        
+        let a = A()
+        let jsonString = a.toJSONString()!
+        XCTAssertEqual(jsonString, "{\"name\":null}")
+    }
 }
