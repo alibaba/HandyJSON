@@ -441,4 +441,19 @@ class BasicTypesInStructTestsFromJSON: XCTestCase {
         XCTAssertEqual(4, object.int)
         XCTAssertEqual(2, object.intOptional)
     }
+
+    func testNullInJSON() {
+        let nullJson = """
+            { "anyObject": null, "anyObjectImplicitlyUnwrapped": null, "arrayAnyObjectOptional": null, "dictAnyObjectOptional": null, "arrayNSStringOptional": null, "nsArrayOptional": null, "enumIntOptional": null, "enumStringOptional": null}
+        """
+        let basicObject = BasicTypesInStruct.deserialize(from: nullJson)
+        XCTAssertNotNil(basicObject)
+        XCTAssertEqual((basicObject?.anyObject as! Bool), true)
+        XCTAssertNil(basicObject?.arrayAnyObjectOptional)
+        XCTAssertNil(basicObject?.dictAnyObjectOptional)
+        XCTAssertNil(basicObject?.arrayNSStringOptional)
+        XCTAssertNil(basicObject?.nsArrayOptional)
+        XCTAssertNil(basicObject?.enumIntOptional)
+        XCTAssertNil(basicObject?.enumStringOptional)
+    }
 }

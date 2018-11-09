@@ -53,6 +53,7 @@ fileprivate func getRawValueFrom(dict: [String: Any], property: PropertyInfo, ma
 }
 
 fileprivate func convertValue(rawValue: Any, property: PropertyInfo, mapper: HelpingMapper) -> Any? {
+    if rawValue is NSNull { return nil }
     if let mappingHandler = mapper.getMappingHandler(key: Int(bitPattern: property.address)), let transformer = mappingHandler.assignmentClosure {
         return transformer(rawValue)
     }
