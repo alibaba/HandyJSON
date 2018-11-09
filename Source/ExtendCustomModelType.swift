@@ -236,7 +236,7 @@ extension _ExtendCustomModelType {
         for (key, property) in properties {
             var realKey = key
             var realValue = property.0
-
+            var useNullValueIfNeeded = false
             if let info = property.1 {
                 if info.bridged, let _value = (instance as! NSObject).value(forKey: key) {
                     realValue = _value
@@ -246,6 +246,10 @@ extension _ExtendCustomModelType {
                     continue
                 }
 
+                if mapper.propertyPresentNullValue(key: Int(bitPattern: info.address)) {
+                    useNullValueIfNeeded = true
+                }
+                
                 if let mappingHandler = mapper.getMappingHandler(key: Int(bitPattern: info.address)) {
                     // if specific key is set, replace the label
                     if let mappingPaths = mappingHandler.mappingPaths, mappingPaths.count > 0 {
@@ -265,6 +269,10 @@ extension _ExtendCustomModelType {
             if let typedValue = realValue as? _Transformable {
                 if let result = self._serializeAny(object: typedValue) {
                     dict[realKey] = result
+                    continue
+                }
+                else if useNullValueIfNeeded {
+                    dict[realKey] = NSNull()
                     continue
                 }
             }
