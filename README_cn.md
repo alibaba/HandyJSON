@@ -622,6 +622,11 @@ class BasicTypes: HandyJSON {
 }
 ```
 
+# 致谢
+
+* [reflection](https://github.com/Zewo/Reflection): HandyJSON第一个版本使用了Swift提供的Mirror机制，随后引入了reflection这个库的源码并做了改动，用来实现类属性解析的功能。
+* [ObjectMapper](https://github.com/tristanhimmelman/ObjectMapper): 为了更广泛地支持已有设施，Mapper的实现参考了ObjectMapper的Transform，并引入了若干已实现好的Transformer。同时也引入了ObjectMapper的部分testcases。
+
 # License
 
 HandyJSON is released under the Apache License, Version 2.0. See LICENSE for details.
