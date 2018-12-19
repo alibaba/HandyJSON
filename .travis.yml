@@ -12,6 +12,10 @@ env:
 
 before_install:
   - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+  - export NEED_PRE_BOOT=`instruments -s devices | grep "iPhone 5 (8.1" | awk -F '[ ]' '{print $4}' | awk -F '[\[]' '{print $2}' | sed 's/.$//'`
+  - echo $NEED_PRE_BOOT
+  - npm install ios-sim -g
+  - ios-sim start --devicetypeid "com.apple.CoreSimulator.SimDeviceType.iPhone-5, 8.1"
 
 script:
   - set -o pipefail
@@ -19,17 +23,11 @@ script:
   - xcodebuild -showsdks
 
   - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "platform=iOS Simulator,OS=12.0,name=iPhone XS Max" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
-
   - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "platform=iOS Simulator,OS=11.4,name=iPhone 8" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
-
   - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "platform=iOS Simulator,OS=10.1,name=iPhone 7 Plus" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
-
   - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "platform=iOS Simulator,OS=9.3,name=iPhone 6" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
-
   - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "platform=iOS Simulator,OS=8.1,name=iPhone 5" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
-
   - xcodebuild -scheme "HandyJSON macOS" test
-
   - xcodebuild -scheme "HandyJSON tvOS" -destination "platform=tvOS Simulator,OS=12.0,name=Apple TV" test
 
 after_success:
