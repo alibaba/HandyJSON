@@ -125,8 +125,10 @@ extension Metadata {
 
         var isSwiftClass: Bool {
             get {
-                let lowbit = self.pointer.pointee.databits & 1
-                return lowbit == 1
+                // see include/swift/Runtime/Config.h macro SWIFT_CLASS_IS_SWIFT_MASK
+                // it can be 1 or 2 depending on environment
+                let lowbit = self.pointer.pointee.databits & 3
+                return lowbit != 0
             }
         }
 
@@ -146,7 +148,7 @@ extension Metadata {
             }
 
             // ignore objc-runtime layer
-            guard let metaclass = Metadata.Class(anyType: superclass), metaclass.isSwiftClass else {
+            guard let metaclass = Metadata.Class(anyType: superclass) else {
                 return nil
             }
 

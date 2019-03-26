@@ -44,13 +44,23 @@ struct Subject: HandyJSON {
     var lessonPeriod: Int?
 }
 
-class Student: HandyJSON {
-    var id: String?
+class Person: HandyJSON {
     var name: String?
     var age: Int?
-    var grade: Grade = .One
     var height: Int?
     var gender: Gender?
+
+    required init() {}
+}
+
+class IdentifiedPerson: Person {
+    var id: String?
+    
+    required init() {}
+}
+
+class Student: IdentifiedPerson {
+    var grade: Grade = .One
     var className: String?
     var teacher: Teacher = Teacher()
     var subjects: [Subject]?
