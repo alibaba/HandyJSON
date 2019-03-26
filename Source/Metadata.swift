@@ -71,7 +71,10 @@ var is64BitPlatform: Bool {
 }
 
 // MARK: Metadata + Kind
-// https://github.com/apple/swift/blob/swift-3.0-branch/include/swift/ABI/MetadataKind.def
+// include/swift/ABI/MetadataKind.def
+let MetadataKindIsNonHeap = 0x200
+let MetadataKindIsRuntimePrivate = 0x100
+let MetadataKindIsNonType = 0x400
 extension Metadata {
     static let kind: Kind? = nil
 
@@ -80,33 +83,33 @@ extension Metadata {
         case `enum`
         case optional
         case opaque
+        case foreignClass
         case tuple
         case function
         case existential
         case metatype
         case objCClassWrapper
         case existentialMetatype
-        case foreignClass
         case heapLocalVariable
         case heapGenericLocalVariable
         case errorObject
-        case `class`
+        case `class` // The kind only valid for non-class metadata
         init(flag: Int) {
             switch flag {
-            case 1: self = .struct
-            case 2: self = .enum
-            case 3: self = .optional
-            case 8: self = .opaque
-            case 9: self = .tuple
-            case 10: self = .function
-            case 12: self = .existential
-            case 13: self = .metatype
-            case 14: self = .objCClassWrapper
-            case 15: self = .existentialMetatype
-            case 16: self = .foreignClass
-            case 64: self = .heapLocalVariable
-            case 65: self = .heapGenericLocalVariable
-            case 128: self = .errorObject
+            case (0 | MetadataKindIsNonHeap): self = .struct
+            case (1 | MetadataKindIsNonHeap): self = .enum
+            case (2 | MetadataKindIsNonHeap): self = .optional
+            case (3 | MetadataKindIsNonHeap): self = .foreignClass
+            case (0 | MetadataKindIsRuntimePrivate | MetadataKindIsNonHeap): self = .opaque
+            case (1 | MetadataKindIsRuntimePrivate | MetadataKindIsNonHeap): self = .tuple
+            case (2 | MetadataKindIsRuntimePrivate | MetadataKindIsNonHeap): self = .function
+            case (3 | MetadataKindIsRuntimePrivate | MetadataKindIsNonHeap): self = .existential
+            case (4 | MetadataKindIsRuntimePrivate | MetadataKindIsNonHeap): self = .metatype
+            case (5 | MetadataKindIsRuntimePrivate | MetadataKindIsNonHeap): self = .objCClassWrapper
+            case (6 | MetadataKindIsRuntimePrivate | MetadataKindIsNonHeap): self = .existentialMetatype
+            case (0 | MetadataKindIsNonType): self = .heapLocalVariable
+            case (0 | MetadataKindIsNonType | MetadataKindIsRuntimePrivate): self = .heapGenericLocalVariable
+            case (1 | MetadataKindIsNonType | MetadataKindIsRuntimePrivate): self = .errorObject
             default: self = .class
             }
         }
@@ -153,22 +156,18 @@ extension Metadata {
         func _propertyDescriptionsAndStartPoint() -> ([Property.Description], Int32?)? {
             let instanceStart = pointer.pointee.class_rw_t()?.pointee.class_ro_t()?.pointee.instanceStart
             var result: [Property.Description] = []
-            let selfType = unsafeBitCast(self.pointer, to: Any.Type.self)
-            if let offsets = self.fieldOffsets {
+            if let fieldOffsets = self.fieldOffsets {
                 class NameAndType {
                     var name: String?
                     var type: Any.Type?
                 }
                 for i in 0..<self.numberOfFields {
-                    var nameAndType = NameAndType()
-                    _getFieldAt(selfType, i, { (name, type, nameAndTypePtr) in
-                        let name = String(cString: name)
-                        let type = unsafeBitCast(type, to: Any.Type.self)
-                        nameAndTypePtr.assumingMemoryBound(to: NameAndType.self).pointee.name = name
-                        nameAndTypePtr.assumingMemoryBound(to: NameAndType.self).pointee.type = type
-                    }, &nameAndType)
-                    if let name = nameAndType.name, let type = nameAndType.type {
-                        result.append(Property.Description(key: name, type: type, offset: offsets[i]))
+
+                    if let name = self.reflectionFieldDescriptor?.fieldRecords[i].fieldName,
+                        let cMangledTypeName = self.reflectionFieldDescriptor?.fieldRecords[i].mangledTypeName,
+                        let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: nil, genericArguments: nil) {
+
+                        result.append(Property.Description(key: name, type: fieldType, offset: fieldOffsets[i]))
                     }
                 }
             }
@@ -233,22 +232,16 @@ extension Metadata {
                 return []
             }
             var result: [Property.Description] = []
-            let selfType = unsafeBitCast(self.pointer, to: Any.Type.self)
             class NameAndType {
                 var name: String?
                 var type: Any.Type?
             }
             for i in 0..<self.numberOfFields {
-                var nameAndType = NameAndType()
-                _getFieldAt(selfType, i, { (name, type, nameAndTypePtr) in
-                    let name = String(cString: name)
-                    let type = unsafeBitCast(type, to: Any.Type.self)
-                    let nameAndType = nameAndTypePtr.assumingMemoryBound(to: NameAndType.self).pointee
-                    nameAndType.name = name
-                    nameAndType.type = type
-                }, &nameAndType)
-                if let name = nameAndType.name, let type = nameAndType.type {
-                    result.append(Property.Description(key: name, type: type, offset: fieldOffsets[i]))
+                if let name = self.reflectionFieldDescriptor?.fieldRecords[i].fieldName,
+                    let cMangledTypeName = self.reflectionFieldDescriptor?.fieldRecords[i].mangledTypeName,
+                    let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: nil, genericArguments: nil) {
+
+                    result.append(Property.Description(key: name, type: fieldType, offset: fieldOffsets[i]))
                 }
             }
             return result

@@ -38,6 +38,17 @@ extension ContextDescriptorType {
         }
     }
 
+    var mangledName: String {
+        let pointer = UnsafePointer<Int>(self.pointer)
+        let base = pointer.advanced(by: contextDescriptorOffsetLocation)
+        let mangledNameAddress = base.pointee + 2 * 4 // 2 properties in front
+        if let offset = contextDescriptor?.mangledName,
+            let cString = UnsafePointer<UInt8>(bitPattern: mangledNameAddress + offset) {
+            return String(cString: cString)
+        }
+        return ""
+    }
+
     var numberOfFields: Int {
         return contextDescriptor?.numberOfFields ?? 0
     }
@@ -60,16 +71,36 @@ extension ContextDescriptorType {
             }
         }
     }
+
+    var reflectionFieldDescriptor: FieldDescriptor? {
+        guard let contextDescriptor = self.contextDescriptor else {
+            return nil
+        }
+        let pointer = UnsafePointer<Int>(self.pointer)
+        let base = pointer.advanced(by: contextDescriptorOffsetLocation)
+        let offset = contextDescriptor.reflectionFieldDescriptor
+        let address = base.pointee + 4 * 4 // (4 properties in front) * (sizeof Int32)
+        guard let fieldDescriptorPtr = UnsafePointer<_FieldDescriptor>(bitPattern: address + offset) else {
+            return nil
+        }
+        return FieldDescriptor(pointer: fieldDescriptorPtr)
+    }
 }
 
 protocol ContextDescriptorProtocol {
+    var mangledName: Int { get }
     var numberOfFields: Int { get }
     var fieldOffsetVector: Int { get }
+    var reflectionFieldDescriptor: Int { get }
 }
 
 struct ContextDescriptor<T: _ContextDescriptorProtocol>: ContextDescriptorProtocol, PointerType {
 
     var pointer: UnsafePointer<T>
+
+    var mangledName: Int {
+        return Int(pointer.pointee.mangledNameOffset)
+    }
 
     var numberOfFields: Int {
         return Int(pointer.pointee.numberOfFields)
@@ -78,20 +109,26 @@ struct ContextDescriptor<T: _ContextDescriptorProtocol>: ContextDescriptorProtoc
     var fieldOffsetVector: Int {
         return Int(pointer.pointee.fieldOffsetVector)
     }
+
+    var reflectionFieldDescriptor: Int {
+        return Int(pointer.pointee.reflectionFieldDescriptor)
+    }
 }
 
 protocol _ContextDescriptorProtocol {
-    var mangledName: Int32 { get }
+    var mangledNameOffset: Int32 { get }
     var numberOfFields: Int32 { get }
     var fieldOffsetVector: Int32 { get }
     var fieldTypesAccessor: Int32 { get }
+    var reflectionFieldDescriptor: Int32 { get }
 }
 
 struct _StructContextDescriptor: _ContextDescriptorProtocol {
     var flags: Int32
     var parent: Int32
-    var mangledName: Int32
+    var mangledNameOffset: Int32
     var fieldTypesAccessor: Int32
+    var reflectionFieldDescriptor: Int32
     var numberOfFields: Int32
     var fieldOffsetVector: Int32
 }
@@ -99,11 +136,12 @@ struct _StructContextDescriptor: _ContextDescriptorProtocol {
 struct _ClassContextDescriptor: _ContextDescriptorProtocol {
     var flags: Int32
     var parent: Int32
-    var mangledName: Int32
+    var mangledNameOffset: Int32
     var fieldTypesAccessor: Int32
+    var reflectionFieldDescriptor: Int32
     var superClsRef: Int32
-    var reservedWord1: Int32
-    var reservedWord2: Int32
+    var metadataNegativeSizeInWords: Int32
+    var metadataPositiveSizeInWords: Int32
     var numImmediateMembers: Int32
     var numberOfFields: Int32
     var fieldOffsetVector: Int32

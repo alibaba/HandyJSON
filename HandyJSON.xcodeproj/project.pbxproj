@@ -189,6 +189,14 @@
 		393E10011DA249DC00B3BC12 /* NestTypesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestTypesTest.swift */; };
 		393E10021DA249DC00B3BC12 /* CustomTransformTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144A50D1D9A7A770090F50E /* CustomTransformTest.swift */; };
 		393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
+		7D2813E722058D060044E052 /* MangledName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2813E622058D060044E052 /* MangledName.swift */; };
+		7D2813E822058D060044E052 /* MangledName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2813E622058D060044E052 /* MangledName.swift */; };
+		7D2813E922058D060044E052 /* MangledName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2813E622058D060044E052 /* MangledName.swift */; };
+		7D2813EA22058D060044E052 /* MangledName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2813E622058D060044E052 /* MangledName.swift */; };
+		7D460F662203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
+		7D460F672203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
+		7D460F682203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
+		7D460F692203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
 		7DCD448220FB593600370EF4 /* CBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCD448120FB593600370EF4 /* CBridge.swift */; };
 		7DCD448320FB593600370EF4 /* CBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCD448120FB593600370EF4 /* CBridge.swift */; };
 		7DCD448420FB593600370EF4 /* CBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCD448120FB593600370EF4 /* CBridge.swift */; };
@@ -318,6 +326,8 @@
 		393E0FE91DA2494F00B3BC12 /* HandyJSON macOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HandyJSON macOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		393E10081DA249F100B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		393E100A1DA24A0600B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
+		7D2813E622058D060044E052 /* MangledName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangledName.swift; sourceTree = "<group>"; };
+		7D460F652203511D0027428E /* FieldDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FieldDescriptor.swift; sourceTree = "<group>"; };
 		7DCD448120FB593600370EF4 /* CBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBridge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -387,6 +397,7 @@
 		210A76271E210F5B000C3DDD /* Reflection */ = {
 			isa = PBXGroup;
 			children = (
+				7D460F652203511D0027428E /* FieldDescriptor.swift */,
 				210A76291E210FBB000C3DDD /* AnyExtensions.swift */,
 				215F13281E2175C500B0FFEC /* OtherExtension.swift */,
 				210A762F1E210FBB000C3DDD /* Metadata.swift */,
@@ -396,6 +407,7 @@
 				210A76A51E211331000C3DDD /* ReflectionHelper.swift */,
 				215F132D1E2179E700B0FFEC /* LICENSE */,
 				7DCD448120FB593600370EF4 /* CBridge.swift */,
+				7D2813E622058D060044E052 /* MangledName.swift */,
 			);
 			name = Reflection;
 			sourceTree = "<group>";
@@ -860,6 +872,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D2813E722058D060044E052 /* MangledName.swift in Sources */,
 				210A76441E210FBB000C3DDD /* AnyExtensions.swift in Sources */,
 				21DFCA6E1E18EBA600856775 /* TransformOf.swift in Sources */,
 				2145B0B31F1A7DE700707730 /* ExtendCustomModelType.swift in Sources */,
@@ -889,6 +902,7 @@
 				21DFCA5E1E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */,
 				21A192021E22332000CD7609 /* Configuration.swift in Sources */,
 				21A191FD1E222E8C00CD7609 /* Logger.swift in Sources */,
+				7D460F662203511D0027428E /* FieldDescriptor.swift in Sources */,
 				210A76801E210FBB000C3DDD /* Properties.swift in Sources */,
 				2179B6B31D911DB4007B0320 /* HelpingMapper.swift in Sources */,
 				2145B0AB1F1A3AF600707730 /* Transformable.swift in Sources */,
@@ -931,6 +945,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D2813E822058D060044E052 /* MangledName.swift in Sources */,
 				21D7AD3D1F610197008FC7A4 /* PropertyInfo.swift in Sources */,
 				21356CDA1F1A82220094A4F5 /* Measuable.swift in Sources */,
 				21356CDB1F1A82220094A4F5 /* Transformable.swift in Sources */,
@@ -960,6 +975,7 @@
 				21A192031E22332000CD7609 /* Configuration.swift in Sources */,
 				21A191FE1E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76811E210FBB000C3DDD /* Properties.swift in Sources */,
+				7D460F672203511D0027428E /* FieldDescriptor.swift in Sources */,
 				393E0FA91DA165E300B3BC12 /* Deserializer.swift in Sources */,
 				217801E91F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */,
 				393E0FAA1DA165E300B3BC12 /* Serializer.swift in Sources */,
@@ -971,6 +987,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D2813E922058D060044E052 /* MangledName.swift in Sources */,
 				21D7AD3C1F610192008FC7A4 /* PropertyInfo.swift in Sources */,
 				21356CE21F1A82440094A4F5 /* Measuable.swift in Sources */,
 				21356CE31F1A82440094A4F5 /* Transformable.swift in Sources */,
@@ -1000,6 +1017,7 @@
 				21A192041E22332000CD7609 /* Configuration.swift in Sources */,
 				21A191FF1E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76821E210FBB000C3DDD /* Properties.swift in Sources */,
+				7D460F682203511D0027428E /* FieldDescriptor.swift in Sources */,
 				393E0FD01DA2484F00B3BC12 /* Deserializer.swift in Sources */,
 				217801EA1F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */,
 				393E0FD11DA2484F00B3BC12 /* Serializer.swift in Sources */,
@@ -1032,6 +1050,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D2813EA22058D060044E052 /* MangledName.swift in Sources */,
 				21D7AD3B1F61018C008FC7A4 /* PropertyInfo.swift in Sources */,
 				21356CE81F1A824B0094A4F5 /* Measuable.swift in Sources */,
 				21356CE91F1A824B0094A4F5 /* Transformable.swift in Sources */,
@@ -1061,6 +1080,7 @@
 				21A192051E22332000CD7609 /* Configuration.swift in Sources */,
 				21A192001E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76831E210FBB000C3DDD /* Properties.swift in Sources */,
+				7D460F692203511D0027428E /* FieldDescriptor.swift in Sources */,
 				393E0FFC1DA2495900B3BC12 /* Deserializer.swift in Sources */,
 				217801EB1F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */,
 				393E0FFD1DA2495900B3BC12 /* Serializer.swift in Sources */,
