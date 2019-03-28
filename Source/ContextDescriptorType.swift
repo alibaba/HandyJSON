@@ -38,6 +38,24 @@ extension ContextDescriptorType {
         }
     }
 
+    var contextDescriptorPointer: UnsafeRawPointer? {
+        let pointer = UnsafePointer<Int>(self.pointer)
+        let base = pointer.advanced(by: contextDescriptorOffsetLocation)
+        if base.pointee == 0 {
+            return nil
+        }
+        return UnsafeRawPointer(bitPattern: base.pointee)
+    }
+
+//    var genericArgumentVector: UnsafeRawPointer? {
+//        let pointer = UnsafePointer<Int>(self.pointer)
+//        let base = pointer.advanced(by: 19)
+//        if base.pointee == 0 {
+//            return nil
+//        }
+//        return UnsafeRawPointer(base)
+//    }
+
     var mangledName: String {
         let pointer = UnsafePointer<Int>(self.pointer)
         let base = pointer.advanced(by: contextDescriptorOffsetLocation)
@@ -92,6 +110,7 @@ protocol ContextDescriptorProtocol {
     var numberOfFields: Int { get }
     var fieldOffsetVector: Int { get }
     var reflectionFieldDescriptor: Int { get }
+    var genericParamCount: Int { get }
 }
 
 struct ContextDescriptor<T: _ContextDescriptorProtocol>: ContextDescriptorProtocol, PointerType {
@@ -110,8 +129,16 @@ struct ContextDescriptor<T: _ContextDescriptorProtocol>: ContextDescriptorProtoc
         return Int(pointer.pointee.fieldOffsetVector)
     }
 
+    var fieldTypesAccessor: Int {
+        return Int(pointer.pointee.fieldTypesAccessor)
+    }
+
     var reflectionFieldDescriptor: Int {
         return Int(pointer.pointee.reflectionFieldDescriptor)
+    }
+
+    var genericParamCount: Int {
+        return Int(pointer.pointee.genericParamCount)
     }
 }
 
@@ -121,6 +148,11 @@ protocol _ContextDescriptorProtocol {
     var fieldOffsetVector: Int32 { get }
     var fieldTypesAccessor: Int32 { get }
     var reflectionFieldDescriptor: Int32 { get }
+    var genericParamCount: Int16 { get }
+    var genericRequirementCount: Int16 { get }
+    var genericKeyArgumentCount: Int16 { get }
+    var genericExtraArgumentCount: Int16 { get }
+    var genericParams: Int64 { get }
 }
 
 struct _StructContextDescriptor: _ContextDescriptorProtocol {
@@ -131,6 +163,11 @@ struct _StructContextDescriptor: _ContextDescriptorProtocol {
     var reflectionFieldDescriptor: Int32
     var numberOfFields: Int32
     var fieldOffsetVector: Int32
+    var genericParamCount: Int16
+    var genericRequirementCount: Int16
+    var genericKeyArgumentCount: Int16
+    var genericExtraArgumentCount: Int16
+    var genericParams: Int64
 }
 
 struct _ClassContextDescriptor: _ContextDescriptorProtocol {
@@ -145,4 +182,9 @@ struct _ClassContextDescriptor: _ContextDescriptorProtocol {
     var numImmediateMembers: Int32
     var numberOfFields: Int32
     var fieldOffsetVector: Int32
+    var genericParamCount: Int16
+    var genericRequirementCount: Int16
+    var genericKeyArgumentCount: Int16
+    var genericExtraArgumentCount: Int16
+    var genericParams: Int64
 }

@@ -27,10 +27,18 @@ class Model: HandyJSON {
     }
 }
 
-class Result<T: HandyJSON>: HandyJSON {
+class Test: HandyJSON {
+    var name: String?
+    var id: Int64?
+    required init() {}
+}
+
+class Result<T: HandyJSON>: Test {
     var code: String?
     var data: T?
     var data2: T?
+    var data3: Test?
+    var data4: T?
 
     required init() {
     }
@@ -53,28 +61,33 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    func serialization() {
-        let model = Model()
-        model.name = "xyc"
-        model.id = 1234
-        let result = Result<Model>()
-        result.code = "success"
-        result.data = model
-
-        let json = result.toJSONString() ?? ""
-        print("\(json)")
-    }
+//    func serialization() {
+//        let model = Model()
+//        model.name = "xyc"
+//        model.id = 1234
+//        let result = Result<Model>()
+//        result.code = "success"
+//        result.data = model
+//
+//        let json = result.toJSONString() ?? ""
+//        print("\(json)")
+//    }
 
     func deserialization() {
         let model = Model()
         model.name = "item"
         model.id = 1001
         let result = Result<Model>()
-        result.code = "success"
+//        result.code = "success"
         result.data = model
-        result.data2 = model
+//        result.data2 = model
 
         let json = result.toJSONString() ?? ""
+//        let json = """
+//        {
+//            "name": "hehe"
+//        }
+//        """
         print("\(json)")
 
         if let fromJson = Result<Model>.deserialize(from: json) {
