@@ -12,7 +12,7 @@ import XCTest
 
 class GenericTypesTest: XCTestCase {
 
-    // TODO: 
+    // TODO:
     // 1. 无父类的泛型
     // 2. 有父类的泛型
     // 3. 有父类的父类的泛型
@@ -22,31 +22,40 @@ class GenericTypesTest: XCTestCase {
     // 7. struct 的泛型
     // 8. enum 的泛型
     // 9. 有多个泛型，泛型的类型互不相同
+    // 10. 继承空的类
 
-    func testGeneric() {
-        let genericClass = GenericClass<AConformToOneProtocolClass, InheritanceBasicType, BConformToOneProtocolStruct, GenericStruct<AConformToOneProtocolClass>>()
-        let a = AConformToOneProtocolClass()
-        a.a1 = 123
-        a.a2 = "456"
-        a.a3 = ["hehe": "hoho"]
-        let a4 = TestCollectionOfPrimitives()
-        a4.arrayInt = [9, 7, 5, 3]
-        a.a4 = a4
-        genericClass.oneProtocol = a
-        var b = BConformToOneProtocolStruct()
-        b.b1 = 11111111111
-        genericClass.handyJSON = b
-        let inheritanceBasicType = InheritanceBasicType()
-        inheritanceBasicType.anotherInt = 789
-        genericClass.inheritanceBasicType = inheritanceBasicType
-        genericClass.basicTypesInClass = b
+    func testNoSuperClass() {
+
+        let basicCls = BasicTypesInClass()
+        basicCls.intOptional = 123
+        basicCls.arrayString = ["456", "789"]
+        let cls = BaseGenericClass<BasicTypesInClass>()
+        cls.base = basicCls
+
+        let json = cls.toJSONString()
+
+        let deserializedCls = BaseGenericClass<BasicTypesInClass>.deserialize(from: json)
+
+        XCTAssertEqual(deserializedCls!.base!.intOptional, 123)
+        XCTAssertEqual(deserializedCls!.base!.arrayString, ["456", "789"])
+    }
+
+    func testStructClass() {
+
         var basicStruct = BasicTypesInStruct()
-        basicStruct.arrayInt = [8,9,0]
-        genericClass.basicTypesInStruct = basicStruct
-        var genericStruct = GenericStruct<AConformToOneProtocolClass>()
-        genericStruct.a = a
-        genericClass.genericStruct = genericStruct
+        basicStruct.intOptional = 123
+        basicStruct.arrayString = ["456", "789"]
+        var genericStruct = GenericStruct<BasicTypesInStruct>()
+        genericStruct.t = basicStruct
 
-        let json = genericClass.toJSONString() ?? ""
+        let json = genericStruct.toJSONString()
+
+        let deserializedStruct = GenericStruct<BasicTypesInStruct>.deserialize(from: json)
+
+        XCTAssertEqual(deserializedStruct!.t!.intOptional, 123)
+        XCTAssertEqual(deserializedStruct!.t!.arrayString, ["456", "789"])
+    }
+
+    func testComplecatedGeneric() {
     }
 }

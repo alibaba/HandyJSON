@@ -9,41 +9,29 @@
 import Foundation
 import HandyJSON
 
-protocol OneProtocol: HandyJSON {
-    func aFunc()
+struct GenericStruct<T: HandyJSON>: HandyJSON {
+    var t: T?
 }
 
-extension OneProtocol {
-    func aFunc() {}
+class BaseGenericClass<T: HandyJSON>: HandyJSON {
+    var base: T?
+    required init() {}
 }
 
-class AConformToOneProtocolClass: InheritEmptyOCClass, OneProtocol {
-    var a1: Int?
-    var a2: String?
-    var a3: NSDictionary?
-    var a4: TestCollectionOfPrimitives?
-}
-
-struct BConformToOneProtocolStruct: OneProtocol {
-    var b1: Int64?
-    var b2: Double?
-}
-
-struct GenericStruct<T: OneProtocol>: HandyJSON {
-    var a: T?
-}
-
-class SuperGenericClass: OneProtocol {
-    var s: String?
+class SuperGenericClass<T: HandyJSON>: BaseGenericClass<BasicTypesInClass> {
+    var str: String?
+    var t: T?
 
     required init() {}
 }
 
-class GenericClass<T: OneProtocol, U: InheritanceBasicType, V: HandyJSON, W: HandyJSON>: SuperGenericClass {
+class ComplecatedGenericClass<T: HandyJSON, U: InheritanceBasicType, V: HandyJSON, W: HandyJSON>: SuperGenericClass<BasicTypesInClass> {
     var handyJSON: HandyJSON!
     var oneProtocol: T?
     var inheritanceBasicType: U?
     var basicTypesInClass: V?
     var basicTypesInStruct: BasicTypesInStruct?
     var genericStruct: W?
+
+    required init() {}
 }
