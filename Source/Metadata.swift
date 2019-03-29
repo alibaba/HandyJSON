@@ -160,6 +160,7 @@ extension Metadata {
             return Int(pointer.pointee.classObjectSize - pointer.pointee.classObjectAddressPoint) - (contextDescriptorOffsetLocation + 2) * MemoryLayout<Int>.size
         }
 
+        // reference: https://github.com/apple/swift/blob/master/docs/ABI/TypeMetadata.rst#generic-argument-vector
         var genericArgumentVector: UnsafeRawPointer? {
             let pointer = UnsafePointer<Int>(self.pointer)
             var superVTableSize = 0
@@ -167,7 +168,6 @@ extension Metadata {
                 superVTableSize = _superclass.vTableSize / MemoryLayout<Int>.size
             }
             let base = pointer.advanced(by: contextDescriptorOffsetLocation + 2 + superVTableSize)
-//            let base = pointer.advanced(by: 19)
             if base.pointee == 0 {
                 return nil
             }
@@ -257,6 +257,19 @@ extension Metadata {
             return 1
         }
 
+        var genericArgumentOffsetLocation: Int {
+            return 2
+        }
+
+        var genericArgumentVector: UnsafeRawPointer? {
+            let pointer = UnsafePointer<Int>(self.pointer)
+            let base = pointer.advanced(by: genericArgumentOffsetLocation)
+            if base.pointee == 0 {
+                return nil
+            }
+            return UnsafeRawPointer(base)
+        }
+
         func propertyDescriptions() -> [Property.Description]? {
             guard let fieldOffsets = self.fieldOffsets else {
                 return []
@@ -269,7 +282,7 @@ extension Metadata {
             for i in 0..<self.numberOfFields {
                 if let name = self.reflectionFieldDescriptor?.fieldRecords[i].fieldName,
                     let cMangledTypeName = self.reflectionFieldDescriptor?.fieldRecords[i].mangledTypeName,
-                    let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: nil, genericArguments: nil) {
+                    let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: self.contextDescriptorPointer, genericArguments: self.genericArgumentVector) {
 
                     result.append(Property.Description(key: name, type: fieldType, offset: fieldOffsets[i]))
                 }
