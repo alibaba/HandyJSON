@@ -123,7 +123,6 @@ extension _ExtendCustomModelType {
     }
 
     static func _transform(dict: [String: Any]) -> _ExtendCustomModelType? {
-
         var instance: Self
         if let _nsType = Self.self as? NSObject.Type {
             instance = _nsType.createInstance() as! Self
@@ -137,7 +136,9 @@ extension _ExtendCustomModelType {
     }
 
     static func _transform(dict: [String: Any], to instance: inout Self) {
-        guard let properties = getProperties(forType: Self.self) else {
+        guard let properties = getPropertiesFromCached(type: Self.self, computeIfAbsent: { () -> [Property.Description]? in
+            return getProperties(forType: Self.self)
+        }) else {
             InternalLogger.logDebug("Failed when try to get properties from type: \(type(of: Self.self))")
             return
         }
@@ -206,8 +207,10 @@ extension _ExtendCustomModelType {
 
             let children = readAllChildrenFrom(mirror: mirror)
 
-            guard let properties = getProperties(forType: type(of: object)) else {
-                InternalLogger.logError("Can not get properties info for type: \(type(of: object))")
+            guard let properties = getPropertiesFromCached(type: Self.self, computeIfAbsent: { () -> [Property.Description]? in
+                return getProperties(forType: Self.self)
+            }) else {
+                InternalLogger.logDebug("Failed when try to get properties from type: \(type(of: Self.self))")
                 return nil
             }
 

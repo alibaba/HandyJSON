@@ -31,6 +31,10 @@
 		210A76A71E211331000C3DDD /* ReflectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210A76A51E211331000C3DDD /* ReflectionHelper.swift */; };
 		210A76A81E211331000C3DDD /* ReflectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210A76A51E211331000C3DDD /* ReflectionHelper.swift */; };
 		210A76A91E211331000C3DDD /* ReflectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210A76A51E211331000C3DDD /* ReflectionHelper.swift */; };
+		21220E2122844A140046C3E2 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21220E2022844A140046C3E2 /* Cache.swift */; };
+		21220E2222844A140046C3E2 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21220E2022844A140046C3E2 /* Cache.swift */; };
+		21220E2322844A140046C3E2 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21220E2022844A140046C3E2 /* Cache.swift */; };
+		21220E2422844A140046C3E2 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21220E2022844A140046C3E2 /* Cache.swift */; };
 		21356CDA1F1A82220094A4F5 /* Measuable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0A81F1A375F00707730 /* Measuable.swift */; };
 		21356CDB1F1A82220094A4F5 /* Transformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0AA1F1A3AF600707730 /* Transformable.swift */; };
 		21356CDC1F1A82230094A4F5 /* BuiltInBridgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2145B0AE1F1A3F1400707730 /* BuiltInBridgeType.swift */; };
@@ -272,6 +276,7 @@
 		210A76371E210FBB000C3DDD /* PointerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointerType.swift; sourceTree = "<group>"; };
 		210A76381E210FBB000C3DDD /* Properties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Properties.swift; sourceTree = "<group>"; };
 		210A76A51E211331000C3DDD /* ReflectionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReflectionHelper.swift; sourceTree = "<group>"; };
+		21220E2022844A140046C3E2 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		21356CED1F1A841C0094A4F5 /* EnumType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumType.swift; sourceTree = "<group>"; };
 		214329251DFBDC1400CA386A /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		2144A50D1D9A7A770090F50E /* CustomTransformTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTransformTest.swift; sourceTree = "<group>"; };
@@ -450,6 +455,7 @@
 			children = (
 				21520C471D3341B200F53111 /* HandyJSON.h */,
 				2145B0A81F1A375F00707730 /* Measuable.swift */,
+				21220E2022844A140046C3E2 /* Cache.swift */,
 				2145B0AA1F1A3AF600707730 /* Transformable.swift */,
 				21520C511D3341FC00F53111 /* BuiltInBasicType.swift */,
 				2145B0AE1F1A3F1400707730 /* BuiltInBridgeType.swift */,
@@ -894,6 +900,7 @@
 				21DFCA621E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */,
 				2145B0B11F1A7B4700707730 /* Export.swift in Sources */,
 				216652021F49CA5B003B7F9A /* PropertyInfo.swift in Sources */,
+				21220E2122844A140046C3E2 /* Cache.swift in Sources */,
 				210A767C1E210FBB000C3DDD /* PointerType.swift in Sources */,
 				21DFCA561E18EB9C00856775 /* DateTransform.swift in Sources */,
 				21356CEE1F1A841C0094A4F5 /* EnumType.swift in Sources */,
@@ -969,6 +976,7 @@
 				210A76451E210FBB000C3DDD /* AnyExtensions.swift in Sources */,
 				21DFCA6F1E18EBA600856775 /* TransformOf.swift in Sources */,
 				210A76751E210FBB000C3DDD /* ContextDescriptorType.swift in Sources */,
+				21220E2222844A140046C3E2 /* Cache.swift in Sources */,
 				21DFCA631E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */,
 				210A767D1E210FBB000C3DDD /* PointerType.swift in Sources */,
 				21356CEF1F1A841C0094A4F5 /* EnumType.swift in Sources */,
@@ -1011,6 +1019,7 @@
 				210A76461E210FBB000C3DDD /* AnyExtensions.swift in Sources */,
 				21DFCA701E18EBA600856775 /* TransformOf.swift in Sources */,
 				210A76761E210FBB000C3DDD /* ContextDescriptorType.swift in Sources */,
+				21220E2322844A140046C3E2 /* Cache.swift in Sources */,
 				21DFCA641E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */,
 				210A767E1E210FBB000C3DDD /* PointerType.swift in Sources */,
 				21356CF01F1A841C0094A4F5 /* EnumType.swift in Sources */,
@@ -1076,6 +1085,7 @@
 				210A76471E210FBB000C3DDD /* AnyExtensions.swift in Sources */,
 				21DFCA711E18EBA600856775 /* TransformOf.swift in Sources */,
 				210A76771E210FBB000C3DDD /* ContextDescriptorType.swift in Sources */,
+				21220E2422844A140046C3E2 /* Cache.swift in Sources */,
 				21DFCA651E18EB9C00856775 /* CustomDateFormatTransform.swift in Sources */,
 				210A767F1E210FBB000C3DDD /* PointerType.swift in Sources */,
 				21356CF11F1A841C0094A4F5 /* EnumType.swift in Sources */,
@@ -1285,7 +1295,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info-iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1309,7 +1319,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info-iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1329,7 +1339,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: 业灿 许 (U997QZ92HC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = QBMN2BBW3K;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = HandyJSONDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1349,7 +1359,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: 业灿 许 (U997QZ92HC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = QBMN2BBW3K;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = HandyJSONDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1365,6 +1375,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "Tests/HandyJSONTests/Info-iOS.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1378,6 +1389,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "Tests/HandyJSONTests/Info-iOS.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
