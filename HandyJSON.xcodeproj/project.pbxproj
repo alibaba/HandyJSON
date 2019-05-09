@@ -189,6 +189,20 @@
 		393E10011DA249DC00B3BC12 /* NestTypesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252A91D58BE9100B214BB /* NestTypesTest.swift */; };
 		393E10021DA249DC00B3BC12 /* CustomTransformTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2144A50D1D9A7A770090F50E /* CustomTransformTest.swift */; };
 		393E10061DA249DC00B3BC12 /* InvalidStateHandlingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */; };
+		7D2813E722058D060044E052 /* MangledName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2813E622058D060044E052 /* MangledName.swift */; };
+		7D2813E822058D060044E052 /* MangledName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2813E622058D060044E052 /* MangledName.swift */; };
+		7D2813E922058D060044E052 /* MangledName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2813E622058D060044E052 /* MangledName.swift */; };
+		7D2813EA22058D060044E052 /* MangledName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2813E622058D060044E052 /* MangledName.swift */; };
+		7D460F662203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
+		7D460F672203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
+		7D460F682203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
+		7D460F692203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
+		7D9EFA7F224BA3E3002496B7 /* GenericTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9EFA7E224BA3E3002496B7 /* GenericTypes.swift */; };
+		7D9EFA80224BA3E3002496B7 /* GenericTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9EFA7E224BA3E3002496B7 /* GenericTypes.swift */; };
+		7D9EFA81224BA3E3002496B7 /* GenericTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9EFA7E224BA3E3002496B7 /* GenericTypes.swift */; };
+		7D9EFA83224BA40D002496B7 /* GenericTypesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9EFA82224BA40D002496B7 /* GenericTypesTest.swift */; };
+		7D9EFA84224BA40D002496B7 /* GenericTypesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9EFA82224BA40D002496B7 /* GenericTypesTest.swift */; };
+		7D9EFA85224BA40D002496B7 /* GenericTypesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9EFA82224BA40D002496B7 /* GenericTypesTest.swift */; };
 		7DCD448220FB593600370EF4 /* CBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCD448120FB593600370EF4 /* CBridge.swift */; };
 		7DCD448320FB593600370EF4 /* CBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCD448120FB593600370EF4 /* CBridge.swift */; };
 		7DCD448420FB593600370EF4 /* CBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCD448120FB593600370EF4 /* CBridge.swift */; };
@@ -318,6 +332,10 @@
 		393E0FE91DA2494F00B3BC12 /* HandyJSON macOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HandyJSON macOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		393E10081DA249F100B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		393E100A1DA24A0600B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
+		7D2813E622058D060044E052 /* MangledName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangledName.swift; sourceTree = "<group>"; };
+		7D460F652203511D0027428E /* FieldDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FieldDescriptor.swift; sourceTree = "<group>"; };
+		7D9EFA7E224BA3E3002496B7 /* GenericTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTypes.swift; sourceTree = "<group>"; };
+		7D9EFA82224BA40D002496B7 /* GenericTypesTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTypesTest.swift; sourceTree = "<group>"; };
 		7DCD448120FB593600370EF4 /* CBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBridge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -387,6 +405,7 @@
 		210A76271E210F5B000C3DDD /* Reflection */ = {
 			isa = PBXGroup;
 			children = (
+				7D460F652203511D0027428E /* FieldDescriptor.swift */,
 				210A76291E210FBB000C3DDD /* AnyExtensions.swift */,
 				215F13281E2175C500B0FFEC /* OtherExtension.swift */,
 				210A762F1E210FBB000C3DDD /* Metadata.swift */,
@@ -396,6 +415,7 @@
 				210A76A51E211331000C3DDD /* ReflectionHelper.swift */,
 				215F132D1E2179E700B0FFEC /* LICENSE */,
 				7DCD448120FB593600370EF4 /* CBridge.swift */,
+				7D2813E622058D060044E052 /* MangledName.swift */,
 			);
 			name = Reflection;
 			sourceTree = "<group>";
@@ -479,6 +499,8 @@
 				21F252B31D599DE200B214BB /* InvalidStateHandlingTest.swift */,
 				214329251DFBDC1400CA386A /* TestUtils.swift */,
 				392628001DA3E8E100B0C28D /* Supporting Files */,
+				7D9EFA7E224BA3E3002496B7 /* GenericTypes.swift */,
+				7D9EFA82224BA40D002496B7 /* GenericTypesTest.swift */,
 			);
 			name = HandyJSONTests;
 			path = Tests/HandyJSONTests;
@@ -722,22 +744,23 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = aliyun;
 				TargetAttributes = {
 					21520C431D3341B200F53111 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					21520C5A1D3344A900F53111 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = QBMN2BBW3K;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					217B046C1D571B9F0035A8E2 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 					};
 					393E0F9A1DA1650E00B3BC12 = {
 						CreatedOnToolsVersion = 8.0;
@@ -771,6 +794,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -860,6 +884,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D2813E722058D060044E052 /* MangledName.swift in Sources */,
 				210A76441E210FBB000C3DDD /* AnyExtensions.swift in Sources */,
 				21DFCA6E1E18EBA600856775 /* TransformOf.swift in Sources */,
 				2145B0B31F1A7DE700707730 /* ExtendCustomModelType.swift in Sources */,
@@ -889,6 +914,7 @@
 				21DFCA5E1E18EB9C00856775 /* ISO8601DateTransform.swift in Sources */,
 				21A192021E22332000CD7609 /* Configuration.swift in Sources */,
 				21A191FD1E222E8C00CD7609 /* Logger.swift in Sources */,
+				7D460F662203511D0027428E /* FieldDescriptor.swift in Sources */,
 				210A76801E210FBB000C3DDD /* Properties.swift in Sources */,
 				2179B6B31D911DB4007B0320 /* HelpingMapper.swift in Sources */,
 				2145B0AB1F1A3AF600707730 /* Transformable.swift in Sources */,
@@ -910,8 +936,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D9EFA7F224BA3E3002496B7 /* GenericTypes.swift in Sources */,
 				217801F91F5E80A200EDEB38 /* CustomTransfromTypes.swift in Sources */,
 				217801F51F5E7CFD00EDEB38 /* BasicTypesInStructTestsFromJSON.swift in Sources */,
+				7D9EFA83224BA40D002496B7 /* GenericTypesTest.swift in Sources */,
 				21A191F41E21E62500CD7609 /* BasicTypesInClassTestsFromJSON.swift in Sources */,
 				215F13481E217B9C00B0FFEC /* BasicTypesInClass.swift in Sources */,
 				215F13491E217B9C00B0FFEC /* BasicTypesInClassTestsToJSON.swift in Sources */,
@@ -931,6 +959,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D2813E822058D060044E052 /* MangledName.swift in Sources */,
 				21D7AD3D1F610197008FC7A4 /* PropertyInfo.swift in Sources */,
 				21356CDA1F1A82220094A4F5 /* Measuable.swift in Sources */,
 				21356CDB1F1A82220094A4F5 /* Transformable.swift in Sources */,
@@ -960,6 +989,7 @@
 				21A192031E22332000CD7609 /* Configuration.swift in Sources */,
 				21A191FE1E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76811E210FBB000C3DDD /* Properties.swift in Sources */,
+				7D460F672203511D0027428E /* FieldDescriptor.swift in Sources */,
 				393E0FA91DA165E300B3BC12 /* Deserializer.swift in Sources */,
 				217801E91F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */,
 				393E0FAA1DA165E300B3BC12 /* Serializer.swift in Sources */,
@@ -971,6 +1001,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D2813E922058D060044E052 /* MangledName.swift in Sources */,
 				21D7AD3C1F610192008FC7A4 /* PropertyInfo.swift in Sources */,
 				21356CE21F1A82440094A4F5 /* Measuable.swift in Sources */,
 				21356CE31F1A82440094A4F5 /* Transformable.swift in Sources */,
@@ -1000,6 +1031,7 @@
 				21A192041E22332000CD7609 /* Configuration.swift in Sources */,
 				21A191FF1E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76821E210FBB000C3DDD /* Properties.swift in Sources */,
+				7D460F682203511D0027428E /* FieldDescriptor.swift in Sources */,
 				393E0FD01DA2484F00B3BC12 /* Deserializer.swift in Sources */,
 				217801EA1F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */,
 				393E0FD11DA2484F00B3BC12 /* Serializer.swift in Sources */,
@@ -1011,8 +1043,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D9EFA80224BA3E3002496B7 /* GenericTypes.swift in Sources */,
 				217801FA1F5E80A200EDEB38 /* CustomTransfromTypes.swift in Sources */,
 				217801F61F5E7CFD00EDEB38 /* BasicTypesInStructTestsFromJSON.swift in Sources */,
+				7D9EFA84224BA40D002496B7 /* GenericTypesTest.swift in Sources */,
 				21A192081E223F9000CD7609 /* BasicTypesInClass.swift in Sources */,
 				21A192091E223F9000CD7609 /* BasicTypesInClassTestsToJSON.swift in Sources */,
 				21A191F51E21E62E00CD7609 /* BasicTypesInClassTestsFromJSON.swift in Sources */,
@@ -1032,6 +1066,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D2813EA22058D060044E052 /* MangledName.swift in Sources */,
 				21D7AD3B1F61018C008FC7A4 /* PropertyInfo.swift in Sources */,
 				21356CE81F1A824B0094A4F5 /* Measuable.swift in Sources */,
 				21356CE91F1A824B0094A4F5 /* Transformable.swift in Sources */,
@@ -1061,6 +1096,7 @@
 				21A192051E22332000CD7609 /* Configuration.swift in Sources */,
 				21A192001E222E8C00CD7609 /* Logger.swift in Sources */,
 				210A76831E210FBB000C3DDD /* Properties.swift in Sources */,
+				7D460F692203511D0027428E /* FieldDescriptor.swift in Sources */,
 				393E0FFC1DA2495900B3BC12 /* Deserializer.swift in Sources */,
 				217801EB1F5E60C900EDEB38 /* ExtendCustomBasicType.swift in Sources */,
 				393E0FFD1DA2495900B3BC12 /* Serializer.swift in Sources */,
@@ -1072,8 +1108,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D9EFA81224BA3E3002496B7 /* GenericTypes.swift in Sources */,
 				217801FB1F5E80A200EDEB38 /* CustomTransfromTypes.swift in Sources */,
 				217801F71F5E7CFD00EDEB38 /* BasicTypesInStructTestsFromJSON.swift in Sources */,
+				7D9EFA85224BA40D002496B7 /* GenericTypesTest.swift in Sources */,
 				21A192061E223F8900CD7609 /* BasicTypesInClass.swift in Sources */,
 				21A192071E223F8900CD7609 /* BasicTypesInClassTestsToJSON.swift in Sources */,
 				21A191F61E21E63100CD7609 /* BasicTypesInClassTestsFromJSON.swift in Sources */,
@@ -1124,6 +1162,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1173,7 +1212,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1184,6 +1223,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1226,7 +1266,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1254,7 +1294,7 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1277,7 +1317,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSON;
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1297,7 +1337,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1317,7 +1357,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1330,7 +1370,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1343,7 +1383,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1366,7 +1406,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1390,7 +1430,7 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1414,7 +1454,7 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1437,7 +1477,7 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1455,7 +1495,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Debug;
@@ -1471,7 +1511,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Release;
@@ -1497,7 +1537,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1522,7 +1562,7 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1541,7 +1581,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1559,7 +1599,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "alibaba.HandyJSON-macOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

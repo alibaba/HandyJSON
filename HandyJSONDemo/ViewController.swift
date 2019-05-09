@@ -19,43 +19,29 @@
 import UIKit
 import HandyJSON
 
-enum Grade: Int, HandyJSONEnum {
-    case One = 1
-    case Two = 2
-    case Three = 3
+enum Biz: String, HandyJSONEnum {
+    case social = "social"
+    case education = "education"
+    case news = "news"
 }
 
-enum Gender: String, HandyJSONEnum {
-    case Male = "Male"
-    case Female = "Female"
+protocol Data: HandyJSON {}
+
+class Common: Data {
+    var id: Int?
+    required init() {}
 }
 
-struct Teacher: HandyJSON {
-    var name: String?
-    var age: Int?
-    var height: Int?
-    var gender: Gender?
+class Model: Common {
+    var aInt: Int?
+    var aStr: String?
+    required init() {}
 }
 
-struct Subject: HandyJSON {
-    var name: String?
-    var id: Int64?
-    var credit: Int?
-    var lessonPeriod: Int?
-}
-
-class Student: HandyJSON {
-    var id: String?
-    var name: String?
-    var age: Int?
-    var grade: Grade = .One
-    var height: Int?
-    var gender: Gender?
-    var className: String?
-    var teacher: Teacher = Teacher()
-    var subjects: [Subject]?
-    var seat: String?
-
+class Result<T: Data>: HandyJSON {
+    var code: Int?
+    var biz: Biz?
+    var data: T?
     required init() {}
 }
 
@@ -77,31 +63,31 @@ class ViewController: UIViewController {
     }
 
     func serialization() {
-        let student = Student()
-        student.name = "Jack"
-        student.gender = .Female
-        student.subjects = [Subject(name: "Math", id: 1, credit: 23, lessonPeriod: 64), Subject(name: "English", id: 2, credit: 12, lessonPeriod: 32)]
+        let model = Model()
+        model.id = 1
+        model.aInt = 100
+        model.aStr = "string data"
+        let result = Result<Model>()
+        result.biz = Biz.social
+        result.code = 200
+        result.data = model
+        print(result.toJSON()!)
+        print(result.toJSONString()!)
+        print(result.toJSONString(prettyPrint: true)!)
 
-        print(student.toJSON()!)
-        print(student.toJSONString()!)
-        print(student.toJSONString(prettyPrint: true)!)
-
-        print([student].toJSON())
-        print([student].toJSONString()!)
-        print([student].toJSONString(prettyPrint: true)!)
+        print([result].toJSON())
+        print([result].toJSONString()!)
+        print([result].toJSONString(prettyPrint: true)!)
     }
 
     func deserialization() {
-        let jsonString = "{\"id\":\"77544\",\"json_name\":\"Tom Li\",\"age\":18,\"grade\":2,\"height\":180,\"gender\":\"Female\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subjects\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}"
-
-        if let student = Student.deserialize(from: jsonString) {
-            print(student.toJSON()!)
-        }
-
-        let arrayJSONString = "[{\"id\":\"77544\",\"json_name\":\"Tom Li\",\"age\":18,\"grade\":2,\"height\":180,\"gender\":\"Female\",\"className\":\"A\",\"teacher\":{\"name\":\"Lucy He\",\"age\":28,\"height\":172,\"gender\":\"Female\",},\"subjects\":[{\"name\":\"math\",\"id\":18000324583,\"credit\":4,\"lessonPeriod\":48},{\"name\":\"computer\",\"id\":18000324584,\"credit\":8,\"lessonPeriod\":64}],\"seat\":\"4-3-23\"}]"
-        if let students = [Student].deserialize(from: arrayJSONString) {
-            print(students.count)
-            print(students[0]!.toJSON()!)
+        let jsonString = "{\"data\":{\"aInt\":100,\"aStr\":\"string data\",\"id\":1},\"code\":200,\"biz\":\"social\"}"
+        if let result = Result<Model>.deserialize(from: jsonString) {
+            print(result.data?.id ?? 0)
+            print(result.code ?? "")
+            print(result.biz ?? "")
+            print(result.data?.aInt ?? 0)
+            print(result.data?.aStr ?? "")
         }
     }
 }
