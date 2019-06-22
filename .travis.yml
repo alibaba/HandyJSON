@@ -17,6 +17,8 @@ script:
   - set -o pipefail
   - xcodebuild -version
   - xcodebuild -showsdks
+  - echo "Applying fix for rdar://49326587 see https://developer.apple.com/documentation/xcode_release_notes/xcode_10_2_1_release_notes?language=objc"
+  - sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 9.3.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
 
   - xcodebuild -scheme "$IOS_FRAMEWORK_SCHEME" -sdk "$IOS_SDK" -destination "platform=iOS Simulator,OS=12.0,name=iPhone XS Max" -configuration Debug ONLY_ACTIVE_ARCH=NO test | xcpretty -c
 
