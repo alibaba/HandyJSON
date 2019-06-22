@@ -7,8 +7,8 @@ env:
     - OSX_FRAMEWORK_SCHEME="HandyJSON Mac"
     - TVOS_FRAMEWORK_SCHEME="HandyJSON tvOS"
     - WATCHOS_FRAMEWORK_SCHEME="HandyJSON watchOS"
-    - IOS_SDK=iphonesimulator12.0
-    - OSX_SDK=macosx10.12
+    - IOS_SDK=iphonesimulator12.2
+    - OSX_SDK=macosx10.14
 
 before_install:
   - gem install xcpretty --no-document --quiet
