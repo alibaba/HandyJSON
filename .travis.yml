@@ -11,7 +11,7 @@ env:
     - OSX_SDK=macosx10.12
 
 before_install:
-  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+  - gem install xcpretty --no-document --quiet
 
 script:
   - set -o pipefail
