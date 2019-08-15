@@ -177,15 +177,15 @@ extension Metadata {
         func _propertyDescriptionsAndStartPoint() -> ([Property.Description], Int32?)? {
             let instanceStart = pointer.pointee.class_rw_t()?.pointee.class_ro_t()?.pointee.instanceStart
             var result: [Property.Description] = []
-            if let fieldOffsets = self.fieldOffsets {
+            if let fieldOffsets = self.fieldOffsets, let fieldRecords = self.reflectionFieldDescriptor?.fieldRecords {
                 class NameAndType {
                     var name: String?
                     var type: Any.Type?
                 }
+                
                 for i in 0..<self.numberOfFields {
-
-                    if let name = self.reflectionFieldDescriptor?.fieldRecords[i].fieldName,
-                        let cMangledTypeName = self.reflectionFieldDescriptor?.fieldRecords[i].mangledTypeName,
+                    let name = fieldRecords[i].fieldName
+                    if let cMangledTypeName = fieldRecords[i].mangledTypeName,
                         let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: self.contextDescriptorPointer, genericArguments: self.genericArgumentVector) {
 
                         result.append(Property.Description(key: name, type: fieldType, offset: fieldOffsets[i]))
@@ -271,7 +271,7 @@ extension Metadata {
         }
 
         func propertyDescriptions() -> [Property.Description]? {
-            guard let fieldOffsets = self.fieldOffsets else {
+            guard let fieldOffsets = self.fieldOffsets, let fieldRecords = self.reflectionFieldDescriptor?.fieldRecords else {
                 return []
             }
             var result: [Property.Description] = []
@@ -280,8 +280,8 @@ extension Metadata {
                 var type: Any.Type?
             }
             for i in 0..<self.numberOfFields {
-                if let name = self.reflectionFieldDescriptor?.fieldRecords[i].fieldName,
-                    let cMangledTypeName = self.reflectionFieldDescriptor?.fieldRecords[i].mangledTypeName,
+                let name = fieldRecords[i].fieldName
+                if let cMangledTypeName = fieldRecords[i].mangledTypeName,
                     let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: self.contextDescriptorPointer, genericArguments: self.genericArgumentVector) {
 
                     result.append(Property.Description(key: name, type: fieldType, offset: fieldOffsets[i]))
