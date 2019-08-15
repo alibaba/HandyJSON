@@ -182,10 +182,12 @@ extension Metadata {
                     var name: String?
                     var type: Any.Type?
                 }
+                
+                let fieldRecords = self.reflectionFieldDescriptor?.fieldRecords
                 for i in 0..<self.numberOfFields {
 
-                    if let name = self.reflectionFieldDescriptor?.fieldRecords[i].fieldName,
-                        let cMangledTypeName = self.reflectionFieldDescriptor?.fieldRecords[i].mangledTypeName,
+                    if let name = fieldRecords?[i].fieldName,
+                        let cMangledTypeName = fieldRecords?[i].mangledTypeName,
                         let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: self.contextDescriptorPointer, genericArguments: self.genericArgumentVector) {
 
                         result.append(Property.Description(key: name, type: fieldType, offset: fieldOffsets[i]))
@@ -279,9 +281,11 @@ extension Metadata {
                 var name: String?
                 var type: Any.Type?
             }
+            
+            let fieldRecords = self.reflectionFieldDescriptor?.fieldRecords
             for i in 0..<self.numberOfFields {
-                if let name = self.reflectionFieldDescriptor?.fieldRecords[i].fieldName,
-                    let cMangledTypeName = self.reflectionFieldDescriptor?.fieldRecords[i].mangledTypeName,
+                if let name = fieldRecords?[i].fieldName,
+                    let cMangledTypeName = fieldRecords?[i].mangledTypeName,
                     let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: self.contextDescriptorPointer, genericArguments: self.genericArgumentVector) {
 
                     result.append(Property.Description(key: name, type: fieldType, offset: fieldOffsets[i]))
