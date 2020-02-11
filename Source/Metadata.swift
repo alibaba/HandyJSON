@@ -125,8 +125,10 @@ extension Metadata {
 
         var isSwiftClass: Bool {
             get {
-                let lowbit = self.pointer.pointee.databits & 1
-                return lowbit == 1
+                // see include/swift/Runtime/Config.h macro SWIFT_CLASS_IS_SWIFT_MASK
+                // it can be 1 or 2 depending on environment
+                let lowbit = self.pointer.pointee.rodataPointer & 3
+                return lowbit != 0
             }
         }
 
@@ -146,26 +148,45 @@ extension Metadata {
             }
 
             // ignore objc-runtime layer
-            guard let metaclass = Metadata.Class(anyType: superclass), metaclass.isSwiftClass else {
+            guard let metaclass = Metadata.Class(anyType: superclass) else {
                 return nil
             }
 
             return metaclass
         }
 
+        var vTableSize: Int {
+            // memory size after ivar destroyer
+            return Int(pointer.pointee.classObjectSize - pointer.pointee.classObjectAddressPoint) - (contextDescriptorOffsetLocation + 2) * MemoryLayout<Int>.size
+        }
+
+        // reference: https://github.com/apple/swift/blob/master/docs/ABI/TypeMetadata.rst#generic-argument-vector
+        var genericArgumentVector: UnsafeRawPointer? {
+            let pointer = UnsafePointer<Int>(self.pointer)
+            var superVTableSize = 0
+            if let _superclass = self.superclass {
+                superVTableSize = _superclass.vTableSize / MemoryLayout<Int>.size
+            }
+            let base = pointer.advanced(by: contextDescriptorOffsetLocation + 2 + superVTableSize)
+            if base.pointee == 0 {
+                return nil
+            }
+            return UnsafeRawPointer(base)
+        }
+
         func _propertyDescriptionsAndStartPoint() -> ([Property.Description], Int32?)? {
             let instanceStart = pointer.pointee.class_rw_t()?.pointee.class_ro_t()?.pointee.instanceStart
             var result: [Property.Description] = []
-            if let fieldOffsets = self.fieldOffsets {
+            if let fieldOffsets = self.fieldOffsets, let fieldRecords = self.reflectionFieldDescriptor?.fieldRecords {
                 class NameAndType {
                     var name: String?
                     var type: Any.Type?
                 }
+                
                 for i in 0..<self.numberOfFields {
-
-                    if let name = self.reflectionFieldDescriptor?.fieldRecords[i].fieldName,
-                        let cMangledTypeName = self.reflectionFieldDescriptor?.fieldRecords[i].mangledTypeName,
-                        let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: nil, genericArguments: nil) {
+                    let name = fieldRecords[i].fieldName
+                    if let cMangledTypeName = fieldRecords[i].mangledTypeName,
+                        let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: self.contextDescriptorPointer, genericArguments: self.genericArgumentVector) {
 
                         result.append(Property.Description(key: name, type: fieldType, offset: fieldOffsets[i]))
                     }
@@ -203,16 +224,25 @@ extension _Metadata {
         var superclass: Any.Type?
         var reserveword1: Int
         var reserveword2: Int
-        var databits: UInt
+        var rodataPointer: UInt
+        var classFlags: UInt32
+        var instanceAddressPoint: UInt32
+        var instanceSize: UInt32
+        var instanceAlignmentMask: UInt16
+        var runtimeReservedField: UInt16
+        var classObjectSize: UInt32
+        var classObjectAddressPoint: UInt32
+        var nominalTypeDescriptor: Int
+        var ivarDestroyer: Int
         // other fields we don't care
 
         func class_rw_t() -> UnsafePointer<_class_rw_t>? {
             if MemoryLayout<Int>.size == MemoryLayout<Int64>.size {
                 let fast_data_mask: UInt64 = 0x00007ffffffffff8
-                let databits_t: UInt64 = UInt64(self.databits)
+                let databits_t: UInt64 = UInt64(self.rodataPointer)
                 return UnsafePointer<_class_rw_t>(bitPattern: UInt(databits_t & fast_data_mask))
             } else {
-                return UnsafePointer<_class_rw_t>(bitPattern: self.databits & 0xfffffffc)
+                return UnsafePointer<_class_rw_t>(bitPattern: self.rodataPointer & 0xfffffffc)
             }
         }
     }
@@ -227,8 +257,21 @@ extension Metadata {
             return 1
         }
 
+        var genericArgumentOffsetLocation: Int {
+            return 2
+        }
+
+        var genericArgumentVector: UnsafeRawPointer? {
+            let pointer = UnsafePointer<Int>(self.pointer)
+            let base = pointer.advanced(by: genericArgumentOffsetLocation)
+            if base.pointee == 0 {
+                return nil
+            }
+            return UnsafeRawPointer(base)
+        }
+
         func propertyDescriptions() -> [Property.Description]? {
-            guard let fieldOffsets = self.fieldOffsets else {
+            guard let fieldOffsets = self.fieldOffsets, let fieldRecords = self.reflectionFieldDescriptor?.fieldRecords else {
                 return []
             }
             var result: [Property.Description] = []
@@ -237,9 +280,9 @@ extension Metadata {
                 var type: Any.Type?
             }
             for i in 0..<self.numberOfFields {
-                if let name = self.reflectionFieldDescriptor?.fieldRecords[i].fieldName,
-                    let cMangledTypeName = self.reflectionFieldDescriptor?.fieldRecords[i].mangledTypeName,
-                    let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: nil, genericArguments: nil) {
+                let name = fieldRecords[i].fieldName
+                if let cMangledTypeName = fieldRecords[i].mangledTypeName,
+                    let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: self.contextDescriptorPointer, genericArguments: self.genericArgumentVector) {
 
                     result.append(Property.Description(key: name, type: fieldType, offset: fieldOffsets[i]))
                 }

@@ -110,7 +110,7 @@ public class HelpingMapper {
         if let _converter = converter {
             let assignmentClosure = { (jsonValue: Any?) -> Any? in
                 if let _value = jsonValue{
-                    if let object = _value as? NSObject{
+                    if let object = _value as? NSObject {
                         if let str = String.transform(from: object){
                             return _converter(str)
                         }

@@ -98,7 +98,7 @@ print(object.toJSONString(prettyPrint: true)!) // serialize to pretty JSON strin
 
 * iOS 8.0+/OSX 10.9+/watchOS 2.0+/tvOS 9.0+
 
-* Swift 3.0+ / Swift 4.0+
+* Swift 3.0+ / Swift 4.0+ / Swift 5.0+
 
 # 安装
 

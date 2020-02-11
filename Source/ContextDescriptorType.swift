@@ -38,6 +38,24 @@ extension ContextDescriptorType {
         }
     }
 
+    var contextDescriptorPointer: UnsafeRawPointer? {
+        let pointer = UnsafePointer<Int>(self.pointer)
+        let base = pointer.advanced(by: contextDescriptorOffsetLocation)
+        if base.pointee == 0 {
+            return nil
+        }
+        return UnsafeRawPointer(bitPattern: base.pointee)
+    }
+
+//    var genericArgumentVector: UnsafeRawPointer? {
+//        let pointer = UnsafePointer<Int>(self.pointer)
+//        let base = pointer.advanced(by: 19)
+//        if base.pointee == 0 {
+//            return nil
+//        }
+//        return UnsafeRawPointer(base)
+//    }
+
     var mangledName: String {
         let pointer = UnsafePointer<Int>(self.pointer)
         let base = pointer.advanced(by: contextDescriptorOffsetLocation)
@@ -108,6 +126,10 @@ struct ContextDescriptor<T: _ContextDescriptorProtocol>: ContextDescriptorProtoc
 
     var fieldOffsetVector: Int {
         return Int(pointer.pointee.fieldOffsetVector)
+    }
+
+    var fieldTypesAccessor: Int {
+        return Int(pointer.pointee.fieldTypesAccessor)
     }
 
     var reflectionFieldDescriptor: Int {
