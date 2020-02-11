@@ -208,8 +208,12 @@ extension Metadata {
             if let firstInstanceStart = propsAndStp?.1,
                 let firstProperty = propsAndStp?.0.first?.offset {
                     return propsAndStp?.0.map({ (propertyDesc) -> Property.Description in
-                        let offset = propertyDesc.offset - firstProperty + Int(firstInstanceStart)
-                        return Property.Description(key: propertyDesc.key, type: propertyDesc.type, offset: offset)
+                        if firstInstanceStart >= firstProperty {
+                            let offset = propertyDesc.offset - firstProperty + Int(firstInstanceStart)
+                            return Property.Description(key: propertyDesc.key, type: propertyDesc.type, offset: offset)
+                        } else {
+                            return propertyDesc
+                        }
                     })
             } else {
                 return propsAndStp?.0

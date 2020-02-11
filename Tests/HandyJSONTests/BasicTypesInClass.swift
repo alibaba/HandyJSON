@@ -183,3 +183,47 @@ class InheritEmptyOCClass: EmptyOCClass {
     var int32: Int32!
     var double: Double = 123.45
 }
+
+// iOS 13.4 beta crash
+class ObjcExtensionModel: HandyJSON {
+    var id: String?
+
+    required init() {
+    }
+}
+class ObjcExtensionWithSuperModel: SuperObjcExtensionModel {
+    var id: String?
+
+    required init() {
+    }
+}
+class ObjcExtensionWithOCSuperModel: SuperOCObjcExtensionModel {
+    var id: String?
+
+    required init() {
+    }
+}
+class SuperOCObjcExtensionModel: NSObject, HandyJSON {
+    var a: Int = 0x1234
+    var b: Bool = false
+
+    required override init() {
+    }
+}
+class SuperObjcExtensionModel: HandyJSON {
+    var a: Int = 0x1234
+    var b: Bool = false
+
+    required init() {
+    }
+}
+// 条件1：@objc protocol
+@objc protocol ObjcExtensionProtocol {
+}
+// 条件2：extension
+extension ObjcExtensionModel: ObjcExtensionProtocol {
+}
+extension ObjcExtensionWithSuperModel: ObjcExtensionProtocol {
+}
+extension ObjcExtensionWithOCSuperModel: ObjcExtensionProtocol {
+}

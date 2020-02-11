@@ -630,4 +630,41 @@ class BasicTypesInClassTestsToJSON: XCTestCase {
         XCTAssertEqual(mappedObject?.int64, 33)
         XCTAssertEqual(mappedObject?.double, 44.55)
     }
+
+    func testObjcExtensionModel() {
+        let obj = ObjcExtensionModel()
+        obj.id = "hehe"
+
+        let JSONString = obj.toJSONString(prettyPrint: true)
+        let mappedObject = JSONDeserializer<ObjcExtensionModel>.deserializeFrom(json: JSONString!)
+
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject?.id, "hehe")
+
+        let obj1 = ObjcExtensionWithSuperModel()
+        obj1.a = 0x5678
+        obj1.b = true
+        obj1.id = "hehe"
+
+        let JSONString1 = obj1.toJSONString(prettyPrint: true)
+        let mappedObject1 = JSONDeserializer<ObjcExtensionWithSuperModel>.deserializeFrom(json: JSONString1!)
+
+        XCTAssertNotNil(mappedObject1)
+        XCTAssertEqual(mappedObject1?.a, 0x5678)
+        XCTAssertEqual(mappedObject1?.b, true)
+        XCTAssertEqual(mappedObject1?.id, "hehe")
+
+        let obj2 = ObjcExtensionWithOCSuperModel()
+        obj2.a = 0x5678
+        obj2.b = true
+        obj2.id = "hehe"
+
+        let JSONString2 = obj2.toJSONString(prettyPrint: true)
+        let mappedObject2 = JSONDeserializer<ObjcExtensionWithSuperModel>.deserializeFrom(json: JSONString2!)
+
+        XCTAssertNotNil(mappedObject2)
+        XCTAssertEqual(mappedObject2?.a, 0x5678)
+        XCTAssertEqual(mappedObject2?.b, true)
+        XCTAssertEqual(mappedObject2?.id, "hehe")
+    }
 }

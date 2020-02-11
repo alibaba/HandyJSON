@@ -249,6 +249,20 @@
 			remoteGlobalIDString = 21520C5A1D3344A900F53111;
 			remoteInfo = HandyJSONDemo;
 		};
+		7DAEE14223F2E9A0002C156F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21520C3B1D3341B200F53111 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 21520C5A1D3344A900F53111;
+			remoteInfo = HandyJSONDemo;
+		};
+		7DAEE14423F2E9A4002C156F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21520C3B1D3341B200F53111 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 21520C5A1D3344A900F53111;
+			remoteInfo = HandyJSONDemo;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -695,6 +709,7 @@
 			);
 			dependencies = (
 				393E0FBC1DA2441E00B3BC12 /* PBXTargetDependency */,
+				7DAEE14523F2E9A4002C156F /* PBXTargetDependency */,
 			);
 			name = "HandyJSON tvOS Tests";
 			productName = "HandyJSON tvOSTests";
@@ -731,6 +746,7 @@
 			);
 			dependencies = (
 				393E0FEC1DA2494F00B3BC12 /* PBXTargetDependency */,
+				7DAEE14323F2E9A0002C156F /* PBXTargetDependency */,
 			);
 			name = "HandyJSON macOS Tests";
 			productName = "HandyJSON macOSTests";
@@ -761,6 +777,7 @@
 					217B046C1D571B9F0035A8E2 = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1020;
+						TestTargetID = 21520C5A1D3344A900F53111;
 					};
 					393E0F9A1DA1650E00B3BC12 = {
 						CreatedOnToolsVersion = 8.0;
@@ -1155,6 +1172,16 @@
 			target = 21520C5A1D3344A900F53111 /* HandyJSONDemo */;
 			targetProxy = 3ABCC36F1EBEF2890001BDBB /* PBXContainerItemProxy */;
 		};
+		7DAEE14323F2E9A0002C156F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 21520C5A1D3344A900F53111 /* HandyJSONDemo */;
+			targetProxy = 7DAEE14223F2E9A0002C156F /* PBXContainerItemProxy */;
+		};
+		7DAEE14523F2E9A4002C156F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 21520C5A1D3344A900F53111 /* HandyJSONDemo */;
+			targetProxy = 7DAEE14423F2E9A4002C156F /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -1364,6 +1391,7 @@
 		217B04761D571B9F0035A8E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "Tests/HandyJSONTests/Info-iOS.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1371,12 +1399,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HandyJSONDemo.app/HandyJSONDemo";
 			};
 			name = Debug;
 		};
 		217B04771D571B9F0035A8E2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "Tests/HandyJSONTests/Info-iOS.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1384,6 +1414,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HandyJSONDemo.app/HandyJSONDemo";
 			};
 			name = Release;
 		};
