@@ -197,6 +197,8 @@
 		7D460F672203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
 		7D460F682203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
 		7D460F692203511D0027428E /* FieldDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D460F652203511D0027428E /* FieldDescriptor.swift */; };
+		7D912DA02403E42D00897258 /* OCUIInheritanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D912D9F2403E42D00897258 /* OCUIInheritanceTests.swift */; };
+		7D912DA22403E4C800897258 /* OCUIInheritanceClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D912DA12403E4C800897258 /* OCUIInheritanceClass.swift */; };
 		7D9EFA7F224BA3E3002496B7 /* GenericTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9EFA7E224BA3E3002496B7 /* GenericTypes.swift */; };
 		7D9EFA80224BA3E3002496B7 /* GenericTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9EFA7E224BA3E3002496B7 /* GenericTypes.swift */; };
 		7D9EFA81224BA3E3002496B7 /* GenericTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9EFA7E224BA3E3002496B7 /* GenericTypes.swift */; };
@@ -348,6 +350,8 @@
 		393E100A1DA24A0600B3BC12 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		7D2813E622058D060044E052 /* MangledName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangledName.swift; sourceTree = "<group>"; };
 		7D460F652203511D0027428E /* FieldDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FieldDescriptor.swift; sourceTree = "<group>"; };
+		7D912D9F2403E42D00897258 /* OCUIInheritanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCUIInheritanceTests.swift; sourceTree = "<group>"; };
+		7D912DA12403E4C800897258 /* OCUIInheritanceClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCUIInheritanceClass.swift; sourceTree = "<group>"; };
 		7D9EFA7E224BA3E3002496B7 /* GenericTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTypes.swift; sourceTree = "<group>"; };
 		7D9EFA82224BA40D002496B7 /* GenericTypesTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTypesTest.swift; sourceTree = "<group>"; };
 		7DCD448120FB593600370EF4 /* CBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBridge.swift; sourceTree = "<group>"; };
@@ -515,6 +519,8 @@
 				392628001DA3E8E100B0C28D /* Supporting Files */,
 				7D9EFA7E224BA3E3002496B7 /* GenericTypes.swift */,
 				7D9EFA82224BA40D002496B7 /* GenericTypesTest.swift */,
+				7D912D9F2403E42D00897258 /* OCUIInheritanceTests.swift */,
+				7D912DA12403E4C800897258 /* OCUIInheritanceClass.swift */,
 			);
 			name = HandyJSONTests;
 			path = Tests/HandyJSONTests;
@@ -960,9 +966,11 @@
 				21A191F41E21E62500CD7609 /* BasicTypesInClassTestsFromJSON.swift in Sources */,
 				215F13481E217B9C00B0FFEC /* BasicTypesInClass.swift in Sources */,
 				215F13491E217B9C00B0FFEC /* BasicTypesInClassTestsToJSON.swift in Sources */,
+				7D912DA02403E42D00897258 /* OCUIInheritanceTests.swift in Sources */,
 				21F252B41D599DE200B214BB /* InvalidStateHandlingTest.swift in Sources */,
 				2144A50E1D9A7A770090F50E /* CustomTransformTest.swift in Sources */,
 				214329261DFBDC1400CA386A /* TestUtils.swift in Sources */,
+				7D912DA22403E4C800897258 /* OCUIInheritanceClass.swift in Sources */,
 				217B04701D571B9F0035A8E2 /* OtherFeaturesTest.swift in Sources */,
 				217801ED1F5E794800EDEB38 /* BasicTypesInStruct.swift in Sources */,
 				217801F11F5E7ACB00EDEB38 /* BasicTypesInStructTestsToJSON.swift in Sources */,

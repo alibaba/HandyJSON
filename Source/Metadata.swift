@@ -24,8 +24,15 @@ struct _class_rw_t {
     var ro: UInt
     // other fields we don't care
 
+    // reference: include/swift/Remote/MetadataReader.h/readObjcRODataPtr
     func class_ro_t() -> UnsafePointer<_class_ro_t>? {
-        return UnsafePointer<_class_ro_t>(bitPattern: self.ro)
+        var addr: UInt = self.ro
+        if (self.ro & UInt(1)) != 0 {
+            if let ptr = UnsafePointer<UInt>(bitPattern: self.ro ^ 1) {
+                addr = ptr.pointee
+            }
+        }
+        return UnsafePointer<_class_ro_t>(bitPattern: addr)
     }
 }
 
@@ -205,20 +212,15 @@ extension Metadata {
 
         func propertyDescriptions() -> [Property.Description]? {
             let propsAndStp = _propertyDescriptionsAndStartPoint()
-//            if let firstInstanceStart = propsAndStp?.1,
-//                let firstProperty = propsAndStp?.0.first?.offset {
-//                    return propsAndStp?.0.map({ (propertyDesc) -> Property.Description in
-//                        if firstInstanceStart >= firstProperty {
-//                            let offset = propertyDesc.offset - firstProperty + Int(firstInstanceStart)
-//                            return Property.Description(key: propertyDesc.key, type: propertyDesc.type, offset: offset)
-//                        } else {
-//                            return propertyDesc
-//                        }
-//                    })
-//            } else {
-//                return propsAndStp?.0
-//            }
-            return propsAndStp?.0
+            if let firstInstanceStart = propsAndStp?.1,
+                let firstProperty = propsAndStp?.0.first?.offset {
+                    return propsAndStp?.0.map({ (propertyDesc) -> Property.Description in
+                        let offset = propertyDesc.offset - firstProperty + Int(firstInstanceStart)
+                        return Property.Description(key: propertyDesc.key, type: propertyDesc.type, offset: offset)
+                    })
+            } else {
+                return propsAndStp?.0
+            }
         }
     }
 }
