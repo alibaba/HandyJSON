@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
     s.author = {'xuyecan' => 'xuyecan@gmail.com'}
     s.license = 'Apache License 2.0'
     s.requires_arc = true
-    s.version = '5.0.1'
+    s.version = '5.0.2-beta'
     s.homepage = "https://github.com/alibaba/handyjson"
     s.name = "HandyJSON"
 
