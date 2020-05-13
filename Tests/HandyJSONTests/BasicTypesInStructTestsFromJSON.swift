@@ -112,6 +112,22 @@ class BasicTypesInStructTestsFromJSON: XCTestCase {
         XCTAssertEqual(mappedObject?.anyObjectOptional as? Int, value2)
         XCTAssertEqual(mappedObject?.anyObjectImplicitlyUnwrapped as? Double, value3)
     }
+    
+    func testMappingAnyObjectFromJSONByConvertFromSnakeCase() {
+        HandyJSONConfiguration.deserializeOptions = .convertFromSnakeCase
+        defer {
+            HandyJSONConfiguration.deserializeOptions = .defaultOptions
+        }
+        let value1 = "STRING"
+        let value2: Int = 1234
+        let value3: Double = 11.11
+        let JSONString = "{\"any_object\" : \"\(value1)\", \"any_object_optional\" : \(value2), \"any_object_implicitly_unwrapped\" : \(value3)}"
+        let mappedObject = BasicTypesInStruct.deserialize(from: JSONString)
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject?.anyObject as? String, value1)
+        XCTAssertEqual(mappedObject?.anyObjectOptional as? Int, value2)
+        XCTAssertEqual(mappedObject?.anyObjectImplicitlyUnwrapped as? Double, value3)
+    }
 
     func testMappingStringFromNSStringJSON(){
         let value: String = "STRINGNGNGG"
