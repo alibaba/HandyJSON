@@ -74,14 +74,20 @@ fileprivate func assignProperty(convertedValue: Any, instance: _ExtendCustomMode
 
 fileprivate func readAllChildrenFrom(mirror: Mirror) -> [(String, Any)] {
     var children = [(label: String?, value: Any)]()
-    let mirrorChildrenCollection = AnyRandomAccessCollection(mirror.children)!
-    children += mirrorChildrenCollection
+    if let mirrorChildrenCollection = AnyRandomAccessCollection(mirror.children) {
+        children += mirrorChildrenCollection
+    }
 
     var currentMirror = mirror
     while let superclassChildren = currentMirror.superclassMirror?.children {
-        let randomCollection = AnyRandomAccessCollection(superclassChildren)!
-        children += randomCollection
-        currentMirror = currentMirror.superclassMirror!
+        if let randomCollection = AnyRandomAccessCollection(superclassChildren) {
+            children += randomCollection
+        }
+        if let superclassMirror = currentMirror.superclassMirror {
+            currentMirror = superclassMirror
+        } else {
+            break
+        }
     }
     var result = [(String, Any)]()
     children.forEach { (child) in
