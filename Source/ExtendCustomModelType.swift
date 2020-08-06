@@ -30,6 +30,16 @@ fileprivate func convertKeyIfNeeded(dict: [String: Any]) -> [String: Any] {
             newDict[key.lowercased()] = value
         })
         return newDict
+    } else if HandyJSONConfiguration.deserializeOptions.contains(.convertFromSnakeCase) {
+           var newDict = [String: Any]()
+           dict.forEach({ (kvPair) in
+               let (key, value) = kvPair
+               let result = key.split(separator: "_").reduce("") {(acc, name) in
+                   "\(acc)\(acc.count > 0 ? String(name.capitalized) : String(name))"
+               }
+               newDict[result] = value
+           })
+           return newDict
     }
     return dict
 }
