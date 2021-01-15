@@ -23,6 +23,6 @@
 
 public protocol _ExtendCustomBasicType: _Transformable {
 
-    static func _transform(from object: Any) -> Self?
-    func _plainValue() -> Any?
+    static func _transform(from object: Any, transformer: _Transformer?) -> Self?
+    func _plainValue(transformer: _Transformer?) -> Any?
 }

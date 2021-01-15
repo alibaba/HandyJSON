@@ -102,7 +102,7 @@ public class HelpingMapper {
         self.specify(property: &property, name: nil, converter: converter)
     }
     
-    public func specify<T>(property: inout T, name: String?, converter: ((String) -> T)?) {
+    public func specify<T>(property: inout T, name: String?, converter: ((String) -> T)?, transformer: _Transformer? = nil) {
         let pointer = withUnsafePointer(to: &property, { return $0 })
         let key = Int(bitPattern: pointer)
         let names = (name == nil ? nil : [name!])
@@ -111,7 +111,7 @@ public class HelpingMapper {
             let assignmentClosure = { (jsonValue: Any?) -> Any? in
                 if let _value = jsonValue{
                     if let object = _value as? NSObject {
-                        if let str = String.transform(from: object){
+                        if let str = String.transform(from: object, transformer: transformer){
                             return _converter(str)
                         }
                     }
