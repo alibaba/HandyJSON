@@ -52,13 +52,13 @@ fileprivate func getRawValueFrom(dict: [String: Any], property: PropertyInfo, ma
     return dict[property.key]
 }
 
-fileprivate func convertValue(rawValue: Any, property: PropertyInfo, mapper: HelpingMapper) -> Any? {
+fileprivate func convertValue(rawValue: Any, property: PropertyInfo, mapper: HelpingMapper, transformer: _Transformer?) -> Any? {
     if rawValue is NSNull { return nil }
     if let mappingHandler = mapper.getMappingHandler(key: Int(bitPattern: property.address)), let transformer = mappingHandler.assignmentClosure {
         return transformer(rawValue)
     }
     if let transformableType = property.type as? _Transformable.Type {
-        return transformableType.transform(from: rawValue)
+        return transformableType.transform(from: rawValue, transformer: transformer)
     } else {
         return extensions(of: property.type).takeValue(from: rawValue)
     }
@@ -112,15 +112,18 @@ extension NSObject {
 
 extension _ExtendCustomModelType {
 
-    static func _transform(from object: Any) -> Self? {
+    static func _transform(from object: Any, transformer: _Transformer?) -> Self? {
+        if let result = transformer?.transform(from: object, type: self) {
+            return result
+        }
         if let dict = object as? [String: Any] {
             // nested object, transform recursively
-            return self._transform(dict: dict) as? Self
+            return self._transform(dict: dict, transformer: transformer) as? Self
         }
         return nil
     }
 
-    static func _transform(dict: [String: Any]) -> _ExtendCustomModelType? {
+    static func _transform(dict: [String: Any], transformer: _Transformer?) -> _ExtendCustomModelType? {
 
         var instance: Self
         if let _nsType = Self.self as? NSObject.Type {
@@ -129,12 +132,12 @@ extension _ExtendCustomModelType {
             instance = Self.init()
         }
         instance.willStartMapping()
-        _transform(dict: dict, to: &instance)
+        _transform(dict: dict, to: &instance, transformer: transformer)
         instance.didFinishMapping()
         return instance
     }
 
-    static func _transform(dict: [String: Any], to instance: inout Self) {
+    static func _transform(dict: [String: Any], to instance: inout Self, transformer: _Transformer?) {
         guard let properties = getProperties(forType: Self.self) else {
             InternalLogger.logDebug("Failed when try to get properties from type: \(type(of: Self.self))")
             return
@@ -168,7 +171,7 @@ extension _ExtendCustomModelType {
             InternalLogger.logVerbose("field: ", property.key, "  offset: ", property.offset, "  isBridgeProperty: ", isBridgedProperty)
 
             if let rawValue = getRawValueFrom(dict: _dict, property: propertyDetail, mapper: mapper) {
-                if let convertedValue = convertValue(rawValue: rawValue, property: propertyDetail, mapper: mapper) {
+                if let convertedValue = convertValue(rawValue: rawValue, property: propertyDetail, mapper: mapper, transformer: transformer) {
                     assignProperty(convertedValue: convertedValue, instance: instance, property: propertyDetail)
                     continue
                 }
@@ -180,16 +183,19 @@ extension _ExtendCustomModelType {
 
 extension _ExtendCustomModelType {
 
-    func _plainValue() -> Any? {
-        return Self._serializeAny(object: self)
+    func _plainValue(transformer: _Transformer?) -> Any? {
+        if let result = transformer?.plainValue(from: self) {
+            return result
+        }
+        return Self._serializeAny(object: self, transformer: transformer)
     }
 
-    static func _serializeAny(object: _Transformable) -> Any? {
+    static func _serializeAny(object: _Transformable, transformer: _Transformer?) -> Any? {
 
         let mirror = Mirror(reflecting: object)
 
         guard let displayStyle = mirror.displayStyle else {
-            return object.plainValue()
+            return object.plainValue(transformer: transformer)
         }
 
         // after filtered by protocols above, now we expect the type is pure struct/class
@@ -222,13 +228,13 @@ extension _ExtendCustomModelType {
 
             let requiredInfo = merge(children: children, propertyInfos: propertyInfos)
 
-            return _serializeModelObject(instance: mutableObject, properties: requiredInfo, mapper: mapper) as Any
+            return _serializeModelObject(instance: mutableObject, properties: requiredInfo, mapper: mapper, transformer: transformer) as Any
         default:
-            return object.plainValue()
+            return object.plainValue(transformer: transformer)
         }
     }
 
-    static func _serializeModelObject(instance: _ExtendCustomModelType, properties: [String: (Any, PropertyInfo?)], mapper: HelpingMapper) -> [String: Any] {
+    static func _serializeModelObject(instance: _ExtendCustomModelType, properties: [String: (Any, PropertyInfo?)], mapper: HelpingMapper, transformer: _Transformer?) -> [String: Any] {
 
         var dict = [String: Any]()
         for (key, property) in properties {
@@ -261,7 +267,7 @@ extension _ExtendCustomModelType {
             }
 
             if let typedValue = realValue as? _Transformable {
-                if let result = self._serializeAny(object: typedValue) {
+                if let result = self._serializeAny(object: typedValue, transformer: transformer) {
                     dict[realKey] = result
                     continue
                 }

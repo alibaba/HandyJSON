@@ -10,27 +10,33 @@ import Foundation
 
 protocol _BuiltInBridgeType: _Transformable {
 
-    static func _transform(from object: Any) -> _BuiltInBridgeType?
-    func _plainValue() -> Any?
+    static func _transform(from object: Any, transformer: _Transformer?) -> _BuiltInBridgeType?
+    func _plainValue(transformer: _Transformer?) -> Any?
 }
 
 extension NSString: _BuiltInBridgeType {
 
-    static func _transform(from object: Any) -> _BuiltInBridgeType? {
-        if let str = String.transform(from: object) {
+    static func _transform(from object: Any, transformer: _Transformer?) -> _BuiltInBridgeType? {
+        if let str = String.transform(from: object, transformer: transformer) {
             return NSString(string: str)
         }
         return nil
     }
 
-    func _plainValue() -> Any? {
+    func _plainValue(transformer: _Transformer?) -> Any? {
+        if let result = transformer?.plainValue(from: self) {
+            return result
+        }
         return self
     }
 }
 
 extension NSNumber: _BuiltInBridgeType {
 
-    static func _transform(from object: Any) -> _BuiltInBridgeType? {
+    static func _transform(from object: Any, transformer: _Transformer?) -> _BuiltInBridgeType? {
+        if let result = transformer?.transform(from: object, type: self) {
+            return result
+        }
         switch object {
         case let num as NSNumber:
             return num
@@ -51,29 +57,38 @@ extension NSNumber: _BuiltInBridgeType {
         }
     }
 
-    func _plainValue() -> Any? {
+    func _plainValue(transformer: _Transformer?) -> Any? {
+        if let result = transformer?.plainValue(from: self) {
+            return result
+        }
         return self
     }
 }
 
 extension NSArray: _BuiltInBridgeType {
     
-    static func _transform(from object: Any) -> _BuiltInBridgeType? {
+    static func _transform(from object: Any, transformer: _Transformer?) -> _BuiltInBridgeType? {
+        if let result = transformer?.transform(from: object, type: self) {
+            return result
+        }
         return object as? NSArray
     }
 
-    func _plainValue() -> Any? {
-        return (self as? Array<Any>)?.plainValue()
+    func _plainValue(transformer: _Transformer?) -> Any? {
+        return (self as? Array<Any>)?.plainValue(transformer: transformer)
     }
 }
 
 extension NSDictionary: _BuiltInBridgeType {
     
-    static func _transform(from object: Any) -> _BuiltInBridgeType? {
+    static func _transform(from object: Any, transformer: _Transformer?) -> _BuiltInBridgeType? {
+        if let result = transformer?.transform(from: object, type: self) {
+            return result
+        }
         return object as? NSDictionary
     }
 
-    func _plainValue() -> Any? {
-        return (self as? Dictionary<String, Any>)?.plainValue()
+    func _plainValue(transformer: _Transformer?) -> Any? {
+        return (self as? Dictionary<String, Any>)?.plainValue(transformer: transformer)
     }
 }

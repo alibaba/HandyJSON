@@ -63,33 +63,33 @@ public class JSONDeserializer<T: HandyJSON> {
 
     /// Finds the internal dictionary in `dict` as the `designatedPath` specified, and map it to a Model
     /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer, or nil
-    public static func deserializeFrom(dict: NSDictionary?, designatedPath: String? = nil) -> T? {
-        return deserializeFrom(dict: dict as? [String: Any], designatedPath: designatedPath)
+    public static func deserializeFrom(dict: NSDictionary?, designatedPath: String? = nil, transformer: _Transformer? = nil) -> T? {
+        return deserializeFrom(dict: dict as? [String: Any], designatedPath: designatedPath, transformer: transformer)
     }
 
     /// Finds the internal dictionary in `dict` as the `designatedPath` specified, and map it to a Model
     /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer, or nil
-    public static func deserializeFrom(dict: [String: Any]?, designatedPath: String? = nil) -> T? {
+    public static func deserializeFrom(dict: [String: Any]?, designatedPath: String? = nil, transformer: _Transformer? = nil) -> T? {
         var targetDict = dict
         if let path = designatedPath {
             targetDict = getInnerObject(inside: targetDict, by: path) as? [String: Any]
         }
         if let _dict = targetDict {
-            return T._transform(dict: _dict) as? T
+            return T._transform(dict: _dict, transformer: transformer) as? T
         }
         return nil
     }
 
     /// Finds the internal JSON field in `json` as the `designatedPath` specified, and converts it to Model
     /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer, or nil
-    public static func deserializeFrom(json: String?, designatedPath: String? = nil) -> T? {
+    public static func deserializeFrom(json: String?, designatedPath: String? = nil, transformer: _Transformer? = nil) -> T? {
         guard let _json = json else {
             return nil
         }
         do {
             let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
             if let jsonDict = jsonObject as? NSDictionary {
-                return self.deserializeFrom(dict: jsonDict, designatedPath: designatedPath)
+                return self.deserializeFrom(dict: jsonDict, designatedPath: designatedPath, transformer: transformer)
             }
         } catch let error {
             InternalLogger.logError(error)
@@ -99,13 +99,13 @@ public class JSONDeserializer<T: HandyJSON> {
 
     /// Finds the internal dictionary in `dict` as the `designatedPath` specified, and use it to reassign an exist model
     /// `designatedPath` is a string like `result.data.orderInfo`, which each element split by `.` represents key of each layer, or nil
-    public static func update(object: inout T, from dict: [String: Any]?, designatedPath: String? = nil) {
+    public static func update(object: inout T, from dict: [String: Any]?, designatedPath: String? = nil, transformer: _Transformer? = nil) {
         var targetDict = dict
         if let path = designatedPath {
             targetDict = getInnerObject(inside: targetDict, by: path) as? [String: Any]
         }
         if let _dict = targetDict {
-            T._transform(dict: _dict, to: &object)
+            T._transform(dict: _dict, to: &object, transformer: transformer)
         }
     }
 
