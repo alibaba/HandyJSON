@@ -125,7 +125,7 @@ public class JSONDeserializer<T: HandyJSON> {
         }
     }
 
-    /// if the JSON field found by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`,
+    /// if the JSON field found by `designatedPath` in `json` is representing a array, such as `[{...}, {...}, {...}]`, `[1, 2, 3]` , `["1", "2", "3"]`
     /// this method converts it to a Models array
     public static func deserializeModelArrayFrom(json: String?, designatedPath: String? = nil) -> [T?]? {
         guard let _json = json else {
@@ -135,7 +135,11 @@ public class JSONDeserializer<T: HandyJSON> {
             let jsonObject = try JSONSerialization.jsonObject(with: _json.data(using: String.Encoding.utf8)!, options: .allowFragments)
             if let jsonArray = getInnerObject(inside: jsonObject, by: designatedPath) as? [Any] {
                 return jsonArray.map({ (item) -> T? in
-                    return self.deserializeFrom(dict: item as? [String: Any])
+                    if let dic = item as? [String: Any] {
+                        return self.deserializeFrom(dict: dic)
+                    }else{
+                        return item as? T
+                    }
                 })
             }
         } catch let error {
