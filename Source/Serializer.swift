@@ -57,8 +57,14 @@ public extension HandyJSON {
 
 public extension Collection where Iterator.Element: HandyJSON {
 
-    func toJSON() -> [[String: Any]?] {
-        return self.map{ $0.toJSON() }
+    func toJSON() -> [Any?] { // a array, such as `[{...}, {...}, {...}]`, `[1, 2, 3]` , `["1", "2", "3"]`
+        return self.map{
+            if let _ = $0 as? [String: Any] {
+                return $0.toJSON()
+            }else{
+                return $0
+            }
+        }
     }
 
     func toJSONString(prettyPrint: Bool = false) -> String? {
