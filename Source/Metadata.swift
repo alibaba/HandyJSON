@@ -147,6 +147,17 @@ extension Metadata {
             guard let superclass = pointer.pointee.superclass else {
                 return nil
             }
+            
+            // If it is SwiftObject, return no super class, or following is HandyJSON.Type line will crash
+            let superclassName = String(describing: superclass)
+            if superclassName.contains("SwiftObject") {
+                return nil
+            }
+            
+            // is HandyJSON.Type will crash if superclass is kind of NSObject
+            if superclass is NSObject.Type {
+                return nil
+            }
 
             // If the superclass doesn't conform to handyjson/handyjsonenum protocol,
             // we should ignore the properties inside
