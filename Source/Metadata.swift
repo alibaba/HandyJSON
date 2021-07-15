@@ -150,7 +150,7 @@ extension Metadata {
 
             // If the superclass doesn't conform to handyjson/handyjsonenum protocol,
             // we should ignore the properties inside
-            if (superclass as? HandyJSON) == nil && (superclass as? HandyJSONEnum) == nil {
+            if !(superclass is HandyJSON.Type) && !(superclass is HandyJSONEnum.Type) {
                 return nil
             }
 
