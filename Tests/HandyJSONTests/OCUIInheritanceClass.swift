@@ -15,3 +15,7 @@ class InheritFromUIViewControllerClass: UIViewController, HandyJSON {
     var a: Int?
     var b: String = ""
 }
+
+class SubClassOfInheritFromUIViewController: InheritFromUIViewControllerClass {
+    var c: Double?
+}

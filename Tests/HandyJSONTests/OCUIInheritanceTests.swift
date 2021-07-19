@@ -24,4 +24,19 @@ class OCUIInheritanceTests: XCTestCase {
         XCTAssertEqual(mappedObject!.a, 0x1234)
         XCTAssertEqual(mappedObject!.b, "hehe")
     }
+    
+    func testSubClassOfInheritFromUIViewController() {
+        let obj = SubClassOfInheritFromUIViewController()
+        obj.a = 0x1234
+        obj.b = "hehe"
+        obj.c = 0.5678
+
+        let JSONString = obj.toJSONString(prettyPrint: true)
+        let mappedObject = JSONDeserializer<SubClassOfInheritFromUIViewController>.deserializeFrom(json: JSONString!)
+
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject!.a, 0x1234)
+        XCTAssertEqual(mappedObject!.b, "hehe")
+        XCTAssertEqual(mappedObject!.c, 0.5678)
+    }
 }

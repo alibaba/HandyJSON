@@ -150,25 +150,16 @@ extension Metadata {
                 return nil
             }
             
-            // If it is SwiftObject, return no super class, or following is HandyJSON.Type line will crash
-            let superclassName = String(describing: superclass)
-            if superclassName.contains("SwiftObject") {
-                return nil
-            }
-            
-            // is HandyJSON.Type will crash if superclass is kind of NSObject
-            if superclass is NSObject.Type {
+            // ignore objc-runtime layer
+            guard let metaclass = Metadata.Class(anyType: superclass) else {
                 return nil
             }
 
             // If the superclass doesn't conform to handyjson/handyjsonenum protocol,
             // we should ignore the properties inside
-            if !(superclass is HandyJSON.Type) && !(superclass is HandyJSONEnum.Type) {
-                return nil
-            }
-
-            // ignore objc-runtime layer
-            guard let metaclass = Metadata.Class(anyType: superclass) else {
+            // Use metaclass.isSwiftClass to test if it is a swift class, if it is not return nil directly, or `superclass is HandyJSON.Type` wil crash.
+            if !metaclass.isSwiftClass
+                || (!(superclass is HandyJSON.Type) && !(superclass is HandyJSONEnum.Type)) {
                 return nil
             }
 
