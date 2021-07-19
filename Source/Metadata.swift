@@ -18,6 +18,8 @@
 //  Created by zhouzhuo on 07/01/2017.
 //
 
+import Foundation
+
 struct _class_rw_t {
     var flags: Int32
     var version: Int32
