@@ -1,6 +1,6 @@
 # HandyJSON
 
-***To deal with crash on iOS 14 beta4 please try version 5.0.3-beta***
+***To deal with crash on iOS 15 beta3 please try version 5.0.4-beta***
 
 HandyJSON is a framework written in Swift which to make converting model objects( **pure classes/structs** ) to and from JSON easy on iOS.
 
