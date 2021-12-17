@@ -118,6 +118,7 @@ fileprivate let formatter: NumberFormatter = {
     formatter.usesGroupingSeparator = false
     formatter.numberStyle = .decimal
     formatter.maximumFractionDigits = 16
+    formatter.locale = Locale(identifier: "EN")
     return formatter
 }()
 
