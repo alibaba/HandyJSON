@@ -117,7 +117,8 @@ fileprivate let formatter: NumberFormatter = {
     let formatter = NumberFormatter()
     formatter.usesGroupingSeparator = false
     formatter.numberStyle = .decimal
-    formatter.maximumFractionDigits = 16
+    formatter.maximumFractionDigits = 10
+    formatter.maximumIntegerDigits = 20
     return formatter
 }()
 
