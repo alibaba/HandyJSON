@@ -17,7 +17,13 @@
 //  Created by zhouzhuo on 7/11/16.
 //
 
+#if __has_feature(modules)
+
+#if __has_warning("-Watimport-in-framework-header")
+#pragma clang diagnostic ignored "-Watimport-in-framework-header"
+#endif
 @import Foundation;
+#endif
 
 //! Project version number for HandyJSON.
 FOUNDATION_EXPORT double HandyJSONVersionNumber;
