@@ -25,6 +25,8 @@ public struct DeserializeOptions: OptionSet {
     public let rawValue: Int
 
     public static let caseInsensitive = DeserializeOptions(rawValue: 1 << 0)
+    
+    public static let snakeToCamel = DeserializeOptions(rawValue: 1 << 1)
 
     public static let defaultOptions: DeserializeOptions = []
 

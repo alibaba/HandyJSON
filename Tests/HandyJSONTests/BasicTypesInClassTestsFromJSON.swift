@@ -438,6 +438,19 @@ class BasicTypesInClassTestsFromJSON: XCTestCase {
         XCTAssertEqual(mappedObject?.boolImplicitlyUnwrapped, value)
         HandyJSONConfiguration.deserializeOptions = .defaultOptions
     }
+    
+    func testSnakeToCamelMappingFromJSON() {
+        HandyJSONConfiguration.deserializeOptions = .snakeToCamel
+
+        let value: Bool = true
+        let JSONString = "{\"bool_optional\" : \(value)}"
+
+        let mappedObject = BasicTypesInClass.deserialize(from: JSONString)
+
+        XCTAssertNotNil(mappedObject)
+        XCTAssertEqual(mappedObject?.boolOptional, value)
+        HandyJSONConfiguration.deserializeOptions = .defaultOptions
+    }
 
     func testUpdateExistModel() {
         let basicObject = BasicTypesInClass()
