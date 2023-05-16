@@ -404,4 +404,25 @@ class StructObjectTest: XCTestCase {
         let a = A.deserialize(from: jsonString)!
         XCTAssertEqual(a.upperName, "HANDYJSON")
     }
+    
+    func testSnakeToCamelForStruct() {
+        struct A: HandyJSON {
+            var snakeKey: String?
+
+            func snakeToCamel() -> Bool {
+                return true
+            }
+        }
+        
+        struct B: HandyJSON {
+            var camelKey: String?
+        }
+
+        let jsonString1 = "{\"snake_key\":\"HandyJson\"}"
+        let jsonString2 = "{\"camelKey\":\"HandyJson\"}"
+        let a = A.deserialize(from: jsonString1)!
+        let b = B.deserialize(from: jsonString2)!
+        XCTAssertEqual(a.snakeKey, "HandyJson")
+        XCTAssertEqual(b.camelKey, "HandyJson")
+    }
 }

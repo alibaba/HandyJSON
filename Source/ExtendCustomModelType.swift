@@ -13,6 +13,7 @@ public protocol _ExtendCustomModelType: _Transformable {
     mutating func willStartMapping()
     mutating func mapping(mapper: HelpingMapper)
     mutating func didFinishMapping()
+    func snakeToCamel() -> Bool
 }
 
 extension _ExtendCustomModelType {
@@ -20,18 +21,57 @@ extension _ExtendCustomModelType {
     public mutating func willStartMapping() {}
     public mutating func mapping(mapper: HelpingMapper) {}
     public mutating func didFinishMapping() {}
+    public func snakeToCamel() -> Bool {
+        return HandyJSONConfiguration.deserializeOptions.contains(.snakeToCamel)
+    }
 }
 
-fileprivate func convertKeyIfNeeded(dict: [String: Any]) -> [String: Any] {
-    if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
-        var newDict = [String: Any]()
+fileprivate func convertKeyIfNeeded(dict: [String: Any], snakeToCamel: Bool) -> [String: Any] {
+    var newDict = [String: Any]()
+    if snakeToCamel {
         dict.forEach({ (kvPair) in
             let (key, value) = kvPair
-            newDict[key.lowercased()] = value
+            newDict[deserializeSnakeToCamel(input: key)] = value
         })
-        return newDict
+    } else {
+        newDict = dict
     }
-    return dict
+    if HandyJSONConfiguration.deserializeOptions.contains(.caseInsensitive) {
+        var _newDict = newDict
+        newDict.forEach({ (kvPair) in
+            let (key, value) = kvPair
+            _newDict[key.lowercased()] = value
+        })
+        return _newDict
+    }
+    return newDict
+}
+
+fileprivate func deserializeSnakeToCamel(input: String) -> String {
+    var result = ""
+    var capitalizeNext = false
+    for char in input {
+        if char == "_" {
+            capitalizeNext = true
+        } else if capitalizeNext {
+            result.append(char.uppercased())
+            capitalizeNext = false
+        } else {
+            result.append(char)
+        }
+    }
+    return result
+}
+
+fileprivate func serializeCamelToSnake(input: String) -> String {
+    var result = ""
+    for (index,character) in input.enumerated() {
+        if character.isUppercase && index > 0 {
+            result.append("_")
+        }
+        result.append(character.lowercased())
+    }
+    return result
 }
 
 fileprivate func getRawValueFrom(dict: [String: Any], property: PropertyInfo, mapper: HelpingMapper) -> Any? {
@@ -90,15 +130,21 @@ fileprivate func readAllChildrenFrom(mirror: Mirror) -> [(String, Any)] {
     return result
 }
 
-fileprivate func merge(children: [(String, Any)], propertyInfos: [PropertyInfo]) -> [String: (Any, PropertyInfo?)] {
+fileprivate func merge(children: [(String, Any)], propertyInfos: [PropertyInfo], snakeToCamel: Bool) -> [String: (Any, PropertyInfo?)] {
     var infoDict = [String: PropertyInfo]()
     propertyInfos.forEach { (info) in
         infoDict[info.key] = info
     }
-
+    
     var result = [String: (Any, PropertyInfo?)]()
     children.forEach { (child) in
-        result[child.0] = (child.1, infoDict[child.0])
+        let key: String
+        if snakeToCamel {
+            key = serializeCamelToSnake(input: child.0)
+        } else {
+            key = child.0
+        }
+        result[key] = (child.1, infoDict[child.0])
     }
     return result
 }
@@ -149,7 +195,7 @@ extension _ExtendCustomModelType {
         InternalLogger.logVerbose("instance start at: ", Int(bitPattern: rawPointer))
 
         // process dictionary
-        let _dict = convertKeyIfNeeded(dict: dict)
+        let _dict = convertKeyIfNeeded(dict: dict, snakeToCamel: instance.snakeToCamel())
 
         let instanceIsNsObject = instance.isNSObjectType()
         let bridgedPropertyList = instance.getBridgedPropertyList()
@@ -220,7 +266,7 @@ extension _ExtendCustomModelType {
 
             mutableObject.mapping(mapper: mapper)
 
-            let requiredInfo = merge(children: children, propertyInfos: propertyInfos)
+            let requiredInfo = merge(children: children, propertyInfos: propertyInfos, snakeToCamel: mutableObject.snakeToCamel())
 
             return _serializeModelObject(instance: mutableObject, properties: requiredInfo, mapper: mapper) as Any
         default:
