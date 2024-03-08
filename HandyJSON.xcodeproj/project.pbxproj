@@ -1323,7 +1323,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info-iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSON;
 				PRODUCT_NAME = "$(PROJECT_NAME)";
@@ -1347,7 +1347,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Source/Info-iOS.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSON;
 				PRODUCT_NAME = "$(PROJECT_NAME)";
@@ -1366,7 +1366,7 @@
 				DEVELOPMENT_TEAM = QBMN2BBW3K;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = HandyJSONDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSONDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1386,7 +1386,7 @@
 				DEVELOPMENT_TEAM = QBMN2BBW3K;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = HandyJSONDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSONDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1402,7 +1402,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "Tests/HandyJSONTests/Info-iOS.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1417,7 +1417,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "Tests/HandyJSONTests/Info-iOS.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aliyun.app.HandyJSONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
