@@ -290,11 +290,14 @@ extension Metadata {
                 var name: String?
                 var type: Any.Type?
             }
-            for i in 0..<self.numberOfFields {
+            for i in 0..<self.numberOfFields where fieldRecords[i].mangledTypeName != nil{
                 let name = fieldRecords[i].fieldName
-                if let cMangledTypeName = fieldRecords[i].mangledTypeName,
-                    let fieldType = _getTypeByMangledNameInContext(cMangledTypeName, getMangledTypeNameSize(cMangledTypeName), genericContext: self.contextDescriptorPointer, genericArguments: self.genericArgumentVector) {
-
+                let cMangledTypeName = fieldRecords[i].mangledTypeName!
+                
+                let functionMap: [String: () -> Any.Type?] = [
+                    "function": { _getTypeByMangledNameInContext(cMangledTypeName, UInt(getMangledTypeNameSize(cMangledTypeName)), genericContext: self.contextDescriptorPointer, genericArguments: self.genericArgumentVector) }
+                ]
+                if let function = functionMap["function"],let fieldType  = function() {
                     result.append(Property.Description(key: name, type: fieldType, offset: fieldOffsets[i]))
                 }
             }
